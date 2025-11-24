@@ -1,0 +1,231 @@
+/* Importa o core do Tailwind v4 e o plugin de animações */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Variante para modo dark baseada na classe .dark no HTML/BODY */
+@custom-variant dark (&:is(.dark *));
+
+/* Mapeia as cores/utilitários do Tailwind para as variáveis CSS abaixo */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* =========================
+   🎨 TEMA CLARO (DEFAULT)
+   ========================= */
+:root {
+  /* Raio base para bordas arredondadas (cards, botões, inputs) */
+  --radius: 0.625rem;
+
+  /* =========================
+     TOKENS DE MARCA (clareia/muda a identidade inteira)
+     - Troque esses valores por cliente/projeto
+     ========================= */
+
+  /* Cor principal da marca (usada em botões, links de destaque, etc.) */
+  --brand: oklch(0.55 0.20 280);                /* roxo médio */
+
+  /* Cor do texto em cima da cor principal (ex.: texto branco sobre botão roxo) */
+  --brand-foreground: oklch(0.98 0.01 280);     /* quase branco */
+
+  /* Versão mais suave da marca (fundos de seção, badges leves, hovers) */
+  --brand-soft: oklch(0.96 0.02 280);           /* roxo bem clarinho */
+
+  /* Texto em cima do brand-soft, se usado em chips/badges */
+  --brand-soft-foreground: oklch(0.20 0.03 280);
+
+  /* =========================
+     CORES SEMÂNTICAS
+     - Aqui você define o "tema" padrão do site
+     - Muitas derivam dos tokens de marca
+     ========================= */
+
+  /* Fundo geral da página (bg-background) */
+  --background: oklch(1 0 0);                   /* branco */
+
+  /* Cor principal do texto (text-foreground) */
+  --foreground: oklch(0.145 0 0);               /* quase preto */
+
+  /* Fundo de cards (bg-card) */
+  --card: oklch(1 0 0);                         /* igual ao background */
+
+  /* Texto em cima dos cards (text-card-foreground) */
+  --card-foreground: oklch(0.145 0 0);
+
+  /* Fundo de popovers/menus (bg-popover) */
+  --popover: oklch(1 0 0);
+
+  /* Texto de popovers (text-popover-foreground) */
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* Cor primária (bg-primary, text-primary) – ligada à marca */
+  --primary: var(--brand);                      /* usa diretamente a cor da marca */
+  --primary-foreground: var(--brand-foreground);
+
+  /* Cor secundária (bg-secondary) – áreas de apoio, tags, chips */
+  --secondary: oklch(0.97 0 0);                 /* cinza bem clarinho */
+  --secondary-foreground: oklch(0.205 0 0);     /* texto escuro por cima */
+
+  /* Fundo de elementos "muted" (bg-muted), ex.: caixas discretas, bordas suaves */
+  --muted: oklch(0.97 0 0);                     /* cinza clarinho */
+  --muted-foreground: oklch(0.556 0 0);         /* texto mais suave */
+
+  /* Cor de destaque/acento (bg-accent) – também ligada à marca suave */
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand-soft-foreground);
+
+  /* Cor de ações destrutivas (botão de deletar, avisos de perigo) */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Cor padrão de borda (border-border) */
+  --border: oklch(0.922 0 0);
+
+  /* Fundo de inputs (bg-input) */
+  --input: oklch(0.922 0 0);
+
+  /* Cor do anel de foco (outline-ring) e focus-visible */
+  --ring: oklch(0.708 0 0);
+
+  /* Cores de gráficos (chart-1...5) – usadas em dashboards */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Cores para sidebars (se você tiver layout com menu lateral) */
+  --sidebar: oklch(0.985 0 0);                  /* fundo do sidebar */
+  --sidebar-foreground: oklch(0.145 0 0);       /* texto no sidebar */
+  --sidebar-primary: var(--brand);              /* cor principal no sidebar */
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);          /* hover/seleção no sidebar */
+  --sidebar-accent-foreground: var(--brand-soft-foreground);
+  --sidebar-border: oklch(0.922 0 0);           /* bordas do sidebar */
+  --sidebar-ring: oklch(0.708 0 0);             /* foco no sidebar */
+}
+
+/* =========================
+   🌙 TEMA ESCURO (MODO DARK)
+   ========================= */
+.dark {
+  /* Você pode manter a mesma marca ou ajustar levemente para dark */
+  --brand: oklch(0.70 0.18 280);                /* roxo mais claro para fundo escuro */
+  --brand-foreground: oklch(0.10 0.03 280);     /* texto escuro em cima do roxo claro */
+
+  --brand-soft: oklch(0.30 0.05 280);           /* roxo bem escuro e suave */
+  --brand-soft-foreground: oklch(0.98 0.01 280);
+
+  /* Fundo geral no modo escuro */
+  --background: oklch(0.145 0 0);               /* quase preto */
+
+  /* Texto principal no modo escuro */
+  --foreground: oklch(0.985 0 0);               /* quase branco */
+
+  /* Fundo dos cards (levemente acima do background) */
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+
+  /* Popovers no modo escuro */
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* Primária no dark (ligada à brand) */
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  /* Secundária no dark – caixas de apoio, bordas suaves */
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  /* Muted no dark – fundos discretos, infos secundárias */
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  /* Accent no dark – também ligada ao brand-soft no dark */
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand-soft-foreground);
+
+  /* Cor destrutiva no dark */
+  --destructive: oklch(0.704 0.191 22.216);
+
+  /* Bordas mais suaves no dark (com alpha) */
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+
+  /* Anel de foco no dark (outline-ring) */
+  --ring: oklch(0.556 0 0);
+
+  /* Cores de charts adaptadas para fundo escuro */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  /* Sidebar no modo escuro */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* =========================
+   CAMADA BASE DO TAILWIND
+   - Aqui aplicamos algumas regras globais
+   ========================= */
+@layer base {
+  * {
+    /* Usa sempre a cor de borda e o ring definido nas variáveis */
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    /* Garante que body já use background/texto do tema atual */
+    @apply bg-background text-foreground;
+  }
+}
