@@ -1,22 +1,6 @@
 // app/(site)/blog/page.tsx
 import Link from "next/link";
-
-const posts = [
-  {
-    slug: "por-que-sua-empresa-precisa-de-um-site-hoje",
-    title: "Por que sua empresa precisa de um site hoje",
-    excerpt:
-      "Mesmo com redes sociais fortes, ter um site próprio aumenta a credibilidade e o controle da sua presença digital.",
-    date: "2025-11-01",
-  },
-  {
-    slug: "quando-e-hora-de-sair-da-planilha-e-ir-para-um-sistema-web",
-    title: "Quando é hora de sair da planilha e ir para um sistema web",
-    excerpt:
-      "Alguns sinais mostram que você está perdendo tempo e informação tentando controlar tudo em planilhas.",
-    date: "2025-11-10",
-  },
-];
+import { posts } from "@/lib/blog";
 
 export default function BlogPage() {
   return (
@@ -39,7 +23,7 @@ export default function BlogPage() {
               {new Date(post.date).toLocaleDateString("pt-BR")}
             </p>
             <h2 className="mt-1 text-lg font-semibold">
-              <Link href={`/(site)/blog/${post.slug}`}>{post.title}</Link>
+              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">{post.excerpt}</p>
           </article>

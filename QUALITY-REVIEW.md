@@ -2,8 +2,9 @@
 
 > FASE 1 — Baseline / revisão estática consolidada.
 > NENHUMA correção executada nesta revisão. Este arquivo é a única saída permitida.
+> **Nota:** o baseline abaixo é o **histórico** da revisão inicial (2026-10-01). O estado atual está registrado na seção "Estado após verificação do QLT-001".
 
-## Baseline
+## Baseline inicial da quality review (histórico — 2026-10-01)
 
 - **Data:** 2026-10-01
 - **Branch:** `main`
@@ -54,29 +55,57 @@ Next.js build worker exited with code: 1 and signal: null
 Command exited with code 1
 ```
 
+### Estado após verificação do QLT-001 (2026-10-13)
+
+- **Lint:** ✅ **PASS** — `npm run lint` → **0 errors / 5 warnings** (warnings preexistentes, QLT-012)
+- **Build (production):** ✅ **PASS** — `npm run build` verde
+- **TypeScript via production build:** ✅ **PASS**
+- **Runtime:**
+  - `/blog` → HTTP 200
+  - `/blog/por-que-sua-empresa-precisa-de-um-site-hoje` → HTTP 200 (conteúdo renderizado)
+  - `/blog/quando-e-hora-de-sair-da-planilha-e-ir-para-um-sistema-web` → HTTP 200 (conteúdo renderizado)
+  - `/blog/inexistente` → HTTP 404 (`notFound()` funcionando)
+- **QLT-001:** ✅ **VERIFIED**
+
 ---
 
 ## Findings
 
 ### QLT-001 — `app/(site)/blog/[slug]/page.tsx` vazio quebra o `next build`
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ VERIFIED
 **Prioridade:** P0
 **Categoria:** Build / Rota quebrada
 
-**Evidência:** Arquivo existe mas não é um módulo válido (leitura direta): não possui `default` export. `npm run build` falha no TypeScript com `File '.../blog/[slug]/page.tsx' is not a module`. A rota `app/(site)/blog/[slug]/page.tsx` corresponde publicamente a `/blog/[slug]` (o `(site)` é Route Group e não pertence ao pathname público). A listagem `app/(site)/blog/page.tsx` linka cada card para `href={`/(site)/blog/${post.slug}`}` (comprovado no código), mas a URL pública canônica da rota é `/blog/${post.slug}`.
+**Nota histórica:** foi o bloqueio original do production build no baseline inicial. Implementação concluída; build atualmente verde; runtime verificado.
 
-**Arquivo(s):** `app/(site)/blog/[slug]/page.tsx`
+**Evidência:** Arquivo existia mas não era um módulo válido (leitura direta): não possuía `default` export. `npm run build` falhava no TypeScript com `File '.../blog/[slug]/page.tsx' is not a module`.
 
-**Comportamento atual:** Rota dinâmica sem implementação válida (arquivo não é módulo); `next build` falha; a rota ainda não possui um `default` export funcional.
+**Causa raiz:** Arquivo completamente vazio (0 bytes), sem export ou componente.
 
-**Nota de consistência de href (não validada runtime):** a listagem usa `href={`/(site)/blog/${post.slug}`}`, incluindo o segmento do Route Group `(site)`, enquanto a URL pública canônica da rota é `/blog/${post.slug}`. Recomenda-se padronizar o href para a URL pública. O comportamento runtime desse href específico (se será automaticamente normalizado e funcionará) **NÃO foi validado nesta revisão** — não há evidência suficiente para afirmar que é removido automaticamente ou que a navegação funciona. Esta observação integra QLT-001 e não altera o total de findings.
+**Implementação realizada:**
+- Criado `lib/blog.ts` com fonte de dados compartilhada (tipo `BlogPost`, array `posts`, função `getPostBySlug`)
+- Atualizado `app/(site)/blog/page.tsx` para importar posts da fonte compartilhada e corrigir href para `/blog/${slug}`
+- Implementado `app/(site)/blog/[slug]/page.tsx` com:
+  - `params: Promise<{ slug: string }>`
+  - `await params`
+  - Busca por slug usando `getPostBySlug`
+  - `notFound()` para slugs inexistentes
+  - Renderização de title, date, excerpt
 
-**Impacto:** Bloqueante — quebra o build (baseline fundamental) e quebra a navegação do blog.
+**Testes executados:**
+- `npm run lint` → PASS (0 errors, 5 warnings preexistentes)
+- `npm run build` → PASS (production build verde)
+- Runtime verification:
+  - `/blog` → HTTP 200
+  - `/blog/por-que-sua-empresa-precisa-de-um-site-hoje` → HTTP 200 (conteúdo renderizado)
+  - `/blog/quando-e-hora-de-sair-da-planilha-e-ir-para-um-sistema-web` → HTTP 200 (conteúdo renderizado)
+  - `/blog/inexistente` → HTTP 404 (notFound funcionando)
 
-**Correção mínima sugerida:** Preencher a rota com template de post (dados estáticos reaproveitando o array de `blog/page.tsx`) OU remover/redirectar os links da listagem. Fluxo: `quality-review → plan → safe-implementation`.
-
-**Testes necessários:** `npm run build` verde; render de `/blog/post-exemplo`; verificação de que a listagem aponta para rota funcional.
+**Arquivo(s) modificados:**
+- `lib/blog.ts` (criado)
+- `app/(site)/blog/page.tsx` (import e href corrigido)
+- `app/(site)/blog/[slug]/page.tsx` (implementado)
 
 **Dependências:** Relacionado a QLT-002 (metadata/SEO do blog).
 
@@ -324,7 +353,7 @@ Command exited with code 1
 
 **Arquivo(s):** `app/(site)/layout.tsx`, `app/(site)/page.tsx`
 
-**Comportamento actual:** O **lint passa** (`0 errors / 5 warnings`); os 5 warnings de imports não usados geram ruído e indicam seções que não estão sendo compostas na home. **Esses warnings não são a causa da falha do build** — o production build falha exclusivamente pelo QLT-001 (`blog/[slug]/page.tsx` vazio).
+**Comportamento actual:** O **lint passa** (`0 errors / 5 warnings`); os 5 warnings de imports não usados geram ruído e indicam seções que não estão sendo compostas na home. **Esses warnings nunca foram a causa da falha do build** — no baseline inicial, o production build falhava exclusivamente pelo QLT-001 (`blog/[slug]/page.tsx` vazio). Após a correção e verificação do QLT-001, o production build está verde.
 
 **Impacto:** Manutenibilidade — código morto e possível omissão de seções esperadas na home.
 
@@ -336,27 +365,54 @@ Command exited with code 1
 
 ---
 
+### QLT-013 — Datas date-only podem exibir o dia anterior por conversão de timezone
+
+**Status:** [!] ISSUE_CONFIRMED
+**Prioridade:** P2
+**Categoria:** Data / UX / Correctness
+
+**Evidência:** Durante verificação runtime do QLT-001, data armazenada como `2025-11-01` foi renderizada como `31/10/2025`. O padrão atual `new Date(post.date).toLocaleDateString("pt-BR")` interpreta strings date-only YYYY-MM-DD como UTC e converte para timezone local, causando deslocamento de um dia.
+
+**Arquivo(s):** `app/(site)/blog/page.tsx`, `app/(site)/blog/[slug]/page.tsx`, `lib/blog.ts` (origem das strings de data)
+
+**Comportamento atual:** Datas date-only são interpretadas como UTC e convertidas para timezone local, resultando em exibição do dia anterior em alguns fuseis horários.
+
+**Impacto:** UX / Correctness — Datas exibidas podem não corresponder à data real do post, causando confusão para usuários.
+
+**Correção conceitual:** Formatando datas date-only sem conversão indesejada de timezone. Soluções possíveis:
+- Usar `new Date(post.date + 'T00:00:00')` para forçar timezone local
+- Armazenar datas como ISO 8601 com timezone
+- Usar biblioteca de formatação de datas
+- Formatar manualmente a string YYYY-MM-DD
+
+**Testes necessários:** Verificar renderização de datas em diferentes timezones.
+
+---
+
 ## Distribuição de prioridades
 
 | Prioridade | Qtd | Findings |
 |---|---|---|
-| **P0** | 1 | QLT-001 |
+| **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 5 | QLT-002, QLT-003, QLT-005, QLT-006, QLT-010 |
+| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013 |
 | **P3** | 5 | QLT-004, QLT-007, QLT-008, QLT-009, QLT-012 |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 12 findings.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001 está VERIFIED; os demais permanecem pendentes.
 
 ---
 
-# UM PRÓXIMO ITEM
+# PRÓXIMO ITEM
 
-**QLT-001 — Preencher `app/(site)/blog/[slug]/page.tsx` (ou remover/redirectar a rota).**
+**Repriorização pendente após o fechamento do QLT-001.**
 
-**Motivo:** É o **único P0 confirmado** e o **único que bloquea o `next build`** (confirmado no baseline: `File '.../blog/[slug]/page.tsx' is not a module`). Recuperar um baseline de build verde deve preceder novas evoluções técnicas do Svitordev UI Lab. Fluxo recomendado: `quality-review → plan → safe-implementation`.
+- O QLT-001 (único P0) foi concluído e verificado (build verde, runtime 200/404 confirmado).
+- Existem agora **6 findings P2 pendentes** (QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013).
+- O próximo finding será escolhido em uma **nova etapa de priorização**, não automaticamente por ordem de descoberta.
+- Nenhuma implementação adicional está autorizada nesta sessão documental.
 
-> **Gates independentes (baseline real):** lint e build são gates separados. O **lint está verde** (`0 errors / 5 warnings`), mesmo com o build falhando. Portanto o lint **não é inválido nem não confiável** — valida estática/código independentemente do build. A **validação visual automatizada ainda não existe** porque o Playwright não foi configurado (ver baseline).
+> **Gates independentes (baseline real):** lint e build são gates separados. No baseline inicial o lint estava verde mesmo com o build falhando. Portanto o lint **não é inválido nem não confiável** — valida estática/código independentemente do build. A **validação visual automatizada ainda não existe** porque o Playwright não foi configurado (ver baseline).
 
 ---
 
@@ -364,9 +420,9 @@ Command exited with code 1
 
 - Nenhuma correção de código/página/CSS.
 - Nenhuma instalação de dependências (incl. Playwright / `baseline-browser-mapping`).
-- Nenhum `commit` / `push` / `git add`.
-- Nenhuma alteração de documentação além deste `QUALITY-REVIEW.md`.
-- Nenhum finding marcado como `FIXED`/`VERIFIED`.
+- Nenhum `commit` / `push` / `git add` (na revisão inicial; pendente para a implementação do QLT-001).
+- Nenhuma alteração de documentação além deste `QUALITY-REVIEW.md` (na revisão inicial).
+- Nenhum finding marcado como `FIXED`/`VERIFIED` na revisão inicial. Atualização: **QLT-001 está VERIFIED**; os demais findings permanecem pendentes.
 
 ## Valeração final
 

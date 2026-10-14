@@ -44,12 +44,30 @@ public/
 
 Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada variação em caixa com borda e rótulo. Será evoluído futuramente (índice, filtros, preview de código).
 
-## Problema conhecido
+## Estado de qualidade (atualizado após QLT-001)
 
-`app/(site)/blog/[slug]/page.tsx` está **vazio** no baseline, o que **quebra o `next build`**.
+Production build **verde**. QLT-001 **VERIFIED**. Rota `/blog/[slug]` funcional.
 
-- **Não** corrigir nesta fase.
-- Será tratado posteriormente via: `quality-review` → finding → `plan` → `safe-implementation`.
+- **Total de findings:** 13 (QLT-001 VERIFIED; os demais permanecem pendentes).
+- **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
+
+### Problemas resolvidos
+
+- **QLT-001** (P0): Rota dinâmica `/blog/[slug]` implementada e verificada
+  - Fonte compartilhada em `lib/blog.ts`
+  - Listagem consome fonte compartilhada
+  - Rota dinâmica consome mesma fonte
+  - `notFound()` para slugs inexistentes
+  - href público corrigido para `/blog/${slug}`
+  - Lint PASS, build PASS, runtime 200/404 verificados
+
+### Problemas conhecidos
+
+- **QLT-013** (P2): Datas date-only podem exibir o dia anterior por conversão de timezone
+  - Evidência: `2025-11-01` renderizou como `31/10/2025` durante teste runtime
+  - Causa: `new Date(post.date).toLocaleDateString("pt-BR")` interpreta date-only como UTC
+  - Solução: Formatar datas sem conversão indesejada de timezone
+  - **Não corrigido** — registrado para tratamento futuro
 
 ## Decisões registradas
 

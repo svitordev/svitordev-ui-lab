@@ -23,4 +23,22 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ### Conhecido (não corrigido nesta fase)
 
-- `app/(site)/blog/[slug]/page.tsx` vazio quebra o `next build`. Será tratado posteriormente via `quality-review` → finding → `plan` → `safe-implementation`.
+- `app/(site)/blog/[slug]/page.tsx` vazio quebra o `next build`. **RESOLVIDO** via QLT-001 (ver abaixo).
+
+### Correções
+
+- **QLT-001** (P0): Implementação da rota dinâmica `/blog/[slug]`
+  - Criado `lib/blog.ts` com fonte de dados compartilhada
+  - Implementado busca por slug com `getPostBySlug()`
+  - Implementado `notFound()` para slugs inexistentes
+  - Corrigido href para formato público `/blog/${slug}`
+  - Listagem agora consome fonte compartilhada
+  - Rota dinâmica consome mesma fonte compartilhada
+  - **Testes:** lint PASS, build PASS, runtime 200/404 verificados
+
+### Novo finding
+
+- **QLT-013** (P2): Datas date-only podem exibir o dia anterior por conversão de timezone
+  - Evidência: `2025-11-01` renderizou como `31/10/2025` durante verificação runtime
+  - Causa: `new Date(post.date).toLocaleDateString("pt-BR")` interpreta date-only como UTC
+  - **Não corrigido** nesta fase — registrado para tratamento futuro
