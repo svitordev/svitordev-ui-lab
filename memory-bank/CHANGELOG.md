@@ -36,6 +36,13 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
   - Rota dinâmica consome mesma fonte compartilhada
   - **Testes:** lint PASS, build PASS, runtime 200/404 verificados
 
+- **QLT-012** (P3): Removidos 5 imports não utilizados
+  - `app/(site)/layout.tsx`: `FooterColumns`
+  - `app/(site)/page.tsx`: `AboutTimeline`, `CtaBanner`, `HeroCenterCta`, `ServicesSplitWithHighlight`
+  - 2 arquivos modificados, 5 linhas removidas, JSX preservado
+  - **Testes:** ESLint 0 errors / 0 warnings, build PASS
+  - **QLT-012 VERIFIED**
+
 ### Novo finding
 
 - **QLT-013** (P2): Datas date-only podem exibir o dia anterior por conversão de timezone

@@ -340,11 +340,11 @@ Command exited with code 1
 
 ### QLT-012 — Imports não usados (5 warnings do lint)
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ VERIFIED
 **Prioridade:** P3
 **Categoria:** Código / Manutenibilidade
 
-**Evidência:** `npm run lint` reporta 5 warnings `@typescript-eslint/no-unused-vars`:
+**Evidência (baseline):** `npm run lint` reportava 5 warnings `@typescript-eslint/no-unused-vars`:
 - `app/(site)/layout.tsx:3` → `FooterColumns` importado e não usado.
 - `app/(site)/page.tsx:3` → `AboutTimeline` não usado.
 - `app/(site)/page.tsx:5` → `CtaBanner` não usado.
@@ -362,6 +362,15 @@ Command exited with code 1
 **Testes necessários:** `npm run lint` → 0 warnings; verificar se as seções omitidas deveriam compor a home.
 
 **Dependências:** Relacionado a QLT-011 (revisão da home).
+
+**Verificação (2026-10-13):**
+- Baseline original: lint PASS com 0 errors / 5 warnings.
+- Causa: imports sem uso (decisão de implementação: remover — sem evidência de que as seções deveriam compor a home).
+- Solução: remoção dos 5 imports (`FooterColumns`, `AboutTimeline`, `CtaBanner`, `HeroCenterCta`, `ServicesSplitWithHighlight`).
+- JSX integralmente preservado; nenhum componente removido do repositório.
+- `npm run lint` → **0 errors / 0 warnings** (o aviso externo de manutenção `baseline-browser-mapping` não é warning do ESLint e permanece fora do escopo).
+- `npm run build` → **PASS**.
+- `git diff` → apenas 5 linhas removidas em 2 arquivos.
 
 ---
 
@@ -396,21 +405,21 @@ Command exited with code 1
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
 | **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013 |
-| **P3** | 5 | QLT-004, QLT-007, QLT-008, QLT-009, QLT-012 |
+| **P3** | 5 | QLT-004, QLT-007, QLT-008, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001 está VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 
 # PRÓXIMO ITEM
 
-**Repriorização pendente após o fechamento do QLT-001.**
+**Playwright mínimo — infraestrutura P1 pré-rotina.**
 
-- O QLT-001 (único P0) foi concluído e verificado (build verde, runtime 200/404 confirmado).
-- Existem agora **6 findings P2 pendentes** (QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013).
-- O próximo finding será escolhido em uma **nova etapa de priorização**, não automaticamente por ordem de descoberta.
-- Nenhuma implementação adicional está autorizada nesta sessão documental.
+- QLT-001 e QLT-012 estão VERIFIED (build verde, lint 0 errors / 0 warnings).
+- Conforme a repriorização pré-rotina, o próximo pré-requisito antes do Dia 1 é o **Playwright mínimo** (DEC-006): smoke nas rotas críticas (`/`, `/blog`, post válido, slug inexistente, `/library` + categorias mínimas), chromium, viewports mobile + desktop.
+- Playwright ainda **não** é um finding QLT — é decisão de projeto já registrada (DEC-006); não implementado nesta sessão.
+- Demais findings (P2/P3/P4) permanecem no roadmap, sem escolha automática do próximo por ordem de descoberta.
 
 > **Gates independentes (baseline real):** lint e build são gates separados. No baseline inicial o lint estava verde mesmo com o build falhando. Portanto o lint **não é inválido nem não confiável** — valida estática/código independentemente do build. A **validação visual automatizada ainda não existe** porque o Playwright não foi configurado (ver baseline).
 
@@ -422,7 +431,7 @@ Command exited with code 1
 - Nenhuma instalação de dependências (incl. Playwright / `baseline-browser-mapping`).
 - Nenhum `commit` / `push` / `git add` (na revisão inicial; pendente para a implementação do QLT-001).
 - Nenhuma alteração de documentação além deste `QUALITY-REVIEW.md` (na revisão inicial).
-- Nenhum finding marcado como `FIXED`/`VERIFIED` na revisão inicial. Atualização: **QLT-001 está VERIFIED**; os demais findings permanecem pendentes.
+- Nenhum finding marcado como `FIXED`/`VERIFIED` na revisão inicial. Atualização: **QLT-001 e QLT-012 estão VERIFIED**; os demais findings permanecem pendentes.
 
 ## Valeração final
 

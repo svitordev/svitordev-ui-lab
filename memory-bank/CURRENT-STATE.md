@@ -44,11 +44,12 @@ public/
 
 Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada variação em caixa com borda e rótulo. Será evoluído futuramente (índice, filtros, preview de código).
 
-## Estado de qualidade (atualizado após QLT-001)
+## Estado de qualidade (atualizado após QLT-001 e QLT-012)
 
-Production build **verde**. QLT-001 **VERIFIED**. Rota `/blog/[slug]` funcional.
+Production build **verde**. Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Total de findings:** 13 (QLT-001 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Próximo pré-requisito pré-rotina:** Playwright mínimo (DEC-006 — P1 antes do Dia 1).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Problemas resolvidos
@@ -60,6 +61,11 @@ Production build **verde**. QLT-001 **VERIFIED**. Rota `/blog/[slug]` funcional.
   - `notFound()` para slugs inexistentes
   - href público corrigido para `/blog/${slug}`
   - Lint PASS, build PASS, runtime 200/404 verificados
+
+- **QLT-012** (P3): Imports não usados removidos (verificado)
+  - `FooterColumns` removido de `app/(site)/layout.tsx`
+  - `AboutTimeline`, `CtaBanner`, `HeroCenterCta`, `ServicesSplitWithHighlight` removidos de `app/(site)/page.tsx`
+  - JSX preservado; lint 0/0; build PASS
 
 ### Problemas conhecidos
 

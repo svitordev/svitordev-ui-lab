@@ -1,6 +1,5 @@
 // app/(site)/layout.tsx
 import type { ReactNode } from "react";
-import { FooterColumns } from "@/components/site/footers/footer-columns";
 import { HeaderCentered } from "@/components/site/headers/header-centered";
 import { FooterCta } from "@/components/site/footers/footer-cta";
 
