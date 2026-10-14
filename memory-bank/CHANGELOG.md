@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-14] — Playwright mínimo pré-rotina (VERIFIED)
+
+- `@playwright/test` **1.64.1** instalado (devDependency — única dependência nova).
+- Navegador: **Chromium somente**.
+- Criado `playwright.config.ts`: `testDir: ./tests`, `baseURL: http://localhost:3000`, `webServer` com `npm run dev` (`reuseExistingServer: !CI`, timeout 120000).
+- Criado `tests/smoke.spec.ts`: **8 smoke tests** (`/`, `/blog` listagem, post de slug válido, slug inexistente/404, `/library` redirect, `/library/headers`, `/library/footers`, navegação home → blog).
+- **Dois projects:** desktop (1280×720) e mobile (375×667).
+- Script `npm run test:e2e` adicionado; `.gitignore` com `/test-results/` e `/playwright-report/`.
+- **16/16** (8 testes × 2 projects) em **duas execuções consecutivas**, sem retries.
+- Lint **0 errors / 0 warnings**; build **PASS**.
+- **Infraestrutura Playwright pré-rotina VERIFIED** (DEC-006 executada).
+- Não incluído (posterior): visual regression, CI, Firefox, WebKit.
+
+---
+
 ## [0.1.0] — 2026-09-30
 
 ### Fundação

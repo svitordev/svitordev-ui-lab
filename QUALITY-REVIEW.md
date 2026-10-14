@@ -2,7 +2,7 @@
 
 > FASE 1 — Baseline / revisão estática consolidada.
 > NENHUMA correção executada nesta revisão. Este arquivo é a única saída permitida.
-> **Nota:** o baseline abaixo é o **histórico** da revisão inicial (2026-10-01). O estado atual está registrado na seção "Estado após verificação do QLT-001".
+> **Nota:** o baseline abaixo é o **histórico** da revisão inicial (2026-10-01). O estado atual está registrado nas seções "Estado após verificação do QLT-001" e "Estado após Playwright mínimo pré-rotina".
 
 ## Baseline inicial da quality review (histórico — 2026-10-01)
 
@@ -15,8 +15,8 @@
 - **Build (production):** ❌ **FAIL** — `npm run build` falhou no TypeScript (`blog/[slug]/page.tsx` não é módulo)
 - **TypeScript via production build:** ❌ **FAIL** por QLT-001
 - **Typecheck (LSP):** sem erros adicionais detectados fora do build
-- **Playwright:** NOT_CONFIGURED
-- **Visual regression:** NOT_CONFIGURED
+- **Playwright:** NOT_CONFIGURED no baseline (➡️ implementado e **VERIFIED** em 2026-10-14 — ver seção "Estado após Playwright mínimo pré-rotina")
+- **Visual regression:** NOT_CONFIGURED (continua — posterior)
 - **Gates:** lint e build são **independentes**. O lint valida código/estática e está verde mesmo com o build falhando. A validação visual automatizada ainda não existe (Playwright não configurado).
 - **Método:** revisão estática integral (documentação + código) + baseline real executado no workspace
 
@@ -66,6 +66,20 @@ Command exited with code 1
   - `/blog/quando-e-hora-de-sair-da-planilha-e-ir-para-um-sistema-web` → HTTP 200 (conteúdo renderizado)
   - `/blog/inexistente` → HTTP 404 (`notFound()` funcionando)
 - **QLT-001:** ✅ **VERIFIED**
+
+---
+
+## Estado após Playwright mínimo pré-rotina (2026-10-14)
+
+- **Playwright:** ✅ **CONFIGURED / VERIFIED** (execução da DEC-006 — não é finding QLT)
+- **@playwright/test:** 1.64.1 (devDependency)
+- **Browser:** Chromium somente
+- **Projects:** desktop (1280×720) e mobile (375×667)
+- **Cobertura mínima:** 8 smoke tests (`tests/smoke.spec.ts`) × 2 projects = 16 execuções — `/` (main/banner/h1), `/blog` (listagem), post de slug válido, slug inexistente (404), `/library` (redirect), `/library/headers`, `/library/footers`, navegação home → blog
+- **Execuções:** duas execuções consecutivas verdes (16/16 e 16/16), sem retries
+- **Lint:** ✅ **PASS** — 0 errors / 0 warnings
+- **Build:** ✅ **PASS**
+- **Sem:** Firefox, WebKit, visual regression, screenshots baseline, axe, CI, retries, workers customizados, fullyParallel, reporter externo.
 
 ---
 
@@ -414,14 +428,14 @@ Command exited with code 1
 
 # PRÓXIMO ITEM
 
-**Playwright mínimo — infraestrutura P1 pré-rotina.**
+**Playwright mínimo — infraestrutura P1 pré-rotina.** ✅ **CONCLUÍDA (2026-10-14)** — implementada e verificada (ver seção "Estado após Playwright mínimo pré-rotina").
 
 - QLT-001 e QLT-012 estão VERIFIED (build verde, lint 0 errors / 0 warnings).
-- Conforme a repriorização pré-rotina, o próximo pré-requisito antes do Dia 1 é o **Playwright mínimo** (DEC-006): smoke nas rotas críticas (`/`, `/blog`, post válido, slug inexistente, `/library` + categorias mínimas), chromium, viewports mobile + desktop.
-- Playwright ainda **não** é um finding QLT — é decisão de projeto já registrada (DEC-006); não implementado nesta sessão.
-- Demais findings (P2/P3/P4) permanecem no roadmap, sem escolha automática do próximo por ordem de descoberta.
+- O pré-requisito pré-rotina **Playwright mínimo** (DEC-006) foi executado e **VERIFIED**: smoke nas rotas críticas (`/`, `/blog`, post válido, slug inexistente, `/library` + categorias mínimas), Chromium, viewports mobile + desktop — 16/16 em duas execuções consecutivas.
+- Playwright **não** é um finding QLT — é decisão de projeto já registrada (DEC-006), agora executada.
+- **Próximo passo:** roadmap macro das 1000 evoluções + detalhamento das primeiras ~25. Demais findings (P2/P3/P4) permanecem no roadmap, sem escolha automática do próximo por ordem de descoberta.
 
-> **Gates independentes (baseline real):** lint e build são gates separados. No baseline inicial o lint estava verde mesmo com o build falhando. Portanto o lint **não é inválido nem não confiável** — valida estática/código independentemente do build. A **validação visual automatizada ainda não existe** porque o Playwright não foi configurado (ver baseline).
+> **Gates independentes (baseline real):** lint e build são gates separados. No baseline inicial o lint estava verde mesmo com o build falhando. Portanto o lint **não é inválido nem não confiável** — valida estática/código independentemente do build. Desde 2026-10-14 existe smoke automatizado via Playwright (Chromium, desktop + mobile); **visual regression automatizada ainda não existe** (posterior).
 
 ---
 

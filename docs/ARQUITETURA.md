@@ -76,6 +76,15 @@ public/
 - Exemplo: `import { HeaderCentered } from "@/components/site/headers/header-centered"`.
 - Componentes UI importados de `@/components/ui/*` e utilitários de `@/lib/utils`.
 
+## Testes
+
+- **Playwright** (`@playwright/test` 1.64.1, devDependency) — infraestrutura e2e/smoke mínima (DEC-006, implementada 2026-10-14).
+- `playwright.config.ts` — `testDir: ./tests`, `baseURL: http://localhost:3000`, `webServer` iniciando `npm run dev`.
+- `tests/smoke.spec.ts` — 8 smoke tests: `/`, `/blog` (listagem, post válido, slug inexistente/404), `/library` (redirect, headers, footers) e navegação home → blog.
+- **Projects:** desktop (1280×720) e mobile (375×667), **Chromium** somente.
+- **Execução:** `npm run test:e2e`.
+- Visual regression: ainda não configurada (posterior).
+
 ## Organização atual
 
 - Separação clara: `app/` (páginas/routing), `components/` (reutilizável), `lib/` (utilitários).

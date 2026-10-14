@@ -26,5 +26,5 @@ Critérios para uma evolução (componente, seção, layout, página, infraestru
 
 ## Registro de qualidade
 
-- **Playwright = P1** — deve entrar **antes** do início da rotina das 1000 evoluções.
-- **Visual regression** — avançado, posterior.
+- **Playwright** — infraestrutura mínima **disponível e verificada** (Chromium, desktop + mobile, smoke). Para mudanças que possam afetar rotas, navegação ou a estrutura coberta pelo smoke, `npm run test:e2e` deve permanecer verde. Alterações triviais sem impacto nessa cobertura não exigem testes e2e novos.
+- **Visual regression** — avançado, posterior (ainda não é requisito).

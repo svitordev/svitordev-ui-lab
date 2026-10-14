@@ -7,7 +7,7 @@ Snapshot curto do estado atual do repositório. Não copiar toda a documentaçã
 Repositório base (GitHub Template) em fase de **fundação documental**.
 
 - **Fase atual:** FASE 2 — Documentação.
-- **Próximo passo:** FASE 3 — Fundação visual/theming (após aprovação).
+- **Próxima fase:** roadmap macro das 1000 evoluções + detalhamento das primeiras ~25.
 
 ## Stack confirmada
 
@@ -44,13 +44,20 @@ public/
 
 Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada variação em caixa com borda e rótulo. Será evoluído futuramente (índice, filtros, preview de código).
 
-## Estado de qualidade (atualizado após QLT-001 e QLT-012)
+## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
-Production build **verde**. Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
+Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **8 smoke tests / 16 execuções**; **duas execuções consecutivas verdes** (sem retries). Execução da DEC-006.
+- **QLT-001:** ✅ VERIFIED. **QLT-012:** ✅ VERIFIED.
+- **`/library`:** READY.
+- **Design System:** READY.
 - **Total de findings:** 13 (QLT-001 e QLT-012 VERIFIED; os demais permanecem pendentes).
-- **Próximo pré-requisito pré-rotina:** Playwright mínimo (DEC-006 — P1 antes do Dia 1).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
+
+### Próxima fase
+
+Roadmap macro das 1000 evoluções + detalhamento das primeiras ~25.
 
 ### Problemas resolvidos
 
