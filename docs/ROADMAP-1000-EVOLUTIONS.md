@@ -98,7 +98,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 
 | # | Evolução | Tipo | Objetivo | Dependências | Finding | Esforço |
 |---:|---|---|---|---|---|---|
-| 001 | CTA Split data-driven + contrato de props exemplar | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
+| 001 | CTA Split Actions data-driven + contrato de props exemplar ✅ VERIFIED | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
 | 002 | Logos / social proof strip | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
 | 003 | Hero split com mídia | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
 | 004 | Badge | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
@@ -124,7 +124,9 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 024 | Corrigir datas/timezone | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 | Pequeno |
 | 025 | Smoke Playwright estendido | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
 
-## 001 — CTA Split data-driven + contrato de props exemplar
+## 001 — CTA Split Actions data-driven + contrato de props exemplar
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-15)** — `components/sections/cta/cta-split-actions.tsx` (Server Component; contrato `CtaAction`/`CtaSplitActionsProps` com `title` e `actions` obrigatórios; links internos via `next/link`, protocolos/externos via `<a>`; demo fornecida pela página `/library/cta`). Padrão documentado em `docs/DESIGN-SYSTEM.md` e no catálogo. Lint 0/0; build PASS; e2e 16/16.
 
 **Objetivo:** criar uma NOVA section visualmente útil que estabelece, simultaneamente, o primeiro contrato data-driven do laboratório — referência para todas as novas sections. A rotina não começa com refatoração interna.
 **Entregável:** nova section `components/sections/cta/` (CTA split) + página `/library/cta` atualizada. Contrato mínimo, simples e não excessivamente genérico: eyebrow opcional, title, description, actions (com destinos válidos), conteúdo complementar quando estruturalmente necessário.

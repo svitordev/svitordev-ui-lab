@@ -66,6 +66,16 @@ Sistema de design real atual. Não alterar `app/globals.css` nesta fase.
 - Customizar identidade via CSS variables em `globals.css` (brand, cores, radius).
 - Não duplicar valores de cor/espaçamento — usar tokens existentes.
 
+## Contratos de props (seções data-driven)
+
+Primeiro contrato exemplar do laboratório (Evolução 001): `CtaSplitActions` (`components/sections/cta/cta-split-actions.tsx`).
+
+- Contrato mínimo e local ao componente: `title` e `actions` obrigatórios; `eyebrow`, `description` e `supportingText` opcionais; `actions[].variant` restrito a `default | outline`.
+- Sem props cosméticas (`className`, cor, padding) e sem render-props no contrato.
+- Conteúdo vem por props; dados de demo pertencem à página da `/library`, não ao componente.
+- Server Component quando não há interação client-side.
+- Novas sections data-driven seguem este padrão; componentes legados migram quando forem tocados (estratégia B — sem refatoração em massa).
+
 ## Estratégia para projetos derivados (DEC-004)
 
 Projetos criados a partir do template poderão ser:

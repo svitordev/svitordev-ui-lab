@@ -6,9 +6,9 @@
 
 - **4** UI components
 - **6** site components
-- **21** section components
+- **22** section components
 - **2** wrappers/shells
-- **Total: 33** componentes reutilizáveis relevantes
+- **Total: 34** componentes reutilizáveis relevantes
 
 ---
 
@@ -89,13 +89,14 @@
 | ContactSimple | `components/sections/contact/contact-simple.tsx` | Template | Form simples |
 | ContactSplit | `components/sections/contact/contact-split.tsx` | Template | Dividido |
 
-### CTA — `components/sections/cta/` (3)
+### CTA — `components/sections/cta/` (4)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | CtaBanner | `components/sections/cta/cta-banner.tsx` | Template | Banner |
 | CtaSimple | `components/sections/cta/cta-simple.tsx` | Template | CTA simples |
 | CtaSplit | `components/sections/cta/cta-split.tsx` | Template | Dividido |
+| CtaSplitActions | `components/sections/cta/cta-split-actions.tsx` | Pronto | **Data-driven — contrato exemplar** (Evolução 001). Coluna editorial + painel de conversão; Server Component; links internos via `next/link`, protocolos/externos via `<a>` |
 
 ## Wrappers / shells (2)
 

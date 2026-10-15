@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-15] — Evolução 001: CTA Split Actions data-driven + contrato exemplar (VERIFIED)
+
+- Criado `components/sections/cta/cta-split-actions.tsx` — `CtaSplitActions`, Server Component (sem `"use client"`), data-driven, sem conteúdo hardcoded.
+- Primeiro contrato de props do laboratório: `CtaAction` + `CtaSplitActionsProps` (`title` e `actions` obrigatórios; `eyebrow`/`description`/`supportingText` opcionais; `variant` restrito a `default | outline`; sem props cosméticas).
+- Coluna editorial + painel de conversão; estruturalmente distinto do `cta-split.tsx` legado (caso de uso: decisão/conversão).
+- Links internos via `next/link`; protocolos/externos via `<a>`; key das actions por `href + label`.
+- Demo fornecida pela página `app/library/cta/page.tsx` (constante local tipada) — 4º bloco adicionado, página não reconstruída.
+- Responsivo (1 coluna em 375, 2 colunas em 1280, sem overflow); acessível (h2, links reais, foco, tokens, sem ARIA desnecessário).
+- Lint **0/0**; build **PASS**; e2e **16/16**.
+- Findings: QLT-005 **PARCIAL** (início do padrão), QLT-003 **PARCIAL** (actions do exemplar).
+- Documentação atualizada: `docs/DESIGN-SYSTEM.md` (padrão de contrato), `docs/COMPONENT-CATALOG.md` (entrada + contagem 34), `docs/ROADMAP-1000-EVOLUTIONS.md` (001 VERIFIED).
+
+---
+
 ## [2026-10-15] — Roadmap oficial das 1000 evoluções (documental)
 
 - Criado `docs/ROADMAP-1000-EVOLUTIONS.md` — fonte de verdade do roadmap evolutivo.

@@ -10,7 +10,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Preparação técnica pré-rotina:** concluída.
 - **Roadmap:** macro aprovado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`.
 - **Lote ativo:** 001–025.
-- **Próxima execução:** Evolução 001 (CTA Split data-driven + contrato de props exemplar) — ainda **NÃO implementada**.
+- **Evolução 001:** ✅ IMPLEMENTADA / VERIFIED (CTA Split Actions data-driven + contrato exemplar de props).
+- **Próxima execução:** Evolução 002 (Logos / social proof strip).
 
 ## Stack confirmada
 
@@ -39,9 +40,9 @@ public/
 
 - **4** UI components (`components/ui/`)
 - **6** site components (`components/site/` — headers + footers)
-- **21** section components (`components/sections/` — 7 grupos × 3)
+- **22** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 33** componentes reutilizáveis relevantes
+- **Total: 34** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -60,7 +61,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro criado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Próxima execução: Evolução 001 — ainda não implementada.
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evolução 001 VERIFIED. Próxima execução: Evolução 002 (Logos / social proof strip).
 
 ### Problemas resolvidos
 
