@@ -78,6 +78,8 @@ Regra de execução:
 - reavaliar antes de abrir o próximo lote;
 - auditoria a cada **100**.
 
+O roadmap oficial versionado está em `docs/ROADMAP-1000-EVOLUTIONS.md`.
+
 ## O que pertence ao projeto
 
 - Peças reutilizáveis (componentes, seções, layouts, padrões).

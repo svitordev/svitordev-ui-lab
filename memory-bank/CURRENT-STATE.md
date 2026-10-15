@@ -7,7 +7,10 @@ Snapshot curto do estado atual do repositório. Não copiar toda a documentaçã
 Repositório base (GitHub Template) em fase de **fundação documental**.
 
 - **Fase atual:** FASE 2 — Documentação.
-- **Próxima fase:** roadmap macro das 1000 evoluções + detalhamento das primeiras ~25.
+- **Preparação técnica pré-rotina:** concluída.
+- **Roadmap:** macro aprovado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`.
+- **Lote ativo:** 001–025.
+- **Próxima execução:** Evolução 001 (CTA Split data-driven + contrato de props exemplar) — ainda **NÃO implementada**.
 
 ## Stack confirmada
 
@@ -57,7 +60,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro das 1000 evoluções + detalhamento das primeiras ~25.
+Roadmap macro criado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Próxima execução: Evolução 001 — ainda não implementada.
 
 ### Problemas resolvidos
 

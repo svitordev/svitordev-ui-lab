@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-15] — Roadmap oficial das 1000 evoluções (documental)
+
+- Criado `docs/ROADMAP-1000-EVOLUTIONS.md` — fonte de verdade do roadmap evolutivo.
+- Distribuição macro por áreas somando exatamente 1000 (direcional, rebalanceável entre lotes).
+- Primeiro lote 001–025 detalhado; marcos 100/250/500/750/1000 descritos por maturidade.
+- Estratégia de lotes de ~25 com reavaliação ao fim de cada lote e quality review maior a cada ~100 registrada no documento.
+- `PROJETO.md` e `memory-bank/CURRENT-STATE.md` atualizados minimamente (referência ao roadmap oficial; lote ativo e próxima execução).
+- **Nenhuma evolução implementada nesta mudança** — somente documentação.
+
+---
+
 ## [2026-10-14] — Playwright mínimo pré-rotina (VERIFIED)
 
 - `@playwright/test` **1.64.1** instalado (devDependency — única dependência nova).
