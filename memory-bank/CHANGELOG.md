@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-16] — Evolução 002: Logos / Social Proof Strip (VERIFIED)
+
+- Criado `components/sections/logos/logos-strip.tsx` — `LogosStrip`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.
+- Contrato mínimo: `LogoItem = { name }` via `items` obrigatório; `title` opcional; sem imagem, links, motion, `className` ou props cosméticas (suporte a imagem/links fica para evolução futura somente com demanda real).
+- Wordmarks tipográficos em `<ul role="list">` com `<li>` por marca; flex-wrap centralizado; tokens apenas.
+- Criada `app/library/logos/page.tsx` no padrão atual do showcase (metadata, array tipado, preview, label code) — demo fornecida pela página.
+- Modificado `components/sections/library-shell.tsx` — link "Logos" adicionado ao menu (+1 linha).
+- Responsivo (375 e 1280 sem overflow); acessível (h2, `ul[role=list]`, texto real, sem ARIA desnecessário).
+- Lint **0/0**; build **PASS** (15 rotas); e2e **16/16** (suíte inalterada).
+- Findings: nenhum (segundo caso de uso do contrato da 001).
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 35), `docs/ROADMAP-1000-EVOLUTIONS.md` (002 VERIFIED).
+
+---
+
 ## [2026-10-15] — Evolução 001: CTA Split Actions data-driven + contrato exemplar (VERIFIED)
 
 - Criado `components/sections/cta/cta-split-actions.tsx` — `CtaSplitActions`, Server Component (sem `"use client"`), data-driven, sem conteúdo hardcoded.

@@ -99,7 +99,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | # | Evolução | Tipo | Objetivo | Dependências | Finding | Esforço |
 |---:|---|---|---|---|---|---|
 | 001 | CTA Split Actions data-driven + contrato de props exemplar ✅ VERIFIED | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
-| 002 | Logos / social proof strip | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
+| 002 | Logos / social proof strip ✅ VERIFIED | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
 | 003 | Hero split com mídia | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
 | 004 | Badge | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
 | 005 | Stats / métricas | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
@@ -135,6 +135,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Findings:** QLT-005 (PARCIAL — início do padrão), QLT-003 (PARCIAL — actions do exemplar). **Esforço:** Médio.
 
 ## 002 — Logos / social proof strip
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-16)** — `components/sections/logos/logos-strip.tsx` (Server Component; contrato `LogoItem`/`LogosStripProps` com `items` obrigatório e `title` opcional; somente wordmarks tipográficos — sem imagem, links, motion ou props cosméticas; `<ul role="list">`). Página `/library/logos` no padrão atual do showcase (demo fornecida pela página); link "Logos" adicionado ao menu do shell. Lint 0/0; build PASS; e2e 16/16.
 
 **Objetivo:** primeira section nova seguindo o contrato 001 — faixa de logos/clientes com fallback tipográfico.
 **Entregável:** `components/sections/logos/` + página `/library/logos` no padrão atual do showcase.

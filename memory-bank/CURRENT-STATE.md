@@ -11,7 +11,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Roadmap:** macro aprovado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`.
 - **Lote ativo:** 001–025.
 - **Evolução 001:** ✅ IMPLEMENTADA / VERIFIED (CTA Split Actions data-driven + contrato exemplar de props).
-- **Próxima execução:** Evolução 002 (Logos / social proof strip).
+- **Evolução 002:** ✅ IMPLEMENTADA / VERIFIED (Logos / social proof strip — wordmark tipográfico, sem imagem/links/motion).
+- **Próxima execução:** Evolução 003 (Hero split com mídia).
 
 ## Stack confirmada
 
@@ -40,9 +41,9 @@ public/
 
 - **4** UI components (`components/ui/`)
 - **6** site components (`components/site/` — headers + footers)
-- **22** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions`)
+- **23** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 34** componentes reutilizáveis relevantes
+- **Total: 35** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -61,7 +62,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evolução 001 VERIFIED. Próxima execução: Evolução 002 (Logos / social proof strip).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001 e 002 VERIFIED. Próxima execução: Evolução 003 (Hero split com mídia).
 
 ### Problemas resolvidos
 

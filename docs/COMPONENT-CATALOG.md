@@ -6,9 +6,9 @@
 
 - **4** UI components
 - **6** site components
-- **22** section components
+- **23** section components
 - **2** wrappers/shells
-- **Total: 34** componentes reutilizáveis relevantes
+- **Total: 35** componentes reutilizáveis relevantes
 
 ---
 
@@ -97,6 +97,12 @@
 | CtaSimple | `components/sections/cta/cta-simple.tsx` | Template | CTA simples |
 | CtaSplit | `components/sections/cta/cta-split.tsx` | Template | Dividido |
 | CtaSplitActions | `components/sections/cta/cta-split-actions.tsx` | Pronto | **Data-driven — contrato exemplar** (Evolução 001). Coluna editorial + painel de conversão; Server Component; links internos via `next/link`, protocolos/externos via `<a>` |
+
+### Logos — `components/sections/logos/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| LogosStrip | `components/sections/logos/logos-strip.tsx` | Pronto | **Data-driven** (Evolução 002). Faixa de wordmarks tipográficos; Server Component; sem imagem/links/motion; demo na `/library/logos` |
 
 ## Wrappers / shells (2)
 
