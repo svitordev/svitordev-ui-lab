@@ -101,7 +101,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 001 | CTA Split Actions data-driven + contrato de props exemplar ✅ VERIFIED | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
 | 002 | Logos / social proof strip ✅ VERIFIED | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
 | 003 | Hero Media Showcase ✅ VERIFIED | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
-| 004 | Badge | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
+| 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
 | 005 | Stats / métricas | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
 | 007 | Mobile nav acessível | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
@@ -153,6 +153,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** — **Esforço:** Médio.
 
 ## 004 — Badge
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-18)** — `components/ui/badge.tsx` (UI primitive; Server Component; `<span>` não interativo; CVA + `VariantProps` + `cn()` + `data-slot="badge"`, no padrão local dos primitives; variantes `default`/`secondary`/`outline` somente por tokens — sem destructive, sem sizes, sem `asChild`/Slot, sem hover próprio, sem motion). Sem dependência nova; sem shadcn CLI. Sem página própria no `/library` — igual aos demais primitives; verificação visual quando consumido pela 005/009. Lint 0/0; build PASS; e2e 16/16.
 
 **Objetivo:** primitive base (consumido por 005 e 009) — selecionado por demanda real, não por catálogo.
 **Entregável:** `components/ui/badge.tsx` com variantes temáticas (sem cor hardcoded), no padrão shadcn new-york já adotado pelo projeto.

@@ -4,6 +4,19 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-18] — Evolução 004: Badge (VERIFIED)
+
+- Criado `components/ui/badge.tsx` — `Badge`, UI primitive, Server Component (sem `"use client"`), `<span>` não interativo por conceito.
+- API: `React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>`; `defaultVariants: { variant: "default" }`; `data-slot="badge"`; `className` combinado via `cn()` — padrões reais dos primitives locais (button/card/input/textarea), sem cópia da web.
+- Variantes (decisão do Plan): `default`, `secondary`, `outline` — somente tokens, sem cor hardcoded; sem `destructive` por enquanto.
+- Sem sizes, sem `asChild`/Radix Slot, sem hover próprio, sem motion (reservado para a 012); sem dependência nova; sem shadcn CLI.
+- Sem página no `/library` — igual aos demais primitives; verificação visual quando consumido pela 005/009.
+- Lint **0/0**; build **PASS** (15 rotas); e2e **16/16** (suíte inalterada).
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 37), `docs/ROADMAP-1000-EVOLUTIONS.md` (004 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 005). `docs/DESIGN-SYSTEM.md`: não alterado.
+
+---
+
 ## [2026-10-17] — Evolução 003: Hero Media Showcase (VERIFIED)
 
 - Criado `components/sections/hero/hero-media-showcase.tsx` — `HeroMediaShowcase`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.
