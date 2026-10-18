@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-17] — Evolução 003: Hero Media Showcase (VERIFIED)
+
+- Criado `components/sections/hero/hero-media-showcase.tsx` — `HeroMediaShowcase`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.
+- Contrato: `HeroAction` (tipo local, sem abstração compartilhada prematura com `CtaAction`) + `HeroMediaShowcaseProps` — `title` obrigatório; `eyebrow`/`description`/`actions`/`mediaCaption` opcionais; sem `className` nem props cosméticas.
+- Composição **vertical/showcase** (decisão do Plan, anti-inflação com `hero-primary`): conteúdo editorial centralizado no topo (eyebrow → h1 → descrição → actions) + media frame dominante full-width abaixo + legenda opcional — nenhuma coluna lateral de mídia.
+- Media frame estruturalmente fixo: mock de browser/dashboard em HTML + Tailwind + tokens (chrome com dots, sidebar, stat cards, gráfico de barras, linhas) — sem imagem, sem asset, sem vídeo, sem ReactNode/render-prop, sem texto interno, sem `aria-*`/`role` gratuitos; legenda via `figcaption` (filho direto do `figure`).
+- Actions via `Button asChild`: internos via `next/link`, protocolos/externos via `<a>` (padrão 001); sem motion (reservado para a Evolução 012).
+- Modificado `app/library/hero/page.tsx` — constante local tipada `heroMediaShowcaseDemo` + bloco "Variante 04 · Showcase vertical com media frame" no padrão atual da página (página não reconstruída; QLT-010 segue na 019).
+- Responsivo (375×667 e 1280×720 sem overflow, ordem DOM natural; media ≈ 1,9× a altura do conteúdo no desktop); acessível (h1, links reais, `figure`/`figcaption`, tokens, foco nativo do Button).
+- Lint **0/0**; build **PASS** (15 rotas); e2e **16/16** (suíte inalterada — opção A, smoke novo na 025).
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 36), `docs/ROADMAP-1000-EVOLUTIONS.md` (003 VERIFIED, renomeada para Hero Media Showcase), `memory-bank/CURRENT-STATE.md` (próxima execução: 004). `docs/DESIGN-SYSTEM.md`: não alterado (aplica o padrão já documentado).
+
+---
+
 ## [2026-10-16] — Evolução 002: Logos / Social Proof Strip (VERIFIED)
 
 - Criado `components/sections/logos/logos-strip.tsx` — `LogosStrip`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.

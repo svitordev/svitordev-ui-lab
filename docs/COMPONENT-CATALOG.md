@@ -6,9 +6,9 @@
 
 - **4** UI components
 - **6** site components
-- **23** section components
+- **24** section components
 - **2** wrappers/shells
-- **Total: 35** componentes reutilizáveis relevantes
+- **Total: 36** componentes reutilizáveis relevantes
 
 ---
 
@@ -39,15 +39,16 @@
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (21)
+## Section components — `components/sections/` (24)
 
-### Hero — `components/sections/hero/` (3)
+### Hero — `components/sections/hero/` (4)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | HeroCenterCta | `components/sections/hero/hero-center-cta.tsx` | Template | CTA central |
 | HeroPrimary | `components/sections/hero/hero-primary.tsx` | Template | Layout principal |
 | HeroSteps | `components/sections/hero/hero-steps.tsx` | Template | Hero com passos |
+| HeroMediaShowcase | `components/sections/hero/hero-media-showcase.tsx` | Pronto | **Data-driven** (Evolução 003). Composição vertical/showcase: conteúdo editorial centralizado no topo + media frame dominante full-width (mock HTML/Tailwind, sem imagem) + `figcaption` opcional; Server Component; sem motion; demo na `/library/hero` |
 
 ### About — `components/sections/about/` (3)
 

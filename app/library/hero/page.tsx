@@ -2,6 +2,30 @@
 import { HeroPrimary } from "@/components/sections/hero/hero-primary";
 import { HeroCenterCta } from "@/components/sections/hero/hero-center-cta";
 import { HeroSteps } from "@/components/sections/hero/hero-steps";
+import {
+  HeroMediaShowcase,
+  type HeroMediaShowcaseProps,
+} from "@/components/sections/hero/hero-media-showcase";
+
+const heroMediaShowcaseDemo: HeroMediaShowcaseProps = {
+  eyebrow: "Produto",
+  title: "Veja seu negócio funcionando em um painel claro e objetivo.",
+  description:
+    "Modelo para produtos digitais, SaaS e portfólios: a mensagem principal vem no topo e o produto em destaque logo abaixo.",
+  actions: [
+    {
+      label: "Começar agora",
+      href: "mailto:contato@suaempresa.com",
+      variant: "default",
+    },
+    {
+      label: "Ver exemplos no blog",
+      href: "/blog",
+      variant: "outline",
+    },
+  ],
+  mediaCaption: "Painel ilustrativo montado com HTML e Tailwind — sem imagem.",
+};
 
 export default function HeroSectionsPage() {
   return (
@@ -56,6 +80,18 @@ export default function HeroSectionsPage() {
             </p>
             <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
               <HeroSteps />
+            </div>
+          </div>
+        </section>
+
+        {/* Variante 04 */}
+        <section>
+          <div className="mx-auto max-w-6xl px-4">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Variante 04 · Showcase vertical com media frame
+            </p>
+            <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
+              <HeroMediaShowcase {...heroMediaShowcaseDemo} />
             </div>
           </div>
         </section>

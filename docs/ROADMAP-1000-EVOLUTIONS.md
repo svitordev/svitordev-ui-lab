@@ -100,7 +100,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 |---:|---|---|---|---|---|---|
 | 001 | CTA Split Actions data-driven + contrato de props exemplar ✅ VERIFIED | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
 | 002 | Logos / social proof strip ✅ VERIFIED | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
-| 003 | Hero split com mídia | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
+| 003 | Hero Media Showcase ✅ VERIFIED | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
 | 004 | Badge | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
 | 005 | Stats / métricas | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
@@ -143,7 +143,9 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Critérios de aceite:** data-driven; responsiva; lint/build/e2e verdes.
 **Dependências:** 001. **Finding:** — **Esforço:** Médio.
 
-## 003 — Hero split com mídia
+## 003 — Hero Media Showcase
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-17)** — `components/sections/hero/hero-media-showcase.tsx` (Server Component; contrato `HeroAction`/`HeroMediaShowcaseProps` com `title` obrigatório e `eyebrow`/`description`/`actions`/`mediaCaption` opcionais). Composição **vertical/showcase** aprovada no Plan — conteúdo editorial centralizado no topo + media frame dominante full-width abaixo (mock de browser/dashboard em HTML/Tailwind, sem imagem/asset/dependência) + `figcaption` opcional — estruturalmente distinta dos 3 heroes existentes (nenhuma coluna lateral de mídia). Actions via `Button asChild` (`next/link`/`<a>`, padrão 001), tipo local sem abstração compartilhada prematura. Demo fornecida pela página `/library/hero` (Variante 04, padrão atual da página). Sem motion (reservado para a 012). Lint 0/0; build PASS (15 rotas); e2e 16/16; sem overflow em 375×667 e 1280×720.
 
 **Objetivo:** hero estruturalmente distinto dos existentes (texto + área de mídia/placeholder), no padrão de props.
 **Entregável:** nova variante em `components/sections/hero/` + página `/library/hero` atualizada.
@@ -279,7 +281,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 ## 022 — Landing composition completa
 
 **Objetivo:** demonstração viva do conceito do template: landing completa montada com peças do próprio laboratório.
-**Entregável:** página de demonstração com conteúdo coeso, usando: 001 (CTA Split/contrato), 002 (logos), 003 (hero split), 005 (stats), 009 (reviews), 011 (feature comparison), 016 (pricing), 018 (FAQ), 020 (sticky CTA) e o footer existente.
+**Entregável:** página de demonstração com conteúdo coeso, usando: 001 (CTA Split/contrato), 002 (logos), 003 (Hero Media Showcase), 005 (stats), 009 (reviews), 011 (feature comparison), 016 (pricing), 018 (FAQ), 020 (sticky CTA) e o footer existente.
 **Critérios de aceite:** monta/desmonta por composição; responsiva; lint/build/e2e verdes.
 **Dependências:** apenas as peças listadas. **Finding:** — **Esforço:** Grande.
 
