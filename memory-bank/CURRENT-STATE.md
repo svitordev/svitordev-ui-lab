@@ -15,7 +15,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 003:** ✅ IMPLEMENTADA / VERIFIED (Hero Media Showcase — composição vertical/showcase, media frame HTML/Tailwind dominante, sem imagem/motion).
 - **Evolução 004:** ✅ IMPLEMENTADA / VERIFIED (Badge — UI primitive, `<span>` não interativo, CVA com default/secondary/outline, sem sizes/asChild/motion).
 - **Evolução 005:** ✅ IMPLEMENTADA / VERIFIED (Stats / métricas — `StatsGrid` data-driven, primeiro consumo do Badge, grid 2/4 colunas, demo com value longo validada em 375px).
-- **Próxima execução:** Evolução 006 (`aria-label` nas navs).
+- **Evolução 006:** ✅ IMPLEMENTADA / VERIFIED (`aria-label` nas 4 navs — "Navegação principal" nos 3 headers + "Navegação da biblioteca" no shell; QLT-007 VERIFIED).
+- **Próxima execução:** Evolução 007 (Mobile nav acessível).
 
 ## Stack confirmada
 
@@ -57,15 +58,15 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
 - **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **8 smoke tests / 16 execuções**; **duas execuções consecutivas verdes** (sem retries). Execução da DEC-006.
-- **QLT-001:** ✅ VERIFIED. **QLT-012:** ✅ VERIFIED.
+- **QLT-001:** ✅ VERIFIED. **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
-- **Total de findings:** 13 (QLT-001 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001, QLT-007 e QLT-012 VERIFIED; os demais permanecem pendentes).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001, 002, 003, 004 e 005 VERIFIED. Próxima execução: Evolução 006 (`aria-label` nas navs).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–006 VERIFIED. Próxima execução: Evolução 007 (Mobile nav acessível — QLT-006).
 
 ### Problemas resolvidos
 
@@ -76,6 +77,11 @@ Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–
   - `notFound()` para slugs inexistentes
   - href público corrigido para `/blog/${slug}`
   - Lint PASS, build PASS, runtime 200/404 verificados
+
+- **QLT-007** (P3): `aria-label` adicionado nas 4 `<nav>` (verificado — Evolução 006)
+  - "Navegação principal" nos 3 headers; "Navegação da biblioteca" no `library-shell`
+  - Rótulos confirmados na árvore de acessibilidade; tabulação inalterada; nada visual mudou
+  - Lint 0/0; build PASS; e2e 16/16
 
 - **QLT-012** (P3): Imports não usados removidos (verificado)
   - `FooterColumns` removido de `app/(site)/layout.tsx`

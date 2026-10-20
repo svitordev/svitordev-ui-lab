@@ -103,7 +103,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 003 | Hero Media Showcase ✅ VERIFIED | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
 | 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
 | 005 | Stats / métricas ✅ VERIFIED | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
-| 006 | `aria-label` nas navs | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
+| 006 | `aria-label` nas navs ✅ VERIFIED | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
 | 007 | Mobile nav acessível | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
 | 008 | Avatar | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
 | 009 | Review cards com rating | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
@@ -171,6 +171,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001, 004. **Finding:** — **Esforço:** Médio.
 
 ## 006 — `aria-label` nas navs
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-19)** — `aria-label="Navegação principal"` adicionado nos `<nav>` dos 3 headers (`header-basic`, `header-centered`, `header-with-topbar`) e `aria-label="Navegação da biblioteca"` no `<nav>` do `library-shell` — exatamente os 4 `<nav>` do escopo, rótulos em pt-BR aprovados no Plan. Rótulos confirmados na árvore de acessibilidade em `/`, `/library/headers` e `/library/stats`; tabulação inalterada; nada visual mudou. Lint 0/0; build PASS (16 rotas); e2e 16/16. QLT-007 → VERIFIED.
 
 **Objetivo:** rótulo semântico nas regiões `<nav>` (headers + shell do library).
 **Entregável:** `aria-label` descritivo em todos os `<nav>`.

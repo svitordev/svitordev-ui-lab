@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-19] — Evolução 006: `aria-label` nas navegações (VERIFIED — QLT-007)
+
+- `aria-label="Navegação principal"` adicionado nos `<nav>` dos 3 headers (`header-basic`, `header-centered`, `header-with-topbar`); `aria-label="Navegação da biblioteca"` no `<nav>` do `library-shell` — exatamente os 4 `<nav>` do escopo, rótulos em pt-BR aprovados no Plan.
+- `<nav>` já é landmark nativo — apenas o nome acessível faltava; nenhum outro ARIA adicionado; nada visual mudou; tab order inalterado.
+- Rótulos confirmados na árvore de acessibilidade em `/` (HeaderCentered ativo), `/library/headers` (os 3 previews) e `/library/stats` (shell ativo).
+- Lint **0/0**; build **PASS** (16 rotas); e2e **16/16** (suíte inalterada — smoke de navegação por role/texto continua verde).
+- **QLT-007 → VERIFIED** no `QUALITY-REVIEW.md` (seção + tabela de prioridade P3 + total).
+- Documentação atualizada: `QUALITY-REVIEW.md`, `docs/ROADMAP-1000-EVOLUTIONS.md` (006 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 007).
+
+---
+
 ## [2026-10-19] — Evolução 005: Stats / métricas (VERIFIED)
 
 - Criado `components/sections/stats/stats-grid.tsx` — `StatsGrid`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.

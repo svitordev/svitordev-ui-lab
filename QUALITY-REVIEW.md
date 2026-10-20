@@ -237,7 +237,7 @@ Command exited with code 1
 
 ### QLT-007 — `<nav>` sem `aria-label` nos headers e no `/library`
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-10-19)** — `aria-label="Navegação principal"` adicionado nos `<nav>` dos 3 headers e `aria-label="Navegação da biblioteca"` no `<nav>` do `library-shell` (Evolução 006). Rótulos confirmados na árvore de acessibilidade em `/`, `/library/headers` e `/library/stats`; tabulação inalterada; nada visual mudou. Lint 0/0; build PASS; e2e 16/16.
 **Prioridade:** P3
 **Categoria:** Acessibilidade
 
@@ -419,10 +419,10 @@ Command exited with code 1
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
 | **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013 |
-| **P3** | 5 | QLT-004, QLT-007, QLT-008, QLT-009, QLT-012 — VERIFIED |
+| **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-007 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

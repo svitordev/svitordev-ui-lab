@@ -36,7 +36,10 @@ export function SectionsShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* sub-menu interno */}
-            <nav className="flex flex-wrap gap-2 text-xs font-medium text-muted-foreground">
+            <nav
+              aria-label="Navegação da biblioteca"
+              className="flex flex-wrap gap-2 text-xs font-medium text-muted-foreground"
+            >
               {sectionLinks.map((item) => (
                 <Link
                   key={item.href}

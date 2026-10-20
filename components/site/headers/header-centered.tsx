@@ -26,7 +26,10 @@ export function HeaderCentered() {
         </Link>
 
         {/* Navegação centralizada */}
-        <nav className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-muted-foreground">
+        <nav
+          aria-label="Navegação principal"
+          className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-muted-foreground"
+        >
           {navLinks.map((item) => {
             // ignora o hash na verificação de rota ativa
             const baseHref = item.href.split("#")[0] || "/";

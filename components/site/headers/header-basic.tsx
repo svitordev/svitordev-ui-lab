@@ -26,7 +26,10 @@ export function HeaderBasic() {
         </Link>
 
         {/* Navegação */}
-        <nav className="hidden items-center gap-4 text-xs font-medium text-muted-foreground md:flex">
+        <nav
+          aria-label="Navegação principal"
+          className="hidden items-center gap-4 text-xs font-medium text-muted-foreground md:flex"
+        >
           {navLinks.map((item) => {
             const baseHref = item.href.split("#")[0] || "/";
             const isActive = baseHref === "/" ? pathname === "/" : pathname === baseHref;
