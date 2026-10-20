@@ -10,6 +10,7 @@ const sectionLinks = [
   { href: "/library/hero", label: "Heros" },
   { href: "/library/services", label: "Services" },
   { href: "/library/logos", label: "Logos" },
+  { href: "/library/stats", label: "Stats" },
   { href: "/library/about", label: "Abouts" },
   { href: "/library/testimonials", label: "Testimonials" },
   { href: "/library/pricing", label: "Pricings" },

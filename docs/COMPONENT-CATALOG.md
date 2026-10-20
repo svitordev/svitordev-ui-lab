@@ -6,9 +6,9 @@
 
 - **5** UI components
 - **6** site components
-- **24** section components
+- **25** section components
 - **2** wrappers/shells
-- **Total: 37** componentes reutilizáveis relevantes
+- **Total: 38** componentes reutilizáveis relevantes
 
 ---
 
@@ -40,7 +40,7 @@
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (24)
+## Section components — `components/sections/` (25)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -105,6 +105,12 @@
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | LogosStrip | `components/sections/logos/logos-strip.tsx` | Pronto | **Data-driven** (Evolução 002). Faixa de wordmarks tipográficos; Server Component; sem imagem/links/motion; demo na `/library/logos` |
+
+### Stats — `components/sections/stats/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| StatsGrid | `components/sections/stats/stats-grid.tsx` | Pronto | **Data-driven** (Evolução 005). Grid de números de destaque (`value` + `label` + `description` opcional) com badge de contexto via `Badge` (004); Server Component; `ul[role=list]` 2 colunas no mobile / 4 no desktop; sem motion; demo na `/library/stats` |
 
 ## Wrappers / shells (2)
 

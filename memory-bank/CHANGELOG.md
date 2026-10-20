@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-19] — Evolução 005: Stats / métricas (VERIFIED)
+
+- Criado `components/sections/stats/stats-grid.tsx` — `StatsGrid`, Server Component (sem `"use client"`), data-driven, seguindo o contrato exemplar da Evolução 001.
+- Contrato: `StatItem = { value, label, description? }` (tipo local) + `StatsGridProps = { eyebrow?, title?, description?, items }` — `items` obrigatório; sem `className` público; sem props cosméticas.
+- Primeiro consumo real do `Badge` (004): `eyebrow` renderiza via `<Badge variant="secondary">` centralizado no header — requisito explícito do roadmap.
+- Lista: `ul[role="list"]` em `grid grid-cols-2 gap-8 md:grid-cols-4`; `li` por item com value (`text-3xl/4xl font-bold tabular-nums`) + label + description opcional; key `value-label`; tokens apenas; sem motion (reservado para a 012).
+- Criada `app/library/stats/page.tsx` no padrão atual do showcase (metadata, array tipado, preview, label code) — demo fornecida pela página com 4 métricas conceituais; inclui value longo `R$ 2 mi` para validar o grid de 2 colunas em 375px.
+- Modificado `components/sections/library-shell.tsx` — link "Stats" adicionado ao menu após "Logos" (+1 linha).
+- Responsivo (375×667: grid 2×2, value longo sem truncamento, gap 32px, sem overflow; 1280×720: 4 colunas, sem overflow); acessível (h2, `ul[role=list]`, Badge nativo, tokens, sem ARIA gratuito).
+- Lint **0/0**; build **PASS** (16 rotas); e2e **16/16** (suíte inalterada).
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 38), `docs/ROADMAP-1000-EVOLUTIONS.md` (005 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 006). `docs/DESIGN-SYSTEM.md`: não alterado.
+
+---
+
 ## [2026-10-18] — Evolução 004: Badge (VERIFIED)
 
 - Criado `components/ui/badge.tsx` — `Badge`, UI primitive, Server Component (sem `"use client"`), `<span>` não interativo por conceito.

@@ -14,7 +14,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 002:** ✅ IMPLEMENTADA / VERIFIED (Logos / social proof strip — wordmark tipográfico, sem imagem/links/motion).
 - **Evolução 003:** ✅ IMPLEMENTADA / VERIFIED (Hero Media Showcase — composição vertical/showcase, media frame HTML/Tailwind dominante, sem imagem/motion).
 - **Evolução 004:** ✅ IMPLEMENTADA / VERIFIED (Badge — UI primitive, `<span>` não interativo, CVA com default/secondary/outline, sem sizes/asChild/motion).
-- **Próxima execução:** Evolução 005 (Stats / métricas).
+- **Evolução 005:** ✅ IMPLEMENTADA / VERIFIED (Stats / métricas — `StatsGrid` data-driven, primeiro consumo do Badge, grid 2/4 colunas, demo com value longo validada em 375px).
+- **Próxima execução:** Evolução 006 (`aria-label` nas navs).
 
 ## Stack confirmada
 
@@ -43,9 +44,9 @@ public/
 
 - **5** UI components (`components/ui/` — + `badge` via Evolução 004)
 - **6** site components (`components/site/` — headers + footers)
-- **24** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase`)
+- **25** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 37** componentes reutilizáveis relevantes
+- **Total: 38** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -64,7 +65,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001, 002, 003 e 004 VERIFIED. Próxima execução: Evolução 005 (Stats / métricas).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001, 002, 003, 004 e 005 VERIFIED. Próxima execução: Evolução 006 (`aria-label` nas navs).
 
 ### Problemas resolvidos
 

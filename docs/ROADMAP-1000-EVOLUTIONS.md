@@ -102,7 +102,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 002 | Logos / social proof strip ✅ VERIFIED | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
 | 003 | Hero Media Showcase ✅ VERIFIED | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
 | 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
-| 005 | Stats / métricas | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
+| 005 | Stats / métricas ✅ VERIFIED | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
 | 007 | Mobile nav acessível | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
 | 008 | Avatar | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
@@ -162,6 +162,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** — **Esforço:** Pequeno.
 
 ## 005 — Stats / métricas
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-19)** — `components/sections/stats/stats-grid.tsx` (Server Component; contrato `StatItem`/`StatsGridProps` com `items` obrigatório e `eyebrow`/`title`/`description` opcionais; tipos locais). Header centralizado com **`Badge variant="secondary"`** para o eyebrow — primeiro consumo real do primitive 004, requisito desta evolução. `ul[role=list]` em grid 2 colunas no mobile / 4 no desktop; `li` por item com value (`text-3xl/4xl font-bold tabular-nums`) + label + description opcional. Demo fornecida pela página `/library/stats` (padrão showcase atual; inclui value longo `R$ 2 mi` para validar o grid em 375px); link "Stats" adicionado ao menu do shell. Sem motion (reservado para a 012). Lint 0/0; build PASS (16 rotas); e2e 16/16; sem overflow em 375×667 e 1280×720 (value longo sem truncamento, gap 32px).
 
 **Objetivo:** seção de números de destaque com badge de contexto — padrão recorrente em landing pages.
 **Entregável:** `components/sections/stats/` + página `/library/stats`.
