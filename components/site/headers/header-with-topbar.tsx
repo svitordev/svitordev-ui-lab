@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { MobileNav } from "@/components/site/headers/mobile-nav";
 import { Phone, Mail } from "lucide-react";
 
 const navLinks = [
@@ -71,6 +72,9 @@ export function HeaderWithTopbar() {
               );
             })}
           </nav>
+
+          {/* Menu mobile */}
+          <MobileNav links={navLinks} />
         </div>
       </div>
     </header>

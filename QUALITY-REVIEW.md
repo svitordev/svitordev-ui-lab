@@ -215,7 +215,7 @@ Command exited with code 1
 
 ### QLT-006 — Navegação mobile ausente em 2 headers
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-10-20)** — `MobileNav` criado (`components/site/headers/mobile-nav.tsx`, Client Component) e integrado a `header-basic` e `header-with-topbar`: botão real (Menu/X, `aria-label` dinâmico, `aria-expanded`, `aria-controls` via `useId`) + painel landmark `<nav aria-label="Navegação principal">` operável por teclado; fecha por botão, `Escape` (devolve foco ao botão) e clique fora; `header-centered` reavaliado e intencionalmente mantido (flex-wrap). 2 testes Playwright focados adicionados ao smoke (mobile-only). Lint 0/0; build PASS; e2e 18 passed + 2 skipped. (Evolução 007.)
 **Prioridade:** P2
 **Categoria:** Responsividade / Acessibilidade
 
@@ -418,11 +418,11 @@ Command exited with code 1
 |---|---|---|
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006, QLT-010, QLT-013 |
+| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010, QLT-013 |
 | **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-007 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

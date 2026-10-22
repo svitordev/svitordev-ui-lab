@@ -104,7 +104,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
 | 005 | Stats / métricas ✅ VERIFIED | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs ✅ VERIFIED | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
-| 007 | Mobile nav acessível | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
+| 007 | Mobile nav acessível ✅ VERIFIED | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
 | 008 | Avatar | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
 | 009 | Review cards com rating | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
 | 010 | Migrar `hero-center-cta` para o contrato | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
@@ -180,6 +180,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** QLT-007 ✅. **Esforço:** Pequeno.
 
 ## 007 — Mobile nav acessível
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-20)** — `components/site/headers/mobile-nav.tsx` (`MobileNav`, Client Component; contrato `MobileNavLink`/`MobileNavProps` somente `links`; `Button` real ghost/icon-lg com lucide Menu/X, `aria-label` dinâmico, `aria-expanded`, `aria-controls` via `useId`; painel condicional `<nav aria-label="Navegação principal">` com `ul[role=list]`; fecha por botão/Escape com retorno de foco/clique fora; sem Sheet/portal/focus trap; visível só abaixo de `md`) integrado a `header-basic` (grupo direito, após o CTA) e `header-with-topbar` (linha principal; topbar intacta). `header-centered` reavaliado e intencionalmente mantido (flex-wrap funciona). 2 testes Playwright focados mobile-only adicionados ao smoke. Validação live 375×667 (painel dentro da viewport, ids únicos, independência de estado, link fecha menu, active state preservado) e 1280×720 (sem regressão); zero overflow em todos os casos. Lint 0/0; build PASS (16 rotas); e2e 18 passed + 2 skipped (20 execuções). Padrão documentado em `docs/DESIGN-SYSTEM.md` e no catálogo. QLT-006 → VERIFIED.
 
 **Objetivo:** navegação acessível em viewport estreita nos headers que hoje escondem o menu (`header-basic`, `header-with-topbar`); `header-centered` (flex-wrap) é reavaliado.
 **Entregável:** toggle + painel de navegação operável por teclado (foco, `aria-expanded`, `Escape`).

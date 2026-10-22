@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-20] — Evolução 007: Mobile nav acessível (VERIFIED — QLT-006)
+
+- Criado `components/site/headers/mobile-nav.tsx` — `MobileNav`, Client Component (`useState`/`useId`/`useRef`/`useEffect` com cleanup), contrato `MobileNavLink`/`MobileNavProps` (somente `links` obrigatório) — primeiro componente interativo compartilhado do laboratório.
+- Toggle: `Button` real (ghost, icon-lg) com lucide `Menu`/`X`, `aria-label` dinâmico ("Abrir menu"/"Fechar menu"), `aria-expanded`, `aria-controls` via `useId` (ids únicos por instância, sem duplicar no DOM).
+- Painel: landmark `<nav aria-label="Navegação principal">` condicional com `ul[role="list"]` (decisão do Plan — painel preserva semântica de navegação); fecha pelo botão, `Escape` (devolve foco ao botão) e clique fora; sem focus trap, sem Sheet, sem portal; visível somente abaixo de `md`.
+- Modificados `header-basic.tsx` (MobileNav no grupo direito, depois do CTA — hamburger é o elemento mais à direita, garantindo o painel dentro da viewport em 375px; CTA permanece fora do menu) e `header-with-topbar.tsx` (MobileNav na linha principal; topbar intacta). `header-centered` reavaliado e intencionalmente mantido (flex-wrap funciona; sem hamburger).
+- Adicionados 2 testes Playwright focados ao `tests/smoke.spec.ts` (mobile-only, pulam o project desktop): abrir por teclado → `aria-expanded`/`aria-controls` → painel landmark com links → `Escape` fecha e devolve foco; abrir por clique → clique fora fecha. Suíte: 10 testes / 20 execuções.
+- Validação live: 375×667 (painel dentro da viewport — left 87→right 311 no Basic, left 86→right 310 no Topbar; ids únicos; independência de estado entre instâncias; link fecha menu e navega; active state preservado; zero overflow) e 1280×720 (botão mobile invisível, painel inexistente, nav desktop preservada, zero overflow).
+- Lint **0/0**; build **PASS** (16 rotas); e2e **18 passed + 2 skipped** (20 execuções; skips intencionais dos testes mobile-only no project desktop).
+- **QLT-006 → VERIFIED** no `QUALITY-REVIEW.md` (seção + tabela de prioridade P2 + total).
+- Documentação atualizada: `QUALITY-REVIEW.md`, `docs/ROADMAP-1000-EVOLUTIONS.md` (007 VERIFIED), `docs/COMPONENT-CATALOG.md` (MobileNav + contagem 39), `memory-bank/CURRENT-STATE.md` (próxima execução: 008).
+
+---
+
 ## [2026-10-19] — Evolução 006: `aria-label` nas navegações (VERIFIED — QLT-007)
 
 - `aria-label="Navegação principal"` adicionado nos `<nav>` dos 3 headers (`header-basic`, `header-centered`, `header-with-topbar`); `aria-label="Navegação da biblioteca"` no `<nav>` do `library-shell` — exatamente os 4 `<nav>` do escopo, rótulos em pt-BR aprovados no Plan.

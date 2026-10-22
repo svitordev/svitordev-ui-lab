@@ -5,10 +5,10 @@
 ## Contagem total
 
 - **5** UI components
-- **6** site components
+- **7** site components
 - **25** section components
 - **2** wrappers/shells
-- **Total: 38** componentes reutilizáveis relevantes
+- **Total: 39** componentes reutilizáveis relevantes
 
 ---
 
@@ -22,15 +22,16 @@
 | Textarea | `components/ui/textarea.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
 | Badge | `components/ui/badge.tsx` | Componente base shadcn/ui | Pronto | Alta | **Evolução 004.** `<span>` não interativo; CVA com variantes `default`/`secondary`/`outline` (tokens, sem cor hardcoded); `data-slot`; `cn()`; sem sizes, sem `asChild`, sem motion; consumido por 005/009 |
 
-## Site components — `components/site/` (6)
+## Site components — `components/site/` (7)
 
-### Headers — `components/site/headers/` (3)
+### Headers — `components/site/headers/` (4)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
-| HeaderBasic | `components/site/headers/header-basic.tsx` | Header | Template | Média | Logo/textos hardcoded; nav com hash anchors |
-| HeaderCentered | `components/site/headers/header-centered.tsx` | Header | Template | Média | Logo/textos hardcoded; centralizado |
-| HeaderWithTopbar | `components/site/headers/header-with-topbar.tsx` | Header | Template | Média | Topbar com telefone/email; logo/textos hardcoded |
+| HeaderBasic | `components/site/headers/header-basic.tsx` | Header | Template | Média | Logo/textos hardcoded; nav com hash anchors; **Evolução 007:** `MobileNav` no grupo direito (após o CTA) |
+| HeaderCentered | `components/site/headers/header-centered.tsx` | Header | Template | Média | Logo/textos hardcoded; centralizado; sem MobileNav — decisão Evolução 007 (flex-wrap funciona em mobile) |
+| HeaderWithTopbar | `components/site/headers/header-with-topbar.tsx` | Header | Template | Média | Topbar com telefone/email; logo/textos hardcoded; **Evolução 007:** `MobileNav` na linha principal |
+| MobileNav | `components/site/headers/mobile-nav.tsx` | Componente interativo compartilhado (Client) | Pronto | Alta | **Evolução 007.** Contrato `MobileNavLink`/`MobileNavProps` (somente `links`); `Button` ghost/icon-lg (Menu/X) com `aria-label` dinâmico, `aria-expanded`, `aria-controls` via `useId`; painel condicional `<nav aria-label="Navegação principal">` com `ul[role=list]`; fecha por botão/Escape (devolve foco)/clique fora; sem Sheet/portal/focus trap; visível só abaixo de `md`; usado por HeaderBasic e HeaderWithTopbar |
 
 ### Footers — `components/site/footers/` (3)
 

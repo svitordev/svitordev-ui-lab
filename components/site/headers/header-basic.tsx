@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "@/components/site/headers/mobile-nav";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -49,11 +50,12 @@ export function HeaderBasic() {
           })}
         </nav>
 
-        {/* CTA */}
+        {/* CTA + Menu mobile */}
         <div className="flex items-center gap-2">
           <Button size="sm">
             Entrar em contato
           </Button>
+          <MobileNav links={navLinks} />
         </div>
       </div>
     </header>

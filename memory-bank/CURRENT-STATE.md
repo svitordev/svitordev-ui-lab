@@ -16,7 +16,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 004:** ✅ IMPLEMENTADA / VERIFIED (Badge — UI primitive, `<span>` não interativo, CVA com default/secondary/outline, sem sizes/asChild/motion).
 - **Evolução 005:** ✅ IMPLEMENTADA / VERIFIED (Stats / métricas — `StatsGrid` data-driven, primeiro consumo do Badge, grid 2/4 colunas, demo com value longo validada em 375px).
 - **Evolução 006:** ✅ IMPLEMENTADA / VERIFIED (`aria-label` nas 4 navs — "Navegação principal" nos 3 headers + "Navegação da biblioteca" no shell; QLT-007 VERIFIED).
-- **Próxima execução:** Evolução 007 (Mobile nav acessível).
+- **Evolução 007:** ✅ IMPLEMENTADA / VERIFIED (Mobile nav acessível — `MobileNav` compartilhado integrado a `header-basic` e `header-with-topbar`; `header-centered` mantido; QLT-006 VERIFIED).
+- **Próxima execução:** Evolução 008 (Avatar).
 
 ## Stack confirmada
 
@@ -44,10 +45,10 @@ public/
 ## Inventário atual de componentes
 
 - **5** UI components (`components/ui/` — + `badge` via Evolução 004)
-- **6** site components (`components/site/` — headers + footers)
+- **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
 - **25** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 38** componentes reutilizáveis relevantes
+- **Total: 39** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -57,16 +58,16 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **8 smoke tests / 16 execuções**; **duas execuções consecutivas verdes** (sem retries). Execução da DEC-006.
-- **QLT-001:** ✅ VERIFIED. **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **10 smoke tests / 20 execuções** (18 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
-- **Total de findings:** 13 (QLT-001, QLT-007 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007 e QLT-012 VERIFIED; os demais permanecem pendentes).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–006 VERIFIED. Próxima execução: Evolução 007 (Mobile nav acessível — QLT-006).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–007 VERIFIED. Próxima execução: Evolução 008 (Avatar).
 
 ### Problemas resolvidos
 
@@ -77,6 +78,12 @@ Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–
   - `notFound()` para slugs inexistentes
   - href público corrigido para `/blog/${slug}`
   - Lint PASS, build PASS, runtime 200/404 verificados
+
+- **QLT-006** (P2): Mobile nav acessível nos 2 headers afetados (verificado — Evolução 007)
+  - `MobileNav` compartilhado criado (`components/site/headers/mobile-nav.tsx`) e integrado a `header-basic` e `header-with-topbar`; `header-centered` reavaliado e mantido (flex-wrap)
+  - Botão Menu/X com `aria-expanded`/`aria-controls` (`useId`) e `aria-label` dinâmico; painel landmark `nav` com `ul[role=list]`; Escape devolve foco; clique fora fecha; sem focus trap/Sheet/portal
+  - 2 testes Playwright focados mobile-only adicionados ao smoke; validação live 375×667 e 1280×720 sem overflow
+  - Lint 0/0; build PASS (16 rotas); e2e 18 passed + 2 skipped
 
 - **QLT-007** (P3): `aria-label` adicionado nas 4 `<nav>` (verificado — Evolução 006)
   - "Navegação principal" nos 3 headers; "Navegação da biblioteca" no `library-shell`

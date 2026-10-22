@@ -65,3 +65,57 @@ test('navegacao home -> blog pelo header', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/blog$/);
 });
+
+test('menu mobile do header basico abre pelo teclado e fecha com Escape devolvendo o foco', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'menu mobile existe apenas abaixo do breakpoint md');
+
+  await page.goto('/library/headers');
+
+  const button = page.locator('button[aria-expanded]').first();
+  await expect(button).toBeVisible();
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(button).toHaveAttribute('aria-label', 'Abrir menu');
+
+  await button.focus();
+  await page.keyboard.press('Enter');
+
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  await expect(button).toHaveAttribute('aria-label', 'Fechar menu');
+
+  const panelId = await button.getAttribute('aria-controls');
+  expect(panelId).toBeTruthy();
+
+  const panel = page.locator(`nav[id="${panelId}"]`);
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveAttribute('aria-label', 'Navegação principal');
+  await expect(panel.getByRole('link', { name: 'Início' })).toBeVisible();
+  await expect(panel.getByRole('link', { name: 'Contato' })).toBeVisible();
+
+  await page.keyboard.press('Escape');
+
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(button).toHaveAttribute('aria-label', 'Abrir menu');
+  await expect(button).toBeFocused();
+});
+
+test('menu mobile do header com topbar abre pelo botao e fecha com clique fora', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'menu mobile existe apenas abaixo do breakpoint md');
+
+  await page.goto('/library/headers');
+
+  const button = page.locator('button[aria-expanded]').nth(1);
+  await button.click();
+
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+
+  const panelId = await button.getAttribute('aria-controls');
+  expect(panelId).toBeTruthy();
+
+  const panel = page.locator(`nav[id="${panelId}"]`);
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole('link', { name: 'Blog' })).toBeVisible();
+
+  await page.mouse.click(20, 600);
+
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+});
