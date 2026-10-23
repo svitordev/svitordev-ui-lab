@@ -4,6 +4,18 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-23] — Evolução 008: Avatar (VERIFIED)
+
+- Criado `components/ui/avatar.tsx` — `Avatar`, UI primitive baseado em `@radix-ui/react-avatar` (^1.3.1, dependência nova aprovada no Plan — decisão localizada do primitive, sem DEC global), Client Component ("use client"), API composicional com exatamente 3 exports: `Avatar` (Root), `AvatarImage`, `AvatarFallback`.
+- Tamanho base único (`size-10` no Root); `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`) nos três — padrões reais dos primitives locais (`cn()`, tokens); sem CVA, sem size variants.
+- Imagem com `object-cover`; fallback com tokens existentes (`bg-muted`, `text-muted-foreground`) — comportamento image/fallback fornecido pelo Radix (sem máquina de estado própria no projeto); conteúdo do fallback e `alt` fornecidos pelo consumer; sem geração automática de iniciais; sem status/group; sem interatividade própria.
+- Sem consumer artificial — nenhuma página/demo criada; a validação visual image → fallback será realizada na Evolução 009, primeiro consumer real do Avatar.
+- Lint **0/0**; build **PASS** (16 rotas); e2e **18 passed + 2 skipped**; `git diff --check` limpo.
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 40), `docs/ROADMAP-1000-EVOLUTIONS.md` (008 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 009).
+
+---
+
 ## [2026-10-20] — Evolução 007: Mobile nav acessível (VERIFIED — QLT-006)
 
 - Criado `components/site/headers/mobile-nav.tsx` — `MobileNav`, Client Component (`useState`/`useId`/`useRef`/`useEffect` com cleanup), contrato `MobileNavLink`/`MobileNavProps` (somente `links` obrigatório) — primeiro componente interativo compartilhado do laboratório.

@@ -105,7 +105,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 005 | Stats / métricas ✅ VERIFIED | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs ✅ VERIFIED | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
 | 007 | Mobile nav acessível ✅ VERIFIED | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
-| 008 | Avatar | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
+| 008 | Avatar ✅ VERIFIED | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
 | 009 | Review cards com rating | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
 | 010 | Migrar `hero-center-cta` para o contrato | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
 | 011 | Feature comparison | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
@@ -189,6 +189,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 006. **Finding:** QLT-006 ✅. **Esforço:** Grande.
 
 ## 008 — Avatar
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-23)** — `components/ui/avatar.tsx` (`Avatar`, Client Component; dependência nova aprovada `@radix-ui/react-avatar` ^1.3.1; API composicional Root/Image/Fallback com exatamente 3 exports `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` nos três; imagem com `object-cover`; fallback com tokens existentes — comportamento image/fallback fornecido pelo Radix, sem máquina de estado própria; conteúdo do fallback e `alt` fornecidos pelo consumer; sem geração automática de iniciais, sem CVA, sem size variants, sem status/group, sem consumer artificial). A validação visual image → fallback será realizada na Evolução 009, primeiro consumer real do Avatar. Lint 0/0; build PASS (16 rotas); e2e 18 passed + 2 skipped; `git diff --check` limpo.
 
 **Objetivo:** primitive para autor/reviewer — consumido por 009 e pelo blog futuro.
 **Entregável:** avatar no `components/ui/`. A implementação será decidida **na execução da evolução**, após verificar o stack atual, entre: primitive já disponível; implementação simples compatível com o projeto; ou primitive oficial shadcn/Radix com dependência justificada. Nada é instalado antes disso.

@@ -17,7 +17,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 005:** ✅ IMPLEMENTADA / VERIFIED (Stats / métricas — `StatsGrid` data-driven, primeiro consumo do Badge, grid 2/4 colunas, demo com value longo validada em 375px).
 - **Evolução 006:** ✅ IMPLEMENTADA / VERIFIED (`aria-label` nas 4 navs — "Navegação principal" nos 3 headers + "Navegação da biblioteca" no shell; QLT-007 VERIFIED).
 - **Evolução 007:** ✅ IMPLEMENTADA / VERIFIED (Mobile nav acessível — `MobileNav` compartilhado integrado a `header-basic` e `header-with-topbar`; `header-centered` mantido; QLT-006 VERIFIED).
-- **Próxima execução:** Evolução 008 (Avatar).
+- **Evolução 008:** ✅ IMPLEMENTADA / VERIFIED (Avatar — `components/ui/avatar.tsx`, Radix Avatar (`@radix-ui/react-avatar` ^1.3.1, dependência aprovada), Client Component, API composicional `Avatar`/`AvatarImage`/`AvatarFallback`, tamanho único, `className`/`data-slot`, sem variants/initials automáticas/status/group; validação visual image → fallback fica para a Evolução 009).
+- **Próxima execução:** Evolução 009 (Review cards com rating).
 
 ## Stack confirmada
 
@@ -44,11 +45,11 @@ public/
 
 ## Inventário atual de componentes
 
-- **5** UI components (`components/ui/` — + `badge` via Evolução 004)
+- **6** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
 - **25** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 39** componentes reutilizáveis relevantes
+- **Total: 40** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -67,7 +68,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–007 VERIFIED. Próxima execução: Evolução 008 (Avatar).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–008 VERIFIED. Próxima execução: Evolução 009 (Review cards com rating).
 
 ### Problemas resolvidos
 

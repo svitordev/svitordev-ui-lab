@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **5** UI components
+- **6** UI components
 - **7** site components
 - **25** section components
 - **2** wrappers/shells
-- **Total: 39** componentes reutilizáveis relevantes
+- **Total: 40** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (5)
+## UI components — `components/ui/` (6)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -21,6 +21,7 @@
 | Input | `components/ui/input.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
 | Textarea | `components/ui/textarea.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
 | Badge | `components/ui/badge.tsx` | Componente base shadcn/ui | Pronto | Alta | **Evolução 004.** `<span>` não interativo; CVA com variantes `default`/`secondary`/`outline` (tokens, sem cor hardcoded); `data-slot`; `cn()`; sem sizes, sem `asChild`, sem motion; consumido por 005/009 |
+| Avatar | `components/ui/avatar.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 008.** Baseado em `@radix-ui/react-avatar`; Client Component; API composicional `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`); imagem com `object-cover`; fallback com tokens existentes (conteúdo do consumer); `alt` controlado pelo consumer; sem geração automática de iniciais, sem size variants, sem status, sem AvatarGroup, sem interatividade própria; consumido por 009 |
 
 ## Site components — `components/site/` (7)
 
