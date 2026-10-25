@@ -17,8 +17,9 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 005:** ✅ IMPLEMENTADA / VERIFIED (Stats / métricas — `StatsGrid` data-driven, primeiro consumo do Badge, grid 2/4 colunas, demo com value longo validada em 375px).
 - **Evolução 006:** ✅ IMPLEMENTADA / VERIFIED (`aria-label` nas 4 navs — "Navegação principal" nos 3 headers + "Navegação da biblioteca" no shell; QLT-007 VERIFIED).
 - **Evolução 007:** ✅ IMPLEMENTADA / VERIFIED (Mobile nav acessível — `MobileNav` compartilhado integrado a `header-basic` e `header-with-topbar`; `header-centered` mantido; QLT-006 VERIFIED).
-- **Evolução 008:** ✅ IMPLEMENTADA / VERIFIED (Avatar — `components/ui/avatar.tsx`, Radix Avatar (`@radix-ui/react-avatar` ^1.3.1, dependência aprovada), Client Component, API composicional `Avatar`/`AvatarImage`/`AvatarFallback`, tamanho único, `className`/`data-slot`, sem variants/initials automáticas/status/group; validação visual image → fallback fica para a Evolução 009).
-- **Próxima execução:** Evolução 009 (Review cards com rating).
+- **Evolução 008:** ✅ IMPLEMENTADA / VERIFIED (Avatar — `components/ui/avatar.tsx`, Radix Avatar (`@radix-ui/react-avatar` ^1.3.1, dependência aprovada), Client Component, API composicional `Avatar`/`AvatarImage`/`AvatarFallback`, tamanho único, `className`/`data-slot`, sem variants/initials automáticas/status/group; Avatar 008 validado visualmente na Evolução 009: imagem válida, fallback por erro e fallback sem src).
+- **Evolução 009:** ✅ IMPLEMENTADA / VERIFIED (Review cards com rating — `TestimonialsRatingCards`, quarta variant de testimonials, contrato data-driven, rating inteiro 1–5 acessível via `aria-label`, semântica `article`/`blockquote`/`footer`, Avatar 008 consumido sem mudança de API; contribui para a estratégia de migração gradual de QLT-005).
+- **Próxima execução:** Evolução 010 (migrar `hero-center-cta` para o contrato).
 
 ## Stack confirmada
 
@@ -47,9 +48,9 @@ public/
 
 - **6** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
-- **25** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid`)
+- **26** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 40** componentes reutilizáveis relevantes
+- **Total: 41** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -59,7 +60,7 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **10 smoke tests / 20 execuções** (18 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **13 smoke tests / 26 execuções** (24 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
@@ -68,7 +69,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–008 VERIFIED. Próxima execução: Evolução 009 (Review cards com rating).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–009 VERIFIED. Próxima execução: Evolução 010 (migrar `hero-center-cta` para o contrato).
 
 ### Problemas resolvidos
 

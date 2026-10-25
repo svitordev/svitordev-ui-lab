@@ -101,12 +101,12 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 001 | CTA Split Actions data-driven + contrato de props exemplar ✅ VERIFIED | Nova section + Component API | Criar section visualmente útil estabelecendo o primeiro contrato data-driven do laboratório | — | QLT-005 (PARCIAL), QLT-003 (PARCIAL) | Médio |
 | 002 | Logos / social proof strip ✅ VERIFIED | Nova section | Prova social com logos, data-driven no padrão 001 | 001 | — | Médio |
 | 003 | Hero Media Showcase ✅ VERIFIED | Nova section | Hero estruturalmente diferente dos existentes | 001 | — | Médio |
-| 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005/009 | — | — | Pequeno |
+| 004 | Badge ✅ VERIFIED | Primitive sob demanda | Base visual para rating/tags consumida por 005 | — | — | Pequeno |
 | 005 | Stats / métricas ✅ VERIFIED | Nova section | Números de destaque com badge de contexto | 001, 004 | — | Médio |
 | 006 | `aria-label` nas navs ✅ VERIFIED | Acessibilidade | Rótulo semântico das regiões de navegação | — | QLT-007 | Pequeno |
 | 007 | Mobile nav acessível ✅ VERIFIED | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
 | 008 | Avatar ✅ VERIFIED | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
-| 009 | Review cards com rating | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
+| 009 | Review cards com rating ✅ VERIFIED | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
 | 010 | Migrar `hero-center-cta` para o contrato | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
 | 011 | Feature comparison | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
 | 012 | Motion pass (entrance/hover) | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
@@ -154,9 +154,9 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 
 ## 004 — Badge
 
-**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-18)** — `components/ui/badge.tsx` (UI primitive; Server Component; `<span>` não interativo; CVA + `VariantProps` + `cn()` + `data-slot="badge"`, no padrão local dos primitives; variantes `default`/`secondary`/`outline` somente por tokens — sem destructive, sem sizes, sem `asChild`/Slot, sem hover próprio, sem motion). Sem dependência nova; sem shadcn CLI. Sem página própria no `/library` — igual aos demais primitives; verificação visual quando consumido pela 005/009. Lint 0/0; build PASS; e2e 16/16.
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-18)** — `components/ui/badge.tsx` (UI primitive; Server Component; `<span>` não interativo; CVA + `VariantProps` + `cn()` + `data-slot="badge"`, no padrão local dos primitives; variantes `default`/`secondary`/`outline` somente por tokens — sem destructive, sem sizes, sem `asChild`/Slot, sem hover próprio, sem motion). Sem dependência nova; sem shadcn CLI. Sem página própria no `/library` — igual aos demais primitives; verificação visual quando consumido pela 005. Lint 0/0; build PASS; e2e 16/16.
 
-**Objetivo:** primitive base (consumido por 005 e 009) — selecionado por demanda real, não por catálogo.
+**Objetivo:** primitive base (consumido por 005) — selecionado por demanda real, não por catálogo.
 **Entregável:** `components/ui/badge.tsx` com variantes temáticas (sem cor hardcoded), no padrão shadcn new-york já adotado pelo projeto.
 **Critérios de aceite:** CVA como `button.tsx`; entra no catálogo; lint/build/e2e verdes.
 **Dependências:** nenhuma. **Finding:** — **Esforço:** Pequeno.
@@ -199,9 +199,11 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 
 ## 009 — Review cards com rating
 
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-25)** — `components/sections/testimonials/testimonials-rating-cards.tsx` (`TestimonialsRatingCards`, quarta variante do grupo, estruturalmente distinta das três testimonials legadas; Server Component; contrato data-driven `ReviewItem`/`ReviewAvatar`/`TestimonialsRatingCardsProps`; rating inteiro 1–5 com normalização defensiva; rating acessível via `aria-label` "N de 5 estrelas" com ícones `aria-hidden`; semântica `article`/`blockquote`/`footer`; `avatar` obrigatório por item com `src` opcional e `fallback` obrigatório; `role` opcional; sem mudança no Avatar; sem dependência nova). Variação 04 adicionada à `/library/testimonials` (padrão atual da página, sem antecipar a migração da 019). Consumo real do Avatar 008: imagem válida (data URL SVG), fallback por src quebrado e fallback sem src. Validação live 375×667 (1 coluna) e 1280×720 (3 colunas), zero overflow em ambos. Lint 0/0; build PASS (16 rotas); Playwright 24 passed + 2 skipped (26 execuções, confirmado em duas execuções consecutivas); `git diff --check` limpo. **Avatar 008 — validação visual image/fallback concluída pela Evolução 009.** Contribui para a estratégia de migração gradual de QLT-005 (permanece aberto).
+
 **Objetivo:** social proof com avaliação (SVG/Lucide), avatar e citação — variante estrutural nova.
 **Entregável:** nova variante em `components/sections/testimonials/` + página atualizada.
-**Critérios de aceite:** data-driven; usa Avatar + Badge; rating com texto alternativo acessível; lint/build/e2e verdes.
+**Critérios de aceite:** data-driven; review cards com rating acessível + Avatar; lint/build/e2e verdes.
 **Dependências:** 001, 004, 008. **Finding:** — **Esforço:** Médio.
 
 ## 010 — Migrar `hero-center-cta` para o contrato

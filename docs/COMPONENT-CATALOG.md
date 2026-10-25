@@ -6,9 +6,9 @@
 
 - **6** UI components
 - **7** site components
-- **25** section components
+- **26** section components
 - **2** wrappers/shells
-- **Total: 40** componentes reutilizáveis relevantes
+- **Total: 41** componentes reutilizáveis relevantes
 
 ---
 
@@ -20,7 +20,7 @@
 | Card | `components/ui/card.tsx` | Componente base shadcn/ui | Pronto | Alta | `Card`, `CardHeader`, `CardFooter`, `CardTitle`, `CardAction`, `CardDescription`, `CardContent` |
 | Input | `components/ui/input.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
 | Textarea | `components/ui/textarea.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
-| Badge | `components/ui/badge.tsx` | Componente base shadcn/ui | Pronto | Alta | **Evolução 004.** `<span>` não interativo; CVA com variantes `default`/`secondary`/`outline` (tokens, sem cor hardcoded); `data-slot`; `cn()`; sem sizes, sem `asChild`, sem motion; consumido por 005/009 |
+| Badge | `components/ui/badge.tsx` | Componente base shadcn/ui | Pronto | Alta | **Evolução 004.** `<span>` não interativo; CVA com variantes `default`/`secondary`/`outline` (tokens, sem cor hardcoded); `data-slot`; `cn()`; sem sizes, sem `asChild`, sem motion; consumido por 005 |
 | Avatar | `components/ui/avatar.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 008.** Baseado em `@radix-ui/react-avatar`; Client Component; API composicional `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`); imagem com `object-cover`; fallback com tokens existentes (conteúdo do consumer); `alt` controlado pelo consumer; sem geração automática de iniciais, sem size variants, sem status, sem AvatarGroup, sem interatividade própria; consumido por 009 |
 
 ## Site components — `components/site/` (7)
@@ -69,13 +69,14 @@
 | ServicesSplitWithHighlight | `components/sections/services/services-split-with-highlight.tsx` | Template | Dividido com destaque |
 | ServicesWithIcons | `components/sections/services/services-with-icons.tsx` | Template | Com ícones |
 
-### Testimonials — `components/sections/testimonials/` (3)
+### Testimonials — `components/sections/testimonials/` (4)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | TestimonialsColumns | `components/sections/testimonials/testimonials-columns.tsx` | Template | Colunas |
 | TestimonialsGrid | `components/sections/testimonials/testimonials-grid.tsx` | Template | Grade |
 | TestimonialsHighlight | `components/sections/testimonials/testimonials-highlight.tsx` | Template | Destaque |
+| TestimonialsRatingCards | `components/sections/testimonials/testimonials-rating-cards.tsx` | Pronto | **Data-driven** (Evolução 009). Rating + Avatar + review cards — quarta variante estrutural do grupo; contrato `ReviewItem`/`ReviewAvatar`/`TestimonialsRatingCardsProps` (tipos locais); rating inteiro 1–5 com normalização defensiva; exatamente 5 estrelas Lucide, accessible name `N de 5 estrelas`, ícones `aria-hidden`; semântica `article`/`blockquote`/`footer`; `avatar` obrigatório por item (`src` opcional, `fallback` obrigatório, sem geração automática de initials); `role` opcional; sem `className` público; Server Component consumindo o Avatar (client); layout 1 coluna mobile / 3 desktop; sem motion; sem ações interativas; demo na `/library/testimonials` (Variação 04) |
 
 ### Pricing — `components/sections/pricing/` (3)
 

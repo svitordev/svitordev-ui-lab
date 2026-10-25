@@ -119,3 +119,35 @@ test('menu mobile do header com topbar abre pelo botao e fecha com clique fora',
 
   await expect(button).toHaveAttribute('aria-expanded', 'false');
 });
+
+test('review cards: rating exibe nome acessível com estrelas preenchidas', async ({ page }) => {
+  await page.goto('/library/testimonials');
+
+  const cardAna = page.locator('article').filter({ hasText: 'Ana Souza' });
+  await expect(cardAna.getByLabel('5 de 5 estrelas')).toHaveCount(1);
+
+  const cardRicardo = page.locator('article').filter({ hasText: 'Ricardo Almeida Albuquerque' });
+  await expect(cardRicardo.getByLabel('4 de 5 estrelas')).toHaveCount(1);
+});
+
+test('review cards: avatar com src quebrado exibe o fallback', async ({ page }) => {
+  await page.goto('/library/testimonials');
+
+  const card = page.locator('article').filter({ hasText: 'Ricardo Almeida Albuquerque' });
+  await expect(card.getByText('RA', { exact: true })).toBeVisible();
+});
+
+test('review cards: avatar com imagem válida carrega e fica visível', async ({ page }) => {
+  await page.goto('/library/testimonials');
+
+  const card = page.locator('article').filter({ hasText: 'Ana Souza' });
+  const image = card.locator('[data-slot="avatar-image"]');
+  await expect(image).toBeVisible();
+
+  // alt="" torna a imagem decorativa; naturalWidth > 0 prova que ela carregou de fato.
+  await expect
+    .poll(async () =>
+      image.evaluate((el) => (el as HTMLImageElement).naturalWidth),
+    )
+    .toBeGreaterThan(0);
+});

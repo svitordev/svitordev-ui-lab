@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-25] — Evolução 009: Review cards com rating (VERIFIED)
+
+- Criado `components/sections/testimonials/testimonials-rating-cards.tsx` — `TestimonialsRatingCards`, Server Component, data-driven, quarta variante do grupo testimonials e estruturalmente distinta das três legadas (rating + avatar + review cards).
+- Contrato: `ReviewItem`/`ReviewAvatar`/`TestimonialsRatingCardsProps` (tipos locais); `items` obrigatório; `avatar` obrigatório por item (`src` opcional, `fallback` obrigatório, sem geração automática de initials); `role` opcional; sem `className` público.
+- Rating inteiro 1–5 com normalização defensiva; exatamente 5 estrelas Lucide; accessible name no container `N de 5 estrelas`; ícones `aria-hidden`; semântica `article`/`blockquote`/`footer`; layout 1 coluna mobile / 3 colunas desktop; sem motion; sem ações interativas.
+- Primeiro consumer real do `Avatar` (008), sem alterar sua API: imagem válida (data URL SVG inline) carregou; src quebrado acionou `AvatarFallback`; sem src renderizou `AvatarFallback` direto. **Avatar 008 — validação visual image/fallback concluída pela Evolução 009.**
+- Variação 04 adicionada à `/library/testimonials` no padrão atual da página (sem antecipar a migração da 019), com demo tipada na página cobrindo os três casos do Avatar.
+- Adicionados 3 testes Playwright focados ao smoke (rating acessível; fallback por src quebrado; imagem válida carregada). Suíte: 13 testes / 26 execuções — **24 passed + 2 skipped** (skips intencionais mobile-only da 007), confirmado em duas execuções consecutivas.
+- Validação live: 375×667 (3 cards em 1 coluna, ratings íntegros, Avatar válido, fallback por erro, fallback sem src, role opcional, zero overflow) e 1280×720 (3 colunas, cards/ratings/Avatar íntegros, zero overflow).
+- Lint **0/0**; build **PASS** (16 rotas); `git diff --check` limpo.
+- Findings: nenhum. 009 contribui para a estratégia de migração gradual de QLT-005 (permanece aberto); QLT-010 segue reservado para a Evolução 019.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + contagem 41), `docs/ROADMAP-1000-EVOLUTIONS.md` (009 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 010).
+
+---
+
 ## [2026-10-23] — Evolução 008: Avatar (VERIFIED)
 
 - Criado `components/ui/avatar.tsx` — `Avatar`, UI primitive baseado em `@radix-ui/react-avatar` (^1.3.1, dependência nova aprovada no Plan — decisão localizada do primitive, sem DEC global), Client Component ("use client"), API composicional com exatamente 3 exports: `Avatar` (Root), `AvatarImage`, `AvatarFallback`.
