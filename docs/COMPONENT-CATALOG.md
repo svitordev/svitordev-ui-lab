@@ -42,13 +42,13 @@
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (25)
+## Section components — `components/sections/` (26)
 
 ### Hero — `components/sections/hero/` (4)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
-| HeroCenterCta | `components/sections/hero/hero-center-cta.tsx` | Template | CTA central |
+| HeroCenterCta | `components/sections/hero/hero-center-cta.tsx` | Pronto | **Data-driven** (Evolução 010, migração — visual preservado). Contrato `HeroCenterAction`/`HeroCenterCtaProps` (tipos locais); `title` obrigatório; `description?`/`supportingText?`/`actions?`; uso típico de 1–2 actions (ausente/vazio → sem bloco de CTA); `Button asChild` — internos via `next/link`, protocolos/externos via `<a>`; sem eyebrow; sem `className` público; Server Component; demo na `/library/hero` (consumer) |
 | HeroPrimary | `components/sections/hero/hero-primary.tsx` | Template | Layout principal |
 | HeroSteps | `components/sections/hero/hero-steps.tsx` | Template | Hero com passos |
 | HeroMediaShowcase | `components/sections/hero/hero-media-showcase.tsx` | Pronto | **Data-driven** (Evolução 003). Composição vertical/showcase: conteúdo editorial centralizado no topo + media frame dominante full-width (mock HTML/Tailwind, sem imagem) + `figcaption` opcional; Server Component; sem motion; demo na `/library/hero` |

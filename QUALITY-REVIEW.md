@@ -153,9 +153,9 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / UX
 
-**Evidência:** ~15 botões `<Button>` sem `href`/`onClick` espalhados por 11 arquivos: `header-basic`, `footer-cta`, `hero-center-cta`, `hero-primary`, `hero-steps`, `pricing-highlight`, `pricing-simple-cards`, `pricing-three-tiers`, `cta-banner`, `cta-simple`, `cta-split`. Links hash `/#services` e `/#about` no `header-centered` não têm elemento com `id` correspondente (só `#contact` existe).
+**Evidência:** ~13 botões `<Button>` sem `href`/`onClick` espalhados por 10 arquivos: `header-basic`, `footer-cta`, `hero-primary`, `hero-steps`, `pricing-highlight`, `pricing-simple-cards`, `pricing-three-tiers`, `cta-banner`, `cta-simple`, `cta-split`. Links hash `/#services` e `/#about` no `header-centered` não têm elemento com `id` correspondente (só `#contact` existe). A Evolução 010 converteu os dois CTAs de `hero-center-cta` em links reais (removida da evidência).
 
-**Arquivo(s):** `components/site/headers/header-basic.tsx`, `components/site/footers/footer-cta.tsx`, `components/sections/hero/{hero-center-cta,hero-primary,hero-steps}.tsx`, `components/sections/pricing/{pricing-highlight,pricing-simple-cards,pricing-three-tiers}.tsx`, `components/sections/cta/{cta-banner,cta-simple,cta-split}.tsx`, `components/site/headers/header-centered.tsx`
+**Arquivo(s):** `components/site/headers/header-basic.tsx`, `components/site/footers/footer-cta.tsx`, `components/sections/hero/{hero-primary,hero-steps}.tsx`, `components/sections/pricing/{pricing-highlight,pricing-simple-cards,pricing-three-tiers}.tsx`, `components/sections/cta/{cta-banner,cta-simple,cta-split}.tsx`, `components/site/headers/header-centered.tsx`
 
 **Comportamento actual:** Botões de CTA não levam a lugar nenhum; navegação interna quebra em 2 anchors.
 

@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-26] — Evolução 010: HeroCenterCta data-driven (VERIFIED)
+
+- `components/sections/hero/hero-center-cta.tsx` migrada para o contrato — mesmo componente, sem redesign; toda a copy e os CTAs hardcoded saíram do componente.
+- Contrato: `HeroCenterAction`/`HeroCenterCtaProps` (tipos locais, sem shared type); `title` obrigatório; `description?`, `supportingText?` e `actions?` opcionais; sem eyebrow; sem `className` público; sem props cosméticas.
+- Server Component preservado; `Button asChild` com links reais — internos via `next/link`, protocolos/externos via `<a>` (convenção 001/003); uso típico de 1–2 actions (ausente/vazio → sem bloco).
+- Demo movida para `/library/hero` (consumer real, constante tipada); os dois botões falsos da Hero viraram links reais; CTA interno da demo ajustado para "Ver conteúdos" → `/blog` (coerência de destino).
+- Adicionado 1 teste Playwright focado (Hero renderizada via contrato: heading + CTA `mailto:` + CTA `/blog`). Suíte: 14 testes / 28 execuções — **26 passed + 2 skipped** (skips intencionais mobile-only da 007).
+- Validação live: 375×667 (title, description, 2 CTAs como links, wrapping correto, supporting text, zero elementos vazios, zero overflow) e 1280×720 (layout central, typography/spacing preservados, zero overflow).
+- Lint **0/0**; build **PASS** (16 rotas); `git diff --check` limpo.
+- Findings: QLT-003 recebe correção real (hero-center-cta removida da evidência — 11→10 ocorrências, permanece aberto); QLT-005 recebe mais uma contribuição (permanece aberto); QLT-010 intocado (reservado para a 019).
+- Documentação atualizada: `QUALITY-REVIEW.md` (evidência do QLT-003), `docs/COMPONENT-CATALOG.md` (entrada HeroCenterCta → data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (010 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 011).
+
+---
+
 ## [2026-10-25] — Evolução 009: Review cards com rating (VERIFIED)
 
 - Criado `components/sections/testimonials/testimonials-rating-cards.tsx` — `TestimonialsRatingCards`, Server Component, data-driven, quarta variante do grupo testimonials e estruturalmente distinta das três legadas (rating + avatar + review cards).

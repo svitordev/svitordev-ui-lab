@@ -1,11 +1,34 @@
 // app/sections/hero/page.tsx
 import { HeroPrimary } from "@/components/sections/hero/hero-primary";
-import { HeroCenterCta } from "@/components/sections/hero/hero-center-cta";
+import {
+  HeroCenterCta,
+  type HeroCenterCtaProps,
+} from "@/components/sections/hero/hero-center-cta";
 import { HeroSteps } from "@/components/sections/hero/hero-steps";
 import {
   HeroMediaShowcase,
   type HeroMediaShowcaseProps,
 } from "@/components/sections/hero/hero-media-showcase";
+
+const heroCenterCtaDemo: HeroCenterCtaProps = {
+  title: "Apresentamos sua empresa de forma clara, profissional e confiável.",
+  description:
+    "Sites institucionais pensados para explicar o que você faz, para quem faz e como o cliente pode entrar em contato de forma simples e direta.",
+  supportingText:
+    "Ideal para escritórios, clínicas, consultorias, profissionais liberais e empresas de serviços em geral.",
+  actions: [
+    {
+      label: "Falar com a equipe",
+      href: "mailto:contato@suaempresa.com",
+      variant: "default",
+    },
+    {
+      label: "Ver conteúdos",
+      href: "/blog",
+      variant: "outline",
+    },
+  ],
+};
 
 const heroMediaShowcaseDemo: HeroMediaShowcaseProps = {
   eyebrow: "Produto",
@@ -67,7 +90,7 @@ export default function HeroSectionsPage() {
               Variante 02 · Centralizado com CTA
             </p>
             <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-              <HeroCenterCta />
+              <HeroCenterCta {...heroCenterCtaDemo} />
             </div>
           </div>
         </section>

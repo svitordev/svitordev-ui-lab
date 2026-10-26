@@ -151,3 +151,27 @@ test('review cards: avatar com imagem válida carrega e fica visível', async ({
     )
     .toBeGreaterThan(0);
 });
+
+test('hero centralizada data-driven renderiza heading e CTAs como links reais', async ({ page }) => {
+  await page.goto('/library/hero');
+
+  const hero = page
+    .locator('section')
+    .filter({ hasText: 'Apresentamos sua empresa de forma clara, profissional e confiável.' });
+
+  await expect(
+    hero.getByRole('heading', {
+      level: 1,
+      name: 'Apresentamos sua empresa de forma clara, profissional e confiável.',
+    }),
+  ).toBeVisible();
+
+  await expect(hero.getByRole('link', { name: 'Falar com a equipe' })).toHaveAttribute(
+    'href',
+    'mailto:contato@suaempresa.com',
+  );
+  await expect(hero.getByRole('link', { name: 'Ver conteúdos' })).toHaveAttribute(
+    'href',
+    '/blog',
+  );
+});

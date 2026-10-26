@@ -107,7 +107,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 007 | Mobile nav acessível ✅ VERIFIED | Responsivo/interação | Menu operável por teclado em viewport estreita | 006 | QLT-006 | Grande |
 | 008 | Avatar ✅ VERIFIED | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
 | 009 | Review cards com rating ✅ VERIFIED | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
-| 010 | Migrar `hero-center-cta` para o contrato | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
+| 010 | Migrar `hero-center-cta` para o contrato ✅ VERIFIED | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
 | 011 | Feature comparison | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
 | 012 | Motion pass (entrance/hover) | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
 | 013 | Separator + Skeleton | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
@@ -207,6 +207,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001, 004, 008. **Finding:** — **Esforço:** Médio.
 
 ## 010 — Migrar `hero-center-cta` para o contrato
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-26)** — `hero-center-cta` migrada para contrato data-driven sem redesign: copy/CTAs removidos do componente; `HeroCenterAction`/`HeroCenterCtaProps` (tipos locais); `title` obrigatório; `description?`/`supportingText?`/`actions?`; Server Component preservado; sem eyebrow; `Button asChild` com links reais (internos `next/link`, protocolos `<a>`); `/library/hero` virou consumer real com demo tipada; os dois botões falsos da Hero viraram links reais (CTA interno "Ver conteúdos" → `/blog`). Contribui para QLT-003 (11→10 ocorrências, permanece aberto) e para QLT-005 (permanece aberto); QLT-010 intocado. Validação live 375×667 e 1280×720, zero overflow. +1 teste Playwright. Lint 0/0; build PASS (16 rotas); Playwright 26 passed + 2 skipped (28 execuções); `git diff --check` limpo.
 
 **Objetivo:** validar na prática o padrão estabelecido pela Evolução 001, migrando um componente legado exemplar (migração acontece "quando for tocado" — aqui é tocado de propósito).
 **Entregável:** `hero-center-cta` com props do contrato; catálogo atualizado.
