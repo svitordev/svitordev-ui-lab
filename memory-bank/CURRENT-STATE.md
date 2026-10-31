@@ -20,7 +20,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 008:** ✅ IMPLEMENTADA / VERIFIED (Avatar — `components/ui/avatar.tsx`, Radix Avatar (`@radix-ui/react-avatar` ^1.3.1, dependência aprovada), Client Component, API composicional `Avatar`/`AvatarImage`/`AvatarFallback`, tamanho único, `className`/`data-slot`, sem variants/initials automáticas/status/group; Avatar 008 validado visualmente na Evolução 009: imagem válida, fallback por erro e fallback sem src).
 - **Evolução 009:** ✅ IMPLEMENTADA / VERIFIED (Review cards com rating — `TestimonialsRatingCards`, quarta variant de testimonials, contrato data-driven, rating inteiro 1–5 acessível via `aria-label`, semântica `article`/`blockquote`/`footer`, Avatar 008 consumido sem mudança de API; contribui para a estratégia de migração gradual de QLT-005).
 - **Evolução 010:** ✅ IMPLEMENTADA / VERIFIED (`hero-center-cta` migrada para o contrato — `HeroCenterCta` agora data-driven (`title` obrigatório; `description?`/`supportingText?`/`actions?`; type local; Server Component; sem eyebrow; visual preservado); página da library como consumer real; os dois botões falsos viraram links reais (interno `Ver conteúdos` → `/blog`); contribui para QLT-003 (11→10 ocorrências, permanece aberto) e QLT-005 (permanece aberto).
-- **Próxima execução:** Evolução 011 (Feature comparison).
+- **Evolução 011:** ✅ IMPLEMENTADA / VERIFIED (Feature comparison — novo grupo `features`, `FeatureComparison` data-driven, tabela HTML semântica real (`Recurso` + `scope`), `boolean | string` com `values` keyed por `option.id`, fallback defensivo para valor ausente (distinto de `false`), Check/X + sr-only, Server Component, CSS-only responsive com scroll horizontal interno no mobile e page overflow 0; nova rota `/library/features` + link "Features" na library).
+- **Próxima execução:** Evolução 012 (Motion pass).
 
 ## Stack confirmada
 
@@ -49,9 +50,9 @@ public/
 
 - **6** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
-- **26** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards`)
+- **27** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 41** componentes reutilizáveis relevantes
+- **Total: 42** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -59,9 +60,9 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 ## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
-Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
+Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **14 smoke tests / 28 execuções** (26 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **15 smoke tests / 30 execuções** (28 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
@@ -70,7 +71,7 @@ Production build **verde** (PASS). Lint atual: **0 errors / 0 warnings**. Rota `
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–010 VERIFIED. Próxima execução: Evolução 011 (Feature comparison).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–011 VERIFIED. Próxima execução: Evolução 012 (Motion pass).
 
 ### Problemas resolvidos
 

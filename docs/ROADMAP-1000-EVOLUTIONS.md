@@ -108,7 +108,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 008 | Avatar ✅ VERIFIED | Primitive sob demanda | Base para autor/reviewer consumida por 009 | — | — | Pequeno |
 | 009 | Review cards com rating ✅ VERIFIED | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
 | 010 | Migrar `hero-center-cta` para o contrato ✅ VERIFIED | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
-| 011 | Feature comparison | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
+| 011 | Feature comparison ✅ VERIFIED | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
 | 012 | Motion pass (entrance/hover) | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
 | 013 | Separator + Skeleton | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
 | 014 | Newsletter com estados | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (PARCIAL) | Médio |
@@ -216,6 +216,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** QLT-005 (PARCIAL). **Esforço:** Pequeno–médio.
 
 ## 011 — Feature comparison
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-10-31)** — novo grupo `components/sections/features/` com `feature-comparison.tsx` (`FeatureComparison`); nova rota `/library/features` + link "Features" na library. Contrato data-driven (`ComparisonValue = boolean | string`, `ComparisonOption`, `ComparisonFeature`, `FeatureComparisonProps` — tipos locais), `values` keyed pelo id da opção; tabela HTML semântica real com `Recurso` como primeiro column header explícito e `scope="col"`/`scope="row"`; booleanos via Check/X Lucide `aria-hidden` + sr-only (Incluído/Não incluído); strings como dados; valor ausente com representação própria distinta de `false` ("Não informado"); Server Component; CSS-only responsive com scroll horizontal interno no mobile (wrapper rolável mantém o scroll interno sem provocar overflow no documento); sem pricing, sem CTA, sem highlight, sem feature groups, sem tooltip; sem dependência nova. Validação live 375×667 (page overflow 0, scroll interno testado e utilizável, label longo quebra) e 1280×720 (page overflow 0, 3 opções alinhadas, sem scroll desnecessário). +1 teste Playwright. Lint 0/0; build PASS (17 rotas); Playwright 28 passed + 2 skipped (30 execuções); `git diff --check` limpo.
 
 **Objetivo:** comparação em colunas (antes/depois, com/sem) — estrutura inexistente no lab.
 **Entregável:** nova variante em `components/sections/features/` + página `/library` correspondente.

@@ -175,3 +175,33 @@ test('hero centralizada data-driven renderiza heading e CTAs como links reais', 
     '/blog',
   );
 });
+
+test('feature comparison: tabela semântica com headers, valores textuais e estados acessíveis', async ({ page }) => {
+  await page.goto('/library/features');
+
+  const table = page.getByRole('table');
+  await expect(table).toBeVisible();
+
+  // Cabeçalho semântico explícito + uma coluna por opção.
+  await expect(table.getByRole('columnheader', { name: 'Recurso' })).toBeVisible();
+  await expect(table.getByRole('columnheader', { name: 'Essencial' })).toBeVisible();
+  await expect(table.getByRole('columnheader', { name: 'Profissional' })).toBeVisible();
+  await expect(table.getByRole('columnheader', { name: 'Completo' })).toBeVisible();
+
+  // Pelo menos um recurso com valor textual.
+  const projectsRow = table.getByRole('row').filter({ hasText: 'Projetos ativos' });
+  await expect(projectsRow.getByRole('rowheader', { name: 'Projetos ativos' })).toBeVisible();
+  await expect(projectsRow.getByText('Ilimitado')).toBeVisible();
+
+  // Estados booleanos acessíveis (ícone decorativo + texto sr-only).
+  // exact: true — sem isso, "Incluído" também casaria com "Não incluído" (substring).
+  const supportRow = table.getByRole('row').filter({ hasText: 'Suporte' });
+  await expect(supportRow.getByText('Não incluído', { exact: true })).toHaveCount(1);
+  await expect(supportRow.getByText('Incluído', { exact: true })).toHaveCount(2);
+
+  // Valor ausente: representação própria, diferente de false.
+  const reportsRow = table
+    .getByRole('row')
+    .filter({ has: page.getByRole('rowheader', { name: 'Relatórios', exact: true }) });
+  await expect(reportsRow.getByText('Não informado', { exact: true })).toHaveCount(1);
+});

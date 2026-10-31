@@ -4,6 +4,22 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-10-31] — Evolução 011: Feature Comparison (VERIFIED)
+
+- Criado o novo grupo `components/sections/features/` — `feature-comparison.tsx` (`FeatureComparison`), Server Component, data-driven, primeiro membro do grupo.
+- Contrato: `ComparisonValue = boolean | string`; `ComparisonOption {id, label}`; `ComparisonFeature {label, values: Record<string, ComparisonValue>}` com `values` keyed pelo id da opção; `FeatureComparisonProps` com `eyebrow?`/`title`/`description?`/`options`/`features` (tipos locais, sem `className` público).
+- Tabela HTML semântica real: `Recurso` como primeiro column header explícito, `scope="col"`/`scope="row"`; booleanos via `Check`/`X` Lucide `aria-hidden` com textos acessíveis via sr-only (Incluído/Não incluído); strings renderizadas como dados; valor ausente com representação própria distinta de `false` (`—` + sr-only "Não informado").
+- Server Component; CSS-only responsive; sem pricing, sem CTA, sem highlight, sem feature groups, sem tooltip; nenhuma dependência nova.
+- Mobile com scroll horizontal interno controlado: o wrapper da tabela usa contexto posicionado (`relative`) junto ao `overflow-x-auto` para manter os elementos `sr-only` absolutamente posicionados dentro do contexto de clipping/scroll correto — o scroll permanece interno e o documento não recebe overflow horizontal (não generalizado como regra global).
+- Validação live: 375×667 (page overflow 0; scroll interno testado e utilizável; label longo quebra corretamente; sem clipping indevido) e 1280×720 (page overflow 0; 3 opções alinhadas; tabela íntegra; sem scroll horizontal desnecessário).
+- Nova rota `/library/features` (padrão atual do showcase, demo tipada) + link "Features" adicionado ao menu da library (após Services, antes de Logos).
+- Adicionado 1 teste Playwright ao smoke (tabela semântica, header Recurso, Essencial/Profissional/Completo, valor textual, estados acessíveis Incluído/Não incluído/Não informado). Suíte: 15 testes / 30 execuções — **28 passed + 2 skipped** (skips intencionais mobile-only da 007).
+- Lint **0/0**; build **PASS** (17 rotas); `git diff --check` limpo.
+- Findings: nenhum — a section nova já nasce data-driven e a página já nasce no padrão atual (QLT-005 e QLT-010 não reduzem ocorrências legadas).
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (grupo Features + contagens 27/42), `docs/ROADMAP-1000-EVOLUTIONS.md` (011 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 012).
+
+---
+
 ## [2026-10-26] — Evolução 010: HeroCenterCta data-driven (VERIFIED)
 
 - `components/sections/hero/hero-center-cta.tsx` migrada para o contrato — mesmo componente, sem redesign; toda a copy e os CTAs hardcoded saíram do componente.

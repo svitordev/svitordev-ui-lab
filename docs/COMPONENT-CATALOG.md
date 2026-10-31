@@ -6,9 +6,9 @@
 
 - **6** UI components
 - **7** site components
-- **26** section components
+- **27** section components
 - **2** wrappers/shells
-- **Total: 41** componentes reutilizáveis relevantes
+- **Total: 42** componentes reutilizáveis relevantes
 
 ---
 
@@ -42,7 +42,7 @@
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (26)
+## Section components — `components/sections/` (27)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -114,6 +114,36 @@
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | StatsGrid | `components/sections/stats/stats-grid.tsx` | Pronto | **Data-driven** (Evolução 005). Grid de números de destaque (`value` + `label` + `description` opcional) com badge de contexto via `Badge` (004); Server Component; `ul[role=list]` 2 colunas no mobile / 4 no desktop; sem motion; demo na `/library/stats` |
+
+### Features — `components/sections/features/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| FeatureComparison | `components/sections/features/feature-comparison.tsx` | Pronto | **Data-driven** (Evolução 011). Tabela HTML semântica real de recursos entre opções dinâmicas; `values` keyed por `ComparisonOption.id`; `boolean \| string`; fallback defensivo para valor ausente (distinto de `false`); `Recurso` como primeiro column header; `scope="col"`/`scope="row"`; Check/X Lucide `aria-hidden` com textos acessíveis via sr-only (Incluído/Não incluído/Não informado); Server Component; mobile com scroll horizontal interno controlado; sem pricing, sem CTA, sem highlight, sem grupos, sem JS responsivo; demo na `/library/features` |
+
+Contrato (resumo):
+
+```ts
+ComparisonValue = boolean | string
+
+ComparisonOption {
+  id: string
+  label: string
+}
+
+ComparisonFeature {
+  label: string
+  values: Record<string, ComparisonValue>
+}
+
+FeatureComparisonProps {
+  eyebrow?: string
+  title: string
+  description?: string
+  options: ComparisonOption[]
+  features: ComparisonFeature[]
+}
+```
 
 ## Wrappers / shells (2)
 
