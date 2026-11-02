@@ -25,7 +25,8 @@ export function HeroMediaShowcase({
 }: HeroMediaShowcaseProps) {
   return (
     <section className="w-full bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
+      {/* Evolução 012 — entrance discreto (somente prefers-reduced-motion: no-preference). */}
+      <div className="mx-auto max-w-6xl px-4 py-16 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-500 motion-safe:ease-out md:py-24">
         {/* conteúdo editorial centralizado */}
         <div className="mx-auto max-w-3xl space-y-4 text-center">
           {eyebrow && (

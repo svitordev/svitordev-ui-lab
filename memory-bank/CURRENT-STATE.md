@@ -21,7 +21,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 009:** ✅ IMPLEMENTADA / VERIFIED (Review cards com rating — `TestimonialsRatingCards`, quarta variant de testimonials, contrato data-driven, rating inteiro 1–5 acessível via `aria-label`, semântica `article`/`blockquote`/`footer`, Avatar 008 consumido sem mudança de API; contribui para a estratégia de migração gradual de QLT-005).
 - **Evolução 010:** ✅ IMPLEMENTADA / VERIFIED (`hero-center-cta` migrada para o contrato — `HeroCenterCta` agora data-driven (`title` obrigatório; `description?`/`supportingText?`/`actions?`; type local; Server Component; sem eyebrow; visual preservado); página da library como consumer real; os dois botões falsos viraram links reais (interno `Ver conteúdos` → `/blog`); contribui para QLT-003 (11→10 ocorrências, permanece aberto) e QLT-005 (permanece aberto).
 - **Evolução 011:** ✅ IMPLEMENTADA / VERIFIED (Feature comparison — novo grupo `features`, `FeatureComparison` data-driven, tabela HTML semântica real (`Recurso` + `scope`), `boolean | string` com `values` keyed por `option.id`, fallback defensivo para valor ausente (distinto de `false`), Check/X + sr-only, Server Component, CSS-only responsive com scroll horizontal interno no mobile e page overflow 0; nova rota `/library/features` + link "Features" na library).
-- **Próxima execução:** Evolução 012 (Motion pass).
+- **Evolução 012:** ✅ IMPLEMENTADA / VERIFIED (Motion pass — motion pass controlado em 2 componentes: `HeroMediaShowcase` com entrance motion-safe e `TestimonialsRatingCards` com microinteraction de hover motion-safe; `MobileNav` intocado por decisão de escopo; nenhum Client Component novo; nenhuma dependência nova; padrão Motion documentado no Design System).
+- **Próxima execução:** Evolução 013 (Separator + Skeleton).
 
 ## Stack confirmada
 
@@ -62,7 +63,7 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **15 smoke tests / 30 execuções** (28 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **16 smoke tests / 32 execuções** (30 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
@@ -71,7 +72,7 @@ Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–011 VERIFIED. Próxima execução: Evolução 012 (Motion pass).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–012 VERIFIED. Próxima execução: Evolução 013 (Separator + Skeleton).
 
 ### Problemas resolvidos
 

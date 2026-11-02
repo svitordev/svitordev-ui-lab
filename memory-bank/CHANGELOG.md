@@ -4,6 +4,22 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-02] — Evolução 012: Motion pass (VERIFIED)
+
+- Motion pass controlado: exatamente 2 componentes existentes alterados, nenhum componente novo, nenhuma dependência nova, nenhuma abstração de motion criada.
+- `HeroMediaShowcase`: entrance discreto (fade + pequeno translate-y) via CSS/tw-animate-css já instalado, aplicado ao container principal.
+- `TestimonialsRatingCards`: microinteraction de hover com translate-y mínimo + shadow discreto.
+- Todo motion novo protegido por `motion-safe`; reduced motion validado — conteúdo aparece diretamente no estado final, sem animação e sem transform residual.
+- Server Components preservados; nenhum Client Component novo.
+- `MobileNav` deliberadamente excluído desta evolução (montagem condicional produziria animação assimétrica).
+- Validação live: 375×667 e 1280×720 — entrance/hover funcionando, conteúdo íntegro, hover libera sem ficar preso, overflow 0 em todos os casos.
+- Adicionado 1 teste Playwright de reduced motion (HeroMediaShowcase visível com `animationName` computado sem animação). Suíte: 16 testes / 32 execuções — **30 passed + 2 skipped** (skips intencionais mobile-only da 007).
+- Lint **0/0**; build **PASS** (17 rotas); `git diff --check` limpo.
+- Findings: nenhum.
+- Documentação atualizada: `docs/DESIGN-SYSTEM.md` (nova seção Motion — princípio, hierarquia tecnológica, reduced motion obrigatório, durações preferenciais, propriedades, padrões que exigem justificativa, Server Components), `docs/COMPONENT-CATALOG.md` (observações de motion nas entradas alteradas — contagens inalteradas 27/6/42), `docs/ROADMAP-1000-EVOLUTIONS.md` (012 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 013).
+
+---
+
 ## [2026-10-31] — Evolução 011: Feature Comparison (VERIFIED)
 
 - Criado o novo grupo `components/sections/features/` — `feature-comparison.tsx` (`FeatureComparison`), Server Component, data-driven, primeiro membro do grupo.

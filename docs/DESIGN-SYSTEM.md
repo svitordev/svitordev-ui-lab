@@ -76,6 +76,50 @@ Primeiro contrato exemplar do laboratório (Evolução 001): `CtaSplitActions` (
 - Server Component quando não há interação client-side.
 - Novas sections data-driven seguem este padrão; componentes legados migram quando forem tocados (estratégia B — sem refatoração em massa).
 
+## Motion
+
+Padrão estabelecido pela Evolução 012 (motion pass controlado — aplicado em `HeroMediaShowcase` e `TestimonialsRatingCards`).
+
+### Princípio
+
+- Motion deve ter propósito de UX: reforçar hierarquia ou feedback.
+- Deve ser discreto e não atrasar o acesso ao conteúdo.
+- Não é decoração gratuita nem requisito automático de todo componente.
+- Deve preservar acessibilidade e respeitar reduced motion.
+
+### Hierarquia tecnológica
+
+1. **CSS / Tailwind** — primeira escolha.
+2. **`tw-animate-css`** — quando animation utilities forem o mecanismo adequado.
+3. **JavaScript / bibliotecas especializadas** — somente quando CSS não resolver o comportamento necessário.
+
+### Reduced motion (obrigatório)
+
+- Motion novo deve respeitar `prefers-reduced-motion`.
+- No padrão atual: comportamento que contém movimento usa `motion-safe:`.
+- Com reduced motion: conteúdo permanece visível, aparece diretamente no estado final, nenhum elemento depende de animação para existir e transforms de motion não permanecem ativos.
+- O princípio é obrigatório; a implementação exata pode variar por componente.
+
+### Durações preferenciais
+
+- Microinteraction: ~150–300ms.
+- Entrance: ~300–500ms.
+- Faixas preferenciais — não são valores rígidos; evitar proliferar durações.
+
+### Propriedades
+
+- Preferir animar/transicionar `opacity` e `transform`.
+- Feedback visual pode usar `border-color` e `box-shadow`.
+- Evitar animar sem necessidade: width, height, top, left, margin, padding.
+
+### Padrões que exigem justificativa
+
+Não recomendados por padrão (não proibidos — exigem justificativa clara): loops decorativos contínuos, parallax sem necessidade, motion excessivo, escalas grandes, bounce/overshoot exagerado, stagger via JS sem necessidade, transformar Server Components em Client Components apenas por animação.
+
+### Server Components
+
+Se o efeito pode ser resolvido por CSS, manter Server Component e não adicionar `"use client"` apenas por motion — demonstrado na Evolução 012 em `HeroMediaShowcase` e `TestimonialsRatingCards`.
+
 ## Estratégia para projetos derivados (DEC-004)
 
 Projetos criados a partir do template poderão ser:

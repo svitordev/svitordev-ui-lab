@@ -62,7 +62,7 @@ export function TestimonialsRatingCards({
             return (
               <article
                 key={item.author}
-                className="flex h-full flex-col gap-3 rounded-2xl border bg-background p-4 text-sm shadow-sm"
+                className="flex h-full flex-col gap-3 rounded-2xl border bg-background p-4 text-sm shadow-sm motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md"
               >
                 <div
                   className="flex items-center gap-0.5"

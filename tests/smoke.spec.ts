@@ -205,3 +205,23 @@ test('feature comparison: tabela semântica com headers, valores textuais e esta
     .filter({ has: page.getByRole('rowheader', { name: 'Relatórios', exact: true }) });
   await expect(reportsRow.getByText('Não informado', { exact: true })).toHaveCount(1);
 });
+
+test('reduced motion: hero media showcase permanece visivel sem animacao', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/library/hero');
+
+  // Escopo pela variante específica (HeroMediaShowcase) — a página tem outras heroes.
+  const heading = page.getByRole('heading', {
+    level: 1,
+    name: 'Veja seu negócio funcionando em um painel claro e objetivo.',
+  });
+  await expect(heading).toBeVisible();
+
+  // Container animado (section do componente > container principal) — sob reduced motion
+  // nenhuma animação deve executar; o conteúdo aparece direto no estado final.
+  const container = heading.locator('xpath=ancestor::section[1]/div[1]');
+  await expect(container).toBeVisible();
+  await expect
+    .poll(async () => container.evaluate((el) => getComputedStyle(el).animationName))
+    .toBe('none');
+});

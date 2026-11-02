@@ -109,7 +109,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 009 | Review cards com rating ✅ VERIFIED | Nova section | Social proof com avaliação, avatar e citação | 001, 004, 008 | — | Médio |
 | 010 | Migrar `hero-center-cta` para o contrato ✅ VERIFIED | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
 | 011 | Feature comparison ✅ VERIFIED | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
-| 012 | Motion pass (entrance/hover) | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
+| 012 | Motion pass (entrance/hover) ✅ VERIFIED | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
 | 013 | Separator + Skeleton | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
 | 014 | Newsletter com estados | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (PARCIAL) | Médio |
 | 015 | Labels dos formulários existentes | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 | Pequeno |
@@ -225,6 +225,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** — **Esforço:** Médio–grande.
 
 ## 012 — Motion pass (entrance/hover)
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-02)** — motion pass controlado: 2 componentes alterados, nenhum componente novo, nenhuma dependência nova, nenhuma abstração de motion. `HeroMediaShowcase`: entrance discreto (fade + translate-y pequeno) via CSS/tw-animate-css. `TestimonialsRatingCards`: hover com translate mínimo + shadow discreto. Todo motion novo protegido por `motion-safe`; reduced motion validado (conteúdo no estado final, sem animação). Server Components preservados, nenhum Client Component novo. MobileNav deliberadamente excluído (montagem condicional produziria animação assimétrica). Validação live 375×667 e 1280×720, overflow 0 em todos os casos. +1 teste Playwright de reduced motion. Lint 0/0; build PASS (17 rotas); Playwright 30 passed + 2 skipped (32 execuções); `git diff --check` limpo. Padrão documentado em `docs/DESIGN-SYSTEM.md` (seção Motion).
 
 **Objetivo:** padrão de animação do laboratório usando CSS/Tailwind/tw-animate-css, com `prefers-reduced-motion` e sem layout shift. Padrão documentado quando implementado.
 **Entregável:** classes de animação aplicadas nas sections exemplar + padrão documentado.
