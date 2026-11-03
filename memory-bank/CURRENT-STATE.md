@@ -22,7 +22,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 010:** ✅ IMPLEMENTADA / VERIFIED (`hero-center-cta` migrada para o contrato — `HeroCenterCta` agora data-driven (`title` obrigatório; `description?`/`supportingText?`/`actions?`; type local; Server Component; sem eyebrow; visual preservado); página da library como consumer real; os dois botões falsos viraram links reais (interno `Ver conteúdos` → `/blog`); contribui para QLT-003 (11→10 ocorrências, permanece aberto) e QLT-005 (permanece aberto).
 - **Evolução 011:** ✅ IMPLEMENTADA / VERIFIED (Feature comparison — novo grupo `features`, `FeatureComparison` data-driven, tabela HTML semântica real (`Recurso` + `scope`), `boolean | string` com `values` keyed por `option.id`, fallback defensivo para valor ausente (distinto de `false`), Check/X + sr-only, Server Component, CSS-only responsive com scroll horizontal interno no mobile e page overflow 0; nova rota `/library/features` + link "Features" na library).
 - **Evolução 012:** ✅ IMPLEMENTADA / VERIFIED (Motion pass — motion pass controlado em 2 componentes: `HeroMediaShowcase` com entrance motion-safe e `TestimonialsRatingCards` com microinteraction de hover motion-safe; `MobileNav` intocado por decisão de escopo; nenhum Client Component novo; nenhuma dependência nova; padrão Motion documentado no Design System).
-- **Próxima execução:** Evolução 013 (Separator + Skeleton).
+- **Evolução 013:** ✅ IMPLEMENTADA / VERIFIED (Separator + Skeleton — `components/ui/separator.tsx` e `components/ui/skeleton.tsx`, ambos nativos, Server Components, zero dependências; Separator: único `<div>`, horizontal/vertical, `decorative=true` default sem semântica, modo semântico com `role`/`aria-orientation` derivados de `decorative`/`orientation` como fonte de verdade; Skeleton: `bg-muted` + `rounded-md` + `motion-safe:animate-pulse` (convenção Motion da 012), sem `role="status"` automático — anúncio de loading é do consumer; nenhum consumer artificial, nenhuma rota nova, nenhum teste novo).
+- **Próxima execução:** Evolução 014 (Newsletter com estados).
 
 ## Stack confirmada
 
@@ -49,11 +50,11 @@ public/
 
 ## Inventário atual de componentes
 
-- **6** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008)
+- **8** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008, + `separator` e `skeleton` via Evolução 013)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
 - **27** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison`)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 42** componentes reutilizáveis relevantes
+- **Total: 44** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -72,7 +73,7 @@ Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–012 VERIFIED. Próxima execução: Evolução 013 (Separator + Skeleton).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–013 VERIFIED. Próxima execução: Evolução 014 (Newsletter com estados).
 
 ### Problemas resolvidos
 

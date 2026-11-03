@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **6** UI components
+- **8** UI components
 - **7** site components
 - **27** section components
 - **2** wrappers/shells
-- **Total: 42** componentes reutilizáveis relevantes
+- **Total: 44** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (6)
+## UI components — `components/ui/` (8)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -22,6 +22,17 @@
 | Textarea | `components/ui/textarea.tsx` | Componente base shadcn/ui | Pronto | Alta | Sem conteúdo hardcoded |
 | Badge | `components/ui/badge.tsx` | Componente base shadcn/ui | Pronto | Alta | **Evolução 004.** `<span>` não interativo; CVA com variantes `default`/`secondary`/`outline` (tokens, sem cor hardcoded); `data-slot`; `cn()`; sem sizes, sem `asChild`, sem motion; consumido por 005 |
 | Avatar | `components/ui/avatar.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 008.** Baseado em `@radix-ui/react-avatar`; Client Component; API composicional `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`); imagem com `object-cover`; fallback com tokens existentes (conteúdo do consumer); `alt` controlado pelo consumer; sem geração automática de iniciais, sem size variants, sem status, sem AvatarGroup, sem interatividade própria; consumido por 009 |
+| Separator | `components/ui/separator.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Implementação nativa, zero dependências; Server Component; único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão — modo decorativo sem `role`/`aria-orientation`; modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `decorative`/`orientation` são fonte de verdade — consumer não sobrescreve os atributos controlados; `data-slot="separator"` + `data-orientation`; `className` via `cn()`; `bg-border`; horizontal `h-px w-full` / vertical `h-full w-px`; sem CVA, sem variants, sem sizes |
+| Skeleton | `components/ui/skeleton.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Primitive visual de loading; Server Component; `React.ComponentProps<"div">` — dimensões definidas pelo consumer via `className`; `data-slot="skeleton"`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container; sem variants, sem size API, sem composed skeletons; sem consumer ainda |
+
+Contrato do Separator (resumo):
+
+```ts
+type SeparatorProps = React.ComponentProps<"div"> & {
+  orientation?: "horizontal" | "vertical"
+  decorative?: boolean
+}
+```
 
 ## Site components — `components/site/` (7)
 

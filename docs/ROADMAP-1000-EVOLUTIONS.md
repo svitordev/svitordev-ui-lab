@@ -110,7 +110,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 010 | Migrar `hero-center-cta` para o contrato ✅ VERIFIED | Component API | Validar na prática o padrão estabelecido pela 001 | 001 | QLT-005 (PARCIAL) | Pequeno–médio |
 | 011 | Feature comparison ✅ VERIFIED | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
 | 012 | Motion pass (entrance/hover) ✅ VERIFIED | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
-| 013 | Separator + Skeleton | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
+| 013 | Separator + Skeleton ✅ VERIFIED | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
 | 014 | Newsletter com estados | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (PARCIAL) | Médio |
 | 015 | Labels dos formulários existentes | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 | Pequeno |
 | 016 | Pricing com toggle | Nova section | Alternância mensal/anual interativa | 001 | — | Médio–grande |
@@ -234,6 +234,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** nenhum. **Esforço:** Médio.
 
 ## 013 — Separator + Skeleton
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-02)** — `components/ui/separator.tsx` (`Separator`, implementação nativa, zero dependências; Server Component; único `<div>`; horizontal/vertical; `decorative=true` default sem `role`/`aria-orientation`; modo semântico com `role="separator"` + `aria-orientation` derivado de `orientation`; `data-slot`/`data-orientation`; `bg-border`; a precedência das props foi ajustada para preservar `decorative`/`orientation` como fonte de verdade) e `components/ui/skeleton.tsx` (`Skeleton`, Server Component; `React.ComponentProps<"div">`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` — reduced motion estático, convenção da 012; sem `role="status"` automático — anúncio de loading é do consumer; composição via `className`). Nenhum consumer artificial, nenhuma rota nova, nenhum teste novo. Lint 0/0; build PASS (17 rotas); Playwright 30 passed + 2 skipped (32 execuções, inalterado); `git diff --check` limpo.
 
 **Objetivo:** primitivos selecionados por demanda real (estados, separação semântica).
 **Entregável:** `components/ui/separator.tsx`, `components/ui/skeleton.tsx`.

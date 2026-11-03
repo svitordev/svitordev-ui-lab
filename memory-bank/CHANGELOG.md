@@ -4,6 +4,18 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-02] — Evolução 013: Separator + Skeleton (VERIFIED)
+
+- Criado `components/ui/separator.tsx` — `Separator`, novo primitive com implementação nativa (zero dependências), Server Component, único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão (modo decorativo sem `role`/`aria-orientation`); modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `data-slot`/`data-orientation`; `bg-border`; a precedência das props do Separator foi ajustada para preservar `decorative`/`orientation` como fonte de verdade dos atributos controlados.
+- Criado `components/ui/skeleton.tsx` — `Skeleton`, novo primitive visual de loading, Server Component; `React.ComponentProps<"div">` com dimensões definidas pelo consumer via `className`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático, convenção Motion da 012); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container.
+- Nenhum consumer artificial, nenhuma rota nova, nenhum teste novo.
+- Contagens: UI 6→8, total 42→44 (sections 27 inalterado).
+- Lint **0/0**; build **PASS** (17 rotas); Playwright **30 passed + 2 skipped** (16 testes / 32 execuções, inalterado); `git diff --check` limpo.
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entradas Separator/Skeleton + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (013 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 014).
+
+---
+
 ## [2026-11-02] — Evolução 012: Motion pass (VERIFIED)
 
 - Motion pass controlado: exatamente 2 componentes existentes alterados, nenhum componente novo, nenhuma dependência nova, nenhuma abstração de motion criada.
