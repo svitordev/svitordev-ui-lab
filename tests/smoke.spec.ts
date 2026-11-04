@@ -369,3 +369,82 @@ test('pricing: alterna periodo de cobranca e mantem CTAs reais', async ({ page }
     'mailto:contato@suaempresa.com',
   );
 });
+
+test('faq: suporta comportamento single e collapsible', async ({ page }) => {
+  await page.goto('/library/faq');
+
+  // Contrato principal: Trigger buttons por accessible name (perguntas reais da demo).
+  const first = page.getByRole('button', { name: 'Posso reutilizar estes componentes em outros projetos?' });
+  const second = page.getByRole('button', { name: 'Os componentes funcionam bem em dispositivos móveis?' });
+  const firstAnswer = page.getByText('Sim. Cada seção é independente e recebe o conteúdo por dados');
+  const secondAnswer = page.getByText('Sim. As seções são pensadas para mobile primeiro');
+
+  await expect(first).toHaveAttribute('aria-expanded', 'false');
+
+  // Abrir o primeiro item.
+  await first.click();
+  await expect(first).toHaveAttribute('aria-expanded', 'true');
+  await expect(firstAnswer).toBeVisible();
+
+  // Associação aria-controls -> painel real, lida DEPOIS de abrir (montagem é decisão do Radix).
+  const controls = await first.getAttribute('aria-controls');
+  expect(controls).toBeTruthy();
+  const panel = page.locator(`[id="${controls}"]`);
+  await expect(panel).toHaveCount(1);
+  await expect(panel).toContainText('Cada seção é independente');
+
+  // Single: abrir o segundo fecha o primeiro.
+  await second.click();
+  await expect(second).toHaveAttribute('aria-expanded', 'true');
+  await expect(first).toHaveAttribute('aria-expanded', 'false');
+  await expect(secondAnswer).toBeVisible();
+  await expect(firstAnswer).toBeHidden();
+
+  // Collapsible: clicar novamente no item aberto o fecha.
+  await second.click();
+  await expect(second).toHaveAttribute('aria-expanded', 'false');
+  await expect(secondAnswer).toBeHidden();
+});
+
+test('faq: suporta navegacao por teclado e reduced motion', async ({ page }) => {
+  await page.goto('/library/faq');
+
+  const first = page.getByRole('button', { name: 'Posso reutilizar estes componentes em outros projetos?' });
+  const second = page.getByRole('button', { name: 'Os componentes funcionam bem em dispositivos móveis?' });
+  const last = page.getByRole('button', { name: 'Como integro estas seções no meu projeto Next.js?' });
+
+  await first.focus();
+  await expect(first).toBeFocused();
+
+  // Enter abre, Space fecha — comportamento nativo do Radix, sem handlers próprios.
+  await page.keyboard.press('Enter');
+  await expect(first).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Space');
+  await expect(first).toHaveAttribute('aria-expanded', 'false');
+
+  // Navegação entre triggers fornecida pelo Radix (roving focus).
+  await page.keyboard.press('ArrowDown');
+  await expect(second).toBeFocused();
+  await page.keyboard.press('ArrowUp');
+  await expect(first).toBeFocused();
+  await page.keyboard.press('End');
+  await expect(last).toBeFocused();
+  await page.keyboard.press('Home');
+  await expect(first).toBeFocused();
+
+  // Reduced motion: o estado visual continua mudando (apenas a transição é desligada).
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+
+  const chevron = first.locator('svg');
+  // Lê o estado de rotação real (Tailwind 4 pode aplicar rotate como propriedade própria).
+  const readRotation = (el: Element) => {
+    const s = getComputedStyle(el);
+    return [s.transform, s.rotate, s.translate, s.scale].join('|');
+  };
+  const before = await chevron.evaluate(readRotation);
+  await page.keyboard.press('Enter');
+  await expect(first).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByText('Sim. Cada seção é independente e recebe o conteúdo por dados')).toBeVisible();
+  const after = await chevron.evaluate(readRotation);
+  expect(after).not.toBe(before);
+});

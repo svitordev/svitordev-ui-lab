@@ -115,7 +115,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 015 | Labels dos formulários existentes ✅ VERIFIED | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 — **VERIFIED** | Pequeno |
 | 016 | Pricing com toggle ✅ VERIFIED | Evolução de section existente | Alternância mensal/anual interativa | 001 | — | Médio–grande |
 | 017 | Accordion acessível ✅ VERIFIED (technical) | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
-| 018 | FAQ | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
+| 018 | FAQ ✅ VERIFIED | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
 | 019 | Padronizar páginas legadas do `/library` | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010, QLT-011 (PARCIAL) | Médio |
 | 020 | Sticky CTA bar | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
 | 021 | Sticky-column split | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
@@ -279,6 +279,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** — **Esforço:** Médio.
 
 ## 018 — FAQ
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-04)** — inventário confirmou ausência de FAQ existente; nova section justificada. `components/sections/faq/faq-accordion.tsx` (`FaqAccordion`, data-driven, Server Component), primeiro consumer real do Accordion 017 com `type="single" collapsible` e nenhum state wrapper próprio. Nova rota `/library/faq` + link "FAQ" na navegação da library; demo genérica com 6 itens; nenhuma dependência nova; Accordion primitive intacto. A validação visual/keyboard runtime deliberadamente reservada pela Evolução 017 foi concluída na Evolução 018 (mouse, open/close, single, collapsible, `aria-expanded`/`aria-controls`, teclado, foco, Chevron, reduced motion, heading hierarchy). Validação live 375×667 e 1280×720, zero overflow. +2 testes Playwright. Lint 0/0; build PASS (19 rotas); Playwright 42 passed + 2 skipped (22 testes / 44 execuções); `git diff --check` limpo.
 
 **Objetivo:** seção FAQ construída sobre o accordion 017 — padrão recorrente em landing pages.
 **Entregável:** `components/sections/faq/` + página `/library/faq`.

@@ -26,8 +26,9 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 014:** ✅ IMPLEMENTADA / VERIFIED (Newsletter com estados — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado; contrato data-driven com callback externo `onSubmit`, nenhum backend acoplado; estados idle/submitting/success/error; email controlado; label real + `htmlFor` + `useId`; live region persistente única; acessibilidade validada; rota `/library/newsletter` + link na library com client wrapper só de showcase; demo determinística; +2 testes Playwright; contribui para QLT-004, que permanece aberto; QLT-008 permanece aberto).
 - **Evolução 015:** ✅ IMPLEMENTADA / VERIFIED (Labels dos formulários existentes — QLT-008 encerrado: os 3 contact forms corrigidos com 10 associações `htmlFor`↔`id` 1:1; IDs determinísticos prefixados por variant e únicos na página; Server Components preservados; zero mudança visual; zero comportamento novo; +1 teste Playwright abrangente; QLT-004 e QLT-010 continuam abertos; os `<section id="contact">` duplicados são pré-existentes e ficaram fora do escopo).
 - **Evolução 016:** ✅ IMPLEMENTADA / VERIFIED (Pricing com toggle — decisão anti-inflação: `PricingThreeTiers` evoluído, nenhum componente novo; contrato data-driven; Client Component justificado (estado do intervalo); toggle mensal/anual com `role="group"` + `aria-pressed`, teclado nativo, estado inicial mensal; preços como strings do consumer, sem cálculo comercial; `featured` separado de `action.variant`; CTAs como links reais; consumers: `/library/pricing` e home (identificada durante o build, copy movida para o consumer, ambas Server Components); +1 teste Playwright; contribui para QLT-003 e QLT-005, que permanecem abertos com uma ocorrência a menos; QLT-010 intocado).
-- **Evolução 017:** ✅ IMPLEMENTADA / VERIFIED (technical — Accessible Accordion: `components/ui/accordion.tsx`, Radix Accordion (`@radix-ui/react-accordion` ^1.3.1, dependência aprovada), Client Component, compound API com 4 exports (Header interno), single/multiple, collapsible, controlled/uncontrolled pela API nativa, keyboard/ARIA delegados ao Radix, Chevron decorativo com rotação pelo `data-state` do Trigger (também com reduced motion, instantânea; transição motion-safe), Content sem animação, nenhum consumer/rota/teste novo. Validação técnica concluída na 017; validação visual/keyboard em browser será feita na Evolução 018, primeiro consumer real — precedente Avatar 008→009).
-- **Próxima execução:** Evolução 018 (FAQ).
+- **Evolução 017:** ✅ IMPLEMENTADA / VERIFIED (technical — Accessible Accordion: `components/ui/accordion.tsx`, Radix Accordion (`@radix-ui/react-accordion` ^1.3.1, dependência aprovada), Client Component, compound API com 4 exports (Header interno), single/multiple, collapsible, controlled/uncontrolled pela API nativa, keyboard/ARIA delegados ao Radix, Chevron decorativo com rotação pelo `data-state` do Trigger (também com reduced motion, instantânea; transição motion-safe), Content sem animação, nenhum consumer/rota/teste novo. Validação técnica concluída na 017; validação visual/keyboard em browser concluída na Evolução 018, primeiro consumer real (`FaqAccordion`) — precedente Avatar 008→009).
+- **Evolução 018:** ✅ IMPLEMENTADA / VERIFIED (FAQ — novo grupo `components/sections/faq/` com `FaqAccordion`, data-driven, Server Component; primeiro consumer real do Accordion 017 (`type="single"` + `collapsible`, nenhum state wrapper próprio); rota `/library/faq` + link "FAQ" na navegação da library; demo genérica com 6 itens; nenhuma dependência nova; Accordion primitive intacto; runtime validation da 017 concluída nesta evolução (mouse, single, collapsible, ARIA, teclado, foco, Chevron, reduced motion, heading hierarchy); validação live 375×667 e 1280×720 com zero overflow; +2 testes Playwright; QLT-005 inalterado; QLT-010 destinado à 019).
+- **Próxima execução:** Evolução 019 (standardize legacy /library pages).
 
 ## Stack confirmada
 
@@ -56,9 +57,9 @@ public/
 
 - **9** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008, + `separator` e `skeleton` via Evolução 013, + `accordion` via Evolução 017)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
-- **28** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison` + `newsletter-form`; grupo Newsletter = 1, `NewsletterForm` disponível)
+- **29** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison` + `newsletter-form` + `faq-accordion` via Evolução 018; grupo Newsletter = 1, `NewsletterForm` disponível; grupo FAQ = 1, `FaqAccordion` disponível)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 46** componentes reutilizáveis relevantes
+- **Total: 47** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -66,9 +67,9 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 ## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
-Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
+Production build **verde** (PASS, 19 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **20 smoke tests / 40 execuções** (38 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **22 smoke tests / 44 execuções** (42 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED.
 - **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** continua aberto (Evolução 019).
 - **`/library`:** READY.
@@ -78,7 +79,7 @@ Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–017 concluídas (017 = technical VERIFIED; validação visual/keyboard do Accordion reservada para a 018). Próxima execução: Evolução 018 (FAQ). Ainda não há consumer do Accordion e nenhuma FAQ criada.
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–018 concluídas (017 = technical VERIFIED; runtime validation do Accordion concluída pela Evolução 018, primeiro consumer real — `FaqAccordion`). Próxima execução: Evolução 019 (standardize legacy /library pages).
 
 ### Problemas resolvidos
 

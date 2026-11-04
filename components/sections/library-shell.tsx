@@ -19,6 +19,7 @@ const sectionLinks = [
   { href: "/library/newsletter", label: "Newsletter" },
   { href: "/library/cta", label: "CTAs" },
   { href: "/library/footers", label: "Footers" },
+  { href: "/library/faq", label: "FAQ" },
 ];
 
 export function SectionsShell({ children }: { children: React.ReactNode }) {

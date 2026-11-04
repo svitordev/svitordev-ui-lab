@@ -6,9 +6,9 @@
 
 - **9** UI components
 - **7** site components
-- **28** section components
+- **29** section components
 - **2** wrappers/shells
-- **Total: 46** componentes reutilizáveis relevantes
+- **Total: 47** componentes reutilizáveis relevantes
 
 ---
 
@@ -24,7 +24,7 @@
 | Avatar | `components/ui/avatar.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 008.** Baseado em `@radix-ui/react-avatar`; Client Component; API composicional `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`); imagem com `object-cover`; fallback com tokens existentes (conteúdo do consumer); `alt` controlado pelo consumer; sem geração automática de iniciais, sem size variants, sem status, sem AvatarGroup, sem interatividade própria; consumido por 009 |
 | Separator | `components/ui/separator.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Implementação nativa, zero dependências; Server Component; único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão — modo decorativo sem `role`/`aria-orientation`; modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `decorative`/`orientation` são fonte de verdade — consumer não sobrescreve os atributos controlados; `data-slot="separator"` + `data-orientation`; `className` via `cn()`; `bg-border`; horizontal `h-px w-full` / vertical `h-full w-px`; sem CVA, sem variants, sem sizes |
 | Skeleton | `components/ui/skeleton.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Primitive visual de loading; Server Component; `React.ComponentProps<"div">` — dimensões definidas pelo consumer via `className`; `data-slot="skeleton"`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container; sem variants, sem size API, sem composed skeletons; sem consumer ainda |
-| Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; destinado a composições como FAQ; validação visual/keyboard em browser será feita pela Evolução 018, primeiro consumer real |
+| Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; primeiro consumer real: `FaqAccordion` (Evolução 018); validação runtime visual/keyboard concluída na Evolução 018 — single, collapsible, ARIA, keyboard, foco, Chevron e reduced motion confirmados |
 
 Contrato do Separator (resumo):
 
@@ -69,7 +69,7 @@ Exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`. C
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (27)
+## Section components — `components/sections/` (29)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -233,6 +233,34 @@ FeatureComparisonProps {
   features: ComparisonFeature[]
 }
 ```
+
+### FAQ — `components/sections/faq/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| FaqAccordion | `components/sections/faq/faq-accordion.tsx` | Pronto | **Data-driven** (Evolução 018). FAQ reutilizável — primeiro consumer real do Accordion (017); contrato simples (`FaqItem`/`FaqAccordionProps` — tipos locais); Server Component (sem `"use client"`); `answer: string`; `type="single"` + `collapsible` — uma resposta por vez, item aberto pode colapsar; nenhum state wrapper próprio (o estado vive no primitive Client); visual editorial/neutro; sem Card por item; sem motion adicional; nenhuma dependência nova; demo na `/library/faq` |
+
+Contrato (resumo):
+
+```ts
+export type FaqItem = {
+  question: string
+  answer: string
+}
+
+export type FaqAccordionProps = {
+  eyebrow?: string
+  title: string
+  description?: string
+  items: FaqItem[]
+}
+```
+
+Server/Client boundary: `FaqAccordion` = Server Component; Accordion primitive = Client Component. A página `/library/faq` também é Server Component.
+
+Modo: `<Accordion type="single" collapsible>`, sem wrapper de estado próprio.
+
+Semântica: título da section em `h2`; perguntas usam o Header interno do Radix; Trigger permanece o `button` real do Radix; nenhum heading manual duplicado; ARIA de disclosure fornecida pelo Radix.
 
 ## Wrappers / shells (2)
 

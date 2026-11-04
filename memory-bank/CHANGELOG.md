@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 018: FAQ (VERIFIED)
+
+- Criado `components/sections/faq/faq-accordion.tsx` — `FaqAccordion`, novo grupo `faq`; data-driven; Server Component; primeiro consumer real do Accordion (017).
+- `type="single"` + `collapsible` — uma resposta por vez, item aberto pode colapsar; nenhum state wrapper próprio; nenhuma dependência nova; Accordion primitive intacto.
+- Nova rota `/library/faq` (Server Component) + link "FAQ" na navegação da library; demo genérica com 6 perguntas; visual editorial neutro; sem Card por item; sem motion adicional.
+- Runtime validation da Evolução 017 concluída nesta evolução (deliberadamente reservada pela 017): mouse, open/close, single, collapsible, `aria-expanded`, `aria-controls`, Enter/Space/setas/Home/End, focus-visible, Chevron, reduced motion, heading hierarchy.
+- Validação live 375×667 (FAQ funcional, tap target adequado, respostas sem corte, chevron, foco, zero overflow) e 1280×720 (comportamento completo, teclado, foco, zero overflow).
+- +2 testes Playwright (aria-expanded/aria-controls/painel associado/single/collapsible; Enter/Space/ArrowDown/ArrowUp/Home/End/reduced motion/Chevron-state). Suíte: 22 testes / 44 execuções — **42 passed + 2 skipped**.
+- Contagens: sections 28→29, total 46→47 (UI 9 inalterado). Rotas: 18→19.
+- Lint **0/0**; build **PASS** (19 rotas); `git diff --check` limpo.
+- Findings: QLT-005 inalterado (nasce data-driven, não remove ocorrência legacy); QLT-010 inalterado (Evolução 019); QLT-003 n/a.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada FaqAccordion + nota do Accordion + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (018 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 019).
+
+---
+
 ## [2026-11-04] — Evolução 017: Accessible Accordion (technical VERIFIED)
 
 - Criado `components/ui/accordion.tsx` — novo UI primitive compound de disclosure acessível, baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada no Plan).
