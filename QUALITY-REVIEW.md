@@ -305,7 +305,7 @@ Command exited with code 1
 
 ### QLT-010 — Padrão inconsistente nas páginas do `/library` (7 de 9 desatualizadas)
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-04)** — as 7 páginas originalmente legacy (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) foram migradas para o padrão moderno consolidado: `metadata` local, page header no padrão, entries locais tipadas, preview wrapper consolidado, label `Componente: <code>{id}</code>`, Server Components, mesmas variants, mesma ordem e mesmos demo props. Varredura final: nenhuma das 7 mantém `*SectionsPage`, labels "Variação/Variante 0X" ou comentários antigos `app/sections/` — o único match residual (comentário em `layout.tsx`) pertence ao QLT-011. Gates: lint 0/0; build PASS (19 rotas, nenhuma perdida); Playwright 44 passed + 2 skipped; `git diff --check` limpo. Validação live nas representativas (hero, testimonials, contact) em 375×667 e 1280×720, zero overflow. (Evolução 019.)
 **Prioridade:** P2
 **Categoria:** Showcase / Manutenibilidade
 
@@ -418,11 +418,11 @@ Command exited with code 1
 |---|---|---|
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010, QLT-013 |
+| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 |
 | **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007, QLT-008 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

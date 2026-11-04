@@ -28,7 +28,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 016:** ✅ IMPLEMENTADA / VERIFIED (Pricing com toggle — decisão anti-inflação: `PricingThreeTiers` evoluído, nenhum componente novo; contrato data-driven; Client Component justificado (estado do intervalo); toggle mensal/anual com `role="group"` + `aria-pressed`, teclado nativo, estado inicial mensal; preços como strings do consumer, sem cálculo comercial; `featured` separado de `action.variant`; CTAs como links reais; consumers: `/library/pricing` e home (identificada durante o build, copy movida para o consumer, ambas Server Components); +1 teste Playwright; contribui para QLT-003 e QLT-005, que permanecem abertos com uma ocorrência a menos; QLT-010 intocado).
 - **Evolução 017:** ✅ IMPLEMENTADA / VERIFIED (technical — Accessible Accordion: `components/ui/accordion.tsx`, Radix Accordion (`@radix-ui/react-accordion` ^1.3.1, dependência aprovada), Client Component, compound API com 4 exports (Header interno), single/multiple, collapsible, controlled/uncontrolled pela API nativa, keyboard/ARIA delegados ao Radix, Chevron decorativo com rotação pelo `data-state` do Trigger (também com reduced motion, instantânea; transição motion-safe), Content sem animação, nenhum consumer/rota/teste novo. Validação técnica concluída na 017; validação visual/keyboard em browser concluída na Evolução 018, primeiro consumer real (`FaqAccordion`) — precedente Avatar 008→009).
 - **Evolução 018:** ✅ IMPLEMENTADA / VERIFIED (FAQ — novo grupo `components/sections/faq/` com `FaqAccordion`, data-driven, Server Component; primeiro consumer real do Accordion 017 (`type="single"` + `collapsible`, nenhum state wrapper próprio); rota `/library/faq` + link "FAQ" na navegação da library; demo genérica com 6 itens; nenhuma dependência nova; Accordion primitive intacto; runtime validation da 017 concluída nesta evolução (mouse, single, collapsible, ARIA, teclado, foco, Chevron, reduced motion, heading hierarchy); validação live 375×667 e 1280×720 com zero overflow; +2 testes Playwright; QLT-005 inalterado; QLT-010 destinado à 019).
-- **Próxima execução:** Evolução 019 (standardize legacy /library pages).
+- **Evolução 019:** ✅ IMPLEMENTADA / VERIFIED (Standardize legacy `/library` pages — as 7 páginas legacy (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) migradas para o padrão moderno consolidado: `metadata` local, page headers modernos, entries locais tipadas, preview boxes padronizados, labels `Componente: <code>{id}</code>`; páginas simples usam `Component`, heterogêneas usam `preview: React.ReactNode` — zero `any`, zero `Record<string, unknown>`, nenhuma abstração global; variants/ordem/demo props preservados (Hero 4, About 3, Services 3, Testimonials 4, Pricing 3, Contact 3, CTA 4); nenhum component novo; components internos e `library-shell` intactos; navigation intacta; 19 rotas preservadas; +1 teste Playwright; validação live mobile/desktop nas representativas com zero overflow; **QLT-010 → VERIFIED**; QLT-011 não atualizado — resíduo em `layout.tsx` fora do escopo).
+- **Próxima execução:** Evolução 020 (Sticky CTA bar).
 
 ## Stack confirmada
 
@@ -65,21 +66,23 @@ public/
 
 Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada variação em caixa com borda e rótulo. Será evoluído futuramente (índice, filtros, preview de código).
 
+Todas as páginas de categorias seguem agora o padrão moderno — as 7 legacy foram migradas na Evolução 019 (nenhuma rota removida, nenhum component demonstrado alterado).
+
 ## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
 Production build **verde** (PASS, 19 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **22 smoke tests / 44 execuções** (42 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **23 smoke tests / 46 execuções** (44 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED.
-- **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** continua aberto (Evolução 019).
+- **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** ✅ **VERIFIED** (Evolução 019 — as 7 páginas legacy migradas para o padrão moderno).
 - **`/library`:** READY.
 - **Design System:** READY.
-- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007, QLT-008 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 VERIFIED; os demais permanecem pendentes).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–018 concluídas (017 = technical VERIFIED; runtime validation do Accordion concluída pela Evolução 018, primeiro consumer real — `FaqAccordion`). Próxima execução: Evolução 019 (standardize legacy /library pages).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–019 concluídas (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019). Próxima execução: Evolução 020 (Sticky CTA bar).
 
 ### Problemas resolvidos
 

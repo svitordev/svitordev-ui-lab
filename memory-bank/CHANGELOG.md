@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 019: Standardize legacy /library pages (VERIFIED — QLT-010)
+
+- As 7 páginas legacy (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) migradas para o padrão moderno consolidado da `/library`: `metadata` local, page headers modernos, entries locais tipadas, preview boxes padronizados, labels `Componente: <code>{id}</code>`.
+- Tipagem preservada: páginas simples usam `Component`; páginas heterogêneas usam `preview: React.ReactNode` — zero `any`, zero `Record<string, unknown>`, nenhuma abstração global compartilhada.
+- Variants, ordem e demo props preservados (Hero 4, About 3, Services 3, Testimonials 4, Pricing 3, Contact 3, CTA 4); zero component novo; components internos intactos; navigation intacta; páginas permanecem Server Components.
+- Varredura final: nenhum padrão legacy restante nas 7 páginas — único resíduo (comentário em `layout.tsx`) pertence ao QLT-011, fora do escopo.
+- +1 teste Playwright (teste único cobre as 7 páginas migradas: h1, primeiro component id, label `Componente:`, zero overflow). Suíte: 23 testes / 46 execuções — **44 passed + 2 skipped**.
+- Validação live nas representativas (hero, testimonials, contact) em 375×667 e 1280×720 — zero overflow.
+- Contagens: sections 29, UI 9, total 47 (inalterado). Rotas: 19 → 19.
+- Lint **0/0**; build **PASS** (19 rotas); `git diff --check` limpo.
+- Findings: **QLT-010 VERIFIED** (100% dos casos migrados). QLT-002, QLT-003, QLT-005 e QLT-011 inalterados.
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-010 VERIFIED + tabela/totais), `docs/ROADMAP-1000-EVOLUTIONS.md` (019 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 020).
+
+---
+
 ## [2026-11-04] — Evolução 018: FAQ (VERIFIED)
 
 - Criado `components/sections/faq/faq-accordion.tsx` — `FaqAccordion`, novo grupo `faq`; data-driven; Server Component; primeiro consumer real do Accordion (017).

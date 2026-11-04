@@ -1,4 +1,5 @@
-// app/sections/hero/page.tsx
+// app/library/hero/page.tsx
+import type { Metadata } from "next";
 import { HeroPrimary } from "@/components/sections/hero/hero-primary";
 import {
   HeroCenterCta,
@@ -9,6 +10,21 @@ import {
   HeroMediaShowcase,
   type HeroMediaShowcaseProps,
 } from "@/components/sections/hero/hero-media-showcase";
+
+export const metadata: Metadata = {
+  title: "Library · Hero",
+  description:
+    "Modelos de hero para landings — split, centralizada com CTA, etapas e showcase vertical.",
+};
+
+// Página heterogênea (contratos diferentes) — preview ReactNode preserva a
+// tipagem real de cada contrato no local do JSX, sem tipo genérico inseguro.
+type HeroItem = {
+  id: string;
+  name: string;
+  description: string;
+  preview: React.ReactNode;
+};
 
 const heroCenterCtaDemo: HeroCenterCtaProps = {
   title: "Apresentamos sua empresa de forma clara, profissional e confiável.",
@@ -50,73 +66,73 @@ const heroMediaShowcaseDemo: HeroMediaShowcaseProps = {
   mediaCaption: "Painel ilustrativo montado com HTML e Tailwind — sem imagem.",
 };
 
-export default function HeroSectionsPage() {
+const heros: HeroItem[] = [
+  {
+    id: "hero-primary",
+    name: "Split layout (texto + preview)",
+    description:
+      "Mensagem à esquerda e preview à direita — a hero principal para a maioria das landings.",
+    preview: <HeroPrimary />,
+  },
+  {
+    id: "hero-center-cta",
+    name: "Centralizada com CTA",
+    description:
+      "Conteúdo centralizado com até dois CTAs — título, textos e ações vêm por dados.",
+    preview: <HeroCenterCta {...heroCenterCtaDemo} />,
+  },
+  {
+    id: "hero-steps",
+    name: "Hero com etapas do processo",
+    description:
+      "Mostra o caminho até a contratação em etapas antes da chamada para ação.",
+    preview: <HeroSteps />,
+  },
+  {
+    id: "hero-media-showcase",
+    name: "Showcase vertical com media frame",
+    description:
+      "Editorial no topo e media frame dominante abaixo — para produtos digitais e portfólios.",
+    preview: <HeroMediaShowcase {...heroMediaShowcaseDemo} />,
+  },
+];
+
+export default function HeroLibraryPage() {
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-background">
-      {/* Cabeçalho da página de catálogo */}
-      <div className="border-b bg-background/80">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-lg font-semibold tracking-tight">Hero sections</h1>
-            <p className="text-xs text-muted-foreground">
-              Biblioteca de heros para suas landings. Importe o componente direto na página
-              do cliente ou copie a estrutura e adapte.
-            </p>
-          </div>
-          <p className="text-[11px] text-muted-foreground">
-            components/sections/hero/*.tsx
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto max-w-6xl px-4 py-10 space-y-6">
+        <header className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Hero / Destaques
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Modelos de hero para suas landings. Importe o componente direto na
+            página do cliente ou copie a estrutura e adapte.
           </p>
-        </div>
-      </div>
+        </header>
 
-      {/* Lista de variações */}
-      <div className="space-y-10 pb-12">
-        {/* Variante 01 */}
-        <section>
-          <div className="mx-auto max-w-6xl px-4 pt-6">
-            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Variante 01 · Split layout (texto + preview)
-            </p>
-            <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-              <HeroPrimary />
-            </div>
-          </div>
-        </section>
+        <section className="space-y-4">
+          {heros.map(({ id, name, description, preview }) => (
+            <div
+              key={id}
+              className="space-y-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm"
+            >
+              <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-base font-semibold">{name}</h2>
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  Componente: <code className="font-mono text-[10px]">{id}</code>
+                </p>
+              </div>
 
-        {/* Variante 02 */}
-        <section>
-          <div className="mx-auto max-w-6xl px-4">
-            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Variante 02 · Centralizado com CTA
-            </p>
-            <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-              <HeroCenterCta {...heroCenterCtaDemo} />
+              {/* Preview */}
+              <div className="overflow-hidden rounded-xl border bg-background">
+                {preview}
+              </div>
             </div>
-          </div>
-        </section>
-
-        {/* Variante 03 */}
-        <section>
-          <div className="mx-auto max-w-6xl px-4">
-            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Variante 03 · Hero com etapas do processo
-            </p>
-            <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-              <HeroSteps />
-            </div>
-          </div>
-        </section>
-
-        {/* Variante 04 */}
-        <section>
-          <div className="mx-auto max-w-6xl px-4">
-            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Variante 04 · Showcase vertical com media frame
-            </p>
-            <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-              <HeroMediaShowcase {...heroMediaShowcaseDemo} />
-            </div>
-          </div>
+          ))}
         </section>
       </div>
     </main>

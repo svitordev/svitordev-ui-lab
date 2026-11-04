@@ -116,7 +116,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 016 | Pricing com toggle ✅ VERIFIED | Evolução de section existente | Alternância mensal/anual interativa | 001 | — | Médio–grande |
 | 017 | Accordion acessível ✅ VERIFIED (technical) | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
 | 018 | FAQ ✅ VERIFIED | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
-| 019 | Padronizar páginas legadas do `/library` | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010, QLT-011 (PARCIAL) | Médio |
+| 019 | Padronizar páginas legadas do `/library` ✅ VERIFIED | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010 ✅ | Médio |
 | 020 | Sticky CTA bar | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
 | 021 | Sticky-column split | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
 | 022 | Landing composition completa | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
@@ -289,10 +289,12 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 
 ## 019 — Padronizar páginas legadas do `/library`
 
-**Objetivo:** migrar as 7 páginas legadas (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) para o padrão atual do showcase (`metadata`, array tipado, preview `<Component />`, label `<code>{id}</code>`), preservando as categorias novas já adicionadas até aqui. Trata somente as partes de QLT-011 que pertencem diretamente aos arquivos tocados — não é limpeza geral.
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-04)** — inventário confirmou exatamente 7 páginas legacy; todas migradas ao padrão moderno consolidado (`metadata` local, page headers modernos, entries locais tipadas, preview boxes padronizados, labels `Componente: <code>{id}</code>`). Nenhuma nova abstração global; nenhuma section criada ou alterada. Tipagem preservada: páginas simples usam `Component`; páginas heterogêneas usam `preview: React.ReactNode` — zero `any`, zero `Record<string, unknown>`. Variants preservadas (Hero 4, About 3, Services 3, Testimonials 4, Pricing 3, Contact 3, CTA 4), mesma ordem, mesmos demo props. Navigation intacta; 19 rotas preservadas; contagem 29/9/47 inalterada. +1 teste Playwright — **44 passed + 2 skipped** (23 testes / 46 execuções). Validação live mobile/desktop nas representativas, zero overflow; varredura legacy limpa nas 7 pages. **QLT-010 → VERIFIED.**
+
+**Objetivo:** migrar as 7 páginas legadas (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) para o padrão atual do showcase (`metadata`, array tipado, preview `<Component />`, label `<code>{id}</code>`), preservando as categorias novas já adicionadas até aqui.
 **Entregável:** as 7 páginas migradas.
 **Critérios de aceite:** padrão uniforme; `metadata` em todas; lint/build/e2e verdes.
-**Dependências:** nenhuma. **Findings:** QLT-010 ✅, QLT-011 (PARCIAL — apenas itens dos arquivos tocados). **Esforço:** Médio.
+**Dependências:** nenhuma. **Findings:** QLT-010 ✅. **Esforço:** Médio.
 
 ## 020 — Sticky CTA bar
 
@@ -350,7 +352,6 @@ Apenas os findings com relação natural com evoluções do lote. PARCIAL = a ev
 | QLT-007 | 006 | total |
 | QLT-008 | 015 | total |
 | QLT-010 | 019 | total |
-| QLT-011 | 019 | PARCIAL (somente arquivos tocados) |
 | QLT-013 | 024 | total |
 
 ## Findings futuros

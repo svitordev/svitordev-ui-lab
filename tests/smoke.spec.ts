@@ -448,3 +448,33 @@ test('faq: suporta navegacao por teclado e reduced motion', async ({ page }) => 
   const after = await chevron.evaluate(readRotation);
   expect(after).not.toBe(before);
 });
+
+test('library: paginas migradas seguem o padrao moderno', async ({ page }) => {
+  const migrated = [
+    { route: '/library/hero', h1: 'Hero / Destaques', firstId: 'hero-primary' },
+    { route: '/library/about', h1: 'About / Sobre', firstId: 'about-simple' },
+    { route: '/library/services', h1: 'Services / Serviços', firstId: 'services-grid-simple' },
+    { route: '/library/testimonials', h1: 'Testimonials / Depoimentos', firstId: 'testimonials-grid' },
+    { route: '/library/pricing', h1: 'Pricing / Planos', firstId: 'pricing-three-tiers' },
+    { route: '/library/contact', h1: 'Contact / Contato', firstId: 'contact-simple' },
+    { route: '/library/cta', h1: 'CTAs / Chamadas para ação', firstId: 'cta-simple' },
+  ];
+
+  for (const { route, h1, firstId } of migrated) {
+    await page.goto(route);
+
+    await expect(page.getByRole('heading', { level: 1, name: h1 })).toBeVisible();
+
+    // Padrão moderno: label "Componente: <code>{id}</code>" da primeira entry.
+    await expect(page.getByText('Componente:').first()).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: firstId })).toBeVisible();
+
+    // Zero overflow horizontal em cada página migrada.
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth === document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+  }
+});
