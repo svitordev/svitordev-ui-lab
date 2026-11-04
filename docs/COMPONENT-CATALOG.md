@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **8** UI components
+- **9** UI components
 - **7** site components
 - **28** section components
 - **2** wrappers/shells
-- **Total: 45** componentes reutilizáveis relevantes
+- **Total: 46** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (8)
+## UI components — `components/ui/` (9)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -24,6 +24,7 @@
 | Avatar | `components/ui/avatar.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 008.** Baseado em `@radix-ui/react-avatar`; Client Component; API composicional `Avatar`/`AvatarImage`/`AvatarFallback`; tamanho base único; `className` + `data-slot` (`avatar`/`avatar-image`/`avatar-fallback`); imagem com `object-cover`; fallback com tokens existentes (conteúdo do consumer); `alt` controlado pelo consumer; sem geração automática de iniciais, sem size variants, sem status, sem AvatarGroup, sem interatividade própria; consumido por 009 |
 | Separator | `components/ui/separator.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Implementação nativa, zero dependências; Server Component; único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão — modo decorativo sem `role`/`aria-orientation`; modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `decorative`/`orientation` são fonte de verdade — consumer não sobrescreve os atributos controlados; `data-slot="separator"` + `data-orientation`; `className` via `cn()`; `bg-border`; horizontal `h-px w-full` / vertical `h-full w-px`; sem CVA, sem variants, sem sizes |
 | Skeleton | `components/ui/skeleton.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Primitive visual de loading; Server Component; `React.ComponentProps<"div">` — dimensões definidas pelo consumer via `className`; `data-slot="skeleton"`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container; sem variants, sem size API, sem composed skeletons; sem consumer ainda |
+| Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; destinado a composições como FAQ; validação visual/keyboard em browser será feita pela Evolução 018, primeiro consumer real |
 
 Contrato do Separator (resumo):
 
@@ -33,6 +34,21 @@ type SeparatorProps = React.ComponentProps<"div"> & {
   decorative?: boolean
 }
 ```
+
+Exports públicos do Accordion (resumo — API nativa do Radix preservada):
+
+```tsx
+<Accordion type="single" collapsible>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>...</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+<Accordion type="multiple">...</Accordion>
+```
+
+Exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`. Controlled/uncontrolled via `value`/`defaultValue`/`onValueChange` do Radix. `AccordionHeader` não é export público.
 
 ## Site components — `components/site/` (7)
 

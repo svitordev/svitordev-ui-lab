@@ -114,7 +114,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 014 | Newsletter com estados ✅ VERIFIED | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (contribui — permanece aberto) | Médio |
 | 015 | Labels dos formulários existentes ✅ VERIFIED | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 — **VERIFIED** | Pequeno |
 | 016 | Pricing com toggle ✅ VERIFIED | Evolução de section existente | Alternância mensal/anual interativa | 001 | — | Médio–grande |
-| 017 | Accordion acessível | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
+| 017 | Accordion acessível ✅ VERIFIED (technical) | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
 | 018 | FAQ | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
 | 019 | Padronizar páginas legadas do `/library` | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010, QLT-011 (PARCIAL) | Médio |
 | 020 | Sticky CTA bar | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
@@ -270,6 +270,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** — **Esforço:** Médio–grande.
 
 ## 017 — Accordion acessível
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (technical — 2026-11-04)** — anti-duplicação confirmou inexistência de Accordion prévio; Radix escolhido por comportamento acessível real; `@radix-ui/react-accordion` ^1.3.1 (dependência aprovada no Plan); wrapper fino com compound API de exatamente 4 exports (`Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent`, Header interno ao Trigger); single/multiple, collapsible, controlled/uncontrolled pela API nativa do Radix, sem state wrapper próprio; Client boundary no primitive; `data-slot`s; focus-visible; `ChevronDown` decorativo com `aria-hidden` explícito — rotação 180° controlada pelo `data-state` do Trigger, também com reduced motion (instantânea), apenas a transição `motion-safe`; Content sem animação; nenhum consumer, nenhuma rota, nenhum teste Playwright novo. Validação técnica concluída na Evolução 017 (instalação, types, composição, lint 0/0, build PASS 18 rotas, suíte existente 38 passed + 2 skipped, diff check limpo). A validação visual e de interação em browser (open/close, keyboard runtime, `aria-expanded` runtime, foco, single/collapsible runtime) será realizada na Evolução 018, primeiro consumer real — decisão deliberada de sequência, equivalente ao precedente Avatar 008→009, não uma dívida.
 
 **Objetivo:** primitive de conteúdo expansível, acessível e reutilizável. A escolha entre HTML nativo, primitive existente ou Radix/shadcn será decidida **no Plan da evolução**, após verificar requisitos de comportamento, animação, acessibilidade e dependências. Nada é instalado antes disso.
 **Entregável:** accordion em `components/ui/`, entra no catálogo.

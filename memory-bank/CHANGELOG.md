@@ -4,6 +4,22 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 017: Accessible Accordion (technical VERIFIED)
+
+- Criado `components/ui/accordion.tsx` — novo UI primitive compound de disclosure acessível, baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada no Plan).
+- Exatamente 4 exports públicos: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` — o `Header` do Radix permanece interno ao Trigger (sem export).
+- API nativa do Radix preservada: `type="single"` (com `collapsible`) / `type="multiple"`; controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`); nenhum state wrapper próprio.
+- Client Component (`"use client"` somente no primitive); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button.
+- `ChevronDown` decorativo com `aria-hidden="true"` explícito: rotação de 180° controlada pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea); apenas a transição usa `motion-safe` (convenção da Evolução 012). Content sem animação, spacing neutro, `overflow-hidden`; visual propositalmente mínimo.
+- `data-slot`s (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro exports.
+- Nenhum consumer, nenhuma rota nova, nenhum teste Playwright novo — a validação visual e de interação em browser será realizada na Evolução 018 (FAQ), primeiro consumer real; precedente Avatar 008→009.
+- Contagens: UI 8→9, total 45→46 (compound primitive = 1 unidade; sections 28 inalterado).
+- Lint **0/0**; build **PASS** (18 rotas); Playwright **38 passed + 2 skipped** (20 testes / 40 execuções, inalterado); `git diff --check` limpo.
+- Findings: nenhum.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada + exports + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (017 VERIFIED — technical), `memory-bank/CURRENT-STATE.md` (próxima execução: 018).
+
+---
+
 ## [2026-11-04] — Evolução 016: Pricing com toggle (VERIFIED)
 
 - `PricingThreeTiers` evoluído (decisão anti-inflação: nenhum componente novo, nenhuma variante nova, contagem inalterada — sections 28, UI 8, total 45).
