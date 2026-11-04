@@ -332,3 +332,40 @@ test('newsletter: error preserva o valor, edicao limpa e retry conclui com succe
   await expect(status).toContainText('Inscrição realizada com sucesso.');
   await expect(input).toHaveValue('');
 });
+
+test('pricing: alterna periodo de cobranca e mantem CTAs reais', async ({ page }) => {
+  await page.goto('/library/pricing');
+
+  const group = page.getByRole('group', { name: 'Período de cobrança' });
+  const monthly = group.getByRole('button', { name: 'Mensal' });
+  const yearly = group.getByRole('button', { name: 'Anual' });
+
+  // Estado inicial: mensal selecionado (default interno do componente).
+  await expect(monthly).toHaveAttribute('aria-pressed', 'true');
+  await expect(yearly).toHaveAttribute('aria-pressed', 'false');
+
+  // Escopo semântico pelo heading do plano (nome vindo da demo data-driven).
+  const plan = page
+    .getByRole('heading', { name: 'Profissional', exact: true })
+    .locator('xpath=ancestor::div[2]');
+
+  await expect(plan.getByText('R$ 99/mês')).toBeVisible();
+
+  // Alternar para anual: aria-pressed inverte e o preço exibido muda (dado, não só visual).
+  await yearly.click();
+  await expect(monthly).toHaveAttribute('aria-pressed', 'false');
+  await expect(yearly).toHaveAttribute('aria-pressed', 'true');
+  await expect(plan.getByText('R$ 990/ano')).toBeVisible();
+
+  // Retornar para mensal: estado e preços restaurados.
+  await monthly.click();
+  await expect(monthly).toHaveAttribute('aria-pressed', 'true');
+  await expect(yearly).toHaveAttribute('aria-pressed', 'false');
+  await expect(plan.getByText('R$ 99/mês')).toBeVisible();
+
+  // CTA é link real (convenção 001), não botão morto.
+  await expect(plan.getByRole('link', { name: 'Falar com a equipe' })).toHaveAttribute(
+    'href',
+    'mailto:contato@suaempresa.com',
+  );
+});

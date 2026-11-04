@@ -153,9 +153,9 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / UX
 
-**Evidência:** ~13 botões `<Button>` sem `href`/`onClick` espalhados por 10 arquivos: `header-basic`, `footer-cta`, `hero-primary`, `hero-steps`, `pricing-highlight`, `pricing-simple-cards`, `pricing-three-tiers`, `cta-banner`, `cta-simple`, `cta-split`. Links hash `/#services` e `/#about` no `header-centered` não têm elemento com `id` correspondente (só `#contact` existe). A Evolução 010 converteu os dois CTAs de `hero-center-cta` em links reais (removida da evidência).
+**Evidência:** ~10 botões `<Button>` sem `href`/`onClick` espalhados por 9 arquivos: `header-basic`, `footer-cta`, `hero-primary`, `hero-steps`, `pricing-highlight`, `pricing-simple-cards`, `cta-banner`, `cta-simple`, `cta-split` (recontagem pelo código atual). Links hash `/#services` e `/#about` no `header-centered` não têm elemento com `id` correspondente (só `#contact` existe). A Evolução 010 converteu os dois CTAs de `hero-center-cta` em links reais (removida da evidência). A Evolução 016 converteu os CTAs de `pricing-three-tiers` em links reais via contrato (removida da evidência).
 
-**Arquivo(s):** `components/site/headers/header-basic.tsx`, `components/site/footers/footer-cta.tsx`, `components/sections/hero/{hero-primary,hero-steps}.tsx`, `components/sections/pricing/{pricing-highlight,pricing-simple-cards,pricing-three-tiers}.tsx`, `components/sections/cta/{cta-banner,cta-simple,cta-split}.tsx`, `components/site/headers/header-centered.tsx`
+**Arquivo(s):** `components/site/headers/header-basic.tsx`, `components/site/footers/footer-cta.tsx`, `components/sections/hero/{hero-primary,hero-steps}.tsx`, `components/sections/pricing/{pricing-highlight,pricing-simple-cards}.tsx`, `components/sections/cta/{cta-banner,cta-simple,cta-split}.tsx`, `components/site/headers/header-centered.tsx`
 
 **Comportamento actual:** Botões de CTA não levam a lugar nenhum; navegação interna quebra em 2 anchors.
 
@@ -197,7 +197,7 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / Reutilização
 
-**Evidência:** Os 6 `site` components + 21 `sections` têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*` e `library-shell.tsx` accetam props. O catálogo já classifica `site/` e `sections/` como "templates" — condizente, mas sem contrato de props.
+**Evidência:** Os 6 `site` components + 19 `sections` têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010) e `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer).
 
 **Arquivo(s):** `components/site/**`, `components/sections/**`
 

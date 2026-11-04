@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 016: Pricing com toggle (VERIFIED)
+
+- `PricingThreeTiers` evoluído (decisão anti-inflação: nenhum componente novo, nenhuma variante nova, contagem inalterada — sections 28, UI 8, total 45).
+- Contrato data-driven (`PricingInterval`/`PricingAction`/`PricingPlan`/`PricingThreeTiersProps` — tipos locais); Client Component justificado (estado do intervalo); toggle mensal/anual via `role="group"` com botões `aria-pressed` (selecionado = default, não selecionado = outline), teclado nativo, estado inicial mensal.
+- Preços como strings completas fornecidas pelo consumer, sem cálculo comercial no componente; `featured` controla apenas o destaque do card; `action.variant` é a fonte da variant do CTA; CTAs como links reais (convenção 001); features `string[]`; sem Badge forçado, sem `aria-live`, sem motion novo, nenhuma dependência nova.
+- Consumers: Variação 01 da `/library/pricing` e a home. A home foi identificada durante o build como segunda consumidora real; a solução final manteve o contrato obrigatório, moveu a copy/dados anteriormente internos para a home e nenhuma default data foi reintroduzida no componente; ambas as páginas continuam Server Components.
+- Validação live em 4 cenários — library 375×667, library 1280×720, home 375×667, home 1280×720: toggle funcional nos dois sentidos, preços corretos por período, CTAs reais, featured preservado, cards empilhados no mobile, zero overflow nos quatro cenários.
+- +1 teste Playwright (grupo por accessible name, `aria-pressed` inicial, troca mensal→anual→mensal com preços, CTA com href real). Suíte: 20 testes / 40 execuções — **38 passed + 2 skipped**.
+- Lint **0/0**; build **PASS** (18 rotas); `git diff --check` limpo.
+- Findings: QLT-003 contribuído (evidência recalculada: 10→9 arquivos), continua aberto; QLT-005 contribuído (componente migrou para o contrato), continua aberto; QLT-010 intocado (Evolução 019).
+- Documentação atualizada: `QUALITY-REVIEW.md` (evidências de QLT-003/QLT-005), `docs/COMPONENT-CATALOG.md` (entrada do PricingThreeTiers + contrato), `docs/ROADMAP-1000-EVOLUTIONS.md` (016 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 017).
+
+---
+
 ## [2026-11-04] — Evolução 015: Labels dos formulários existentes (VERIFIED — QLT-008)
 
 - Corrigidos os 3 contact forms legados (`contact-simple`, `contact-split`, `contact-details`): **10 labels** agora com `<label htmlFor>` e **10 campos** com `id` correspondente — associação programática 1:1 restaurada (WCAG 3.3.2 / 1.3.1).

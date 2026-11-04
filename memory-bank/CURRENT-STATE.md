@@ -25,7 +25,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 013:** ✅ IMPLEMENTADA / VERIFIED (Separator + Skeleton — `components/ui/separator.tsx` e `components/ui/skeleton.tsx`, ambos nativos, Server Components, zero dependências; Separator: único `<div>`, horizontal/vertical, `decorative=true` default sem semântica, modo semântico com `role`/`aria-orientation` derivados de `decorative`/`orientation` como fonte de verdade; Skeleton: `bg-muted` + `rounded-md` + `motion-safe:animate-pulse` (convenção Motion da 012), sem `role="status"` automático — anúncio de loading é do consumer; nenhum consumer artificial, nenhuma rota nova, nenhum teste novo).
 - **Evolução 014:** ✅ IMPLEMENTADA / VERIFIED (Newsletter com estados — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado; contrato data-driven com callback externo `onSubmit`, nenhum backend acoplado; estados idle/submitting/success/error; email controlado; label real + `htmlFor` + `useId`; live region persistente única; acessibilidade validada; rota `/library/newsletter` + link na library com client wrapper só de showcase; demo determinística; +2 testes Playwright; contribui para QLT-004, que permanece aberto; QLT-008 permanece aberto).
 - **Evolução 015:** ✅ IMPLEMENTADA / VERIFIED (Labels dos formulários existentes — QLT-008 encerrado: os 3 contact forms corrigidos com 10 associações `htmlFor`↔`id` 1:1; IDs determinísticos prefixados por variant e únicos na página; Server Components preservados; zero mudança visual; zero comportamento novo; +1 teste Playwright abrangente; QLT-004 e QLT-010 continuam abertos; os `<section id="contact">` duplicados são pré-existentes e ficaram fora do escopo).
-- **Próxima execução:** Evolução 016 (Pricing with toggle).
+- **Evolução 016:** ✅ IMPLEMENTADA / VERIFIED (Pricing com toggle — decisão anti-inflação: `PricingThreeTiers` evoluído, nenhum componente novo; contrato data-driven; Client Component justificado (estado do intervalo); toggle mensal/anual com `role="group"` + `aria-pressed`, teclado nativo, estado inicial mensal; preços como strings do consumer, sem cálculo comercial; `featured` separado de `action.variant`; CTAs como links reais; consumers: `/library/pricing` e home (identificada durante o build, copy movida para o consumer, ambas Server Components); +1 teste Playwright; contribui para QLT-003 e QLT-005, que permanecem abertos com uma ocorrência a menos; QLT-010 intocado).
+- **Próxima execução:** Evolução 017 (Accessible Accordion).
 
 ## Stack confirmada
 
@@ -66,8 +67,9 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **19 smoke tests / 38 execuções** (36 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **20 smoke tests / 40 execuções** (38 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED.
+- **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** continua aberto (Evolução 019).
 - **`/library`:** READY.
 - **Design System:** READY.
 - **Total de findings:** 13 (QLT-001, QLT-006, QLT-007, QLT-008 e QLT-012 VERIFIED; os demais permanecem pendentes).
@@ -75,7 +77,7 @@ Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–015 VERIFIED. Próxima execução: Evolução 016 (Pricing with toggle).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–016 VERIFIED. Próxima execução: Evolução 017 (Accessible Accordion).
 
 ### Problemas resolvidos
 

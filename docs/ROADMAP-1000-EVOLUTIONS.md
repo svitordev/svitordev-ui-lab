@@ -113,7 +113,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 013 | Separator + Skeleton ✅ VERIFIED | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
 | 014 | Newsletter com estados ✅ VERIFIED | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (contribui — permanece aberto) | Médio |
 | 015 | Labels dos formulários existentes ✅ VERIFIED | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 — **VERIFIED** | Pequeno |
-| 016 | Pricing com toggle | Nova section | Alternância mensal/anual interativa | 001 | — | Médio–grande |
+| 016 | Pricing com toggle ✅ VERIFIED | Evolução de section existente | Alternância mensal/anual interativa | 001 | — | Médio–grande |
 | 017 | Accordion acessível | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
 | 018 | FAQ | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
 | 019 | Padronizar páginas legadas do `/library` | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010, QLT-011 (PARCIAL) | Médio |
@@ -261,6 +261,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** QLT-008 ✅. **Esforço:** Pequeno.
 
 ## 016 — Pricing com toggle
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-04)** — decisão anti-inflação: `PricingThreeTiers` evoluído, nenhuma variante nova, contagem inalterada (28/8/45). Contrato data-driven (`PricingInterval`/`PricingAction`/`PricingPlan`/`PricingThreeTiersProps` — tipos locais); Client Component justificado (estado do intervalo); toggle mensal/anual via `role="group"` com botões `aria-pressed` (selecionado = default, não selecionado = outline), teclado nativo, estado inicial mensal; preços como strings completas do consumer, zero cálculo comercial; `featured` separado de `action.variant`; CTAs como links reais (convenção 001). Consumers: Variação 01 da `/library/pricing` e a home — a home foi identificada durante o build como segunda consumidora real e incorporada ao escopo mínimo para preservar o contrato obrigatório (nenhum fallback hardcoded; a copy anterior da pricing foi movida para a home; ambas as páginas continuam Server Components). Contribui para QLT-003 e QLT-005 (uma ocorrência a menos cada, ambos permanecem abertos); QLT-010 intocado. Validação live 375×667 e 1280×720 na library e na home, zero overflow nos quatro cenários. +1 teste Playwright. Lint 0/0; build PASS (18 rotas); Playwright 38 passed + 2 skipped (20 testes / 40 execuções); `git diff --check` limpo.
 
 **Objetivo:** pricing com alternância mensal/anual interativa — primeiro client component interativo de section do lab.
 **Entregável:** nova variante em `components/sections/pricing/` + página atualizada.

@@ -95,7 +95,38 @@ type SeparatorProps = React.ComponentProps<"div"> & {
 |---|---|---|---|
 | PricingHighlight | `components/sections/pricing/pricing-highlight.tsx` | Template | Destaque |
 | PricingSimpleCards | `components/sections/pricing/pricing-simple-cards.tsx` | Template | Cards simples |
-| PricingThreeTiers | `components/sections/pricing/pricing-three-tiers.tsx` | Template | 3 planos |
+| PricingThreeTiers | `components/sections/pricing/pricing-three-tiers.tsx` | Pronto | **Data-driven** (Evolução 016, migração — visual preservado). Client Component justificado (estado do intervalo); toggle mensal/anual como grupo acessível `role="group"` com dois botões `aria-pressed` (selecionado = `default`, não selecionado = `outline`); teclado nativo; estado inicial `monthly`; preços como strings completas fornecidas pelo consumer (sem cálculo comercial); `featured` controla apenas o destaque do card; `action.variant` controla a variant do CTA; CTAs como links reais (convenção 001); features `string[]`; sem Badge forçado, sem `aria-live`, sem motion novo, sem dependência nova; consumers: `/library/pricing` (Variação 01) e home |
+
+Contrato (resumo):
+
+```ts
+PricingInterval = "monthly" | "yearly"
+
+PricingAction {
+  label: string
+  href: string
+  variant?: "default" | "outline"
+}
+
+PricingPlan {
+  name: string
+  description?: string
+  prices: Record<PricingInterval, string>
+  features: string[]
+  action: PricingAction
+  featured?: boolean
+}
+
+PricingThreeTiersProps {
+  eyebrow?: string
+  title: string
+  description?: string
+  billingLabel: string
+  monthlyLabel: string
+  yearlyLabel: string
+  plans: PricingPlan[]
+}
+```
 
 ### Contact — `components/sections/contact/` (3)
 
