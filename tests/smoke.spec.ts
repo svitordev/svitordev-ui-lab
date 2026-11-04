@@ -225,3 +225,55 @@ test('reduced motion: hero media showcase permanece visivel sem animacao', async
     .poll(async () => container.evaluate((el) => getComputedStyle(el).animationName))
     .toBe('none');
 });
+
+test('newsletter: success limpa o campo e mantem a live region acessivel', async ({ page }) => {
+  await page.goto('/library/newsletter');
+
+  const input = page.getByLabel('Seu e-mail');
+  const button = page.getByRole('button', { name: 'Inscrever-se' });
+  const status = page.getByRole('status');
+
+  await input.fill('valido@exemplo.com');
+  await button.click();
+
+  // Janela de submitting: input e botão bloqueados, botão com o label de envio
+  // (cobre na prática a prevenção de submit duplicado).
+  await expect(input).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Enviando...' })).toBeDisabled();
+
+  await expect(status).toContainText('Inscrição realizada com sucesso.');
+
+  await expect(input).toHaveValue('');
+  await expect(input).toBeEnabled();
+  await expect(button).toBeEnabled();
+  await expect(input).not.toHaveAttribute('aria-invalid');
+});
+
+test('newsletter: error preserva o valor, edicao limpa e retry conclui com success', async ({ page }) => {
+  await page.goto('/library/newsletter');
+
+  const input = page.getByLabel('Seu e-mail');
+  const button = page.getByRole('button', { name: 'Inscrever-se' });
+  const status = page.getByRole('status');
+
+  await input.fill('erro@exemplo.com');
+  await button.click();
+
+  await expect(status).toContainText('Não foi possível concluir a inscrição.');
+  await expect(input).toHaveValue('erro@exemplo.com');
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+
+  const describedBy = await input.getAttribute('aria-describedby');
+  expect(describedBy).toBeTruthy();
+  await expect(status).toHaveAttribute('id', describedBy!);
+
+  // Correção: digitar novamente limpa o erro (volta para idle).
+  await input.fill('valido@exemplo.com');
+  await expect(status).toHaveText('');
+  await expect(input).not.toHaveAttribute('aria-invalid');
+
+  // Retry: novo submit conclui com success e limpa o campo.
+  await button.click();
+  await expect(status).toContainText('Inscrição realizada com sucesso.');
+  await expect(input).toHaveValue('');
+});

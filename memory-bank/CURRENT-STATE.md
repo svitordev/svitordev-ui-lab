@@ -23,7 +23,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 011:** ✅ IMPLEMENTADA / VERIFIED (Feature comparison — novo grupo `features`, `FeatureComparison` data-driven, tabela HTML semântica real (`Recurso` + `scope`), `boolean | string` com `values` keyed por `option.id`, fallback defensivo para valor ausente (distinto de `false`), Check/X + sr-only, Server Component, CSS-only responsive com scroll horizontal interno no mobile e page overflow 0; nova rota `/library/features` + link "Features" na library).
 - **Evolução 012:** ✅ IMPLEMENTADA / VERIFIED (Motion pass — motion pass controlado em 2 componentes: `HeroMediaShowcase` com entrance motion-safe e `TestimonialsRatingCards` com microinteraction de hover motion-safe; `MobileNav` intocado por decisão de escopo; nenhum Client Component novo; nenhuma dependência nova; padrão Motion documentado no Design System).
 - **Evolução 013:** ✅ IMPLEMENTADA / VERIFIED (Separator + Skeleton — `components/ui/separator.tsx` e `components/ui/skeleton.tsx`, ambos nativos, Server Components, zero dependências; Separator: único `<div>`, horizontal/vertical, `decorative=true` default sem semântica, modo semântico com `role`/`aria-orientation` derivados de `decorative`/`orientation` como fonte de verdade; Skeleton: `bg-muted` + `rounded-md` + `motion-safe:animate-pulse` (convenção Motion da 012), sem `role="status"` automático — anúncio de loading é do consumer; nenhum consumer artificial, nenhuma rota nova, nenhum teste novo).
-- **Próxima execução:** Evolução 014 (Newsletter com estados).
+- **Evolução 014:** ✅ IMPLEMENTADA / VERIFIED (Newsletter com estados — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado; contrato data-driven com callback externo `onSubmit`, nenhum backend acoplado; estados idle/submitting/success/error; email controlado; label real + `htmlFor` + `useId`; live region persistente única; acessibilidade validada; rota `/library/newsletter` + link na library com client wrapper só de showcase; demo determinística; +2 testes Playwright; contribui para QLT-004, que permanece aberto; QLT-008 permanece aberto).
+- **Próxima execução:** Evolução 015 (Labels dos formulários existentes — QLT-008).
 
 ## Stack confirmada
 
@@ -52,9 +53,9 @@ public/
 
 - **8** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008, + `separator` e `skeleton` via Evolução 013)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
-- **27** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison`)
+- **28** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison` + `newsletter-form`; grupo Newsletter = 1, `NewsletterForm` disponível)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 44** componentes reutilizáveis relevantes
+- **Total: 45** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -62,9 +63,9 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 ## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
-Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
+Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **16 smoke tests / 32 execuções** (30 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **18 smoke tests / 36 execuções** (34 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
@@ -73,7 +74,7 @@ Production build **verde** (PASS, 17 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–013 VERIFIED. Próxima execução: Evolução 014 (Newsletter com estados).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–014 VERIFIED. Próxima execução: Evolução 015 (Labels dos formulários existentes — QLT-008).
 
 ### Problemas resolvidos
 

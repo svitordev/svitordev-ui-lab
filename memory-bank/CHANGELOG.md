@@ -4,6 +4,21 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 014: Newsletter com estados (VERIFIED)
+
+- Criada `components/sections/newsletter/newsletter-form.tsx` — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado (estado, `useId`, submit handler, callback); contrato data-driven com callback externo `onSubmit` (union `{ success: true } | { success: false; message? }`; exceções tratadas com fallback `errorMessage`, nunca `exception.message`); nenhum backend acoplado.
+- Estados idle/submitting/success/error: submitting desabilita input/button, troca o label (`submittingLabel`) e marca o form com `aria-busy`; success limpa o campo; error preserva o valor; editar após success/error volta para idle; retry permitido.
+- Acessibilidade: label real visível com `htmlFor`/`useId`; live region persistente única `role="status"` (`aria-live="polite"`, `aria-atomic`); `aria-invalid`/`aria-describedby` somente no erro.
+- Nova rota `/library/newsletter` (Server Component) com client wrapper apenas de showcase (fora do catálogo) e link "Newsletter" na nav da library; demo determinística (delay ~400ms; `erro@*` → erro, demais válidos → sucesso); sem Skeleton/Separator forçados; sem motion novo.
+- Validação live: 375×667 (form empilhado) e 1280×720 (input+button inline, feedback abaixo) — feedback quebra corretamente, overflow 0.
+- +2 testes Playwright (success com submitting/disabled/label de envio/campo limpo; error com `aria-invalid`/`aria-describedby`, edição que limpa o erro e retry até success). Suíte: 18 testes / 36 execuções — **34 passed + 2 skipped**.
+- Contagens: sections 27→28, total 44→45 (UI 8 inalterado).
+- Lint **0/0**; build **PASS** (18 rotas); `git diff --check` limpo.
+- Findings: 014 contribui para QLT-004 (comportamento mínimo de form estabelecido), que **permanece aberto** (os 3 contact forms legados seguem sem comportamento); QLT-008 **permanece aberto** (nasce correta por construção; legado destinado à 015).
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (grupo Newsletter + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (014 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 015).
+
+---
+
 ## [2026-11-02] — Evolução 013: Separator + Skeleton (VERIFIED)
 
 - Criado `components/ui/separator.tsx` — `Separator`, novo primitive com implementação nativa (zero dependências), Server Component, único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão (modo decorativo sem `role`/`aria-orientation`); modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `data-slot`/`data-orientation`; `bg-border`; a precedência das props do Separator foi ajustada para preservar `decorative`/`orientation` como fonte de verdade dos atributos controlados.

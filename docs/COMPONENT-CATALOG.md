@@ -6,9 +6,9 @@
 
 - **8** UI components
 - **7** site components
-- **27** section components
+- **28** section components
 - **2** wrappers/shells
-- **Total: 44** componentes reutilizáveis relevantes
+- **Total: 45** componentes reutilizáveis relevantes
 
 ---
 
@@ -104,6 +104,37 @@ type SeparatorProps = React.ComponentProps<"div"> & {
 | ContactDetails | `components/sections/contact/contact-details.tsx` | Template | Detalhes + form |
 | ContactSimple | `components/sections/contact/contact-simple.tsx` | Template | Form simples |
 | ContactSplit | `components/sections/contact/contact-split.tsx` | Template | Dividido |
+
+### Newsletter — `components/sections/newsletter/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| NewsletterForm | `components/sections/newsletter/newsletter-form.tsx` | Pronto | **Data-driven — primeiro form funcional do Lab** (Evolução 014). Client Component justificado (estado, `useId`, submit); callback externo `onSubmit` — sem backend acoplado; estados idle/submitting/success/error; email controlado; `type="email"` + `required` + `autoComplete="email"`; label real com `htmlFor`/`useId`; input/button disabled em submitting; `aria-busy` no form; live region persistente única (`role="status"`, `aria-live="polite"`, `aria-atomic`); erro com `aria-invalid` + `aria-describedby`; success limpa o campo e remove o estado de erro; editar após success/error volta para idle; retry permitido; mobile stack / desktop inline; sem motion, sem dependência nova; demo na `/library/newsletter` |
+
+Contrato (resumo):
+
+```ts
+NewsletterSubmitResult =
+  | { success: true }
+  | { success: false; message?: string }
+
+NewsletterFormProps {
+  eyebrow?: string
+  title: string
+  description?: string
+  label: string
+  placeholder?: string
+  buttonLabel: string
+  submittingLabel: string
+  successMessage: string
+  errorMessage: string
+  onSubmit: (email: string) => Promise<NewsletterSubmitResult> | NewsletterSubmitResult
+}
+```
+
+Estados: `idle → submitting → success | error`. Submitting desabilita input/button; success limpa o input; error preserva o input; editar após success/error volta para idle; retry permitido.
+
+Acessibilidade: `<label htmlFor>` + `useId`; `aria-busy` durante submitting; live region persistente única `role="status"` (`aria-live="polite"`, `aria-atomic`); erro com `aria-invalid` + `aria-describedby`; success remove o estado de erro.
 
 ### CTA — `components/sections/cta/` (4)
 

@@ -111,7 +111,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 011 | Feature comparison ✅ VERIFIED | Nova section | Comparação em colunas (antes/depois, com/sem) | 001 | — | Médio–grande |
 | 012 | Motion pass (entrance/hover) ✅ VERIFIED | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
 | 013 | Separator + Skeleton ✅ VERIFIED | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
-| 014 | Newsletter com estados | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (PARCIAL) | Médio |
+| 014 | Newsletter com estados ✅ VERIFIED | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (contribui — permanece aberto) | Médio |
 | 015 | Labels dos formulários existentes | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 | Pequeno |
 | 016 | Pricing com toggle | Nova section | Alternância mensal/anual interativa | 001 | — | Médio–grande |
 | 017 | Accordion acessível | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
@@ -243,6 +243,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** — **Esforço:** Pequeno.
 
 ## 014 — Newsletter com estados
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-04)** — `NewsletterForm` (`components/sections/newsletter/newsletter-form.tsx`), novo grupo `newsletter`, Client Component justificado (estado, `useId`, submit, callback); nova rota `/library/newsletter` (Server Component) com client wrapper apenas de showcase (fora do catálogo) + link "Newsletter" na library; contrato data-driven com callback externo `onSubmit`, sem backend; estados idle/submitting/success/error; label real + `useId`; `submittingLabel`; `aria-busy` no form; live region persistente única (`role="status"`, polite, atomic); erro com `aria-invalid`/`aria-describedby`; success limpa o campo; retry; demo determinística; validado em 375×667 e 1280×720 com overflow 0; sem motion novo; nenhuma dependência nova; +2 testes Playwright. Contribui para QLT-004 (permanece aberto); QLT-008 permanece aberto (015). Lint 0/0; build PASS (18 rotas); Playwright 34 passed + 2 skipped (18 testes / 36 execuções); `git diff --check` limpo.
 
 **Objetivo:** lead form que **nasce acessível**: labels associados, feedback de erro/sucesso, interação acessível. Decide o padrão de comportamento mínimo de form do laboratório.
 **Entregável:** nova section de form/newsletter + página `/library` correspondente.

@@ -16,6 +16,7 @@ const sectionLinks = [
   { href: "/library/testimonials", label: "Testimonials" },
   { href: "/library/pricing", label: "Pricings" },
   { href: "/library/contact", label: "Contacts" },
+  { href: "/library/newsletter", label: "Newsletter" },
   { href: "/library/cta", label: "CTAs" },
   { href: "/library/footers", label: "Footers" },
 ];
