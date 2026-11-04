@@ -101,9 +101,9 @@ type SeparatorProps = React.ComponentProps<"div"> & {
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
-| ContactDetails | `components/sections/contact/contact-details.tsx` | Template | Detalhes + form |
-| ContactSimple | `components/sections/contact/contact-simple.tsx` | Template | Form simples |
-| ContactSplit | `components/sections/contact/contact-split.tsx` | Template | Dividido |
+| ContactDetails | `components/sections/contact/contact-details.tsx` | Template | Detalhes + form; labels associados programaticamente (`htmlFor` + ids exclusivos — Evolução 015); 2 campos corretamente nomeados |
+| ContactSimple | `components/sections/contact/contact-simple.tsx` | Template | Form simples; labels associados programaticamente (`htmlFor` + ids exclusivos — Evolução 015); 4 campos corretamente nomeados |
+| ContactSplit | `components/sections/contact/contact-split.tsx` | Template | Dividido; labels associados programaticamente (`htmlFor` + ids exclusivos — Evolução 015); 4 campos corretamente nomeados |
 
 ### Newsletter — `components/sections/newsletter/` (1)
 

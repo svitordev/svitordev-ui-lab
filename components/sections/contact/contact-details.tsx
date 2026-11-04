@@ -63,12 +63,13 @@ export function ContactDetails() {
           {/* Formulário resumido */}
           <form className="space-y-4 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm">
             <div className="space-y-1">
-              <label className="text-xs font-medium">Nome</label>
-              <Input placeholder="Seu nome" />
+              <label htmlFor="contact-details-name" className="text-xs font-medium">Nome</label>
+              <Input id="contact-details-name" placeholder="Seu nome" />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium">Mensagem</label>
+              <label htmlFor="contact-details-message" className="text-xs font-medium">Mensagem</label>
               <Textarea
+                id="contact-details-message"
                 rows={4}
                 placeholder="Conte em poucas linhas como podemos ajudar."
               />

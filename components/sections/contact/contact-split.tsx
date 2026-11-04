@@ -30,23 +30,24 @@ export function ContactSplit() {
           {/* Coluna formulário */}
           <form className="space-y-4 rounded-2xl border bg-background p-4 text-sm shadow-sm">
             <div className="space-y-1">
-              <label className="text-xs font-medium">Nome</label>
-              <Input placeholder="Seu nome" />
+              <label htmlFor="contact-split-name" className="text-xs font-medium">Nome</label>
+              <Input id="contact-split-name" placeholder="Seu nome" />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium">E-mail ou WhatsApp</label>
-              <Input placeholder="Seu contato principal" />
+              <label htmlFor="contact-split-contact" className="text-xs font-medium">E-mail ou WhatsApp</label>
+              <Input id="contact-split-contact" placeholder="Seu contato principal" />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium">Assunto</label>
-              <Input placeholder="Ex.: atendimento, orçamento, dúvida, outro..." />
+              <label htmlFor="contact-split-subject" className="text-xs font-medium">Assunto</label>
+              <Input id="contact-split-subject" placeholder="Ex.: atendimento, orçamento, dúvida, outro..." />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium">Mensagem</label>
+              <label htmlFor="contact-split-message" className="text-xs font-medium">Mensagem</label>
               <Textarea
+                id="contact-split-message"
                 rows={3}
                 placeholder="Explique brevemente a situação ou o serviço que você procura."
               />

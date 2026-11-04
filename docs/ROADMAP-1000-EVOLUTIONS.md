@@ -112,7 +112,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 012 | Motion pass (entrance/hover) ✅ VERIFIED | Motion | Padrão de animação com reduced-motion | 001 | — | Médio |
 | 013 | Separator + Skeleton ✅ VERIFIED | Primitivos sob demanda | Bases para estados e separação semântica | — | — | Pequeno |
 | 014 | Newsletter com estados ✅ VERIFIED | Nova section | Lead form nascendo acessível, com feedback erro/sucesso | 001 | QLT-004 (contribui — permanece aberto) | Médio |
-| 015 | Labels dos formulários existentes | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 | Pequeno |
+| 015 | Labels dos formulários existentes ✅ VERIFIED | Acessibilidade | `htmlFor`/`id` nos contact forms legados | — | QLT-008 — **VERIFIED** | Pequeno |
 | 016 | Pricing com toggle | Nova section | Alternância mensal/anual interativa | 001 | — | Médio–grande |
 | 017 | Accordion acessível | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
 | 018 | FAQ | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
@@ -252,6 +252,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** QLT-004 (PARCIAL — decisão de comportamento + estados no novo form). **Esforço:** Médio.
 
 ## 015 — Labels dos formulários existentes
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-04)** — 3 contact forms corrigidos (`contact-simple`, `contact-split`, `contact-details`): 10 labels com `<label htmlFor>` + 10 campos com `id` (associação 1:1); IDs determinísticos prefixados por variant e únicos na mesma página; Server Components preservados; zero mudança visual; zero comportamento novo (nenhum `name`/`required`/ARIA adicionada); QLT-008 encerrado (100% dos casos corrigidos); QLT-004 e QLT-010 continuam abertos; +1 teste Playwright abrangente (10 associações, `getByLabel`, htmlFor/id, tipos de campo, foco por label, unicidade dos IDs); validado em 375×667 e 1280×720 com overflow 0. Lint 0/0; build PASS (18 rotas); Playwright 36 passed + 2 skipped (19 testes / 38 execuções); `git diff --check` limpo.
 
 **Objetivo:** corrigir a associação programática `htmlFor`/`id` nos contact forms legados (`contact-details`, `contact-simple`, `contact-split`). Não é pré-requisito da 014 — a 014 já nasce correta; a 015 corrige o legado.
 **Entregável:** labels associados nos 3 contact sections.

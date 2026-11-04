@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-04] — Evolução 015: Labels dos formulários existentes (VERIFIED — QLT-008)
+
+- Corrigidos os 3 contact forms legados (`contact-simple`, `contact-split`, `contact-details`): **10 labels** agora com `<label htmlFor>` e **10 campos** com `id` correspondente — associação programática 1:1 restaurada (WCAG 3.3.2 / 1.3.1).
+- IDs determinísticos e prefixados por variant (`contact-simple-*`, `contact-split-*`, `contact-details-*`), únicos entre as 3 variants na mesma página.
+- Server Components preservados; nenhum `"use client"`; nenhum hook; zero mudança visual; zero comportamento novo; nenhum `name`/`required`/ARIA adicionada; placeholders e copy preservados.
+- Os `<section id="contact">` duplicados são pré-existentes e continuam — fora do escopo da Evolução 015.
+- +1 teste Playwright abrangente (as 10 associações via escopo semântico pelos headings, `getByLabel`, `htmlFor`/`id`, tipos de campo, foco por clique no label, unicidade dos 10 IDs). Suíte: 19 testes / 38 execuções — **36 passed + 2 skipped**.
+- Validação live: 375×667 e 1280×720 — label click foca o campo correto, visual preservado, overflow 0.
+- Lint **0/0**; build **PASS** (18 rotas); `git diff --check` limpo.
+- Findings: **QLT-008 VERIFIED** (100% dos casos corrigidos); QLT-004 continua aberto; QLT-010 continua aberto (Evolução 019).
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-008 VERIFIED + tabela/totais), `docs/COMPONENT-CATALOG.md` (observações das 3 sections), `docs/ROADMAP-1000-EVOLUTIONS.md` (015 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 016).
+
+---
+
 ## [2026-11-04] — Evolução 014: Newsletter com estados (VERIFIED)
 
 - Criada `components/sections/newsletter/newsletter-form.tsx` — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado (estado, `useId`, submit handler, callback); contrato data-driven com callback externo `onSubmit` (union `{ success: true } | { success: false; message? }`; exceções tratadas com fallback `errorMessage`, nunca `exception.message`); nenhum backend acoplado.

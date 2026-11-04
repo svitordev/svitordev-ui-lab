@@ -261,7 +261,7 @@ Command exited with code 1
 
 ### QLT-008 — Labels de formulário não associados aos inputs
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-04)** — os únicos casos do finding eram os 3 contact forms e todos foram corrigidos: **10 labels** com `<label htmlFor>` + **10 campos** com `id` correspondente (associação 1:1). ContactSimple: Nome, E-mail, Assunto, Mensagem. ContactSplit: Nome, E-mail ou WhatsApp, Assunto, Mensagem. ContactDetails: Nome, Mensagem. IDs determinísticos prefixados por variant (`contact-simple-*`, `contact-split-*`, `contact-details-*`), únicos na mesma página. `getByLabel` resolve corretamente os 10 campos; clique no label foca o campo associado (validado ao vivo em 375×667 e 1280×720, zero mudança visual, zero overflow). Nenhuma ARIA artificial necessária; Server Components preservados; nenhum comportamento de form foi alterado. 1 teste Playwright abrangente adicionado ao smoke (10 associações + foco por label + unicidade de IDs). Lint 0/0; build PASS (18 rotas); e2e 36 passed + 2 skipped. (Evolução 015.)
 **Prioridade:** P3
 **Categoria:** Acessibilidade
 
@@ -419,10 +419,10 @@ Command exited with code 1
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
 | **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010, QLT-013 |
-| **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008, QLT-009, QLT-012 — VERIFIED |
+| **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007, QLT-008 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

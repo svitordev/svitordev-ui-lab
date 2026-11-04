@@ -20,23 +20,24 @@ export function ContactSimple() {
         <form className="space-y-4 rounded-2xl border bg-muted/30 p-4 shadow-sm">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1 text-sm">
-              <label className="text-xs font-medium">Nome</label>
-              <Input placeholder="Seu nome completo" />
+              <label htmlFor="contact-simple-name" className="text-xs font-medium">Nome</label>
+              <Input id="contact-simple-name" placeholder="Seu nome completo" />
             </div>
             <div className="space-y-1 text-sm">
-              <label className="text-xs font-medium">E-mail</label>
-              <Input type="email" placeholder="seuemail@exemplo.com" />
+              <label htmlFor="contact-simple-email" className="text-xs font-medium">E-mail</label>
+              <Input id="contact-simple-email" type="email" placeholder="seuemail@exemplo.com" />
             </div>
           </div>
 
           <div className="space-y-1 text-sm">
-            <label className="text-xs font-medium">Assunto</label>
-            <Input placeholder="Ex.: atendimento, orçamento, dúvida, outro..." />
+            <label htmlFor="contact-simple-subject" className="text-xs font-medium">Assunto</label>
+            <Input id="contact-simple-subject" placeholder="Ex.: atendimento, orçamento, dúvida, outro..." />
           </div>
 
           <div className="space-y-1 text-sm">
-            <label className="text-xs font-medium">Mensagem</label>
+            <label htmlFor="contact-simple-message" className="text-xs font-medium">Mensagem</label>
             <Textarea
+              id="contact-simple-message"
               rows={4}
               placeholder="Conte brevemente sobre a sua necessidade ou o serviço que você procura."
             />

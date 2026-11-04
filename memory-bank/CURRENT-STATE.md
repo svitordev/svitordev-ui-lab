@@ -24,7 +24,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 012:** ✅ IMPLEMENTADA / VERIFIED (Motion pass — motion pass controlado em 2 componentes: `HeroMediaShowcase` com entrance motion-safe e `TestimonialsRatingCards` com microinteraction de hover motion-safe; `MobileNav` intocado por decisão de escopo; nenhum Client Component novo; nenhuma dependência nova; padrão Motion documentado no Design System).
 - **Evolução 013:** ✅ IMPLEMENTADA / VERIFIED (Separator + Skeleton — `components/ui/separator.tsx` e `components/ui/skeleton.tsx`, ambos nativos, Server Components, zero dependências; Separator: único `<div>`, horizontal/vertical, `decorative=true` default sem semântica, modo semântico com `role`/`aria-orientation` derivados de `decorative`/`orientation` como fonte de verdade; Skeleton: `bg-muted` + `rounded-md` + `motion-safe:animate-pulse` (convenção Motion da 012), sem `role="status"` automático — anúncio de loading é do consumer; nenhum consumer artificial, nenhuma rota nova, nenhum teste novo).
 - **Evolução 014:** ✅ IMPLEMENTADA / VERIFIED (Newsletter com estados — `NewsletterForm`, novo grupo `newsletter`, primeira section funcional de form do Lab; Client Component justificado; contrato data-driven com callback externo `onSubmit`, nenhum backend acoplado; estados idle/submitting/success/error; email controlado; label real + `htmlFor` + `useId`; live region persistente única; acessibilidade validada; rota `/library/newsletter` + link na library com client wrapper só de showcase; demo determinística; +2 testes Playwright; contribui para QLT-004, que permanece aberto; QLT-008 permanece aberto).
-- **Próxima execução:** Evolução 015 (Labels dos formulários existentes — QLT-008).
+- **Evolução 015:** ✅ IMPLEMENTADA / VERIFIED (Labels dos formulários existentes — QLT-008 encerrado: os 3 contact forms corrigidos com 10 associações `htmlFor`↔`id` 1:1; IDs determinísticos prefixados por variant e únicos na página; Server Components preservados; zero mudança visual; zero comportamento novo; +1 teste Playwright abrangente; QLT-004 e QLT-010 continuam abertos; os `<section id="contact">` duplicados são pré-existentes e ficaram fora do escopo).
+- **Próxima execução:** Evolução 016 (Pricing with toggle).
 
 ## Stack confirmada
 
@@ -65,16 +66,16 @@ Showcase oficial. Estrutura `app/library/[categoria]/page.tsx` renderiza cada va
 
 Production build **verde** (PASS, 18 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **18 smoke tests / 36 execuções** (34 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
-- **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-012:** ✅ VERIFIED.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **19 smoke tests / 38 execuções** (36 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED.
 - **`/library`:** READY.
 - **Design System:** READY.
-- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007, QLT-008 e QLT-012 VERIFIED; os demais permanecem pendentes).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–014 VERIFIED. Próxima execução: Evolução 015 (Labels dos formulários existentes — QLT-008).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–015 VERIFIED. Próxima execução: Evolução 016 (Pricing with toggle).
 
 ### Problemas resolvidos
 
@@ -96,6 +97,13 @@ Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–
   - "Navegação principal" nos 3 headers; "Navegação da biblioteca" no `library-shell`
   - Rótulos confirmados na árvore de acessibilidade; tabulação inalterada; nada visual mudou
   - Lint 0/0; build PASS; e2e 16/16
+
+- **QLT-008** (P3): Labels de formulário associados aos inputs nos 3 contact forms (verificado — Evolução 015)
+  - 10 labels com `htmlFor` + 10 campos com `id` (associação 1:1); IDs determinísticos prefixados por variant, únicos na página
+  - Server Components preservados; zero mudança visual; zero comportamento novo; nenhuma ARIA artificial
+  - 1 teste Playwright abrangente adicionado ao smoke (10 associações, `getByLabel`, htmlFor/id, tipos de campo, foco por label, unicidade de IDs)
+  - Validação live 375×667 e 1280×720: label click foca o campo correto, zero overflow
+  - Lint 0/0; build PASS (18 rotas); e2e 36 passed + 2 skipped
 
 - **QLT-012** (P3): Imports não usados removidos (verificado)
   - `FooterColumns` removido de `app/(site)/layout.tsx`

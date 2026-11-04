@@ -226,6 +226,61 @@ test('reduced motion: hero media showcase permanece visivel sem animacao', async
     .toBe('none');
 });
 
+test('contact forms: associacao label-campo com htmlFor/id, ids unicos e foco por label', async ({ page }) => {
+  await page.goto('/library/contact');
+
+  // Escopo semântico pelos headings das variants (ordem visual não é contrato do teste).
+  const simple = page
+    .getByRole('heading', { name: 'Fale com nossa equipe' })
+    .locator('xpath=ancestor::section[1]');
+  const split = page
+    .getByRole('heading', { name: 'Conte um pouco sobre o que você precisa' })
+    .locator('xpath=ancestor::section[1]');
+  const details = page
+    .getByRole('heading', { name: 'Canais de contato' })
+    .locator('xpath=ancestor::section[1]');
+
+  // QLT-008: as 10 associações label<->campo (label exato -> id esperado -> tag do campo).
+  const associations = [
+    { section: simple, label: 'Nome', id: 'contact-simple-name', tag: 'input' },
+    { section: simple, label: 'E-mail', id: 'contact-simple-email', tag: 'input' },
+    { section: simple, label: 'Assunto', id: 'contact-simple-subject', tag: 'input' },
+    { section: simple, label: 'Mensagem', id: 'contact-simple-message', tag: 'textarea' },
+    { section: split, label: 'Nome', id: 'contact-split-name', tag: 'input' },
+    { section: split, label: 'E-mail ou WhatsApp', id: 'contact-split-contact', tag: 'input' },
+    { section: split, label: 'Assunto', id: 'contact-split-subject', tag: 'input' },
+    { section: split, label: 'Mensagem', id: 'contact-split-message', tag: 'textarea' },
+    { section: details, label: 'Nome', id: 'contact-details-name', tag: 'input' },
+    { section: details, label: 'Mensagem', id: 'contact-details-message', tag: 'textarea' },
+  ];
+
+  for (const { section, label, id, tag } of associations) {
+    // O label aponta para o id esperado (htmlFor -> for no HTML).
+    await expect(section.getByText(label, { exact: true })).toHaveAttribute('for', id);
+    // O campo correspondente possui esse id e é a tag esperada.
+    await expect(section.locator(`${tag}[id="${id}"]`)).toHaveCount(1);
+    // Associated name real via label programático (getByLabel só resolve por associação).
+    await expect(section.getByLabel(label, { exact: true })).toHaveCount(1);
+  }
+
+  // Foco nativo por label: 1 label representativo por variant.
+  await simple.getByText('Nome', { exact: true }).click();
+  await expect(simple.locator('input[id="contact-simple-name"]')).toBeFocused();
+
+  await split.getByText('Nome', { exact: true }).click();
+  await expect(split.locator('input[id="contact-split-name"]')).toBeFocused();
+
+  await details.getByText('Nome', { exact: true }).click();
+  await expect(details.locator('input[id="contact-details-name"]')).toBeFocused();
+
+  // Ids de campo únicos na página (apenas input[id]/textarea[id] dos 3 forms de contact).
+  const ids = await page.evaluate(() =>
+    [...document.querySelectorAll('input[id], textarea[id]')].map((el) => el.id),
+  );
+  expect(ids).toHaveLength(10);
+  expect(new Set(ids).size).toBe(10);
+});
+
 test('newsletter: success limpa o campo e mantem a live region acessivel', async ({ page }) => {
   await page.goto('/library/newsletter');
 
