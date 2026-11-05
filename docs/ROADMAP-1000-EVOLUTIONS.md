@@ -117,7 +117,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 017 | Accordion acessível ✅ VERIFIED (technical) | Primitive sob demanda | Conteúdo expansível acessível e reutilizável | — | — | Médio |
 | 018 | FAQ ✅ VERIFIED | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
 | 019 | Padronizar páginas legadas do `/library` ✅ VERIFIED | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010 ✅ | Médio |
-| 020 | Sticky CTA bar | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
+| 020 | Sticky CTA bar ✅ VERIFIED | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
 | 021 | Sticky-column split | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
 | 022 | Landing composition completa | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
 | 023 | Metadata SEO | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 | Pequeno–médio |
@@ -297,6 +297,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Findings:** QLT-010 ✅. **Esforço:** Médio.
 
 ## 020 — Sticky CTA bar
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-05)** — inventário confirmou inexistência de CTA sticky/fixed no projeto; nova section justificada no grupo CTA existente (`StickyCtaBar`, `components/sections/cta/sticky-cta-bar.tsx`), nenhuma CTA legacy refatorada. `position: sticky; bottom: 0` (não `fixed`), limitada pelo containing/scroll block do consumer; Server Component; CSS-only; contrato data-driven; links reais (convenção 001); sem JS de scroll; sem visibility state; sem z-index novo; sem motion; sem dependência nova. `/library/cta` 4 → 5 entries (demo com contexto real de scroll); nenhuma rota nova. Runtime sticky comprovado por geometria: desktop `scrollHeight 521 > clientHeight 420`, mobile `909 > 420`, delta `containerBottom − asideBottom = 0` no início, meio e final do scroll. Mobile 375×667 e desktop 1280×720 validados, zero overflow. +1 teste Playwright — **46 passed + 2 skipped** (24 testes / 48 execuções). Lint 0/0; build PASS (19 rotas); `git diff --check` limpo.
 
 **Objetivo:** CTA fixo mobile-first — variante estrutural nova da área CTA.
 **Entregável:** nova variante em `components/sections/cta/` + página atualizada.

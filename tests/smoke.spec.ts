@@ -478,3 +478,82 @@ test('library: paginas migradas seguem o padrao moderno', async ({ page }) => {
     ).toBe(true);
   }
 });
+
+test('sticky cta bar: permanece presa ao fundo do scroll container durante scroll', async ({ page }) => {
+  await page.goto('/library/cta');
+
+  // Landmark complementary (aside), escopado pelo conteúdo da demo.
+  const bar = page.getByRole('complementary').filter({ hasText: 'Pronto para usar no próximo projeto?' });
+  await expect(bar).toBeVisible();
+
+  // Configuração CSS: sticky bottom-0 (prova a configuração, não só a classe).
+  const css = await bar.evaluate((el) => {
+    const s = getComputedStyle(el);
+    return { position: s.position, bottom: s.bottom };
+  });
+  expect(css.position).toBe('sticky');
+  expect(css.bottom).toBe('0px');
+
+  // Ancestral realmente rolável, identificado subindo o DOM (sem cadeia hardcodada).
+  const scrollInfo = await bar.evaluate((el) => {
+    const sc = (() => {
+      let node = el.parentElement;
+      while (node) {
+        const oy = getComputedStyle(node).overflowY;
+        if (oy === 'auto' || oy === 'scroll') return node;
+        node = node.parentElement;
+      }
+      return null;
+    })();
+    return sc ? { scrollHeight: sc.scrollHeight, clientHeight: sc.clientHeight } : null;
+  });
+  expect(scrollInfo).not.toBeNull();
+  expect(scrollInfo!.scrollHeight).toBeGreaterThan(scrollInfo!.clientHeight);
+
+  // Geometria: bottom da barra vs bottom do scroll container (tolerância p/ border/rounding).
+  const geometry = () =>
+    bar.evaluate((el) => {
+      let node = el.parentElement;
+      while (node) {
+        const oy = getComputedStyle(node).overflowY;
+        if (oy === 'auto' || oy === 'scroll') break;
+        node = node.parentElement;
+      }
+      const c = (node ?? document.documentElement).getBoundingClientRect();
+      const a = el.getBoundingClientRect();
+      return { containerBottom: c.bottom, asideBottom: a.bottom, asideTop: a.top };
+    });
+
+  // Estado A — posição inicial do scroll: barra já presa ao fundo do container.
+  const before = await geometry();
+  expect(Math.abs(before.containerBottom - before.asideBottom)).toBeLessThanOrEqual(2);
+
+  // Estado B — scroll intermediário significativo (50%).
+  await bar.evaluate((el) => {
+    let node = el.parentElement;
+    while (node) {
+      const oy = getComputedStyle(node).overflowY;
+      if (oy === 'auto' || oy === 'scroll') {
+        node.scrollTop = Math.floor((node.scrollHeight - node.clientHeight) * 0.5);
+        return;
+      }
+      node = node.parentElement;
+    }
+  });
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+
+  const during = await geometry();
+  expect(Math.abs(during.containerBottom - during.asideBottom)).toBeLessThanOrEqual(2);
+  expect(during.asideTop).toBeLessThan(during.containerBottom); // barra visível, não só colapsada no fim
+
+  // Links reais (convenção 001) — sem navegar para o mailto.
+  await expect(bar.getByRole('link', { name: 'Explorar componentes' })).toHaveAttribute('href', '/library/headers');
+  await expect(bar.getByRole('link', { name: 'Falar com a equipe' })).toHaveAttribute('href', 'mailto:contato@suaempresa.com');
+
+  // Zero overflow horizontal.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

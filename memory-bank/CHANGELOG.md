@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-05] — Evolução 020: Sticky CTA bar (VERIFIED)
+
+- Criado `components/sections/cta/sticky-cta-bar.tsx` — `StickyCtaBar`, nova section no grupo CTA existente; anti-duplicação confirmada por inventário (nenhuma CTA sticky/fixed existente; nenhuma CTA legacy refatorada).
+- `position: sticky; bottom: 0` — o comportamento fica limitado pelo containing/scroll block do consumer (não é `fixed`); Server Component; CSS-only — sem scroll listeners, sem visibility state; sem z-index customizado; sem compensação de safe-area; sem motion; nenhuma dependência nova.
+- Contrato data-driven local (`StickyCtaAction`/`StickyCtaBarProps`); actions reais pela convenção 001 — interno via `next/link`, protocolo/externo via `<a>`, `Button asChild`; root `<aside>`; mobile-first, horizontal em desktop.
+- `/library/cta` 4 → 5 entries (nova entry `sticky-cta-bar`, demo com scroll container próprio da página); nenhuma rota nova; home e `library-shell` intactos.
+- Runtime sticky comprovado por geometria: desktop `scrollHeight 521 > clientHeight 420`, mobile `909 > 420`; delta `containerBottom − asideBottom = 0` no início, meio e final do scroll. Validação live 375×667 e 1280×720, zero overflow.
+- +1 teste Playwright (aside por conteúdo, computed `sticky`/`bottom 0`, ancestral rolável, scroll real, geometria em múltiplas posições, links reais, zero overflow). Suíte: 24 testes / 48 execuções — **46 passed + 2 skipped**.
+- Lint **0/0**; build **PASS** (19 rotas); `git diff --check` limpo.
+- Contagens: sections 30, UI 9, total 48. Rotas: 19 → 19. QLT-003, QLT-005 e QLT-011 inalterados.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (StickyCtaBar + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (020 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 021).
+
+---
+
 ## [2026-11-04] — Evolução 019: Standardize legacy /library pages (VERIFIED — QLT-010)
 
 - As 7 páginas legacy (`hero`, `about`, `services`, `testimonials`, `pricing`, `contact`, `cta`) migradas para o padrão moderno consolidado da `/library`: `metadata` local, page headers modernos, entries locais tipadas, preview boxes padronizados, labels `Componente: <code>{id}</code>`.

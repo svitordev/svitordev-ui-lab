@@ -6,9 +6,9 @@
 
 - **9** UI components
 - **7** site components
-- **29** section components
+- **30** section components
 - **2** wrappers/shells
-- **Total: 47** componentes reutilizáveis relevantes
+- **Total: 48** componentes reutilizáveis relevantes
 
 ---
 
@@ -69,7 +69,7 @@ Exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`. C
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (29)
+## Section components — `components/sections/` (30)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -183,7 +183,7 @@ Estados: `idle → submitting → success | error`. Submitting desabilita input/
 
 Acessibilidade: `<label htmlFor>` + `useId`; `aria-busy` durante submitting; live region persistente única `role="status"` (`aria-live="polite"`, `aria-atomic`); erro com `aria-invalid` + `aria-describedby`; success remove o estado de erro.
 
-### CTA — `components/sections/cta/` (4)
+### CTA — `components/sections/cta/` (5)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
@@ -191,6 +191,23 @@ Acessibilidade: `<label htmlFor>` + `useId`; `aria-busy` durante submitting; liv
 | CtaSimple | `components/sections/cta/cta-simple.tsx` | Template | CTA simples |
 | CtaSplit | `components/sections/cta/cta-split.tsx` | Template | Dividido |
 | CtaSplitActions | `components/sections/cta/cta-split-actions.tsx` | Pronto | **Data-driven — contrato exemplar** (Evolução 001). Coluna editorial + painel de conversão; Server Component; links internos via `next/link`, protocolos/externos via `<a>` |
+| StickyCtaBar | `components/sections/cta/sticky-cta-bar.tsx` | Pronto | **Data-driven** (Evolução 020). CTA compacta e persistente; `position: sticky; bottom: 0` — o comportamento sticky fica limitado pelo containing/scroll block no qual o componente é inserido (não é `fixed`, não gruda no viewport global); Server Component; CSS-only — sem scroll listeners, sem state; actions reais via `Button asChild` — internos via `next/link`, protocolos/externos via `<a>`; mobile-first (copy + actions empilhadas), horizontal em desktop; root `<aside>`; sem motion, sem z-index customizado, sem compensação de safe-area; sem dependência nova; demo na `/library/cta` (scroll container próprio da página) |
+
+Contrato do StickyCtaBar (resumo):
+
+```ts
+export type StickyCtaAction = {
+  label: string
+  href: string
+  variant?: "default" | "outline"
+}
+
+export type StickyCtaBarProps = {
+  title: string
+  description?: string
+  actions: StickyCtaAction[]
+}
+```
 
 ### Logos — `components/sections/logos/` (1)
 

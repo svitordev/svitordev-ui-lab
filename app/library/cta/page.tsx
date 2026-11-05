@@ -7,6 +7,10 @@ import {
   CtaSplitActions,
   type CtaSplitActionsProps,
 } from "@/components/sections/cta/cta-split-actions";
+import {
+  StickyCtaBar,
+  type StickyCtaBarProps,
+} from "@/components/sections/cta/sticky-cta-bar";
 
 export const metadata: Metadata = {
   title: "Library · CTAs",
@@ -44,6 +48,44 @@ const ctaSplitActionsDemo: CtaSplitActionsProps = {
   ],
 };
 
+const stickyCtaBarDemo: StickyCtaBarProps = {
+  title: "Pronto para usar no próximo projeto?",
+  description:
+    "Combine as seções da biblioteca e adapte o conteúdo ao seu produto.",
+  actions: [
+    {
+      label: "Explorar componentes",
+      href: "/library/headers",
+      variant: "default",
+    },
+    {
+      label: "Falar com a equipe",
+      href: "mailto:contato@suaempresa.com",
+      variant: "outline",
+    },
+  ],
+};
+
+// Filler da demo — gera scroll real no container para observar o comportamento
+// sticky. Vive só na página; não faz parte do contrato do componente.
+const stickyBarDemoFiller = [
+  "Conteúdo de exemplo — role este container para ver a barra permanecer presa ao fundo.",
+  "O espaço acima representa a página real onde a barra seria usada.",
+  "A barra acompanha o scroll e sai de cena quando este container termina.",
+  "Nenhuma linha aqui pertence ao componente — é apenas contexto de demonstração.",
+  "Role mais um pouco e observe a geometria da barra em relação ao container.",
+  "O comportamento sticky é CSS puro, sem JavaScript.",
+  "Em um projeto real, este seria o conteúdo editorial da página.",
+  "Continue rolando — a barra continua visível no fundo do container.",
+  "Quase no final do container de demonstração.",
+  "Mais uma linha de contexto — em desktop o texto não quebra, então o filler precisa de volume suficiente para gerar scroll real em qualquer viewport.",
+  "Cada linha é apenas espaço ocupado: o objetivo é garantir scrollHeight maior que a altura visível do container.",
+  "A barra continua no fundo do container enquanto houver conteúdo abaixo dela.",
+  "Nenhum spacer artificial foi adicionado ao componente — a altura é da demo.",
+  "Continue rolando — o comportamento observado aqui é o mesmo de uma página real.",
+  "Ao chegar aqui, a barra atinge sua posição natural no fim do conteúdo.",
+];
+
 const ctas: CtaItem[] = [
   {
     id: "cta-simple",
@@ -69,6 +111,22 @@ const ctas: CtaItem[] = [
     description:
       "Coluna editorial + painel de conversão — contrato data-driven do Lab.",
     preview: <CtaSplitActions {...ctaSplitActionsDemo} />,
+  },
+  {
+    id: "sticky-cta-bar",
+    name: "Sticky CTA bar (barra persistente)",
+    description:
+      "Barra compacta que permanece presa ao fundo do seu scroll container — CSS puro, sem JS.",
+    preview: (
+      <div className="h-[420px] overflow-y-auto">
+        <div className="space-y-3 px-4 py-6 text-xs text-muted-foreground">
+          {stickyBarDemoFiller.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+        <StickyCtaBar {...stickyCtaBarDemo} />
+      </div>
+    ),
   },
 ];
 
