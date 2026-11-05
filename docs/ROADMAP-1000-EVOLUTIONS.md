@@ -118,7 +118,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 018 | FAQ ✅ VERIFIED | Nova section | FAQ construída sobre o accordion 017 | 017 | — | Médio |
 | 019 | Padronizar páginas legadas do `/library` ✅ VERIFIED | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010 ✅ | Médio |
 | 020 | Sticky CTA bar ✅ VERIFIED | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
-| 021 | Sticky-column split | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
+| 021 | Sticky-column split ✅ VERIFIED | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
 | 022 | Landing composition completa | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
 | 023 | Metadata SEO | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 | Pequeno–médio |
 | 024 | Corrigir datas/timezone | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 | Pequeno |
@@ -306,6 +306,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001, 007. **Finding:** — **Esforço:** Médio.
 
 ## 021 — Sticky-column split
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-05)** — inventário confirmou inexistência de sticky-column no lab; nova section justificada no grupo `features` (`StickyColumnSplit`, `components/sections/features/sticky-column-split.tsx`), nenhuma section legacy refatorada. Server Component; data-driven; grid responsivo (`md:grid-cols-2`); sticky somente em `lg` (`lg:sticky lg:top-8` com `md:self-start`); mobile em fluxo normal; sem `fixed`; sem z-index; sem JS; sem IntersectionObserver; sem scrollspy; sem motion. `/library/features` 1 → 2 entries (`FeatureComparison` intacto); nenhuma rota nova; demo com contexto de scroll próprio e conteúdo posterior que torna o boundary da section observável. Runtime geométrico validado: `scrollHeight 965 > clientHeight 420`; `deltaTop = stickyRect.top − scrollContainerRect.top` — inicial 64px (posição natural), intermediário 32px (sticky engajado exatamente no `top-8`), final −84px (coluna liberada pelo fim do containing block). Mobile: computed `static`, coluna acompanha o scroll (breakpoint CSS, não JS), 6 items, zero overflow. Desktop 1280×720 validado, zero overflow. +1 teste Playwright — **48 passed + 2 skipped** (25 testes / 50 execuções). Lint 0/0; build PASS (19 rotas); `git diff --check` limpo.
 
 **Objetivo:** padrão responsivo de split com coluna fixa em desktop (conteúdo + mídia/CTA) — inexistente no lab.
 **Entregável:** nova variante de section + página `/library` correspondente.

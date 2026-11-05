@@ -6,9 +6,9 @@
 
 - **9** UI components
 - **7** site components
-- **30** section components
+- **31** section components
 - **2** wrappers/shells
-- **Total: 48** componentes reutilizáveis relevantes
+- **Total: 49** componentes reutilizáveis relevantes
 
 ---
 
@@ -69,7 +69,7 @@ Exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`. C
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (30)
+## Section components — `components/sections/` (31)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -221,11 +221,28 @@ export type StickyCtaBarProps = {
 |---|---|---|---|
 | StatsGrid | `components/sections/stats/stats-grid.tsx` | Pronto | **Data-driven** (Evolução 005). Grid de números de destaque (`value` + `label` + `description` opcional) com badge de contexto via `Badge` (004); Server Component; `ul[role=list]` 2 colunas no mobile / 4 no desktop; sem motion; demo na `/library/stats` |
 
-### Features — `components/sections/features/` (1)
+### Features — `components/sections/features/` (2)
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
 | FeatureComparison | `components/sections/features/feature-comparison.tsx` | Pronto | **Data-driven** (Evolução 011). Tabela HTML semântica real de recursos entre opções dinâmicas; `values` keyed por `ComparisonOption.id`; `boolean \| string`; fallback defensivo para valor ausente (distinto de `false`); `Recurso` como primeiro column header; `scope="col"`/`scope="row"`; Check/X Lucide `aria-hidden` com textos acessíveis via sr-only (Incluído/Não incluído/Não informado); Server Component; mobile com scroll horizontal interno controlado; sem pricing, sem CTA, sem highlight, sem grupos, sem JS responsivo; demo na `/library/features` |
+| StickyColumnSplit | `components/sections/features/sticky-column-split.tsx` | Pronto | **Data-driven** (Evolução 021). Section editorial de duas colunas — coluna de contexto à esquerda, conteúdo detalhado à direita; responsiva: mobile em fluxo normal, `md` grid de 2 colunas ainda sem sticky, `lg+` coluna esquerda sticky (`md:self-start lg:sticky lg:top-8`) limitada pelo containing block; Server Component; CSS-only — sem JS de scroll, sem scrollspy; items semânticos `<article>` (título `h3` + descrição); root `<section>`; sem z-index customizado, sem motion, sem dependência nova; demo na `/library/features` |
+
+Contrato do StickyColumnSplit (resumo):
+
+```ts
+export type StickyColumnItem = {
+  title: string
+  description: string
+}
+
+export type StickyColumnSplitProps = {
+  eyebrow?: string
+  title: string
+  description?: string
+  items: StickyColumnItem[]
+}
+```
 
 Contrato (resumo):
 

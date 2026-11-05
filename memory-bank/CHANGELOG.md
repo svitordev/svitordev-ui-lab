@@ -4,6 +4,20 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-05] — Evolução 021: Sticky-column split (VERIFIED)
+
+- Criado `components/sections/features/sticky-column-split.tsx` — `StickyColumnSplit`, nova section no grupo `features`; anti-duplicação confirmada por inventário (nenhuma sticky-column existente; nenhuma section legacy refatorada).
+- Section editorial de duas colunas — coluna de contexto à esquerda, conteúdo detalhado à direita; responsiva: mobile em fluxo normal, `md` grid de 2 colunas ainda sem sticky, `lg+` coluna esquerda sticky (`md:self-start lg:sticky lg:top-8`) limitada pelo containing block; Server Component; CSS-only — sem JS de scroll, sem IntersectionObserver, sem scrollspy; sem z-index customizado; sem motion; nenhuma dependência nova.
+- Contrato data-driven local (`StickyColumnItem`/`StickyColumnSplitProps`); items semânticos `<article>` com título `h3`; root `<section>`; eyebrow opcional em texto; título em `h2`.
+- `/library/features` 1 → 2 entries (nova entry `sticky-column-split`, demo com scroll container próprio e conteúdo posterior que torna o boundary da section observável); `FeatureComparison` intacto; nenhuma rota nova.
+- Runtime geométrico validado: `scrollHeight 965 > clientHeight 420`; `deltaTop` relativo ao scroll container — inicial 64px (posição natural), intermediário 32px (sticky engajado exatamente no `top-8`), final −84px (coluna liberada pelo fim do containing block). Mobile: computed `static`, coluna acompanha o scroll (breakpoint CSS), 6 items. Mobile 375×667 e desktop 1280×720, zero overflow.
+- +1 teste Playwright (section pelo conteúdo, ancestral rolável, scroll real, mobile sem sticky, desktop sticky com top 32px, geometria relativa ao scroll container, boundary no final, zero overflow). Suíte: 25 testes / 50 execuções — **48 passed + 2 skipped**.
+- Lint **0/0**; build **PASS** (19 rotas); `git diff --check` limpo.
+- Contagens: sections 31, UI 9, total 49. Rotas: 19 → 19. QLT-002, QLT-003, QLT-005 e QLT-011 inalterados.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (StickyColumnSplit + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (021 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 022).
+
+---
+
 ## [2026-11-05] — Evolução 020: Sticky CTA bar (VERIFIED)
 
 - Criado `components/sections/cta/sticky-cta-bar.tsx` — `StickyCtaBar`, nova section no grupo CTA existente; anti-duplicação confirmada por inventário (nenhuma CTA sticky/fixed existente; nenhuma CTA legacy refatorada).

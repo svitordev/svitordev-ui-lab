@@ -557,3 +557,96 @@ test('sticky cta bar: permanece presa ao fundo do scroll container durante scrol
     ),
   ).toBe(true);
 });
+
+test('sticky column split: coluna sticky apenas em desktop, mobile em fluxo normal', async ({ page }, testInfo) => {
+  await page.goto('/library/features');
+
+  // Section do componente = section ancestral mais próxima do heading da demo;
+  // a coluna sticky é o pai direto do heading (localização por conteúdo).
+  const heading = page.getByRole('heading', { level: 2, name: 'Contexto sempre visível' });
+  await expect(heading).toBeVisible();
+
+  // Coluna sticky localizada de forma robusta: o pai direto do heading da demo.
+  const info = await heading.evaluate((h) => {
+    const column = h.parentElement!;
+    let sc: HTMLElement | null = column.parentElement;
+    while (sc) {
+      const oy = getComputedStyle(sc).overflowY;
+      if (oy === 'auto' || oy === 'scroll') break;
+      sc = sc.parentElement;
+    }
+    if (!sc) return null;
+    const s = getComputedStyle(column);
+    return { position: s.position, top: s.top, scrollHeight: sc.scrollHeight, clientHeight: sc.clientHeight };
+  });
+  expect(info).not.toBeNull();
+
+  // Scroll real no container da demo (obrigatório — sem scroll, o teste falha).
+  expect(info!.scrollHeight).toBeGreaterThan(info!.clientHeight);
+
+  // Geometria relativa ao scroll container (não coordenada absoluta de viewport).
+  const measure = () =>
+    heading.evaluate((h) => {
+      const column = h.parentElement!;
+      let sc: HTMLElement | null = column.parentElement;
+      while (sc) {
+        const oy = getComputedStyle(sc).overflowY;
+        if (oy === 'auto' || oy === 'scroll') break;
+        sc = sc.parentElement;
+      }
+      const c = (sc ?? document.documentElement).getBoundingClientRect();
+      const a = column.getBoundingClientRect();
+      return { deltaTop: Math.round(a.top - c.top), scrollTop: sc ? sc.scrollTop : 0 };
+    });
+
+  const scrollTo = (fraction: number) =>
+    heading.evaluate((h, f) => {
+      const column = h.parentElement!;
+      let sc: HTMLElement | null = column.parentElement;
+      while (sc) {
+        const oy = getComputedStyle(sc).overflowY;
+        if (oy === 'auto' || oy === 'scroll') break;
+        sc = sc.parentElement;
+      }
+      if (sc) sc.scrollTop = Math.floor((sc.scrollHeight - sc.clientHeight) * f);
+    }, fraction);
+
+  const settle = () => page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+
+  if (testInfo.project.name === 'mobile') {
+    // Mobile: lg:sticky não se aplica — coluna deve permanecer em fluxo normal.
+    expect(info!.position).not.toBe('sticky');
+
+    const before = await measure();
+    await scrollTo(0.5);
+    await settle();
+    const after = await measure();
+
+    // A coluna se move junto com o conteúdo (sticky não engatou).
+    expect(Math.abs(after.deltaTop - before.deltaTop)).toBeGreaterThan(20);
+  } else {
+    // Desktop: configuração CSS comprovada (parte central do comportamento).
+    expect(info!.position).toBe('sticky');
+    expect(info!.top).toBe('32px');
+
+    // Scroll intermediário: sticky engajado — deltaTop em relação ao scrollport ≈ top-8.
+    await scrollTo(0.5);
+    await settle();
+    const mid = await measure();
+    expect(Math.abs(mid.deltaTop - 32)).toBeLessThanOrEqual(2);
+
+    // Boundary: rolando até o fim (conteúdo demo-only após a section), a coluna
+    // deixa de ocupar o offset — o containing block terminou e ela foi empurrada.
+    await scrollTo(1);
+    await settle();
+    const end = await measure();
+    expect(Math.abs(end.deltaTop - 32)).toBeGreaterThan(20);
+  }
+
+  // Zero overflow horizontal.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
