@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPostBySlug } from "@/lib/blog";
+import { formatDateOnly } from "@/lib/format-date";
 
 // Evolução 023 — metadata dinâmica pela mesma fonte de conteúdo da página
 // (getPostBySlug — nenhuma fonte nova). Slug inexistente → notFound(),
@@ -39,7 +40,7 @@ export default async function BlogPostPage({
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:py-16">
       <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-        {new Date(post.date).toLocaleDateString("pt-BR")}
+        {formatDateOnly(post.date)}
       </p>
       <h1 className="mt-1 mb-4 text-2xl font-semibold tracking-tight md:text-3xl">
         {post.title}

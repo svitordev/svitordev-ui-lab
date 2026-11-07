@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { posts } from "@/lib/blog";
+import { formatDateOnly } from "@/lib/format-date";
 
 // Description reutiliza a copy introdutória real da própria página.
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default function BlogPage() {
             className="rounded-xl border bg-background p-4 shadow-sm"
           >
             <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              {new Date(post.date).toLocaleDateString("pt-BR")}
+              {formatDateOnly(post.date)}
             </p>
             <h2 className="mt-1 text-lg font-semibold">
               <Link href={`/blog/${post.slug}`}>{post.title}</Link>

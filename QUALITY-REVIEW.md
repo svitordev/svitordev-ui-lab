@@ -390,7 +390,7 @@ Command exited with code 1
 
 ### QLT-013 — Datas date-only podem exibir o dia anterior por conversão de timezone
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-07)** — corrigido na Evolução 024 por parsing estrutural DATE-ONLY em `lib/format-date.ts` (`formatDateOnly`); ver Verificação abaixo.
 **Prioridade:** P2
 **Categoria:** Data / UX / Correctness
 
@@ -410,6 +410,17 @@ Command exited with code 1
 
 **Testes necessários:** Verificar renderização de datas em diferentes timezones.
 
+**Verificação (2026-11-07) — Evolução 024:**
+- Causa raiz confirmada: `2025-11-01` é uma data civil DATE-ONLY; o código anterior `new Date(post.date).toLocaleDateString("pt-BR")` a tratava como instante UTC e a convertia para o dia anterior em timezone negativo (exemplo observado: `2025-11-01` → `31/10/2025`).
+- Correção: criado `lib/format-date.ts` com `formatDateOnly` — contrato `YYYY-MM-DD → dd/mm/yyyy`, parsing estrutural da string; sem `Date`, sem `Intl`, sem offset, sem timezone, sem locale; resultado determinístico (`2025-11-01` → `01/11/2025`; `2025-11-10` → `10/11/2025`).
+- Consumers corrigidos (exatamente 2, ambos usando o mesmo helper): listagem `/blog` e detalhe `/blog/[slug]`.
+- `lib/blog.ts` permaneceu intacto — as datas fonte NÃO foram alteradas para compensar o bug; a correção aconteceu na interpretação/formatação.
+- Nenhum timezone foi hardcoded na aplicação — `America/Fortaleza`, `America/Sao_Paulo` e `UTC` não foram adicionados ao código de produção; DATE-ONLY permanece semanticamente sem timezone.
+- Teste adicionado: `blog: datas date-only sao renderizadas sem deslocamento` — cobertura do helper diretamente (`2025-11-01` → `01/11/2025`; `2025-11-10` → `10/11/2025`), da listagem `/blog` e do detalhe real, com a mesma data editorial nas duas telas. Browser `timezoneId` não serviria como prova primária: as páginas são Server Components e a formatação ocorre no processo Node/Next do SSR; a invariância foi demonstrada pela implementação sem APIs de timezone + teste direto + E2E + varredura.
+- Varredura final: nenhum consumer DATE-ONLY vulnerável permanece em `app/**`/`lib/**` — sem `new Date(post.date)`, `toLocaleDateString(...)`, `Date.parse(...)` ou `Intl.DateTimeFormat(...)` para DATE-ONLY nos caminhos afetados. `new Date().getFullYear()` nos footers permanece intocado (data atual de runtime, não relacionado ao QLT-013).
+- Critério de fechamento atendido: todos os consumers afetados corrigidos; nenhuma conversão vulnerável restante; dados fonte preservados; listagem e detalhe exibem o mesmo dia; helper timezone-independent; teste cobre helper + UI; gates verdes.
+- Gates: lint **0/0**; build **PASS** (20 rotas); Playwright **58 passed + 2 skipped** (30 testes / 60 execuções); `git diff --check` limpo.
+
 ---
 
 ## Distribuição de prioridades
@@ -418,11 +429,11 @@ Command exited with code 1
 |---|---|---|
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 |
+| **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 — **VERIFIED** |
 | **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

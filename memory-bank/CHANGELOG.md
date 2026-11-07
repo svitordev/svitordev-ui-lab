@@ -4,6 +4,19 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-07] — Evolução 024: Corrigir datas/timezone (VERIFIED — QLT-013)
+
+- Causa raiz: `new Date("YYYY-MM-DD")` tratava data civil DATE-ONLY como instante UTC, deslocando o dia em fusos negativos (`2025-11-01` era renderizado como `31/10/2025`).
+- Criado `lib/format-date.ts` — `formatDateOnly`, contrato `YYYY-MM-DD → dd/mm/yyyy`, parsing estrutural da string; sem `Date`, sem `Intl`, sem offset, sem timezone, sem locale; resultado determinístico em qualquer ambiente.
+- `lib/blog.ts` intacto — datas fonte preservadas, nenhuma compensação de bug nos dados editoriais.
+- Os 2 consumers (`/blog`, `/blog/[slug]`) agora usam o mesmo helper; listagem e detalhe exibem o mesmo dia editorial (`2025-11-01` → `01/11/2025`; `2025-11-10` → `10/11/2025`).
+- +1 teste Playwright (`blog: datas date-only sao renderizadas sem deslocamento` — helper direto + E2E listagem + E2E detalhe). Suíte: 30 testes / 60 execuções — **58 passed + 2 skipped**.
+- Varredura final limpa: nenhum consumer DATE-ONLY vulnerável permanece em `app/**`/`lib/**`.
+- Lint **0/0**; build **PASS** (20 rotas); `git diff --check` limpo. Nenhuma dependência nova. Contagens: sections 31, UI 9, total 49 (inalterado). **QLT-013 → VERIFIED.**
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-013 VERIFIED + tabela/totais), `docs/ROADMAP-1000-EVOLUTIONS.md` (024 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 025).
+
+---
+
 ## [2026-11-07] — Evolução 023: Metadata SEO (VERIFIED — QLT-002)
 
 - Root metadata atualizada para o nome oficial **Svitordev UI Lab** com title template `%s | Svitordev UI Lab`; description global preservada; `<html lang="pt-BR">` normalizado.

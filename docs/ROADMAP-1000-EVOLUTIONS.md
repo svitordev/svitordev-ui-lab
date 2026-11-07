@@ -121,7 +121,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 021 | Sticky-column split ✅ VERIFIED | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
 | 022 | Landing composition completa ✅ VERIFIED | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
 | 023 | Metadata SEO ✅ VERIFIED | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 ✅ | Pequeno–médio |
-| 024 | Corrigir datas/timezone | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 | Pequeno |
+| 024 | Corrigir datas/timezone ✅ VERIFIED | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 ✅ | Pequeno |
 | 025 | Smoke Playwright estendido | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
 
 ## 001 — CTA Split Actions data-driven + contrato de props exemplar
@@ -333,6 +333,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** QLT-002 ✅. **Esforço:** Pequeno–médio.
 
 ## 024 — Corrigir datas/timezone
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-07)** — causa raiz: `new Date("YYYY-MM-DD")` tratava data civil DATE-ONLY como instante UTC, deslocando o dia em fusos negativos. Correção por parsing estrutural em `lib/format-date.ts` (`formatDateOnly`, `YYYY-MM-DD → dd/mm/yyyy`) — sem `Date`, sem `Intl`, sem timezone, sem locale, sem biblioteca. Dados dos posts intactos; os 2 consumers (`/blog`, `/blog/[slug]`) usam o mesmo helper; nenhum timezone hardcoded na aplicação. Teste direto do helper + E2E (listagem e detalhe exibem o mesmo dia editorial); varredura final limpa. +1 teste Playwright — **58 passed + 2 skipped** (30 testes / 60 execuções). Lint 0/0; build PASS (20 rotas); `git diff --check` limpo. **QLT-013 → VERIFIED.**
 
 **Objetivo:** datas date-only sem deslocamento de fuso.
 **Entregável:** formatação estável em `lib/blog.ts`/páginas do blog.

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { formatDateOnly } from '../lib/format-date';
 
 test('home carrega com main, banner e um heading nivel 1', async ({ page }) => {
   await page.goto('/');
@@ -798,4 +799,23 @@ test('metadata: blog dinamico usa title e description reais do post', async ({ p
   expect(description404).not.toBe(
     'Mesmo com redes sociais fortes, ter um site próprio aumenta a credibilidade e o controle da sua presença digital.',
   );
+});
+
+test('blog: datas date-only sao renderizadas sem deslocamento', async ({ page }) => {
+  // Prova direta do helper puro (import relativo — a suíte não resolve alias tsconfig):
+  // sem Date, sem Intl, sem timezone, sem locale — o resultado é determinístico
+  // em qualquer ambiente (a formatação ocorre no Server Component).
+  expect(formatDateOnly('2025-11-01')).toBe('01/11/2025');
+  expect(formatDateOnly('2025-11-10')).toBe('10/11/2025');
+
+  // E2E listagem — escopado pelo article do post (sem getByText global).
+  await page.goto('/blog');
+  const card = page
+    .locator('article')
+    .filter({ has: page.getByRole('link', { name: 'Por que sua empresa precisa de um site hoje' }) });
+  await expect(card).toContainText('01/11/2025');
+
+  // E2E detalhe — mesma data editorial cadastrada na fonte.
+  await page.goto('/blog/por-que-sua-empresa-precisa-de-um-site-hoje');
+  await expect(page.getByText('01/11/2025', { exact: true })).toBeVisible();
 });
