@@ -650,3 +650,94 @@ test('sticky column split: coluna sticky apenas em desktop, mobile em fluxo norm
     ),
   ).toBe(true);
 });
+
+test('landing: compoe sections em uma pagina completa', async ({ page }) => {
+  await page.goto('/library/landing');
+
+  // Hero da landing (h1 por texto exato — o h1 do shell e o da landing coexistem).
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Organize sua operação e entregue uma experiência melhor aos seus clientes.' }),
+  ).toBeVisible();
+
+  // Ordem relativa das sections principais por heading único (bounding box, sem nth global).
+  const headings = [
+    'Empresas que confiam no nosso trabalho',
+    'Números que mostram a operação',
+    'Compare os recursos disponíveis em cada plano',
+    'O que dizem os clientes',
+    'Planos para cada fase do negócio',
+    'Perguntas frequentes',
+    'Pronto para simplificar sua operação?',
+  ];
+  const ys: number[] = [];
+  for (const name of headings) {
+    const heading = page.getByRole('heading', { level: 2, name });
+    await expect(heading).toBeVisible();
+    const box = await heading.boundingBox();
+    expect(box).not.toBeNull();
+    ys.push(box!.y);
+  }
+  for (let i = 1; i < ys.length; i++) {
+    expect(ys[i]).toBeGreaterThan(ys[i - 1]);
+  }
+
+  // Sticky CTA (aside) e footer presentes — localizados por conteúdo, não por landmark global.
+  await expect(page.getByRole('complementary')).toBeVisible();
+  await expect(page.locator('footer').filter({ hasText: '©' })).toBeVisible();
+
+  // Fragmentos LOCAIS (fragmento puro criado pelos dados da landing) precisam
+  // resolver no DOM da própria página.
+  for (const sel of ['#services', '#contact']) {
+    const found = await page.evaluate((s) => document.querySelector(s) !== null, sel);
+    expect(found, `âncora local ${sel} inexistente`).toBe(true);
+  }
+  await expect(page.getByRole('link', { name: 'Ver recursos' })).toHaveAttribute('href', '#services');
+  await expect(page.getByRole('link', { name: 'Ver planos' })).toHaveAttribute('href', '#services');
+  await expect(page.getByRole('link', { name: 'Começar com o Profissional' })).toHaveAttribute('href', '#contact');
+
+  // Links root+fragment do footer (/#...) são navegação real para a home —
+  // NÃO são validados contra o DOM atual (pathname importa; falso positivo corrigido).
+  const rootFragments = await page.evaluate(() =>
+    [...document.querySelectorAll('footer a')]
+      .map((a) => a.getAttribute('href')!)
+      .filter((h) => h.includes('#')),
+  );
+  expect(rootFragments.length).toBeGreaterThan(0);
+  for (const href of rootFragments) {
+    expect(href.startsWith('/')).toBe(true); // destino: outra rota (home), não âncora local
+  }
+
+  // Zero overflow horizontal.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+test('landing: mantem interacoes client funcionando em conjunto', async ({ page }) => {
+  await page.goto('/library/landing');
+
+  // Pricing — toggle Mensal/Anual (Client Component dentro da page Server).
+  const group = page.getByRole('group', { name: 'Período de cobrança' });
+  await expect(group.getByRole('button', { name: 'Mensal' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(group.getByRole('button', { name: 'Anual' })).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.getByText('R$ 99/mês')).toBeVisible();
+
+  await group.getByRole('button', { name: 'Anual' }).click();
+
+  await expect(group.getByRole('button', { name: 'Anual' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(group.getByRole('button', { name: 'Mensal' })).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.getByText('R$ 990/ano')).toBeVisible();
+
+  // FAQ — accordion (closed -> open), no mesmo page load.
+  const trigger = page.getByRole('button', { name: 'Posso adaptar a plataforma ao meu negócio?' });
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+  await trigger.click();
+
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await expect(
+    page.getByText('Sim. A estrutura é configurável: você define serviços, horários e campos conforme a rotina do seu atendimento.'),
+  ).toBeVisible();
+});

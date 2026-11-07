@@ -4,6 +4,19 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-05] — Evolução 022: Landing composition completa (VERIFIED)
+
+- Nova rota `/library/landing` — primeira landing completa montada apenas por composição, sem nenhum component novo. Page Server Component; demo data no consumer; narrativa brand-neutral única, coerente entre as sections (Features e Pricing usam os mesmos planos).
+- Composição final: HeroMediaShowcase → LogosStrip → StatsGrid → FeatureComparison → TestimonialsRatingCards → PricingThreeTiers → FaqAccordion → CtaSplitActions → StickyCtaBar → FooterColumns.
+- Header omitido após inventário real dos hrefs: os headers existentes usam links root+fragment (`/#...`) que navegam para a home — incompatíveis com navegação local desta rota. FooterColumns reutilizado como está (exigência do roadmap); seus `/#...` continuam sendo links reais para a home.
+- Fragmentos locais apenas com consumer real na rota: `#services` (hero, sticky bar) e `#contact` (actions do pricing). Pricing (toggle mensal/anual, `aria-pressed`) e FAQ (accordion, `aria-expanded`) coexistem na mesma página.
+- StickyCtaBar validada no document scroll real (computed `sticky`/`bottom 0`; desktop `barBottom 720 = innerHeight`, mobile `667 = 667`) com boundary antes do footer (desktop `barBottom 409 ≤ footerTop 449`; mobile `93 ≤ 133`).
+- Mobile 375×667 e desktop 1280×720 validados, zero overflow. +2 testes Playwright. Suíte: 27 testes / 54 execuções — **52 passed + 2 skipped**.
+- Lint **0/0**; build **PASS** (20 rotas); `git diff --check` limpo. Nenhuma dependência nova. Contagens: sections 31, UI 9, total 49 (inalterado). QLT-002, QLT-003, QLT-005 e QLT-011 inalterados.
+- Documentação atualizada: `docs/ROADMAP-1000-EVOLUTIONS.md` (022 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 023).
+
+---
+
 ## [2026-11-05] — Evolução 021: Sticky-column split (VERIFIED)
 
 - Criado `components/sections/features/sticky-column-split.tsx` — `StickyColumnSplit`, nova section no grupo `features`; anti-duplicação confirmada por inventário (nenhuma sticky-column existente; nenhuma section legacy refatorada).

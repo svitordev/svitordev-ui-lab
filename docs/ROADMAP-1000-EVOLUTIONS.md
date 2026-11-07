@@ -119,7 +119,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 019 | Padronizar páginas legadas do `/library` ✅ VERIFIED | Showcase | Migrar as 7 páginas legadas para o padrão atual | — | QLT-010 ✅ | Médio |
 | 020 | Sticky CTA bar ✅ VERIFIED | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
 | 021 | Sticky-column split ✅ VERIFIED | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
-| 022 | Landing composition completa | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
+| 022 | Landing composition completa ✅ VERIFIED | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
 | 023 | Metadata SEO | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 | Pequeno–médio |
 | 024 | Corrigir datas/timezone | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 | Pequeno |
 | 025 | Smoke Playwright estendido | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
@@ -315,6 +315,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** 001. **Finding:** — **Esforço:** Médio.
 
 ## 022 — Landing composition completa
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-05)** — objetivo cumprido por composição: landing completa montada exclusivamente com peças existentes, **nenhum component novo** (contagem 31/9/49 inalterada). Page dedicada `app/library/landing/page.tsx` (Server Component) dentro do domínio da Library; demo data no consumer; narrativa brand-neutral única e coerente (Features e Pricing usam os mesmos planos). Composição final: HeroMediaShowcase → LogosStrip → StatsGrid → FeatureComparison → TestimonialsRatingCards → PricingThreeTiers → FaqAccordion → CtaSplitActions → StickyCtaBar → FooterColumns. Header deliberadamente omitido após inventário real dos hrefs: os headers existentes usam links root+fragment (`/#...`) que navegam para a home `/` — seriam enganosos nesta rota; nenhum header/footer alterado. FooterColumns reutilizado como footer existente exigido pelo roadmap, como está. Fragmentos locais apenas com consumer real: `#services` (hero, sticky bar) e `#contact` (actions do pricing). Client boundaries preservadas (PricingThreeTiers, FaqAccordion→Accordion). StickyCtaBar validada no document scroll real (computed `sticky`/`bottom 0`; desktop `barBottom 720 = innerHeight`, mobile `667 = 667`) com boundary antes do footer (desktop `barBottom 409 ≤ footerTop 449`; mobile `93 ≤ 133`). Teste de links classifica corretamente fragmento puro (DOM atual) vs path+fragment (outra rota). Mobile 375×667 e desktop 1280×720 validados, zero overflow. +2 testes Playwright — **52 passed + 2 skipped** (27 testes / 54 execuções). Lint 0/0; build PASS (20 rotas); `git diff --check` limpo. Nenhuma dependência nova.
 
 **Objetivo:** demonstração viva do conceito do template: landing completa montada com peças do próprio laboratório.
 **Entregável:** página de demonstração com conteúdo coeso, usando: 001 (CTA Split/contrato), 002 (logos), 003 (Hero Media Showcase), 005 (stats), 009 (reviews), 011 (feature comparison), 016 (pricing), 018 (FAQ), 020 (sticky CTA) e o footer existente.
