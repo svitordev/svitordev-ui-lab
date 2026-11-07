@@ -1,6 +1,28 @@
 // app/(site)/blog/[slug]/page.tsx
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPostBySlug } from "@/lib/blog";
+
+// Evolução 023 — metadata dinâmica pela mesma fonte de conteúdo da página
+// (getPostBySlug — nenhuma fonte nova). Slug inexistente → notFound(),
+// coerente com a página: sem metadata enganosa para 404.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+  };
+}
 
 export default async function BlogPostPage({
   params,

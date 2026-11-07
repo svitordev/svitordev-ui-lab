@@ -120,7 +120,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 020 | Sticky CTA bar ✅ VERIFIED | Nova section | CTA fixo mobile-first | 001, 007 | — | Médio |
 | 021 | Sticky-column split ✅ VERIFIED | Responsivo | Split com coluna fixa em desktop | 001 | — | Médio |
 | 022 | Landing composition completa ✅ VERIFIED | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
-| 023 | Metadata SEO | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 | Pequeno–médio |
+| 023 | Metadata SEO ✅ VERIFIED | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 ✅ | Pequeno–médio |
 | 024 | Corrigir datas/timezone | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 | Pequeno |
 | 025 | Smoke Playwright estendido | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
 
@@ -324,6 +324,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** apenas as peças listadas. **Finding:** — **Esforço:** Grande.
 
 ## 023 — Metadata SEO
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-07)** — auditoria global de metadata: Library já estava coberta após 019/022 (15/15 com title+description, auditadas sem duplicação — marca exatamente 1x em cada title). Root metadata atualizada para o nome oficial "Svitordev UI Lab" com title template `%s | Svitordev UI Lab` e description global preservada; `lang="pt-BR"` normalizado. Home com metadata própria (`Início`, description herdada conscientemente); `/blog` com metadata própria (description baseada na copy real); blog dinâmico com `generateMetadata` usando a fonte real (`post.title`/`post.excerpt`; slug inexistente → `notFound()`, sem metadata enganosa para 404); `/library` (redirect) conscientemente sem metadata. Nenhuma URL fictícia — metadataBase, canonical, sitemap, robots, OG/Twitter custom e icons deliberadamente adiados (sem origem pública oficial nem assets sociais). +2 testes Playwright — **56 passed + 2 skipped** (29 testes / 58 execuções). Lint 0/0; build PASS (20 rotas); `git diff --check` limpo. **QLT-002 → VERIFIED.**
 
 **Objetivo:** `metadata` por página em home, blog e páginas do library ainda sem (reaproveitando o padrão de `headers`/`footers`).
 **Entregável:** `export const metadata` nas páginas pendentes.

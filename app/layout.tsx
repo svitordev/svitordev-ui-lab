@@ -2,8 +2,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// Evolução 023 — nome oficial do projeto (README/AGENTS) + title template:
+// páginas declaram apenas o título próprio e o sufixo é aplicado pelo template.
+// metadataBase/canonical/OG/Twitter permanecem adiados — sem origem pública oficial.
 export const metadata: Metadata = {
-  title: "Starter Institucional + Blog",
+  title: {
+    default: "Svitordev UI Lab",
+    template: "%s | Svitordev UI Lab",
+  },
   description:
     "Template base de landing e blog em Next.js, Tailwind e shadcn/ui.",
 };
@@ -14,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br" suppressHydrationWarning className="dark">
+    <html lang="pt-BR" suppressHydrationWarning className="dark">
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
       </body>

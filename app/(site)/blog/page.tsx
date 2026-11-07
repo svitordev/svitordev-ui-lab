@@ -1,6 +1,14 @@
 // app/(site)/blog/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import { posts } from "@/lib/blog";
+
+// Description reutiliza a copy introdutória real da própria página.
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "Conteúdos simples sobre presença digital, sistemas sob medida e automação para pequenos negócios.",
+};
 
 export default function BlogPage() {
   return (

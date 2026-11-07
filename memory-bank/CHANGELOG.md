@@ -4,6 +4,18 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-07] — Evolução 023: Metadata SEO (VERIFIED — QLT-002)
+
+- Root metadata atualizada para o nome oficial **Svitordev UI Lab** com title template `%s | Svitordev UI Lab`; description global preservada; `<html lang="pt-BR">` normalizado.
+- Home com metadata própria (`Início`, description herdada conscientemente do root); `/blog` com metadata própria (description baseada na copy real da página); blog dinâmico com `generateMetadata` usando a fonte real existente (`post.title`/`post.excerpt`; slug inexistente → `notFound()`, sem metadata enganosa para 404).
+- Library 15/15 auditadas (cobertas desde 019/022): title + description próprios, template aplicado sem duplicação da marca (marca exatamente 1x em cada title); `/library` (redirect) conscientemente sem metadata.
+- metadataBase, canonical, sitemap, robots, Open Graph/Twitter custom e icons deliberadamente adiados — não existe origem pública oficial confiável nem assets sociais adequados no repositório; nenhuma URL fictícia introduzida.
+- +2 testes Playwright. Suíte: 29 testes / 58 execuções — **56 passed + 2 skipped**.
+- Lint **0/0**; build **PASS** (20 rotas); `git diff --check` limpo. Nenhuma dependência nova. Contagens: sections 31, UI 9, total 49 (inalterado). **QLT-002 → VERIFIED.**
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-002 VERIFIED + tabela/totais), `docs/ROADMAP-1000-EVOLUTIONS.md` (023 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 024).
+
+---
+
 ## [2026-11-05] — Evolução 022: Landing composition completa (VERIFIED)
 
 - Nova rota `/library/landing` — primeira landing completa montada apenas por composição, sem nenhum component novo. Page Server Component; demo data no consumer; narrativa brand-neutral única, coerente entre as sections (Features e Pricing usam os mesmos planos).

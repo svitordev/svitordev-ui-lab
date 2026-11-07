@@ -127,7 +127,7 @@ Command exited with code 1
 
 ### QLT-002 — Sem metadata de página em home e listagem de blog (SEO básico)
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-07)** — escopo original do finding eliminado (Evolução 023): root metadata com nome oficial "Svitordev UI Lab" + title template `%s | Svitordev UI Lab` + description global coerente + `lang="pt-BR"`; home com metadata própria (`Início | Svitordev UI Lab`, description herdada conscientemente do root); `/blog` com metadata própria (description baseada na copy real da página); blog dinâmico com `generateMetadata` usando a fonte real existente (`post.title`/`post.excerpt`; slug inexistente → `notFound()`, sem metadata enganosa para 404); Library 15/15 auditadas com title+description próprios, template aplicado sem duplicação da marca (marca exatamente 1x em 15/15), `/library` (redirect) conscientemente sem metadata. Itens dependentes de origem pública/asset social (metadataBase, canonical, sitemap, robots, OG/Twitter custom, icons) foram deliberadamente adiados para evitar configuração fictícia ou metadata imprecisa. +2 testes Playwright — **56 passed + 2 skipped** (29 testes / 58 execuções). Lint 0/0; build PASS (20 rotas); `git diff --check` limpo.
 **Prioridade:** P2
 **Categoria:** SEO / Next.js
 
@@ -418,11 +418,11 @@ Command exited with code 1
 |---|---|---|
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 6 | QLT-002, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 |
+| **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 |
 | **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

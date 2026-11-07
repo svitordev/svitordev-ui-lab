@@ -1,4 +1,5 @@
 // app/(site)/page.tsx
+import type { Metadata } from "next";
 import { AboutSplit } from "@/components/sections/about/about-split";
 import { ContactSplit } from "@/components/sections/contact/contact-split";
 import { CtaSimple } from "@/components/sections/cta/cta-simple";
@@ -59,6 +60,11 @@ const pricingHomeData: PricingThreeTiersProps = {
       action: { label: "Falar sobre este formato", href: "#contact", variant: "outline" },
     },
   ],
+};
+
+// Description herda conscientemente do root (descreve o projeto como um todo).
+export const metadata: Metadata = {
+  title: "Início",
 };
 
 export default function SiteHomePage() {

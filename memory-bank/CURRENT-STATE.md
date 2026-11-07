@@ -32,7 +32,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 020:** ✅ IMPLEMENTADA / VERIFIED (Sticky CTA bar — `StickyCtaBar` em `components/sections/cta/sticky-cta-bar.tsx`, nova section justificada por inventário (nenhuma CTA sticky/fixed existente); grupo CTA existente, nenhuma legacy refatorada; `position: sticky; bottom: 0` limitada pelo containing/scroll block do consumer (não fixed); Server Component; CSS-only, sem scroll listeners/state; contrato data-driven local; links reais pela convenção 001; sem z-index novo, sem safe-area, sem motion; `/library/cta` 4 → 5 entries com demo de scroll container próprio; runtime sticky comprovado por geometria (delta containerBottom−asideBottom = 0 no início/meio/final do scroll; desktop scroll 521>420, mobile 909>420); mobile 375×667 + desktop 1280×720 validados, zero overflow; +1 teste Playwright; QLT-003/005/011 inalterados).
 - **Evolução 021:** ✅ IMPLEMENTADA / VERIFIED (Sticky-column split — `StickyColumnSplit` em `components/sections/features/sticky-column-split.tsx`, nova section justificada por inventário (nenhuma sticky-column existente); grupo `features`, nenhuma legacy refatorada; Server Component; data-driven; grid `md:grid-cols-2`; sticky somente em `lg` (`lg:sticky lg:top-8` com `md:self-start`); mobile em fluxo normal (breakpoint CSS, não JS); sem fixed, sem z-index, sem JS de scroll, sem IntersectionObserver, sem scrollspy, sem motion; items semânticos `article`/`h3`; `/library/features` 1 → 2 entries com `FeatureComparison` intacto; demo com scroll container próprio e conteúdo posterior que torna o boundary observável; runtime geométrico validado — `scrollHeight 965 > clientHeight 420`, `deltaTop` relativo ao scroll container: inicial 64px (natural), intermediário 32px (sticky engajado no `top-8`), final −84px (liberada pelo fim do containing block); mobile `static` com coluna fluindo, 6 items; mobile 375×667 + desktop 1280×720, zero overflow; +1 teste Playwright; QLT-002/003/005/011 inalterados).
 - **Evolução 022:** ✅ IMPLEMENTADA / VERIFIED (Landing composition completa — primeira landing completa montada apenas por composição, sem nenhum component novo; rota dedicada `/library/landing` dentro da Library; 9 peças modernas + FooterColumns existente; Header omitido após inventário dos hrefs (`/#...` navegam para a home); narrativa brand-neutral; fragmentos locais com consumer real (`#services`, `#contact`); Pricing + FAQ coexistindo; StickyCtaBar validada no document scroll com boundary antes do footer; mobile/desktop validados, zero overflow; +2 testes Playwright).
-- **Próxima execução:** Evolução 023 (Metadata SEO).
+- **Evolução 023:** ✅ IMPLEMENTADA / VERIFIED (Metadata SEO — root metadata com nome oficial "Svitordev UI Lab" + title template `%s | Svitordev UI Lab` + `lang="pt-BR"`; home, blog index e blog dinâmico (`generateMetadata` com title/excerpt reais da fonte, 404 via `notFound()`) cobertos; Library 15/15 auditada sem duplicação da marca; `/library` redirect conscientemente sem metadata; metadataBase/canonical/sitemap/robots/OG/Twitter/icons deliberadamente adiados — sem origem pública oficial nem assets sociais, nenhum domínio fictício; +2 testes Playwright; **QLT-002 → VERIFIED**).
+- **Próxima execução:** Evolução 024 (Corrigir datas/timezone).
 
 ## Stack confirmada
 
@@ -81,17 +82,17 @@ Todas as páginas de categorias seguem agora o padrão moderno — as 7 legacy f
 
 Production build **verde** (PASS, 20 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **27 smoke tests / 54 execuções** (52 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **29 smoke tests / 58 execuções** (56 passed + 2 skips intencionais — testes mobile-only da Evolução 007 pulam o project desktop). Execução da DEC-006.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED.
-- **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** ✅ **VERIFIED** (Evolução 019 — as 7 páginas legacy migradas para o padrão moderno).
+- **QLT-003:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` — CTAs viraram links reais, Evolução 016). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** ✅ **VERIFIED** (Evolução 019 — as 7 páginas legacy migradas para o padrão moderno). **QLT-002:** ✅ **VERIFIED** (Evolução 023 — metadata por página em home/blog/library; title template; `lang="pt-BR"`; canonical/sitemap/social metadata aguardam definição de origem pública oficial e assets adequados — nenhum domínio fictício foi introduzido).
 - **`/library`:** READY.
 - **Design System:** READY.
-- **Total de findings:** 13 (QLT-001, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 VERIFIED; os demais permanecem pendentes).
+- **Total de findings:** 13 (QLT-001, QLT-002, QLT-006, QLT-007, QLT-008, QLT-010 e QLT-012 VERIFIED; os demais permanecem pendentes).
 - **Fonte compartilhada de posts:** `lib/blog.ts` (usada pela listagem e pela rota dinâmica).
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–022 concluídas (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022). Próxima execução: Evolução 023 (Metadata SEO).
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–025). Evoluções 001–023 concluídas (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022; Metadata SEO / QLT-002 VERIFIED pela Evolução 023). Próxima execução: Evolução 024 (Corrigir datas/timezone).
 
 ### Problemas resolvidos
 
@@ -125,6 +126,12 @@ Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md` (lote ativo 001–
   - `FooterColumns` removido de `app/(site)/layout.tsx`
   - `AboutTimeline`, `CtaBanner`, `HeroCenterCta`, `ServicesSplitWithHighlight` removidos de `app/(site)/page.tsx`
   - JSX preservado; lint 0/0; build PASS
+
+- **QLT-002** (P2): Metadata por página em home, blog e library (verificado — Evolução 023)
+  - Root: nome oficial "Svitordev UI Lab" + title template `%s | Svitordev UI Lab` + `lang="pt-BR"`; description global preservada
+  - Home, blog index e blog dinâmico (`generateMetadata` com title/excerpt reais da fonte; 404 sem metadata enganosa) cobertos; Library 15/15 auditada sem duplicação da marca
+  - canonical/sitemap/social metadata aguardam definição de origem pública oficial e assets adequados; nenhum domínio fictício foi introduzido
+  - +2 testes Playwright; lint 0/0; build PASS (20 rotas); e2e 56 passed + 2 skipped
 
 ### Problemas conhecidos
 

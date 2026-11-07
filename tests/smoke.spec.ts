@@ -741,3 +741,61 @@ test('landing: mantem interacoes client funcionando em conjunto', async ({ page 
     page.getByText('Sim. A estrutura é configurável: você define serviços, horários e campos conforme a rotina do seu atendimento.'),
   ).toBeVisible();
 });
+
+test('metadata: paginas estaticas representativas com title e description proprios', async ({ page }) => {
+  const routes = [
+    { path: '/', title: 'Início | Svitordev UI Lab' },
+    { path: '/blog', title: 'Blog | Svitordev UI Lab' },
+    { path: '/library/landing', title: 'Library · Landing | Svitordev UI Lab' },
+    { path: '/library/faq', title: 'Library · FAQ | Svitordev UI Lab' },
+  ];
+
+  for (const { path, title } of routes) {
+    await page.goto(path);
+
+    await expect(page).toHaveTitle(title);
+
+    // O nome do site aparece uma única vez no title (sem duplicação do template).
+    const occurrences = title.split('Svitordev UI Lab').length - 1;
+    expect(occurrences, `title duplicado em ${path}`).toBe(1);
+
+    // Meta description presente e não vazia.
+    const description = await page.evaluate(
+      () => document.querySelector('meta[name="description"]')?.getAttribute('content') ?? null,
+    );
+    expect(description, `description ausente em ${path}`).toBeTruthy();
+
+    // Viewport padrão continua presente.
+    await expect(
+      page.locator('meta[name="viewport"]').first(),
+    ).toHaveAttribute('content', /width=device-width/);
+  }
+});
+
+test('metadata: blog dinamico usa title e description reais do post', async ({ page }) => {
+  const slug = 'por-que-sua-empresa-precisa-de-um-site-hoje';
+  await page.goto(`/blog/${slug}`);
+
+  // generateMetadata: title = título real + template; description = excerpt real.
+  await expect(page).toHaveTitle('Por que sua empresa precisa de um site hoje | Svitordev UI Lab');
+
+  const description = await page.evaluate(
+    () => document.querySelector('meta[name="description"]')?.getAttribute('content') ?? null,
+  );
+  expect(description).toBe(
+    'Mesmo com redes sociais fortes, ter um site próprio aumenta a credibilidade e o controle da sua presença digital.',
+  );
+
+  // Slug inexistente → 404 sem metadata enganosa (sem title/excerpt do post real).
+  const response = await page.goto('/blog/slug-inexistente-023');
+  expect(response?.status()).toBe(404);
+
+  const title404 = await page.title();
+  expect(title404).not.toContain('Por que sua empresa precisa de um site hoje');
+  const description404 = await page.evaluate(
+    () => document.querySelector('meta[name="description"]')?.getAttribute('content') ?? null,
+  );
+  expect(description404).not.toBe(
+    'Mesmo com redes sociais fortes, ter um site próprio aumenta a credibilidade e o controle da sua presença digital.',
+  );
+});
