@@ -156,9 +156,15 @@ test('review cards: avatar com imagem válida carrega e fica visível', async ({
 test('hero centralizada data-driven renderiza heading e CTAs como links reais', async ({ page }) => {
   await page.goto('/library/hero');
 
+  // Escopo pela section própria da variante (ancestor::section[1] a partir do heading,
+  // padrão consolidado). O filter por hasText casava um ancestral que também contém a
+  // HeroPrimary — desde a 026 (CTAs como links) isso gerava ambiguidade em strict mode.
   const hero = page
-    .locator('section')
-    .filter({ hasText: 'Apresentamos sua empresa de forma clara, profissional e confiável.' });
+    .getByRole('heading', {
+      level: 1,
+      name: 'Apresentamos sua empresa de forma clara, profissional e confiável.',
+    })
+    .locator('xpath=ancestor::section[1]');
 
   await expect(
     hero.getByRole('heading', {
@@ -905,4 +911,60 @@ test('nenhuma rota representativa lanca page error durante render', async ({ pag
     expect(response?.status(), `status inesperado em ${route}`).toBe(200);
     expect(pageErrors, `pageerror em ${route}`).toEqual([]);
   }
+});
+
+test('destinos de CTAs e anchors seguem o contrato sem links mortos', async ({ page }) => {
+  // Evolução 026 — lista explícita de contratos (inventário reauditorado), sem heurística
+  // global de buttons: Buttons com comportamento Client legítimo (submit, toggle, menu)
+  // não entram aqui; apenas os elementos navegacionais corrigidos.
+  const contracts: Array<{ route: string; name: string; href: string }> = [
+    { route: '/', name: 'Entrar em contato', href: '/#contact' }, // CtaSimple (home)
+    { route: '/library/hero', name: 'Ver serviços', href: '/#services' }, // HeroPrimary
+    { route: '/library/hero', name: 'Falar com a equipe', href: '/#contact' }, // HeroPrimary
+    { route: '/library/hero', name: 'Quero conversar sobre um projeto', href: '/#contact' }, // HeroSteps
+    { route: '/library/pricing', name: 'Conversar sobre um serviço sob medida', href: '/#contact' }, // PricingHighlight
+    { route: '/library/pricing', name: 'Ver qual faz sentido para mim', href: '/#contact' }, // PricingSimpleCards
+    { route: '/library/cta', name: 'Falar com a equipe', href: '/#contact' }, // CtaBanner
+    { route: '/library/cta', name: 'Entrar em contato', href: '/#contact' }, // CtaSimple + CtaSplit
+    { route: '/library/headers', name: 'Entrar em contato', href: '/#contact' }, // HeaderBasic
+    { route: '/library/footers', name: 'Falar com a equipe', href: '/#contact' }, // FooterCta
+  ];
+
+  for (const contract of contracts) {
+    await page.goto(contract.route);
+    await expect(
+      page.locator(`a[href="${contract.href}"]`, { hasText: contract.name }).first(),
+      `link real ausente em ${contract.route}: ${contract.name}`,
+    ).toBeVisible();
+    await expect(page.locator('a[href="#"]'), `href="#" em ${contract.route}`).toHaveCount(0);
+  }
+
+  // Âncoras da home: alvos reais e únicos para /#services, /#about e /#contact.
+  await page.goto('/');
+  await expect(page.locator('[id="services"]')).toHaveCount(1);
+  await expect(page.locator('[id="about"]')).toHaveCount(1);
+  await expect(page.locator('[id="contact"]')).toHaveCount(1);
+});
+
+test('navegacao representativa da home: header para #services e CTA para #contact', async ({ page }, testInfo) => {
+  await page.goto('/');
+
+  // HeaderCentered (header da home): o link Serviços aponta para o alvo real da home.
+  const servicesLink = page
+    .getByRole('navigation', { name: 'Navegação principal' })
+    .getByRole('link', { name: 'Serviços' });
+  await expect(servicesLink).toHaveAttribute('href', '/#services');
+
+  // Clique exercitado apenas no desktop (nav do HeaderCentered é visível nos dois
+  // projects, mas o critério não deve depender de elemento que poderia ser oculto).
+  if (testInfo.project.name === 'desktop') {
+    await servicesLink.click();
+    await expect(page).toHaveURL(/#services$/);
+    await expect(page.locator('[id="services"]')).toHaveCount(1);
+  }
+
+  // CTA visível nos dois projects (CtaSimple da home) → /#contact.
+  await page.getByRole('link', { name: 'Entrar em contato' }).first().click();
+  await expect(page).toHaveURL(/^http:\/\/localhost:3000\/#contact$/);
+  await expect(page.locator('[id="contact"]')).toHaveCount(1);
 });

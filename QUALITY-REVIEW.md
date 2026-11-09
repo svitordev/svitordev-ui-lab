@@ -149,7 +149,7 @@ Command exited with code 1
 
 ### QLT-003 — CTAs e links hash sem destino (dead CTAs / dead anchors)
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-09)** — encerrado pela Evolução 026: 10 botões mortos → 0; CTAs navegacionais convertidos em links semânticos (`Button asChild` + `Link`, visual preservado); `/#services` e `/#about` passaram a resolver; `/#contact` permanece válido; zero `href="#"`. Ver verificação abaixo.
 **Prioridade:** P2
 **Categoria:** Componentes / UX
 
@@ -166,6 +166,16 @@ Command exited with code 1
 **Testes necessários:** Cliques nos CTAs; verificação de que anchors hash apontam para ids existentes.
 
 **Dependências:** Nenhuma bloqueante.
+
+**Verificação (Evolução 026, 2026-11-09):**
+
+- **Buttons mortos:** 10 → **0**. Todos os CTAs navegacionais agora usam links reais, via `Button asChild` + `Link`, preservando o visual. Buttons puros permanecem somente quando possuem ação real (submit, toggle, abrir menu).
+- **Destinos finais:** HeaderBasic → `/#contact`; FooterCta → `/#contact`; HeroPrimary "Ver serviços" → `/#services` e "Falar com a equipe" → `/#contact`; HeroSteps → `/#contact`; PricingHighlight → `/#contact`; PricingSimpleCards → `/#contact`; CtaBanner → `/#contact`; CtaSimple → `/#contact`; CtaSplit → `/#contact`.
+- **Anchors:** `/#services` agora resolve; `/#about` agora resolve; `/#contact` permanece válido; zero `href="#"`.
+- **Responsabilidade dos IDs:** `#services` e `#about` foram adicionados no consumer da home (`app/(site)/page.tsx`), não dentro dos components reutilizáveis — anchors pertencem à composição da home; evita IDs específicos embutidos em components reutilizáveis e o risco futuro de IDs duplicados em múltiplos consumers. `ServicesWithIcons` e `AboutSplit` permanecem intactos quanto a IDs.
+- **QLT-005:** inalterado — trocar Button morto por Link não significa migrar contrato/props; contagem histórica preservada.
+- **Testes:** +2 Playwright — contrato explícito de destinos (links reais, hrefs esperados, anchors existentes, zero `href="#"`) e navegação representativa da home (header → `#services`, CTA → `#contact`, desktop/mobile tratados conforme visibilidade real). Locator preexistente da Evolução 010 tornado mais específico para continuar isolando a variante `HeroCenterCta`.
+- **Gates:** lint **0/0**; build **PASS** (20 rotas); Playwright **67 passed + 3 skipped** (35 testes / 70 execuções); `git diff --check` limpo.
 
 ---
 
@@ -429,11 +439,11 @@ Command exited with code 1
 |---|---|---|
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
-| **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 — **VERIFIED** |
+| **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003 — **VERIFIED**, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 — **VERIFIED** |
 | **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-003, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

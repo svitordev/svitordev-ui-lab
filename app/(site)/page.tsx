@@ -71,8 +71,15 @@ export default function SiteHomePage() {
   return (
     <>
       <HeroSteps />
-      <ServicesWithIcons />
-      <AboutSplit/>
+      {/* Âncoras da navegação da home (Evolução 026): os IDs são alvos dos links
+          /#services e /#about dos headers/footers e pertencem à composição da home,
+          não aos componentes reutilizáveis. */}
+      <div id="services">
+        <ServicesWithIcons />
+      </div>
+      <div id="about">
+        <AboutSplit />
+      </div>
       <TestimonialsGrid/>
       <PricingThreeTiers {...pricingHomeData} />
       <ContactSplit/>

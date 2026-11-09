@@ -1,4 +1,5 @@
 // components/sections/hero/hero-steps.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const steps = [
@@ -32,7 +33,9 @@ export function HeroSteps() {
               sem intermediários, e acompanha o projeto de perto.
             </p>
 
-            <Button size="lg">Quero conversar sobre um projeto</Button>
+            <Button size="lg" asChild>
+              <Link href="/#contact">Quero conversar sobre um projeto</Link>
+            </Button>
           </div>
 
           {/* Coluna steps */}

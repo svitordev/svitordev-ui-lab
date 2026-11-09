@@ -1,4 +1,5 @@
 // components/sections/hero/hero-primary.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export function HeroPrimary() {
@@ -21,11 +22,11 @@ export function HeroPrimary() {
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button size="lg">
-              Ver serviços
+            <Button size="lg" asChild>
+              <Link href="/#services">Ver serviços</Link>
             </Button>
-            <Button size="lg" variant="outline">
-              Falar com a equipe
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/#contact">Falar com a equipe</Link>
             </Button>
           </div>
 

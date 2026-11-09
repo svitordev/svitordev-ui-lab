@@ -1,4 +1,5 @@
 // components/sections/pricing/pricing-simple-cards.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const items = [
@@ -53,8 +54,8 @@ export function PricingSimpleCards() {
               </ul>
 
               <div className="mt-3">
-                <Button size="sm" variant="outline">
-                  Ver qual faz sentido para mim
+                <Button size="sm" variant="outline" asChild>
+                  <Link href="/#contact">Ver qual faz sentido para mim</Link>
                 </Button>
               </div>
             </div>

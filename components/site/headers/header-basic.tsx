@@ -52,8 +52,8 @@ export function HeaderBasic() {
 
         {/* CTA + Menu mobile */}
         <div className="flex items-center gap-2">
-          <Button size="sm">
-            Entrar em contato
+          <Button size="sm" asChild>
+            <Link href="/#contact">Entrar em contato</Link>
           </Button>
           <MobileNav links={navLinks} />
         </div>

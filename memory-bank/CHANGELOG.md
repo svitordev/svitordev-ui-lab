@@ -4,6 +4,19 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-09] — Evolução 026: Padronizar destinos de CTAs e anchors (VERIFIED — QLT-003)
+
+- **10 Buttons mortos eliminados** (9 arquivos) → **0**: todos os CTAs navegacionais passaram a usar links semânticos via `Button asChild` + `Link`, preservando o visual. Buttons puros permanecem somente com ação real (submit, toggle, abrir menu).
+- **Destinos:** HeaderBasic/FooterCta/HeroSteps/PricingHighlight/PricingSimpleCards/CtaBanner/CtaSimple/CtaSplit → `/#contact`; HeroPrimary "Ver serviços" → `/#services`.
+- **Anchors reais:** `/#services` e `/#about` agora resolvem; `/#contact` permanece válido; zero `href="#"`.
+- **IDs no consumer da home:** `#services` e `#about` definidos em `app/(site)/page.tsx` (wrappers mínimos, sem redesign, sem mudança de conteúdo), não dentro dos components reutilizáveis (`ServicesWithIcons`/`AboutSplit` intactos).
+- **QLT-005 intacto** — a 026 não conta como migração data-driven; nenhum contrato/props migrado. QLT-004/009/011 inalterados.
+- +2 testes Playwright (contrato explícito de destinos + navegação representativa da home). Locator preexistente da 010 tornado mais específico para continuar isolando a variante `HeroCenterCta`.
+- Suíte: 35 testes / 70 execuções — **67 passed + 3 skipped**. Lint **0/0**; build **PASS** (20 rotas); `git diff --check` limpo. Nenhuma dependência nova. Contagens: sections 31, UI 9, total 49 (inalterado). **QLT-003 → VERIFIED.**
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-003 VERIFIED + tabela/totais), `docs/ROADMAP-1000-EVOLUTIONS.md` (026 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 027).
+
+---
+
 ## [2026-11-09] — Lote 02 (026–050) planejado
 
 - **Planejamento — nenhuma evolução executada.** Reavaliação pós-Lote 01 concluída; Lote 02 gravado em `docs/ROADMAP-1000-EVOLUTIONS.md` (Status: PLANEJADO / NÃO INICIADO).

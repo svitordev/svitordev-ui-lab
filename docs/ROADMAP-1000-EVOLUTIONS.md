@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **PLANEJADO / NÃO INICIADO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). Nenhuma evolução deste lote foi executada.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; 027–050 planejadas e não iniciadas.
 
 ## Visão geral
 
@@ -396,7 +396,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 
 | # | Nome | Tipo | Objetivo | Entregável | Finding | Dependências | Esforço |
 |---|---|---|---|---|---|---|---|
-| 026 | Padronizar destinos de CTAs e anchors | quality | Só QLT-003: botões mortos, anchors sem alvo, destinos reais, sem `href="#"`, sem botão navegacional sem destino — sem props/contratos novos | 9 arquivos + header-centered + ids reais | QLT-003 | — | Pequeno |
+| 026 | Padronizar destinos de CTAs e anchors ✅ VERIFIED | quality | Só QLT-003: botões mortos, anchors sem alvo, destinos reais, sem `href="#"`, sem botão navegacional sem destino — sem props/contratos novos | 9 arquivos + header-centered + ids reais | QLT-003 ✅ | — | Pequeno |
 | 027 | Alert (primitive) | UI | Feedback acessível via tokens/CVA | `components/ui/alert.tsx` + demo | — | — | Pequeno |
 | 028 | Contact forms: comportamento de demo | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 | 026, 027 | Médio |
 | 029 | Tabs (primitive) | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
@@ -424,6 +424,12 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 
 \* QLT-011 só poderá ser marcado VERIFIED na 050 se TODAS as evidências restantes tiverem sido eliminadas.
 
+## 026 — Padronizar destinos de CTAs e anchors
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-09)** — **QLT-003 → VERIFIED**.
+
+Inventário de 10 Buttons mortos (9 arquivos) convertido em links reais (`Button asChild` + `Link`, visual preservado); anchors da home corrigidos; zero `href="#"`; `#services` e `#about` definidos no consumer da home, não nos components reutilizáveis; sem migração de props (QLT-005 intacto); +2 testes; ajuste de locator preexistente apenas para manter o escopo correto. lint 0/0; build 20 rotas; Playwright 67+3.
+
 ## Anti-inflação
 
 Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do lote (tabela abaixo). Pagination e Empty State foram removidos do lote (sem demanda hoje — voltam em lote futuro quando houver consumer). Toast adiado (sem consumer). Nenhum componente novo nasce "porque poderá ser útil".
@@ -441,7 +447,7 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 
 ## Findings no lote
 
-- **QLT-003** — planejado para a **026** (fechar com evidência: inventário verificado de 10 botões mortos em 9 arquivos + anchors `/#services`/`/#about` sem ids; correção + asserts de destino). A 026 não adiciona props/contratos.
+- **QLT-003** — ✅ **VERIFIED pela 026** (2026-11-09): 10 botões mortos → 0; anchors `/#services`/`/#about` passaram a resolver por alvos reais na home; zero `href="#"`.
 - **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
 - **QLT-005** — hoje **25 componentes sem props** (19 sections + 6 site); o lote migra **11** (031, 032, 036×2, 037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
 - **QLT-009** — **candidato a VERIFIED apenas após decisão + implementação da 030** (Plan próprio; ADR sozinha não transforma código morto em código resolvido).

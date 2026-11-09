@@ -1,4 +1,5 @@
 // components/sections/cta/cta-banner.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
@@ -20,9 +21,11 @@ export function CtaBanner() {
             </p>
           </div>
 
-          <Button size="sm" className="mt-1 md:mt-0">
-            Falar com a equipe
-            <ArrowRight className="ml-1.5 h-4 w-4" />
+          <Button size="sm" className="mt-1 md:mt-0" asChild>
+            <Link href="/#contact">
+              Falar com a equipe
+              <ArrowRight className="ml-1.5 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>

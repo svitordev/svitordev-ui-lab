@@ -1,4 +1,5 @@
 // components/sections/pricing/pricing-highlight.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const bullets = [
@@ -26,8 +27,8 @@ export function PricingHighlight() {
               O investimento é definido de acordo com a complexidade, o tempo envolvido e o
               nível de acompanhamento necessário em cada situação.
             </p>
-            <Button size="sm">
-              Conversar sobre um serviço sob medida
+            <Button size="sm" asChild>
+              <Link href="/#contact">Conversar sobre um serviço sob medida</Link>
             </Button>
           </div>
 

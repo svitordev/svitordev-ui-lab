@@ -1,4 +1,5 @@
 // components/sections/cta/cta-simple.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export function CtaSimple() {
@@ -12,7 +13,9 @@ export function CtaSimple() {
           Envie uma mensagem com um resumo da sua necessidade. Vamos avaliar o cenário e
           indicar o melhor caminho de forma clara e objetiva.
         </p>
-        <Button size="lg">Entrar em contato</Button>
+        <Button size="lg" asChild>
+          <Link href="/#contact">Entrar em contato</Link>
+        </Button>
         <p className="text-[11px] text-muted-foreground">
           Pode ser para tirar dúvidas, pedir um orçamento ou agendar uma conversa inicial.
         </p>

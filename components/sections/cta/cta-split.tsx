@@ -1,4 +1,5 @@
 // components/sections/cta/cta-split.tsx
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const steps = [
@@ -21,8 +22,8 @@ export function CtaSplit() {
               Sem compromisso. O objetivo é entender o seu cenário, sugerir caminhos possíveis
               e ver se faz sentido avançar com algum dos serviços oferecidos.
             </p>
-            <Button size="lg">
-              Entrar em contato
+            <Button size="lg" asChild>
+              <Link href="/#contact">Entrar em contato</Link>
             </Button>
           </div>
 
