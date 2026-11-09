@@ -6,7 +6,7 @@ Fonte de verdade do roadmap evolutivo do laboratório. Documento aprovado e vers
 
 Direcionar a evolução contínua do Svitordev UI Lab (GitHub Template) ao longo de ~1000 evoluções macro, equilibrando criação visual, qualidade, APIs reutilizáveis, acessibilidade, motion, testes e documentação — sem inflação artificial.
 
-Este documento detalha apenas o **lote ativo (001–025)**. As demais evoluções existem como direção macro até serem detalhadas no lote correspondente.
+Este documento detalha o **lote 01 (001–025), concluído**, e o **lote ativo 02 (026–050), planejado**. As demais evoluções existem como direção macro até serem detalhadas no lote correspondente.
 
 ## Princípios
 
@@ -91,6 +91,8 @@ Esperado: laboratório consolidado — catálogo estável e navegável, visual r
 ---
 
 # Lote 01 — Evoluções 001–025
+
+**Status:** ✅ **CONCLUÍDO** — as 25 evoluções IMPLEMENTADAS / VERIFIED.
 
 ## Visão geral
 
@@ -379,3 +381,107 @@ Esperado ao fim do lote: contrato de props em vigor (1 migração + ~10 novas se
 ## Critério para iniciar a 001
 
 Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dependência pendente (a 001 não instala nada). A partir daí, cada evolução segue a `DEFINITION-OF-DONE` vigente (lint + build sempre; `npm run test:e2e` quando afetar o smoke), com `git add` explícito por arquivo.
+
+---
+
+# Lote 02 — Evoluções 026–050
+
+**Status:** **PLANEJADO / NÃO INICIADO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). Nenhuma evolução deste lote foi executada.
+
+## Visão geral
+
+O lote abre com a dívida real de confiança do template (026 — QLT-003) e combina qualidade com criação: primitivos novos apenas com consumer real nomeado, migrações incrementais do contrato de props, compositions que validam a reutilização com peças já existentes, e um fecho que reaudita em vez de fechar automaticamente. A 049 é auditoria de regressão (só gaps reais) e a 050 é documentação + reauditoria.
+
+## Evoluções
+
+| # | Nome | Tipo | Objetivo | Entregável | Finding | Dependências | Esforço |
+|---|---|---|---|---|---|---|---|
+| 026 | Padronizar destinos de CTAs e anchors | quality | Só QLT-003: botões mortos, anchors sem alvo, destinos reais, sem `href="#"`, sem botão navegacional sem destino — sem props/contratos novos | 9 arquivos + header-centered + ids reais | QLT-003 | — | Pequeno |
+| 027 | Alert (primitive) | UI | Feedback acessível via tokens/CVA | `components/ui/alert.tsx` + demo | — | — | Pequeno |
+| 028 | Contact forms: comportamento de demo | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 | 026, 027 | Médio |
+| 029 | Tabs (primitive) | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
+| 030 | Tema: definir política e alinhar implementação | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 | — | Pequeno–médio |
+| 031 | Migrar hero-primary para contrato | refactor | QLT-005 incremental | contrato + demo | QLT-005 | 026 | Pequeno |
+| 032 | Migrar hero-steps + corrigir heading | refactor | Contrato + h1→h3 | contrato + heading hierarchy | QLT-005, QLT-011 | 026 | Pequeno |
+| 033 | Breadcrumbs (primitive) | UI | Navegação hierárquica | `components/ui/breadcrumbs.tsx` + demo | — | — | Pequeno |
+| 034 | Gallery (section) | section | Grid de mídia data-driven, estruturalmente distinta, **usando Tabs como parte funcional** (conjuntos reais da demo) | nova section + categoria + demo | — | 029 | Médio |
+| 035 | Consent preferences banner | site | Componente de UI/comportamento de consentimento (não compliance engine); persistência explícita, acessível, sem tracking real, demo segura | `components/site/consent-banner.tsx` + demo + teste | — | 026 | Pequeno |
+| 036 | Migrar services×2 para contrato | refactor | QLT-005 incremental | 2 contratos + demos | QLT-005 | 026 | Médio |
+| 037 | Migrar AboutTimeline para contrato | refactor | Preparar About composition; reduzir QLT-005 sem migração escondida | contrato + demo | QLT-005 | — | Pequeno |
+| 038 | Migrar headers×3 para API data-driven | refactor | Links/actions via props; consolidar padrão da 026; preservar MobileNav e acessibilidade (3 componentes pequenos — cabem numa evolução) | 3 contratos + demos | QLT-005 | 026 | Médio |
+| 039 | DropdownMenu + Header with dropdown navigation | UI | Primitive com consumer real imediato: 4º header funcionalmente distinto | `components/ui/dropdown-menu.tsx` + header novo + demo + teste | — | 038 | Médio |
+| 040 | Migrar footers×3 para contrato | refactor | QLT-005 incremental | 3 contratos + demos | QLT-005 | 026 | Médio |
+| 041 | Composition: Pricing page | composition | Página completa com peças existentes (billing toggle já próprio — sem Tabs) | rota dedicada + teste | — | 040 | Médio |
+| 042 | Composition: Contact page | composition | Página completa: forms corrigidos + Alert + footer + peças existentes | rota dedicada + teste | — | 027, 028, 040 | Médio |
+| 043 | Composition: About page | composition | Página completa com AboutTimeline migrada | rota dedicada | — | 037, 040 | Médio |
+| 044 | Composition: Services page | composition | Valida as migrações com consumer real: services migrados + Gallery + testimonials + FAQ + CTA + footer | rota dedicada + teste | — | 034, 036, 040 | Médio |
+| 045 | Blog: article layout | composition | Breadcrumbs + Avatar + post relacionado real + semântica de artigo; sem paginação artificial; sem author/schema sem contrato | evolução blog + teste | — | 033 | Médio |
+| 046 | Composition: SaaS landing | composition | 2ª landing completa; peças novas só quando semanticamente adequadas; **consumer do Consent banner** e do Header with dropdown navigation | rota dedicada + teste | — | 035, 039, 040 | Médio |
+| 047 | Loading states com Skeleton | quality | Skeleton ganha consumidores reais: `loading.tsx` em `/blog` e `/blog/[slug]` (valor real para projetos derivados com dados; não criar loading só para marcar uso) | 2 loading.tsx + teste | — | 045 | Pequeno |
+| 048 | Skip link + focus audit | accessibility | Skip-to-content + auditoria de focus dos primitivos | skip link + teste | — | — | Pequeno |
+| 049 | Auditoria de regressão do Lote 02 | testing | Inventariar 026–048, verificar cobertura, adicionar SOMENTE gaps reais, sem duplicar, matrix completa | suíte revisada | — | 026–048 | Médio |
+| 050 | Documentação + reauditoria do Lote 02 | docs | Catálogo final, recipes úteis, reauditar findings abertos, validar contagens, dívida restante, preparar Lote 03 | docs + catálogo | QLT-011* | 049 | Pequeno |
+
+\* QLT-011 só poderá ser marcado VERIFIED na 050 se TODAS as evidências restantes tiverem sido eliminadas.
+
+## Anti-inflação
+
+Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do lote (tabela abaixo). Pagination e Empty State foram removidos do lote (sem demanda hoje — voltam em lote futuro quando houver consumer). Toast adiado (sem consumer). Nenhum componente novo nasce "porque poderá ser útil".
+
+## Consumer real de cada component novo
+
+| Component novo | Evolução | Consumer real | Evolução consumer |
+|---|---|---|---|
+| Alert | 027 | Contact forms (feedback demo) | 028, 042 |
+| Tabs | 029 | Gallery (alternar conjuntos) | 034 |
+| Breadcrumbs | 033 | Blog article layout | 045 |
+| Consent preferences banner | 035 | SaaS landing | 046 |
+| DropdownMenu | 039 | Header with dropdown navigation | 039 (mesma evolução) |
+| Gallery | 034 | Composition: Services page | 044 |
+
+## Findings no lote
+
+- **QLT-003** — planejado para a **026** (fechar com evidência: inventário verificado de 10 botões mortos em 9 arquivos + anchors `/#services`/`/#about` sem ids; correção + asserts de destino). A 026 não adiciona props/contratos.
+- **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
+- **QLT-005** — hoje **25 componentes sem props** (19 sections + 6 site); o lote migra **11** (031, 032, 036×2, 037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
+- **QLT-009** — **candidato a VERIFIED apenas após decisão + implementação da 030** (Plan próprio; ADR sozinha não transforma código morto em código resolvido).
+- **QLT-011** — **parcialmente atacado na 032** (heading hierarchy) **e reauditado na 050** (comentários stale, nit do wrapper). Sem fechamento garantido.
+
+## Componentes novos previstos (7)
+
+- **UI (+4):** Alert, Tabs, Breadcrumbs, DropdownMenu.
+- **site (+2):** Consent preferences banner, Header with dropdown navigation.
+- **sections (+1):** Gallery.
+
+## Migrações do contrato (11)
+
+hero-primary, hero-steps, services-grid-simple, services-split-with-highlight, AboutTimeline, HeaderBasic, HeaderCentered, HeaderWithTopbar, FooterColumns, FooterCta, FooterSimple.
+
+## Compositions (6)
+
+Pricing page, Contact page, About page, Services page, Blog article layout, SaaS landing. A Services page foi escolhida sobre a alternativa "Portfolio page" porque valida as migrações da 036 com consumer real e inclui a Gallery (034) como demonstração de projetos/trabalhos/exemplos relacionados aos serviços.
+
+## Testes
+
+Cada evolução interativa traz o seu teste pelo DoD (028, 034, 035, 039, 041–047, 048). A 049 adiciona **somente gaps reais** do inventário — nada predeterminado. Sem axe, sem visual regression ainda.
+
+## Contagem estimada ao fim do lote
+
+UI 9 → **13** · site 7 → **9** · sections 31 → **32** · shells 2 → 2 · **total 49 → 56** (estimativa direcional, não promessa rígida).
+
+## Itens adiados
+
+Pagination, Empty State, Toast (sem consumer real hoje), dashboard/data UI (decisão de produto no checkpoint 050), axe/visual regression, CI, migração massiva do contrato.
+
+## Riscos
+
+- **2 dependências Radix novas** (Tabs 029, DropdownMenu 039) — política exige justificativa documentada; a11y de teclado é a justificativa; aprovar no Plan de cada uma.
+- **030 pode crescer** se a decisão for a Opção B (mecanismo de tema real) — por isso exige Plan próprio.
+- **039 acumula primitive + header novo** — se o Plan mostrar escopo excessivo, dividir e reportar antes de implementar.
+- Suíte crescer ~10–14 testes ao longo do lote — tempo ainda aceitável.
+
+## Checkpoints
+
+- **030 (curto):** revisar 026–030 — padrão de destinos em vigor? consumers reais ativos? decisão de tema tomada e implementada de fato?
+- **040 (intermediário):** revisar migrações sem regressão; primitivos novos com consumidores reais em uso; compositions ainda fazem sentido na ordem; reequilibrar 041–050.
+- **050 (global):** repriorização antes do Lote 03 — reauditar produto, validar contagens, decidir dashboard/data UI, axe/visual regression, findings restantes, rebalancear a distribuição macro.

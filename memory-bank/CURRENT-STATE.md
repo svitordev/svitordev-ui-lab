@@ -9,7 +9,7 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Fase atual:** FASE 2 — Documentação.
 - **Preparação técnica pré-rotina:** concluída.
 - **Roadmap:** macro aprovado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`.
-- **Lote ativo:** 001–025.
+- **Lote ativo:** 02 (026–050) — **planejado e ainda não iniciado**. Lote 01 (001–025) ✅ concluído.
 - **Evolução 001:** ✅ IMPLEMENTADA / VERIFIED (CTA Split Actions data-driven + contrato exemplar de props).
 - **Evolução 002:** ✅ IMPLEMENTADA / VERIFIED (Logos / social proof strip — wordmark tipográfico, sem imagem/links/motion).
 - **Evolução 003:** ✅ IMPLEMENTADA / VERIFIED (Hero Media Showcase — composição vertical/showcase, media frame HTML/Tailwind dominante, sem imagem/motion).
@@ -35,7 +35,7 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 023:** ✅ IMPLEMENTADA / VERIFIED (Metadata SEO — root metadata com nome oficial "Svitordev UI Lab" + title template `%s | Svitordev UI Lab` + `lang="pt-BR"`; home, blog index e blog dinâmico (`generateMetadata` com title/excerpt reais da fonte, 404 via `notFound()`) cobertos; Library 15/15 auditada sem duplicação da marca; `/library` redirect conscientemente sem metadata; metadataBase/canonical/sitemap/robots/OG/Twitter/icons deliberadamente adiados — sem origem pública oficial nem assets sociais, nenhum domínio fictício; +2 testes Playwright; **QLT-002 → VERIFIED**).
 - **Evolução 024:** ✅ IMPLEMENTADA / VERIFIED (Corrigir datas/timezone — **QLT-013 → VERIFIED**: criado `lib/format-date.ts` com `formatDateOnly` — parsing estrutural DATE-ONLY, sem `Date`, sem `Intl`, sem timezone, sem locale, resultado determinístico; os 2 consumers (`/blog`, `/blog/[slug]`) usam o mesmo helper; `lib/blog.ts` intacto — datas fonte preservadas, nenhuma compensação de bug nos dados; listagem e detalhe exibem o mesmo dia editorial; nenhum timezone hardcoded na aplicação; Server Components preservados; +1 teste Playwright abrangente).
 - **Evolução 025:** ✅ IMPLEMENTADA / VERIFIED (Smoke Playwright estendido — suíte auditada antes da expansão; +3 testes em `tests/smoke.spec.ts`: navegação real pelo menu mobile (preview do `HeaderBasic` escopado semanticamente, painel real via `aria-controls`, clique em link real do painel até outra rota — destino ajustado ao contrato real do `HeaderBasic`, preservando o critério "abrir menu mobile e navegar"); `library: rotas sem smoke proprio renderizam via shell com entry e zero overflow` (clique real na shell nav → `/library/logos` e `/library/stats`, desktop + mobile); `nenhuma rota representativa lanca page error durante render` (6 rotas; `pageerror` como sinal de exceção não capturada; `console.error` excluído para evitar ruído do dev/Turbopack). Cobertura de rotas públicas relevantes: 17/19 → 19/19 + 404. 15/15 categorias da Library com visita direta ou smoke funcional. Nenhuma alteração de produção. Nenhuma dependência nova. Duas execuções consecutivas verdes, zero retries).
-- **Próxima execução:** Evolução 026 — nome indefinido (o roadmap detalha apenas o lote ativo 001–025, agora concluído; o lote 02 será detalhado na repriorização ao fim do lote 01, conforme a seção "Lotes e reavaliações"). Aguardar definição antes de iniciar.
+- **Próxima execução:** Evolução 026 — Padronizar destinos de CTAs e anchors (planejada no Lote 02; ainda não iniciada). Aguardar ordem de início.
 
 ## Stack confirmada
 
@@ -95,7 +95,7 @@ Production build **verde** (PASS, 20 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`. **Lote 01 (001–025) concluído** — todas as evoluções VERIFIED (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022; Metadata SEO / QLT-002 VERIFIED pela Evolução 023; datas/timezone / QLT-013 VERIFIED pela Evolução 024; smoke estendido VERIFIED pela Evolução 025). Próxima execução: Evolução 026 — nome a definir na repriorização ao fim do lote 01 (o roadmap detalha apenas o lote ativo). Aguardar definição do lote 02 antes de iniciar.
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`. **Lote 01 (001–025) concluído** — todas as evoluções VERIFIED (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022; Metadata SEO / QLT-002 VERIFIED pela Evolução 023; datas/timezone / QLT-013 VERIFIED pela Evolução 024; smoke estendido VERIFIED pela Evolução 025). **Lote 02 (026–050) planejado no roadmap e ainda não iniciado** (detalhes em `docs/ROADMAP-1000-EVOLUTIONS.md`). Próxima execução: Evolução 026 — Padronizar destinos de CTAs e anchors. Aguardar ordem de início.
 
 ### Problemas resolvidos
 

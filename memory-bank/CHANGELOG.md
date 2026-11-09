@@ -4,6 +4,18 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-09] — Lote 02 (026–050) planejado
+
+- **Planejamento — nenhuma evolução executada.** Reavaliação pós-Lote 01 concluída; Lote 02 gravado em `docs/ROADMAP-1000-EVOLUTIONS.md` (Status: PLANEJADO / NÃO INICIADO).
+- Findings atuais verificados no código antes do planejamento: QLT-003 (10 botões mortos em 9 arquivos + 2 anchors sem alvo), QLT-004 (3 contact forms sem comportamento), QLT-005 (25 sem props), QLT-009 (dark fixo, light morto), QLT-011 (parcial). Nenhum finding alterado nesta sessão — o roadmap apenas planeja ações futuras.
+- Anti-inflação aplicada: **7 componentes novos estimados** (4 UI + 2 site + 1 section), todos com consumer real nomeado dentro do lote; **11 migrações** do contrato de props; **6 compositions**; QLT-005 estimado em 25 → 14 ao fim do lote — **permanece aberto**.
+- Itens adiados por falta de consumer/decisão: Pagination, Empty State, Toast, dashboard/data UI, axe/visual regression, CI.
+- Checkpoints definidos: 030 (curto), 040 (intermediário), 050 (global — reauditoria, prepara o Lote 03). QLT-009 e QLT-011 são candidatos, sem fechamento automático.
+- Próxima evolução: **026 — Padronizar destinos de CTAs e anchors** (não iniciada).
+- `memory-bank/CURRENT-STATE.md` atualizado (lote ativo, próxima execução). Nenhum código, teste, catálogo, Design System ou Decisions alterado.
+
+---
+
 ## [2026-11-08] — Evolução 025: Smoke Playwright estendido (VERIFIED)
 
 - Suíte auditada antes da expansão; gaps reais eliminados: `/library/logos` e `/library/stats` passaram a ter smoke direto, a navegação do menu mobile passou a ser exercitada por clique real, e `pageerror` passou a ser monitorado em rotas representativas. Cobertura de rotas públicas relevantes: 17/19 → **19/19 + 404**; 15/15 categorias da Library com visita direta ou smoke funcional.
