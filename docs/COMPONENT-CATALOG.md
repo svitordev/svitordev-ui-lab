@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **9** UI components
+- **10** UI components
 - **7** site components
 - **31** section components
 - **2** wrappers/shells
-- **Total: 49** componentes reutilizáveis relevantes
+- **Total: 50** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (9)
+## UI components — `components/ui/` (10)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -25,6 +25,7 @@
 | Separator | `components/ui/separator.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Implementação nativa, zero dependências; Server Component; único `<div>`; orientação `horizontal` (default) / `vertical`; `decorative=true` por padrão — modo decorativo sem `role`/`aria-orientation`; modo semântico (`decorative=false`) com `role="separator"` + `aria-orientation` derivado de `orientation`; `decorative`/`orientation` são fonte de verdade — consumer não sobrescreve os atributos controlados; `data-slot="separator"` + `data-orientation`; `className` via `cn()`; `bg-border`; horizontal `h-px w-full` / vertical `h-full w-px`; sem CVA, sem variants, sem sizes |
 | Skeleton | `components/ui/skeleton.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Primitive visual de loading; Server Component; `React.ComponentProps<"div">` — dimensões definidas pelo consumer via `className`; `data-slot="skeleton"`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container; sem variants, sem size API, sem composed skeletons; sem consumer ainda |
 | Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; primeiro consumer real: `FaqAccordion` (Evolução 018); validação runtime visual/keyboard concluída na Evolução 018 — single, collapsible, ARIA, keyboard, foco, Chevron e reduced motion confirmados |
+| Alert | `components/ui/alert.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 027.** Primitive estático de feedback; Server Component, zero dependências; CVA com variantes `default`/`destructive` (somente tokens existentes — nenhum token novo, nenhuma cor raw); `data-slot` (`alert`/`alert-title`/`alert-description`); `cn()`; `React.ComponentProps<"div">` nos três exports — aceita props HTML normais; NÃO impõe `role`/`aria-live` (semântica live é do consumer); destructive com styling contextual também na description; sem `forwardRef`, sem `asChild`, sem sizes, sem motion, sem ícone automático (suporta `svg` como child); exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants` (1 entrada de catálogo); demo em `/library/alerts`; consumers planejados (ainda não executados): 028 — Contact forms e 042 — Contact page |
 
 Contrato do Separator (resumo):
 
@@ -49,6 +50,17 @@ Exports públicos do Accordion (resumo — API nativa do Radix preservada):
 ```
 
 Exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`. Controlled/uncontrolled via `value`/`defaultValue`/`onValueChange` do Radix. `AccordionHeader` não é export público.
+
+Contrato do Alert (resumo):
+
+```tsx
+<Alert variant="default | destructive">
+  <AlertTitle>...</AlertTitle>
+  <AlertDescription>...</AlertDescription>
+</Alert>
+```
+
+`React.ComponentProps<"div">` + `VariantProps` da CVA; container estático Server-compatible; `data-slot` em todos; o primitive NÃO impõe `role="alert"`/`role="status"`/`aria-live` — o consumer fornece quando necessário. Exports: `Alert`, `AlertTitle`, `AlertDescription`, `alertVariants`.
 
 ## Site components — `components/site/` (7)
 

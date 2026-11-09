@@ -968,3 +968,32 @@ test('navegacao representativa da home: header para #services e CTA para #contac
   await expect(page).toHaveURL(/^http:\/\/localhost:3000\/#contact$/);
   await expect(page.locator('[id="contact"]')).toHaveCount(1);
 });
+
+test('alerts: primitive renderiza variantes e semantica base', async ({ page }) => {
+  await page.goto('/library/alerts');
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Alerts / Feedback' }),
+  ).toBeVisible();
+
+  // Duas demos (default + destructive) com title/description textuais — o
+  // significado é carregado pelo texto, não pela cor. Sem acoplamento a classes
+  // internas da CVA: apenas data-slots, textos e semântica.
+  await expect(page.locator('[data-slot="alert"]')).toHaveCount(2);
+  await expect(page.locator('[data-slot="alert-title"]')).toHaveCount(2);
+  await expect(page.locator('[data-slot="alert-description"]')).toHaveCount(2);
+  await expect(page.getByText('Prazo de resposta')).toBeVisible();
+  await expect(page.getByText('Falha no envio')).toBeVisible();
+
+  // Contrato do primitive base: nenhuma live region é imposta automaticamente —
+  // role/aria-live pertencem ao consumer. Escopo nas raízes do demo: asserts
+  // globais casariam com overlays injetados pelo dev server fora do conteúdo.
+  await expect(page.locator('[data-slot="alert"][role]')).toHaveCount(0);
+  await expect(page.locator('[data-slot="alert"][aria-live]')).toHaveCount(0);
+
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

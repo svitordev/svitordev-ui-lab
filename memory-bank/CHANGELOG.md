@@ -4,6 +4,18 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-09] — Evolução 027: Alert (primitive) (VERIFIED)
+
+- **Novo primitive `Alert`** (`components/ui/alert.tsx`) — 1 entrada de catálogo (exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants`); Server-compatible, sem `"use client"`; CVA; `data-slot`; sem `forwardRef`.
+- **Variantes:** exatamente `default` + `destructive`, usando somente semantic tokens existentes — nenhum token global novo, nenhuma cor raw; destructive com styling contextual também na description.
+- **Sem `role`/`aria-live`/live region automáticos** — o primitive aceita as props normalmente; a semântica live é responsabilidade do consumer (a 028 decidirá entre feedback informativo e erro urgente).
+- **Nova rota `/library/alerts`** (20 → 21) — categoria "Alerts / Feedback" no padrão moderno, demo estática com as 2 variantes (title + description, sem interação falsa); Library Shell com link "Alerts" antes de Landing.
+- +1 teste Playwright (`alerts: primitive renderiza variantes e semantica base` — desktop + mobile). Suíte: 36 testes / 72 execuções — **69 passed + 3 skipped**. Lint **0/0**; build **PASS** (21 rotas); `git diff --check` limpo. Nenhuma dependência nova.
+- Contagens: UI 9 → **10**, total 49 → **50** (sections 31, shells 2 — inalteradas). Nenhum finding alterado (QLT-003 VERIFIED; QLT-004/005/009/011 abertos). **028 não implementada.**
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entry Alert + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (027 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 028).
+
+---
+
 ## [2026-11-09] — Evolução 026: Padronizar destinos de CTAs e anchors (VERIFIED — QLT-003)
 
 - **10 Buttons mortos eliminados** (9 arquivos) → **0**: todos os CTAs navegacionais passaram a usar links semânticos via `Button asChild` + `Link`, preservando o visual. Buttons puros permanecem somente com ação real (submit, toggle, abrir menu).
