@@ -819,3 +819,90 @@ test('blog: datas date-only sao renderizadas sem deslocamento', async ({ page })
   await page.goto('/blog/por-que-sua-empresa-precisa-de-um-site-hoje');
   await expect(page.getByText('01/11/2025', { exact: true })).toBeVisible();
 });
+
+test('menu mobile do header basico abre e navega para a home pelo link do painel', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'menu mobile existe apenas abaixo do breakpoint md');
+
+  await page.goto('/library/headers');
+
+  // Escopo semântico pelo heading da variant (padrão dos testes das evoluções 007/015) —
+  // sem depender de ordem global de button[aria-expanded] na página.
+  // h2 → div interno → div flex → card (ancestor::div[3]).
+  const preview = page
+    .getByRole('heading', { name: 'Header básico' })
+    .locator('xpath=ancestor::div[3]');
+
+  const button = preview.locator('button[aria-expanded]');
+  await expect(button).toBeVisible();
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+
+  await button.click();
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+
+  const panelId = await button.getAttribute('aria-controls');
+  expect(panelId).toBeTruthy();
+
+  const panel = page.locator(`nav[id="${panelId}"]`);
+  await expect(panel).toBeVisible();
+
+  // Navegação real pelo painel aberto (critério da 025). O painel do HeaderBasic tem
+  // Início/Serviços/Sobre/Contato (Blog pertence a outros headers) — 'Início' é o link
+  // real para outra rota (/).
+  await panel.getByRole('link', { name: 'Início' }).click();
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
+});
+
+test('library: rotas sem smoke proprio renderizam via shell com entry e zero overflow', async ({ page }) => {
+  // Navegação real pela shell nav da Library até as duas categorias ainda sem smoke próprio.
+  await page.goto('/library/headers');
+
+  const shellNav = page.getByRole('navigation', { name: 'Navegação da biblioteca' });
+
+  await shellNav.getByRole('link', { name: 'Logos' }).click();
+
+  await expect(page).toHaveURL(/\/library\/logos$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Logos / Prova social' })).toBeVisible();
+  await expect(page.getByText('Componente:').first()).toBeVisible();
+  await expect(page.locator('code').filter({ hasText: 'logos-strip' })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+
+  await shellNav.getByRole('link', { name: 'Stats' }).click();
+
+  await expect(page).toHaveURL(/\/library\/stats$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Stats / Métricas' })).toBeVisible();
+  await expect(page.getByText('Componente:').first()).toBeVisible();
+  await expect(page.locator('code').filter({ hasText: 'stats-grid' })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+test('nenhuma rota representativa lanca page error durante render', async ({ page }) => {
+  // Somente pageerror (exceções não capturadas — determinísticas). console.error fica
+  // de fora deliberadamente: o dev server pode emitir mensagens irrelevantes (instável).
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+
+  const routes = [
+    '/',
+    '/blog',
+    '/blog/por-que-sua-empresa-precisa-de-um-site-hoje',
+    '/library/logos',
+    '/library/stats',
+    '/library/landing',
+  ];
+
+  for (const route of routes) {
+    const response = await page.goto(route);
+    expect(response?.status(), `status inesperado em ${route}`).toBe(200);
+    expect(pageErrors, `pageerror em ${route}`).toEqual([]);
+  }
+});

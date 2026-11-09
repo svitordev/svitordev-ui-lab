@@ -122,7 +122,7 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 | 022 | Landing composition completa ✅ VERIFIED | Composição/página | Página completa montada com peças do laboratório | 001, 002, 003, 005, 009, 011, 016, 018, 020 + footer existente | — | Grande |
 | 023 | Metadata SEO ✅ VERIFIED | SEO/qualidade | `metadata` por página em home, blog e library | — | QLT-002 ✅ | Pequeno–médio |
 | 024 | Corrigir datas/timezone ✅ VERIFIED | Correção | Datas date-only sem deslocamento de fuso | — | QLT-013 ✅ | Pequeno |
-| 025 | Smoke Playwright estendido | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
+| 025 | Smoke Playwright estendido ✅ VERIFIED | Testes | Cobrir menu mobile e a landing composition | 007, 022 | — | Médio |
 
 ## 001 — CTA Split Actions data-driven + contrato de props exemplar
 
@@ -342,6 +342,8 @@ O lote é dominado por **criação visual real**: CTA Split, logos, hero, stats,
 **Dependências:** nenhuma. **Finding:** QLT-013 ✅. **Esforço:** Pequeno.
 
 ## 025 — Smoke Playwright estendido
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-08)** — suíte auditada antes da expansão (30 testes; gaps reais: `/library/logos` e `/library/stats` nunca visitadas por teste direto; navegação pelo menu mobile inexistente; sem monitoramento de erros de runtime). +3 testes em `tests/smoke.spec.ts`: navegação real pelo menu mobile (preview do `HeaderBasic` escopado semanticamente, painel real via `aria-controls`, clique em link real do painel até outra rota — o destino inicialmente considerado no planejamento foi ajustado ao contrato real do `HeaderBasic`, que não possui link `Blog` no painel; o critério "abrir menu mobile e navegar" foi preservado integralmente); `library: rotas sem smoke proprio renderizam via shell com entry e zero overflow` (clique real na shell nav → `/library/logos` e `/library/stats`, desktop + mobile); `nenhuma rota representativa lanca page error durante render` (6 rotas; `pageerror` como sinal de exceção não capturada; `console.error` deliberadamente excluído para evitar ruído do ambiente dev/Turbopack). Cobertura de rotas públicas relevantes: 17/19 → **19/19 + 404**. 15/15 categorias da Library com visita direta ou smoke funcional. Nenhuma alteração de produção. Nenhuma dependência nova. **33 testes / 66 execuções — 63 passed + 3 skipped** (3 skips intencionais: 2 mobile-only da 007 + 1 mobile-only novo da 025; menu não existe no breakpoint desktop). Duas execuções consecutivas verdes, zero retries. Lint 0/0; build PASS (20 rotas); `git diff --check` limpo.
 
 **Objetivo:** estender o Playwright aos fluxos críticos criados no lote: abrir menu mobile e navegar; smoke da landing composition.
 **Entregável:** `tests/smoke.spec.ts` estendido (roles/textos estáveis, sem seletores frágeis).

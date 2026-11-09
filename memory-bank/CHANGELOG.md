@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-08] — Evolução 025: Smoke Playwright estendido (VERIFIED)
+
+- Suíte auditada antes da expansão; gaps reais eliminados: `/library/logos` e `/library/stats` passaram a ter smoke direto, a navegação do menu mobile passou a ser exercitada por clique real, e `pageerror` passou a ser monitorado em rotas representativas. Cobertura de rotas públicas relevantes: 17/19 → **19/19 + 404**; 15/15 categorias da Library com visita direta ou smoke funcional.
+- +3 testes em `tests/smoke.spec.ts` (arquivo único alterado): `menu mobile do header basico abre e navega para a home pelo link do painel` (mobile-only; preview escopado semanticamente; painel real; clique em link real do painel até `/` — destino ajustado ao contrato real do `HeaderBasic`, preservando o critério "abrir menu mobile e navegar"); `library: rotas sem smoke proprio renderizam via shell com entry e zero overflow` (clique real na Library Shell → Logos e Stats; desktop + mobile); `nenhuma rota representativa lanca page error durante render` (6 rotas; `pageerror` como sinal de exceção não capturada; `console.error` excluído para evitar ruído do dev/Turbopack).
+- Suíte: 33 testes / 66 execuções — **63 passed + 3 skipped** (skips intencionais: 2 mobile-only da 007 + 1 mobile-only novo da 025). Duas execuções consecutivas verdes, zero retries.
+- Nenhuma alteração de produção. Nenhuma dependência nova. Lint **0/0**; build **PASS** (20 rotas); `git diff --check` limpo. Contagens: sections 31, UI 9, total 49 (inalterado). Findings: nenhum alterado (QLT-002 e QLT-013 permanecem VERIFIED).
+- Documentação atualizada: `docs/ROADMAP-1000-EVOLUTIONS.md` (025 VERIFIED — lote 01 concluído), `memory-bank/CURRENT-STATE.md` (próxima execução: 026, nome a definir na repriorização do lote).
+
+---
+
 ## [2026-11-07] — Evolução 024: Corrigir datas/timezone (VERIFIED — QLT-013)
 
 - Causa raiz: `new Date("YYYY-MM-DD")` tratava data civil DATE-ONLY como instante UTC, deslocando o dia em fusos negativos (`2025-11-01` era renderizado como `31/10/2025`).
