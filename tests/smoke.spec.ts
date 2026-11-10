@@ -1150,3 +1150,50 @@ test('tabs: primitive Radix com selecao por clique, teclado e paineis correspond
     ),
   ).toBe(true);
 });
+
+test('tema: politica oficial dark-only com paleta unica aplicada em rotas representativas', async ({ page }) => {
+  const routes = ['/', '/blog', '/library/landing', '/library/alerts', '/library/tabs'];
+
+  for (const route of routes) {
+    await page.goto(route);
+
+    // Politica dark-only: o html nao carrega mais a classe .dark (nenhum mecanismo de tema).
+    expect(
+      await page.evaluate(() => !document.documentElement.classList.contains('dark')),
+    ).toBe(true);
+
+    // A paleta oficial unica esta aplicada no :root (sem bloco .dark sobrescrevendo).
+    // Comparacao via resolucao de cor no navegador com tolerancia (valores computados sao normalizados).
+    expect(
+      await page.evaluate(() => {
+        const parse = (v: string) => v.match(/[\d.]+/g)?.map(Number) ?? [];
+        const el = document.createElement('div');
+        document.body.appendChild(el);
+        el.style.color = 'color-mix(in srgb, var(--background), white 0%)';
+        const fromPalette = parse(getComputedStyle(el).color);
+        el.style.color = 'color-mix(in srgb, oklch(0.145 0 0), white 0%)';
+        const officialDark = parse(getComputedStyle(el).color);
+        el.remove();
+        return (
+          fromPalette.length >= 3 &&
+          officialDark.length >= 3 &&
+          fromPalette
+            .slice(0, 3)
+            .every((v, i) => Math.abs(v - officialDark[i]) < 0.002)
+        );
+      }),
+    ).toBe(true);
+
+    // Render real: h1 ou main presente e zero overflow horizontal (mobile 375 + desktop 1280).
+    expect(
+      await page.evaluate(
+        () => document.querySelector('h1') !== null || document.querySelector('main') !== null,
+      ),
+    ).toBe(true);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+  }
+});

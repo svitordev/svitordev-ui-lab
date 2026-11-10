@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; 030–050 planejadas e não iniciadas.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; 031–050 planejadas e não iniciadas. Próxima execução: **031**.
 
 ## Visão geral
 
@@ -400,7 +400,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 | 027 | Alert (primitive) ✅ VERIFIED | UI | Feedback acessível via tokens/CVA | `components/ui/alert.tsx` + demo | — | — | Pequeno |
 | 028 | Contact forms: comportamento de demo ✅ VERIFIED | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 ✅ | 026, 027 | Médio |
 | 029 | Tabs (primitive) ✅ VERIFIED | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
-| 030 | Tema: definir política e alinhar implementação | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 | — | Pequeno–médio |
+| 030 | Tema: definir política e alinhar implementação ✅ VERIFIED | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 ✅ | — | Pequeno–médio |
 | 031 | Migrar hero-primary para contrato | refactor | QLT-005 incremental | contrato + demo | QLT-005 | 026 | Pequeno |
 | 032 | Migrar hero-steps + corrigir heading | refactor | Contrato + h1→h3 | contrato + heading hierarchy | QLT-005, QLT-011 | 026 | Pequeno |
 | 033 | Breadcrumbs (primitive) | UI | Navegação hierárquica | `components/ui/breadcrumbs.tsx` + demo | — | — | Pequeno |
@@ -446,6 +446,13 @@ Os 3 contact forms reais (`contact-simple`, `contact-details`, `contact-split`) 
 **Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-10)** — sem finding associado.
 
 Primitive `components/ui/tabs.tsx` via `@radix-ui/react-tabs` (^1.2.1 — única dependência nova, justificada por teclado/foco/ARIA nativos e consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry — ajustada à latest real). Client boundary apenas no primitive; API mínima `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` preservando a API do Radix (controlled/uncontrolled, `orientation`); activation mode padrão preservado; `data-slot` + `cn()` + `React.ComponentProps`; visual somente tokens; transição `motion-safe`; sem variants extras. Nova categoria/demo `/library/tabs` (3 abas neutras, padrão pós-019) + link na Library Shell. +1 teste dual-project. UI 10 → 11; total 50 → 51; rotas 21 → 22; lint 0/0; build 22 rotas; Playwright 73+3. Consumer planejado (034 — Gallery) não antecipado.
+## 030 — Tema: política dark-only oficial
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-10)** — **QLT-009 → VERIFIED** (DEC-011).
+
+Auditoria real antes de decidir (`.goal/evidence/T1-theme-audit.md`): dark era o único tema que renderizava; paleta light do `:root` era dead code; nenhum provider/toggle/persistência existia. Decisão: **Opção A — dark-only oficial** (B falhava o próprio gate e exigiria componente novo sem consumer). Implementação exatamente a opcao aprovada: paleta única oficial no `:root` (valores dark), blocos `.dark` e `@custom-variant dark` removidos, `color-scheme: dark` adicionado, `className="dark"`/`suppressHydrationWarning` removidos do layout raiz, 8 utilitários `dark:` dos 3 bases shadcn resolvidos inline com os valores hoje efetivos (render preservado). +1 teste Playwright dual-project em 5 rotas representativas. Nenhum componente novo (31/11/51), nenhuma rota nova (22), nenhuma dependência nova. lint 0/0; build 22 rotas; Playwright 75+3; diff-check limpo.
+
+**Checkpoint 030 (curto) — respondido:** padrão de destinos da 026 em vigor (zero `href="#"`, links reais) ✓; consumers reais ativos (Alert→contact forms 028; Tabs→034 ainda pendente, planejado) ✓; decisão de tema tomada E implementada de fato (DEC-011 + código alinhado + teste) ✓.
 ## Anti-inflação
 
 Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do lote (tabela abaixo). Pagination e Empty State foram removidos do lote (sem demanda hoje — voltam em lote futuro quando houver consumer). Toast adiado (sem consumer). Nenhum componente novo nasce "porque poderá ser útil".
@@ -466,7 +473,7 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 - **QLT-003** — ✅ **VERIFIED pela 026** (2026-11-09): 10 botões mortos → 0; anchors `/#services`/`/#about` passaram a resolver por alvos reais na home; zero `href="#"`.
 - **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
 - **QLT-005** — hoje **25 componentes sem props** (19 sections + 6 site); o lote migra **11** (031, 032, 036×2, 037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
-- **QLT-009** — **candidato a VERIFIED apenas após decisão + implementação da 030** (Plan próprio; ADR sozinha não transforma código morto em código resolvido).
+- **QLT-009** — ✅ **VERIFIED pela 030** (2026-11-10): decisão tomada (DEC-011 — dark-only oficial) E implementada de fato — paleta única no `:root`, sem `.dark`, sem `@custom-variant dark`, sem mecanismo fake; teste novo protege a política.
 - **QLT-011** — **parcialmente atacado na 032** (heading hierarchy) **e reauditado na 050** (comentários stale, nit do wrapper). Sem fechamento garantido.
 
 ## Componentes novos previstos (7)

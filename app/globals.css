@@ -2,9 +2,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Variante para modo dark baseada na classe .dark no HTML/BODY */
-@custom-variant dark (&:is(.dark *));
-
 /* Mapeia as cores/utilitários do Tailwind para as variáveis CSS abaixo */
 @theme inline {
   --color-background: var(--background);
@@ -52,9 +49,14 @@
 }
 
 /* =========================
-   🎨 TEMA CLARO (DEFAULT)
+   � TEMA OFICIAL — DARK-ONLY (Evolução 030)
+   Paleta única do Lab: o tema oficial é dark. Projetos derivados
+   alteram estes valores para assumir outra identidade.
    ========================= */
 :root {
+  /* Alinha controles nativos (scrollbars, inputs nativos) ao tema oficial */
+  color-scheme: dark;
+
   /* Raio base para bordas arredondadas (cards, botões, inputs) */
   --radius: 0.625rem;
 
@@ -64,16 +66,16 @@
      ========================= */
 
   /* Cor principal da marca (usada em botões, links de destaque, etc.) */
-  --brand: oklch(0.55 0.20 280);                /* roxo médio */
+  --brand: oklch(0.70 0.18 280);                /* roxo ajustado para fundo escuro */
 
-  /* Cor do texto em cima da cor principal (ex.: texto branco sobre botão roxo) */
-  --brand-foreground: oklch(0.98 0.01 280);     /* quase branco */
+  /* Cor do texto em cima da cor principal (ex.: texto claro sobre botão roxo) */
+  --brand-foreground: oklch(0.10 0.03 280);     /* quase preto */
 
   /* Versão mais suave da marca (fundos de seção, badges leves, hovers) */
-  --brand-soft: oklch(0.96 0.02 280);           /* roxo bem clarinho */
+  --brand-soft: oklch(0.30 0.05 280);           /* roxo escuro e suave */
 
   /* Texto em cima do brand-soft, se usado em chips/badges */
-  --brand-soft-foreground: oklch(0.20 0.03 280);
+  --brand-soft-foreground: oklch(0.98 0.01 280);
 
   /* =========================
      CORES SEMÂNTICAS
@@ -82,136 +84,67 @@
      ========================= */
 
   /* Fundo geral da página (bg-background) */
-  --background: oklch(1 0 0);                   /* branco */
+  --background: oklch(0.145 0 0);               /* quase preto */
 
   /* Cor principal do texto (text-foreground) */
-  --foreground: oklch(0.145 0 0);               /* quase preto */
+  --foreground: oklch(0.985 0 0);               /* quase branco */
 
   /* Fundo de cards (bg-card) */
-  --card: oklch(1 0 0);                         /* igual ao background */
+  --card: oklch(0.205 0 0);                     /* levemente acima do background */
 
   /* Texto em cima dos cards (text-card-foreground) */
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
 
   /* Fundo de popovers/menus (bg-popover) */
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.205 0 0);
 
   /* Texto de popovers (text-popover-foreground) */
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
 
   /* Cor primária (bg-primary, text-primary) – ligada à marca */
   --primary: var(--brand);                      /* usa diretamente a cor da marca */
   --primary-foreground: var(--brand-foreground);
 
   /* Cor secundária (bg-secondary) – áreas de apoio, tags, chips */
-  --secondary: oklch(0.97 0 0);                 /* cinza bem clarinho */
-  --secondary-foreground: oklch(0.205 0 0);     /* texto escuro por cima */
+  --secondary: oklch(0.269 0 0);                /* cinza escuro */
+  --secondary-foreground: oklch(0.985 0 0);     /* texto claro por cima */
 
   /* Fundo de elementos "muted" (bg-muted), ex.: caixas discretas, bordas suaves */
-  --muted: oklch(0.97 0 0);                     /* cinza clarinho */
-  --muted-foreground: oklch(0.556 0 0);         /* texto mais suave */
+  --muted: oklch(0.269 0 0);                    /* cinza escuro */
+  --muted-foreground: oklch(0.708 0 0);         /* texto mais suave */
 
   /* Cor de destaque/acento (bg-accent) – também ligada à marca suave */
   --accent: var(--brand-soft);
   --accent-foreground: var(--brand-soft-foreground);
 
   /* Cor de ações destrutivas (botão de deletar, avisos de perigo) */
-  --destructive: oklch(0.577 0.245 27.325);
-
-  /* Cor padrão de borda (border-border) */
-  --border: oklch(0.922 0 0);
-
-  /* Fundo de inputs (bg-input) */
-  --input: oklch(0.922 0 0);
-
-  /* Cor do anel de foco (outline-ring) e focus-visible */
-  --ring: oklch(0.708 0 0);
-
-  /* Cores de gráficos (chart-1...5) – usadas em dashboards */
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-
-  /* Cores para sidebars (se você tiver layout com menu lateral) */
-  --sidebar: oklch(0.985 0 0);                  /* fundo do sidebar */
-  --sidebar-foreground: oklch(0.145 0 0);       /* texto no sidebar */
-  --sidebar-primary: var(--brand);              /* cor principal no sidebar */
-  --sidebar-primary-foreground: var(--brand-foreground);
-  --sidebar-accent: var(--brand-soft);          /* hover/seleção no sidebar */
-  --sidebar-accent-foreground: var(--brand-soft-foreground);
-  --sidebar-border: oklch(0.922 0 0);           /* bordas do sidebar */
-  --sidebar-ring: oklch(0.708 0 0);             /* foco no sidebar */
-}
-
-/* =========================
-   🌙 TEMA ESCURO (MODO DARK)
-   ========================= */
-.dark {
-  /* Você pode manter a mesma marca ou ajustar levemente para dark */
-  --brand: oklch(0.70 0.18 280);                /* roxo mais claro para fundo escuro */
-  --brand-foreground: oklch(0.10 0.03 280);     /* texto escuro em cima do roxo claro */
-
-  --brand-soft: oklch(0.30 0.05 280);           /* roxo bem escuro e suave */
-  --brand-soft-foreground: oklch(0.98 0.01 280);
-
-  /* Fundo geral no modo escuro */
-  --background: oklch(0.145 0 0);               /* quase preto */
-
-  /* Texto principal no modo escuro */
-  --foreground: oklch(0.985 0 0);               /* quase branco */
-
-  /* Fundo dos cards (levemente acima do background) */
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-
-  /* Popovers no modo escuro */
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-
-  /* Primária no dark (ligada à brand) */
-  --primary: var(--brand);
-  --primary-foreground: var(--brand-foreground);
-
-  /* Secundária no dark – caixas de apoio, bordas suaves */
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-
-  /* Muted no dark – fundos discretos, infos secundárias */
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-
-  /* Accent no dark – também ligada ao brand-soft no dark */
-  --accent: var(--brand-soft);
-  --accent-foreground: var(--brand-soft-foreground);
-
-  /* Cor destrutiva no dark */
   --destructive: oklch(0.704 0.191 22.216);
 
-  /* Bordas mais suaves no dark (com alpha) */
+  /* Cor padrão de borda (border-border) */
   --border: oklch(1 0 0 / 10%);
+
+  /* Fundo de inputs (bg-input) */
   --input: oklch(1 0 0 / 15%);
 
-  /* Anel de foco no dark (outline-ring) */
+  /* Cor do anel de foco (outline-ring) e focus-visible */
   --ring: oklch(0.556 0 0);
 
-  /* Cores de charts adaptadas para fundo escuro */
+  /* Cores de gráficos (chart-1...5) – usadas em dashboards */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
 
-  /* Sidebar no modo escuro */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: var(--brand);
+  /* Cores para sidebars (se você tiver layout com menu lateral) */
+  --sidebar: oklch(0.205 0 0);                  /* fundo do sidebar */
+  --sidebar-foreground: oklch(0.985 0 0);       /* texto no sidebar */
+  --sidebar-primary: var(--brand);              /* cor principal no sidebar */
   --sidebar-primary-foreground: var(--brand-foreground);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent: oklch(0.269 0 0);           /* hover/seleção no sidebar */
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);         /* bordas do sidebar */
+  --sidebar-ring: oklch(0.556 0 0);             /* foco no sidebar */
 }
 
 /* =========================

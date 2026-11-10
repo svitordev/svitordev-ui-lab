@@ -73,3 +73,15 @@ Decisões arquiteturais aprovadas. Uma decisão por entrada: o que foi decidido,
 - **Motivo:** Detalhar 25 por vez mantém foco, permite reavaliação e evita component inflation e duplicações.
 - **Data:** 2026-09-30
 - **Impacto:** Não criar o roadmap nem desafios nesta fase.
+
+## DEC-011 — Theme policy (dark-only oficial)
+
+- **Contexto:** Desde a fundação o `html` carregava `className="dark"` fixo e a paleta light do `:root` nunca renderizou — dead code inalcançável (QLT-009). A DEC-004 previa light/dark opcional para projetos derivados, mas no Lab a infraestrutura implicava um segundo tema sem consumer, sem toggle e sem QA visual. Auditoria completa em `.goal/evidence/T1-theme-audit.md` (2026-11-10).
+- **Alternativas:** A) dark-only oficial — paleta única no `:root`, sem mecanismo de tema; B) light/dark suportados — provider + toggle acessível + persistência + QA visual dos 51 componentes em light.
+- **Decisão:** **Opção A — dark-only oficial.** O Svitordev UI Lab tem um único tema oficial: o dark. A paleta oficial vive no `:root` de `app/globals.css` (com `color-scheme: dark`). Não existe bloco `.dark`, `@custom-variant dark`, provider, toggle, script pré-hidratação nem persistência de tema.
+- **Motivos:** B falhou o próprio gate ("cabe na 030 sem refactor amplo") e exigiria componente novo sem consumer (anti-inflação); A satisfaz os 4 gates da auditoria — produto efetivamente dark, UI projetada/testada nesse modo (29 evoluções), light sem consumer real, infraestrutura light só gerava estado morto. Risco baixo, render preservado, SSR sem mudança.
+- **Consequências:** Tokens únicos e sem ambiguidade; os 8 utilitários `dark:` dos 3 bases shadcn foram resolvidos inline com os valores hoje efetivos; `suppressHydrationWarning` removido do layout raiz; `color-scheme: dark` alinha controles nativos ao tema; +1 teste Playwright dual-project protege a política em rotas representativas.
+- **Opção rejeitada:** B — não por incapacidade técnica, mas por falta de consumer real e custo de QA nunca realizado. Continua válida para projetos derivados quando houver demanda real.
+- **Como revisar:** Se um projeto derivado precisar de light/dark, introduzir o mecanismo na origem do projeto (provider + toggle + testes nos dois temas). O Lab só reabre esta decisão se ele próprio ganhar um segundo tema com consumer real. Para o Lab, esta decisão supera a leitura da DEC-004 (que permanece válida para projetos derivados).
+- **Data:** 2026-11-10
+- **Impacto:** `app/globals.css`, `app/layout.tsx`, `components/ui/button.tsx`, `components/ui/input.tsx`, `components/ui/textarea.tsx`, `tests/smoke.spec.ts`; QLT-009 → VERIFIED; `docs/DESIGN-SYSTEM.md` alinhado.

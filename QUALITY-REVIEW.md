@@ -301,7 +301,7 @@ Command exited with code 1
 
 ### QLT-009 — Theme light morto (dark forçado sem toggle)
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-10)** — decisão tomada e implementada (DEC-011 — **dark-only oficial**, Opção A da auditoria da Evolução 030). A paleta única do `:root` é agora a paleta oficial dark (os valores antes no bloco `.dark`, efetivamente os únicos que renderizavam); o bloco `.dark` e o `@custom-variant dark` foram removidos; `color-scheme: dark` adicionado ao `:root`; `className="dark"` e `suppressHydrationWarning` removidos do layout raiz; os 8 utilitários `dark:` dos 3 bases shadcn (`button`, `input`, `textarea`) foram resolvidos inline com os valores hoje efetivos — render preservado, nenhuma classe morta remanescente. Nenhum mecanismo de tema fake: sem toggle, sem provider, sem persistência. +1 teste Playwright dual-project cobre a política em 5 rotas representativas (html sem classe `dark`, paleta oficial aplicada, render real, zero overflow). Gates: lint 0/0; build PASS (22 rotas); Playwright 75 passed + 3 skipped; `git diff --check` limpo. (Evolução 030.)
 **Prioridade:** P3
 **Categoria:** Design System / Theming
 
@@ -448,10 +448,10 @@ Command exited with code 1
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
 | **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003 — **VERIFIED**, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 — **VERIFIED** |
-| **P3** | 5 | QLT-004 — **VERIFIED**, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
+| **P3** | 5 | QLT-004 — **VERIFIED**, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009 — **VERIFIED**, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-003, QLT-004, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-003, QLT-004, QLT-006, QLT-007, QLT-008, QLT-009, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

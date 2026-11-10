@@ -1,0 +1,44 @@
+{
+  "goal": "Evolucao 029 - Tabs (primitive): API Radix estavel para consumer futuro (034 Gallery), sem funcionalidades extras",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Primitive Tabs + demo + testes + gates",
+      "acceptance": [
+        "primitive components/ui/tabs.tsx existe",
+        "API minima Tabs/TabsList/TabsTrigger/TabsContent",
+        "Radix justificado e unica dependencia nova",
+        "client boundary minimo so no primitive",
+        "data-slot tabs/tabs-list/tabs-trigger/tabs-content",
+        "cn()",
+        "React.ComponentProps",
+        "keyboard ArrowRight/ArrowLeft/Home/End via Radix sem handlers manuais",
+        "activation mode padrao preservado",
+        "ARIA real (tablist/tab/tabpanel/aria-selected/associacao)",
+        "tokens semanticos sem cores raw",
+        "focus-visible do projeto",
+        "demo /library/tabs no padrao pos-019 com metadata e 3 tabs neutras",
+        "Gallery nao antecipada",
+        "teste Playwright abrangente cobrindo clique, teclado, paineis, focus e zero overflow",
+        "lint/build/e2e/diff-check verdes",
+        "contagens reais 31/11/51, rotas 22, +1 teste dual-project",
+        "escopo nao ampliado"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Documentacao e atualizacao de estado",
+      "acceptance": [
+        "COMPONENT-CATALOG com Tabs como 1 entrada (4 exports) e contagens reais",
+        "ROADMAP 029 VERIFIED e proxima 030",
+        "CURRENT-STATE com 001-029, UI/total/rotas/Playwright reais e dependencia Radix documentada",
+        "CHANGELOG somente estado final",
+        "DESIGN-SYSTEM so se nova convencao global real",
+        "QUALITY-REVIEW intacto",
+        "nenhum documento indevido",
+        "numeros iguais aos gates reais",
+        "diff-check limpo"
+      ]
+    }
+  ]
+}

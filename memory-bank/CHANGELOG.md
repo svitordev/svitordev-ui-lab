@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-10] — Evolução 030: Tema — política dark-only oficial (VERIFIED — QLT-009)
+
+- **Política final: DARK-ONLY oficial** (Opção A da auditoria; **DEC-011**). Paleta única oficial no `:root` de `app/globals.css` com os valores dark em uso; blocos `.dark` e `@custom-variant dark` removidos; `color-scheme: dark` adicionado ao `:root` (controles nativos alinhados ao tema). Nenhum mecanismo de tema fake: sem toggle, sem provider, sem script pré-hidratação, sem persistência.
+- `app/layout.tsx`: `<html lang="pt-BR">` — `className="dark"` e `suppressHydrationWarning` removidos (resquício de mecanismo inexistente).
+- `components/ui/button.tsx`, `input.tsx`, `textarea.tsx`: os 8 utilitários `dark:` (defaults shadcn) resolvidos inline com os valores hoje efetivos — render preservado, nenhuma classe morta remanescente.
+- +1 teste Playwright dual-project (5 rotas representativas: `/`, `/blog`, `/library/landing`, `/library/alerts`, `/library/tabs` — html sem classe `dark`, paleta oficial aplicada, h1/main presente, zero overflow). Suíte: 39 testes / 78 execuções — **75 passed + 3 skipped**. Lint **0/0**; build **PASS** (22 rotas); `git diff --check` limpo.
+- Nenhuma dependência nova; nenhum component novo (contagens 31/11/51); nenhuma rota nova (22). **QLT-009 → VERIFIED.** QLT-005 e demais findings inalterados.
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-009 VERIFIED + tabela/totais), `memory-bank/DECISIONS.md` (**DEC-011** — theme policy), `docs/DESIGN-SYSTEM.md` (política final real), `docs/ROADMAP-1000-EVOLUTIONS.md` (030 VERIFIED + checkpoint curto respondido), `memory-bank/CURRENT-STATE.md` (próxima execução: 031).
+
+---
+
 ## [2026-11-10] — Evolução 029: Tabs (primitive) (VERIFIED)
 
 - **Novo primitive `Tabs`** (`components/ui/tabs.tsx`) — 1 entrada de catálogo (exports `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent`); Client Component via `@radix-ui/react-tabs` (^1.2.1, única dependência nova — teclado/foco/ARIA nativos do Radix, consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry); API pública preserva a API do Radix (controlled/uncontrolled, `orientation`); activation mode padrão preservado (automático); `data-slot` (`tabs`/`tabs-list`/`tabs-trigger`/`tabs-content`); `cn()`; `React.ComponentProps` do primitive Radix em cada export; visual somente tokens; transição `motion-safe`; sem variants extras.

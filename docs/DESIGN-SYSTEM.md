@@ -1,13 +1,13 @@
 # DESIGN-SYSTEM.md — Svitordev UI Lab
 
-Sistema de design real atual. Não alterar `app/globals.css` nesta fase.
+Sistema de design real atual. Tema oficial: **dark-only** (DEC-011) — paleta única no `:root`.
 
 ## Base
 
 - **Tailwind CSS 4** — framework de estilização.
 - **Configuração inline** em `app/globals.css` (estilo Tailwind v4). **Não existe `tailwind.config.ts`.**
 - **shadcn/ui** (style new-york) — componentes base, sem dependência de biblioteca de UI.
-- **CSS variables** — tokens definidos em `:root` (light) e `.dark` (dark).
+- **CSS variables** — paleta oficial única definida no `:root` (tema dark oficial — DEC-011). Não existe bloco `.dark`.
 - **`@theme inline`** — mapeia CSS variables para tokens do Tailwind (`--color-*`, `--radius-*`, `--font-*`).
 
 ## EXISTENTE (documentar, não recriar)
@@ -27,7 +27,7 @@ Sistema de design real atual. Não alterar `app/globals.css` nesta fase.
 
 ### Brand (identidade visual)
 
-- `--brand` — roxo (light: `oklch(0.55 0.20 280)`, dark: `oklch(0.70 0.18 280)`)
+- `--brand` — roxo (`oklch(0.70 0.18 280)` — paleta oficial única)
 - `--brand-foreground` — texto sobre o brand
 - `--brand-soft`, `--brand-soft-foreground` — variantes suaves do brand
 
@@ -43,10 +43,13 @@ Sistema de design real atual. Não alterar `app/globals.css` nesta fase.
 
 - `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-primary-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`
 
-### Light/dark
+### Tema (política final — DEC-011)
 
-- `@custom-variant dark` define o suporte a dark mode via classe `dark`.
-- Layout raiz aplica `className="dark"` (dark por padrão).
+- **Dark-only oficial.** Existe um único tema no Lab — o dark — definido como paleta única no `:root` de `app/globals.css`, com `color-scheme: dark` (controles nativos alinhados ao tema).
+- Não existe bloco `.dark`, `@custom-variant dark`, provider, toggle, script pré-hidratação nem persistência de tema — nenhum mecanismo que sugira um segundo tema inexistente.
+- Os 3 bases shadcn com defaults `dark:` do upstream (`button`, `input`, `textarea`) tiveram os utilitários resolvidos inline com os valores hoje efetivos — nenhuma classe `dark:` permanece no código.
+- Layout raiz: `<html lang="pt-BR">`, sem classe de tema e sem `suppressHydrationWarning`.
+- Projetos derivados alteram os valores do `:root` para assumir outra identidade (ver Estratégia para projetos derivados / DEC-004). A decisão de suportar dois temas com toggle numa origem derivada é do projeto derivado (DEC-011).
 
 ## A EXPANDIR (tarefa técnica posterior)
 
@@ -58,7 +61,7 @@ Sistema de design real atual. Não alterar `app/globals.css` nesta fase.
 
 - Chart colors / gradientes customizados.
 - Tokens de animação (tempo/easing como token).
-- Theme switching / toggle visual de tema (DEC-004).
+- Theme switching / toggle visual de tema — opcional apenas em projetos derivados (DEC-004); no Lab a política oficial é dark-only (DEC-011).
 
 ## Regras de uso
 
