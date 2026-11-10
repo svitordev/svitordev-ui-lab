@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-10] — Evolução 029: Tabs (primitive) (VERIFIED)
+
+- **Novo primitive `Tabs`** (`components/ui/tabs.tsx`) — 1 entrada de catálogo (exports `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent`); Client Component via `@radix-ui/react-tabs` (^1.2.1, única dependência nova — teclado/foco/ARIA nativos do Radix, consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry); API pública preserva a API do Radix (controlled/uncontrolled, `orientation`); activation mode padrão preservado (automático); `data-slot` (`tabs`/`tabs-list`/`tabs-trigger`/`tabs-content`); `cn()`; `React.ComponentProps` do primitive Radix em cada export; visual somente tokens; transição `motion-safe`; sem variants extras.
+- **Nova rota `/library/tabs`** (21 → 22) — categoria "Tabs / Abas" no padrão pós-019, demo com 3 abas neutras; Library Shell com link "Tabs" antes de Landing.
+- +1 teste Playwright dual-project (clique, teclado ArrowRight/ArrowLeft/Home/End, associação `aria-controls`, foco, zero overflow). Suíte: 38 testes / 76 execuções — **73 passed + 3 skipped**. Lint **0/0**; build **PASS** (22 rotas); `git diff --check` limpo.
+- **Dependência nova documentada:** `@radix-ui/react-tabs` ^1.2.1 (usada em `components/ui/tabs.tsx`). Contagens: UI 10 → **11**, total 50 → **51** (sections 31, shells 2 — inalteradas). Nenhum finding alterado. **030 não iniciada.**
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entry Tabs + contagens), `docs/ROADMAP-1000-EVOLUTIONS.md` (029 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 030). `docs/DESIGN-SYSTEM.md` inalterado (nenhuma convenção global nova).
+
+---
+
 ## [2026-11-10] — Evolução 028: Contact forms: comportamento de demo (VERIFIED — QLT-004)
 
 - **Os 3 contact forms reais** (`contact-simple`, `contact-details`, `contact-split`) agora interceptam o submit localmente (`preventDefault`) e exibem o primitive `Alert` da Evolução 027 com feedback explícito: **demo local, nenhum backend, nenhum envio real, feedback acessível** (`role="status"` + `aria-live="polite"` fornecidos pelo consumer — default do primitive intacto).

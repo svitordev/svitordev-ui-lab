@@ -9,7 +9,7 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Fase atual:** FASE 2 — Documentação.
 - **Preparação técnica pré-rotina:** concluída.
 - **Roadmap:** macro aprovado e versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`.
-- **Lote ativo:** 02 (026–050) — **em execução**: 026 ✅, 027 ✅, 028 ✅ concluídas; **029 é a próxima**. Lote 01 (001–025) ✅ concluído.
+- **Lote ativo:** 02 (026–050) — **em execução**: 026 ✅, 027 ✅, 028 ✅, 029 ✅ concluídas; **030 é a próxima**. Lote 01 (001–025) ✅ concluído.
 - **Evolução 001:** ✅ IMPLEMENTADA / VERIFIED (CTA Split Actions data-driven + contrato exemplar de props).
 - **Evolução 002:** ✅ IMPLEMENTADA / VERIFIED (Logos / social proof strip — wordmark tipográfico, sem imagem/links/motion).
 - **Evolução 003:** ✅ IMPLEMENTADA / VERIFIED (Hero Media Showcase — composição vertical/showcase, media frame HTML/Tailwind dominante, sem imagem/motion).
@@ -38,7 +38,8 @@ Repositório base (GitHub Template) em fase de **fundação documental**.
 - **Evolução 026:** ✅ IMPLEMENTADA / VERIFIED (Padronizar destinos de CTAs e anchors — **QLT-003 → VERIFIED**: 10 Buttons mortos → 0, todos convertidos em links semânticos (`Button asChild` + `Link`, visual preservado); anchors `/#services` e `/#about` passaram a resolver por IDs adicionados no consumer da home (`app/(site)/page.tsx`), não nos components reutilizáveis (`ServicesWithIcons`/`AboutSplit` intactos); `/#contact` continua resolvendo; zero `href="#"`; sem migração de props (QLT-005 inalterado); MobileNav preservado; +2 testes Playwright; locator preexistente da 010 tornado mais específico para manter o escopo correto; lint 0/0; build PASS (20 rotas); e2e 67 passed + 3 skipped).
 - **Evolução 027:** ✅ IMPLEMENTADA / VERIFIED (Alert (primitive) — `components/ui/alert.tsx`, 1 entrada de catálogo com exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants`; Server-compatible, sem `forwardRef`; CVA com variantes `default`/`destructive` usando somente tokens existentes (nenhum token novo, sem cores raw); sem `role`/`aria-live` automáticos — semântica live é do consumer; destructive com styling contextual na description; sem ícone automático; sem motion; zero dependências; nova demo `/library/alerts` no padrão moderno (sem interação falsa) + link "Alerts" na Library Shell antes de Landing; +1 teste Playwright; UI 9 → 10, total 49 → 50; rotas 20 → 21; lint 0/0; build PASS (21 rotas); e2e 69 passed + 3 skipped; consumers planejados 028/042 não antecipados).
 - **Evolução 028:** ✅ IMPLEMENTADA / VERIFIED (Contact forms: comportamento de demo — **QLT-004 → VERIFIED**: os 3 forms (`contact-simple`, `contact-details`, `contact-split`) interceptam o submit localmente e exibem o Alert da 027 com feedback explícito de demonstração (demo local, nenhum backend, nenhum envio real, feedback acessível); `role="status"`/`aria-live="polite"` fornecidos pelo consumer (default do primitive intacto); sem API route/fetch/loading fake; validação nativa preservada; campos preservados após o submit; edição oculta o aviso; `"use client"` exatamente nos 3 forms (menor boundary — páginas/shell permanecem Server Components); nenhuma prop nova (QLT-005 inalterado); +1 teste Playwright abrangente; rotas 21; contagens 31/10/50; lint 0/0; build PASS (21 rotas); e2e 71 passed + 3 skipped).
-- **Próxima execução:** Evolução 029 — Tabs (primitive) (planejada no Lote 02; ainda não iniciada). Aguardar ordem de início.
+- **Evolução 029:** ✅ IMPLEMENTADA / VERIFIED (Tabs (primitive) — `components/ui/tabs.tsx`, 1 entrada de catálogo com exports `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent`; `@radix-ui/react-tabs` ^1.2.1 — única dependência nova (teclado/foco/ARIA nativos do Radix, consistência com Accordion/Avatar; `^1.3.1` do plano não existe no registry); Client Component apenas no primitive (página permanece Server); API preserva a do Radix (controlled/uncontrolled, `orientation`); activation mode padrão preservado; `data-slot` + `cn()` + `React.ComponentProps`; visual somente tokens, focus-visible do projeto, transição `motion-safe`; sem variants extras; nova demo `/library/tabs` no padrão pós-019 (3 abas neutras) + link "Tabs" na Library Shell antes de Landing; +1 teste Playwright dual-project; UI 10 → 11, total 50 → 51; rotas 21 → 22; lint 0/0; build PASS (22 rotas); e2e 73 passed + 3 skipped; consumer planejado 034 não antecipado).
+- **Próxima execução:** Evolução 030 — Tema: definir política e alinhar implementação (planejada no Lote 02; Plan próprio antes de implementar; ainda não iniciada). Aguardar ordem de início.
 
 ## Stack confirmada
 
@@ -65,11 +66,11 @@ public/
 
 ## Inventário atual de componentes
 
-- **10** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008, + `separator` e `skeleton` via Evolução 013, + `accordion` via Evolução 017, + `alert` via Evolução 027)
+- **11** UI components (`components/ui/` — + `badge` via Evolução 004, + `avatar` via Evolução 008, + `separator` e `skeleton` via Evolução 013, + `accordion` via Evolução 017, + `alert` via Evolução 027, + `tabs` via Evolução 029)
 - **7** site components (`components/site/` — headers + footers; + `mobile-nav` via Evolução 007)
 - **31** section components (`components/sections/` — 7 grupos × 3 + `cta-split-actions` + `logos-strip` + `hero-media-showcase` + `stats-grid` + `testimonials-rating-cards` + `feature-comparison` + `newsletter-form` + `faq-accordion` via Evolução 018 + `sticky-cta-bar` via Evolução 020 + `sticky-column-split` via Evolução 021; grupo Newsletter = 1, `NewsletterForm` disponível; grupo FAQ = 1, `FaqAccordion` disponível; grupo CTA = 5, `StickyCtaBar` disponível; grupo Features = 2, `StickyColumnSplit` disponível)
 - **2** wrappers/shells (`library-shell.tsx` + `app/library/layout.tsx`)
-- **Total: 50** componentes reutilizáveis relevantes
+- **Total: 51** componentes reutilizáveis relevantes
 
 ## `/library` (DEC-001)
 
@@ -85,11 +86,13 @@ Todas as páginas de categorias seguem agora o padrão moderno — as 7 legacy f
 
 `/library/alerts` (Evolução 027) — nova categoria de feedback; demo estática com as variantes do Alert (`default` + `destructive`, title + description, sem interação falsa); Library Shell com link "Alerts" antes de Landing. Nova rota: 20 → 21.
 
+`/library/tabs` (Evolução 029) — nova categoria de abas; demo com 3 abas neutras (Visão geral / Recursos / Detalhes) usando o primitive Tabs via Radix; Library Shell com link "Tabs" antes de Landing. Nova rota: 21 → 22.
+
 ## Estado de qualidade (atualizado após Playwright mínimo — 2026-10-14)
 
-Production build **verde** (PASS, 21 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
+Production build **verde** (PASS, 22 rotas). Lint atual: **0 errors / 0 warnings**. Rota `/blog/[slug]` funcional.
 
-- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **37 smoke tests / 74 execuções** (71 passed + 3 skipped — skips intencionais: 2 testes mobile-only da Evolução 007 + 1 teste mobile-only da Evolução 025; o menu mobile não existe no breakpoint desktop). Execução da DEC-006.
+- **Playwright mínimo:** ✅ **VERIFIED** — `@playwright/test` 1.64.1, **Chromium** somente; projects desktop **1280×720** e mobile **375×667**; **38 smoke tests / 76 execuções** (73 passed + 3 skipped — skips intencionais: 2 testes mobile-only da Evolução 007 + 1 teste mobile-only da Evolução 025; o menu mobile não existe no breakpoint desktop). Execução da DEC-006.
 - **Cobertura de smoke (pós-025):** 19/19 rotas públicas relevantes visitadas diretamente + 404; 15/15 categorias da Library com visita direta ou smoke funcional; mobile nav com navegação real; Library Shell exercitada por clique; `pageerror` monitorado em rotas representativas (`console.error` excluído por ruído do dev). Não é cobertura de código.
 - **QLT-001:** ✅ VERIFIED. **QLT-006:** ✅ VERIFIED (Evolução 007). **QLT-007:** ✅ VERIFIED (Evolução 006). **QLT-008:** ✅ VERIFIED (Evolução 015). **QLT-012:** ✅ VERIFIED. **QLT-013:** ✅ **VERIFIED** (Evolução 024 — datas date-only formatadas por parsing estrutural sem conversão de timezone; listagem e detalhe consistentes; dados editoriais preservados).
 - **QLT-003:** ✅ **VERIFIED** (Evolução 026 — 10 Buttons mortos → 0, todos como links reais; anchors `/#services`/`/#about` com alvos reais na home; zero `href="#"`). **QLT-004:** ✅ **VERIFIED** (Evolução 028 — os 3 contact forms com comportamento demonstrativo real: submit interceptado localmente, Alert acessível via consumer, nenhum backend, nenhum envio real, campos preservados). **QLT-005:** continua aberto, com uma ocorrência a menos (`pricing-three-tiers` migrado para o contrato, Evolução 016). **QLT-010:** ✅ **VERIFIED** (Evolução 019 — as 7 páginas legacy migradas para o padrão moderno). **QLT-002:** ✅ **VERIFIED** (Evolução 023 — metadata por página em home/blog/library; title template; `lang="pt-BR"`; canonical/sitemap/social metadata aguardam definição de origem pública oficial e assets adequados — nenhum domínio fictício foi introduzido).
@@ -100,7 +103,7 @@ Production build **verde** (PASS, 21 rotas). Lint atual: **0 errors / 0 warnings
 
 ### Próxima fase
 
-Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`. **Lote 01 (001–025) concluído** — todas as evoluções VERIFIED (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022; Metadata SEO / QLT-002 VERIFIED pela Evolução 023; datas/timezone / QLT-013 VERIFIED pela Evolução 024; smoke estendido VERIFIED pela Evolução 025). **Lote 02 em execução**: 026 ✅ VERIFIED (2026-11-09 — Padronizar destinos de CTAs e anchors, QLT-003 → VERIFIED); 027 ✅ VERIFIED (2026-11-09 — Alert (primitive), sem finding); 028 ✅ VERIFIED (2026-11-10 — Contact forms: comportamento de demo, QLT-004 → VERIFIED); 029–050 planejadas e não iniciadas (detalhes em `docs/ROADMAP-1000-EVOLUTIONS.md`). Próxima execução: Evolução 029 — Tabs (primitive). Aguardar ordem de início.
+Roadmap macro versionado em `docs/ROADMAP-1000-EVOLUTIONS.md`. **Lote 01 (001–025) concluído** — todas as evoluções VERIFIED (017 = technical VERIFIED, runtime validation concluída pela 018; QLT-010 VERIFIED pela Evolução 019; Sticky CTA bar VERIFIED pela Evolução 020; Sticky-column split VERIFIED pela Evolução 021; Landing composition completa VERIFIED pela Evolução 022; Metadata SEO / QLT-002 VERIFIED pela Evolução 023; datas/timezone / QLT-013 VERIFIED pela Evolução 024; smoke estendido VERIFIED pela Evolução 025). **Lote 02 em execução**: 026 ✅ VERIFIED (2026-11-09 — Padronizar destinos de CTAs e anchors, QLT-003 → VERIFIED); 027 ✅ VERIFIED (2026-11-09 — Alert (primitive), sem finding); 028 ✅ VERIFIED (2026-11-10 — Contact forms: comportamento de demo, QLT-004 → VERIFIED); 029 ✅ VERIFIED (2026-11-10 — Tabs (primitive), sem finding); 030–050 planejadas e não iniciadas (detalhes em `docs/ROADMAP-1000-EVOLUTIONS.md`). Próxima execução: Evolução 030 — Tema: definir política e alinhar implementação. Aguardar ordem de início.
 
 ### Problemas resolvidos
 

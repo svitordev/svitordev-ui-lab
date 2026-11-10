@@ -1,0 +1,27 @@
+{
+  "task_id": "T1",
+  "fingerprint": "e67cf9152c966e941cb9bc26f60805e00f3534dfaf9d6d393ad8ed41d50a9c7f",
+  "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+  "verdict": "APPROVED",
+  "summary": "Auditoria independente em modo somente leitura concluÃ­da para a EvoluÃ§Ã£o 028 â€” Task T1 (comportamento demonstrativo consistente nos 3 contact forms). Todos os 12 critÃ©rios de aceite foram verificados diretamente no cÃ³digo-fonte e artefatos do workspace: (1) os 3 forms reais do QLT-004 (ContactSimple, ContactSplit e ContactDetails em components/sections/contact/) foram identificados e atualizados; (2) o submit Ã© interceptado via event.preventDefault() sem chamadas de rede, backend ou reload de pÃ¡gina; (3) o primitive Alert da EvoluÃ§Ã£o 027 (Alert, AlertTitle, AlertDescription) Ã© reutilizado sem modificaÃ§Ãµes em components/ui/alert.tsx; (4) role=\"status\" e aria-live=\"polite\" sÃ£o definidos no consumer ao exibir o Alert; (5) a mensagem Ã© explicitamente demonstrativa (\"DemonstraÃ§Ã£o concluÃ­da\" / \"Este formulÃ¡rio funciona apenas como demonstraÃ§Ã£o. Nenhum dado foi enviado.\"), sem simular envio real; (6) todos os valores preenchidos nos campos sÃ£o preservados apÃ³s o submit e editar qualquer campo oculta o aviso (onChange); (7) a validaÃ§Ã£o nativa do navegador foi preservada (sem noValidate e mantendo type=\"email\" em contact-simple-email); (8) todos os 10 pares label htmlFor/id da EvoluÃ§Ã£o 015 (QLT-008) permanecem intactos; (9) o novo teste Playwright em tests/smoke.spec.ts cobre o fluxo completo nos 3 forms (preenchimento por label, submit, Alert acessÃ­vel, preservaÃ§Ã£o de valores, ausÃªncia de POST/reload e ocultaÃ§Ã£o ao editar); (10) artefatos de build (.next/BUILD_ID, manifests com 21 rotas), resultado da suÃ­te Playwright (test-results/.last-run.json com status passed) e higiene de cÃ³digo/diff confirmados; (11) package.json inalterado, sem dependÃªncia nova; (12) QLT-005 intacto (os 3 componentes continuam sem props, sem antecipar migraÃ§Ã£o data-driven ou documentaÃ§Ã£o da T2).",
+  "findings": [],
+  "tests": [
+    {
+      "evidence": "tests/smoke.spec.ts (linhas 1001-1090) exercita os 3 forms em /library/contact, valida Alert com role=status e aria-live=polite, preservacao de campos, ausencia de POST/reload e ocultacao ao editar; test-results/.last-run.json registra status=passed e failedTests=[].",
+      "name": "Playwright E2E â€” contact forms: submit demonstrativo exibe Alert acessivel sem envio real",
+      "status": "passed"
+    },
+    {
+      "evidence": "tests/smoke.spec.ts (linhas 236-289) preservado integralmente; 10 associacoes htmlFor/id nos 3 contact forms verificadas no codigo-fonte.",
+      "name": "Playwright E2E â€” contact forms: associacao label-campo com htmlFor/id, ids unicos e foco por label",
+      "status": "passed"
+    },
+    {
+      "evidence": "Artefatos em .next/BUILD_ID (UMUKbVtKOubXwn0z9jNgj), .next/app-path-routes-manifest.json (21 rotas) e inspecao estatica de tipos/imports nos 4 arquivos tocados sem erros ou warnings.",
+      "name": "Next.js Production Build & TypeScript / ESLint static verification",
+      "status": "passed"
+    }
+  ],
+  "correction_prompt": "",
+  "source": "independent-antigravity-cli"
+}

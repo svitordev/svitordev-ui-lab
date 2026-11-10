@@ -1088,3 +1088,65 @@ test('contact forms: submit demonstrativo exibe Alert acessivel sem envio real',
   await first.getByLabel('Assunto', { exact: true }).fill('Editando novamente');
   await expect(first.locator('[data-slot="alert"]')).toHaveCount(0);
 });
+
+test('tabs: primitive Radix com selecao por clique, teclado e paineis correspondentes', async ({ page }) => {
+  await page.goto('/library/tabs');
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Tabs / Abas' }),
+  ).toBeVisible();
+
+  // Semantica ARIA real do Radix (roles nativos, nao classes internas).
+  await expect(page.getByRole('tablist')).toHaveCount(1);
+  const tabGeral = page.getByRole('tab', { name: 'Visão geral' });
+  const tabRecursos = page.getByRole('tab', { name: 'Recursos' });
+  const tabDetalhes = page.getByRole('tab', { name: 'Detalhes' });
+  await expect(tabGeral).toHaveCount(1);
+  await expect(tabRecursos).toHaveCount(1);
+  await expect(tabDetalhes).toHaveCount(1);
+
+  // Estado inicial: primeira tab selecionada com o painel correspondente visivel.
+  await expect(tabGeral).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('Resumo do conteúdo em destaque nesta área do template.')).toBeVisible();
+
+  // Selecao por clique: painel acompanha a selecao.
+  await tabRecursos.click();
+  await expect(tabRecursos).toHaveAttribute('aria-selected', 'true');
+  await expect(tabGeral).toHaveAttribute('aria-selected', 'false');
+  await expect(page.getByText('Lista neutra de recursos disponíveis para o seu projeto.')).toBeVisible();
+
+  // Associacao tab->panel real (aria-controls do Radix aponta para o painel visivel).
+  const controls = await tabRecursos.getAttribute('aria-controls');
+  expect(controls).toBeTruthy();
+  await expect(page.locator(`[id="${controls}"]`)).toBeVisible();
+
+  // Teclado (activation mode automatico do Radix: setas movem selecao e foco).
+  // Foco ja esta em tabRecursos (clique); ArrowRight -> Detalhes.
+  await page.keyboard.press('ArrowRight');
+  await expect(tabDetalhes).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('Informações complementares, estáveis e independentes de dados.')).toBeVisible();
+
+  // ArrowLeft -> volta para Recursos.
+  await page.keyboard.press('ArrowLeft');
+  await expect(tabRecursos).toHaveAttribute('aria-selected', 'true');
+
+  // Home -> primeira tab; End -> ultima tab.
+  await page.keyboard.press('Home');
+  await expect(tabGeral).toHaveAttribute('aria-selected', 'true');
+  await page.keyboard.press('End');
+  await expect(tabDetalhes).toHaveAttribute('aria-selected', 'true');
+
+  // Foco acompanha a selecao via teclado (comportamento real do Radix, sem handlers manuais).
+  await expect
+    .poll(async () =>
+      page.evaluate(() => document.activeElement?.getAttribute('aria-selected') === 'true'),
+    )
+    .toBe(true);
+
+  // Zero overflow horizontal (mobile 375 + desktop 1280).
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

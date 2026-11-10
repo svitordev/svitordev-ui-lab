@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **10** UI components
+- **11** UI components
 - **7** site components
 - **31** section components
 - **2** wrappers/shells
-- **Total: 50** componentes reutilizáveis relevantes
+- **Total: 51** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (10)
+## UI components — `components/ui/` (11)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -26,6 +26,7 @@
 | Skeleton | `components/ui/skeleton.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 013.** Primitive visual de loading; Server Component; `React.ComponentProps<"div">` — dimensões definidas pelo consumer via `className`; `data-slot="skeleton"`; `bg-muted` + `rounded-md`; `motion-safe:animate-pulse` (reduced motion → estático); sem `role="status"`/`aria-live`/`aria-busy` automáticos — anunciar loading é responsabilidade do consumer/container; sem variants, sem size API, sem composed skeletons; sem consumer ainda |
 | Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; primeiro consumer real: `FaqAccordion` (Evolução 018); validação runtime visual/keyboard concluída na Evolução 018 — single, collapsible, ARIA, keyboard, foco, Chevron e reduced motion confirmados |
 | Alert | `components/ui/alert.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 027.** Primitive estático de feedback; Server Component, zero dependências; CVA com variantes `default`/`destructive` (somente tokens existentes — nenhum token novo, nenhuma cor raw); `data-slot` (`alert`/`alert-title`/`alert-description`); `cn()`; `React.ComponentProps<"div">` nos três exports — aceita props HTML normais; NÃO impõe `role`/`aria-live` (semântica live é do consumer); destructive com styling contextual também na description; sem `forwardRef`, sem `asChild`, sem sizes, sem motion, sem ícone automático (suporta `svg` como child); exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants` (1 entrada de catálogo); demo em `/library/alerts`; consumers planejados (ainda não executados): 028 — Contact forms e 042 — Contact page |
+| Tabs | `components/ui/tabs.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 029.** Primitive de abas; baseado em `@radix-ui/react-tabs` (^1.2.1, única dependência nova — teclado/foco/ARIA nativos do Radix, consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry); Client Component (boundary apenas no primitive); API pública preserva a API do Radix — controlled/uncontrolled via `value`/`defaultValue`/`onValueChange`, `orientation` preservada pelas props do Root; activation mode padrão do Radix preservado (automático — setas movem seleção e foco; Home/End; sem wrappers ou estado extra); `data-slot` (`tabs`/`tabs-list`/`tabs-trigger`/`tabs-content`); `cn()`; `React.ComponentProps` do primitive Radix correspondente em cada export; visual somente tokens (focus-visible `ring` do projeto, `bg-muted`, `data-[state=active]` com `bg-background`/`shadow-sm`, disabled `opacity-50`); transição CSS simples `motion-safe`; sem variants extras; exports `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` (1 entrada de catálogo); demo em `/library/tabs`; consumer planejado (ainda não executado): 034 — Gallery |
 
 Contrato do Separator (resumo):
 
@@ -61,6 +62,19 @@ Contrato do Alert (resumo):
 ```
 
 `React.ComponentProps<"div">` + `VariantProps` da CVA; container estático Server-compatible; `data-slot` em todos; o primitive NÃO impõe `role="alert"`/`role="status"`/`aria-live` — o consumer fornece quando necessário. Exports: `Alert`, `AlertTitle`, `AlertDescription`, `alertVariants`.
+
+Contrato do Tabs (resumo — API nativa do Radix preservada):
+
+```tsx
+<Tabs defaultValue="...">
+  <TabsList>
+    <TabsTrigger value="...">...</TabsTrigger>
+  </TabsList>
+  <TabsContent value="...">...</TabsContent>
+</Tabs>
+```
+
+Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Controlled/uncontrolled via `value`/`defaultValue`/`onValueChange` do Radix; `orientation` do Radix preservada; activation mode padrão (automático) sem wrappers.
 
 ## Site components — `components/site/` (7)
 

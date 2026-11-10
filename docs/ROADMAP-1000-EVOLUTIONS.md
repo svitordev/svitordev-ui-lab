@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; 029–050 planejadas e não iniciadas.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; 030–050 planejadas e não iniciadas.
 
 ## Visão geral
 
@@ -399,7 +399,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 | 026 | Padronizar destinos de CTAs e anchors ✅ VERIFIED | quality | Só QLT-003: botões mortos, anchors sem alvo, destinos reais, sem `href="#"`, sem botão navegacional sem destino — sem props/contratos novos | 9 arquivos + header-centered + ids reais | QLT-003 ✅ | — | Pequeno |
 | 027 | Alert (primitive) ✅ VERIFIED | UI | Feedback acessível via tokens/CVA | `components/ui/alert.tsx` + demo | — | — | Pequeno |
 | 028 | Contact forms: comportamento de demo ✅ VERIFIED | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 ✅ | 026, 027 | Médio |
-| 029 | Tabs (primitive) | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
+| 029 | Tabs (primitive) ✅ VERIFIED | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
 | 030 | Tema: definir política e alinhar implementação | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 | — | Pequeno–médio |
 | 031 | Migrar hero-primary para contrato | refactor | QLT-005 incremental | contrato + demo | QLT-005 | 026 | Pequeno |
 | 032 | Migrar hero-steps + corrigir heading | refactor | Contrato + h1→h3 | contrato + heading hierarchy | QLT-005, QLT-011 | 026 | Pequeno |
@@ -441,7 +441,11 @@ Primitive `components/ui/alert.tsx` criado no padrão real dos primitives (CVA, 
 **Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-10)** — **QLT-004 → VERIFIED**.
 
 Os 3 contact forms reais (`contact-simple`, `contact-details`, `contact-split`) agora interceptam o submit localmente e exibem o Alert da 027 com feedback explícito de demonstração (demo local, nenhum backend, nenhum envio real, feedback acessível — `role="status"`/`aria-live="polite"` fornecidos pelo consumer, default do primitive intacto). Sem API route, sem fetch, sem loading fake, sem "sucesso" enganoso; validação nativa preservada; campos preservados após o submit; edição oculta o aviso. `"use client"` exatamente nos 3 forms (menor boundary — páginas/shell permanecem Server Components). Nenhuma prop nova (QLT-005 não antecipado). +1 teste Playwright abrangente. Rotas 21; contagens 31/10/50; lint 0/0; build 21 rotas; Playwright 71+3.
+## 029 — Tabs (primitive)
 
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-10)** — sem finding associado.
+
+Primitive `components/ui/tabs.tsx` via `@radix-ui/react-tabs` (^1.2.1 — única dependência nova, justificada por teclado/foco/ARIA nativos e consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry — ajustada à latest real). Client boundary apenas no primitive; API mínima `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` preservando a API do Radix (controlled/uncontrolled, `orientation`); activation mode padrão preservado; `data-slot` + `cn()` + `React.ComponentProps`; visual somente tokens; transição `motion-safe`; sem variants extras. Nova categoria/demo `/library/tabs` (3 abas neutras, padrão pós-019) + link na Library Shell. +1 teste dual-project. UI 10 → 11; total 50 → 51; rotas 21 → 22; lint 0/0; build 22 rotas; Playwright 73+3. Consumer planejado (034 — Gallery) não antecipado.
 ## Anti-inflação
 
 Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do lote (tabela abaixo). Pagination e Empty State foram removidos do lote (sem demanda hoje — voltam em lote futuro quando houver consumer). Toast adiado (sem consumer). Nenhum componente novo nasce "porque poderá ser útil".
