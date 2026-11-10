@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; 028–050 planejadas e não iniciadas.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; 029–050 planejadas e não iniciadas.
 
 ## Visão geral
 
@@ -398,7 +398,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 |---|---|---|---|---|---|---|---|
 | 026 | Padronizar destinos de CTAs e anchors ✅ VERIFIED | quality | Só QLT-003: botões mortos, anchors sem alvo, destinos reais, sem `href="#"`, sem botão navegacional sem destino — sem props/contratos novos | 9 arquivos + header-centered + ids reais | QLT-003 ✅ | — | Pequeno |
 | 027 | Alert (primitive) ✅ VERIFIED | UI | Feedback acessível via tokens/CVA | `components/ui/alert.tsx` + demo | — | — | Pequeno |
-| 028 | Contact forms: comportamento de demo | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 | 026, 027 | Médio |
+| 028 | Contact forms: comportamento de demo ✅ VERIFIED | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 ✅ | 026, 027 | Médio |
 | 029 | Tabs (primitive) | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
 | 030 | Tema: definir política e alinhar implementação | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 | — | Pequeno–médio |
 | 031 | Migrar hero-primary para contrato | refactor | QLT-005 incremental | contrato + demo | QLT-005 | 026 | Pequeno |
@@ -435,6 +435,12 @@ Inventário de 10 Buttons mortos (9 arquivos) convertido em links reais (`Button
 **Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-09)** — sem finding associado.
 
 Primitive `components/ui/alert.tsx` criado no padrão real dos primitives (CVA, `data-slot`, `cn()`, `React.ComponentProps`, Server-compatible, sem `forwardRef`, sem `"use client"`); API mínima `Alert`/`AlertTitle`/`AlertDescription` (+`alertVariants`); variantes exatamente `default` + `destructive` usando somente tokens existentes (nenhum token novo, nenhuma cor raw); sem `role`/`aria-live` automáticos — semântica live é do consumer; sem ícone automático; sem motion; zero dependências novas. Nova categoria/demo `/library/alerts` (padrão moderno, sem interação falsa) + link na Library Shell. +1 teste. UI 9 → 10; total 49 → 50; rotas 20 → 21; lint 0/0; build 21 rotas; Playwright 69+3. Consumers planejados (028, 042) não antecipados.
+
+## 028 — Contact forms: comportamento de demo
+
+**Status:** ✅ **IMPLEMENTADA / VERIFIED (2026-11-10)** — **QLT-004 → VERIFIED**.
+
+Os 3 contact forms reais (`contact-simple`, `contact-details`, `contact-split`) agora interceptam o submit localmente e exibem o Alert da 027 com feedback explícito de demonstração (demo local, nenhum backend, nenhum envio real, feedback acessível — `role="status"`/`aria-live="polite"` fornecidos pelo consumer, default do primitive intacto). Sem API route, sem fetch, sem loading fake, sem "sucesso" enganoso; validação nativa preservada; campos preservados após o submit; edição oculta o aviso. `"use client"` exatamente nos 3 forms (menor boundary — páginas/shell permanecem Server Components). Nenhuma prop nova (QLT-005 não antecipado). +1 teste Playwright abrangente. Rotas 21; contagens 31/10/50; lint 0/0; build 21 rotas; Playwright 71+3.
 
 ## Anti-inflação
 

@@ -181,7 +181,7 @@ Command exited with code 1
 
 ### QLT-004 — Formulários de contato sem comportamento
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** ✅ **VERIFIED (2026-11-10)** — encerrado pela Evolução 028: os 3 forms possuem comportamento demonstrativo real (submit interceptado localmente, nenhum backend, nenhum envio real) com feedback acessível via Alert da 027. Ver verificação abaixo.
 **Prioridade:** P3
 **Categoria:** Componentes / Forms
 
@@ -198,6 +198,14 @@ Command exited with code 1
 **Testes necessários:** Submissão de formulário; verificação de feedback de validação.
 
 **Dependências:** Relacionado a QLT-003 (destino dos CTAs de contato) e QLT-008.
+
+**Verificação (Evolução 028, 2026-11-10):**
+
+- **Os 3 forms** (`contact-simple`, `contact-details`, `contact-split`) agora interceptam o submit localmente (`preventDefault`) e exibem o primitive `Alert` da Evolução 027 com feedback explícito: **demo local, nenhum backend, nenhum envio real, feedback acessível** (`role="status"` + `aria-live="polite"` fornecidos pelo consumer — default do primitive intacto).
+- **Nenhum envio simulado:** sem API route, sem fetch, sem `setTimeout`/loading fake, sem mensagem de "enviado com sucesso"; validação nativa preservada; campos preservados após o submit demonstrativo; edição após o feedback oculta o aviso.
+- **Client boundary no menor escopo:** `"use client"` exatamente nos 3 arquivos dos forms (estado/handler pertencem ao form); páginas e shell permanecem Server Components.
+- **Teste:** +1 Playwright abrangente cobrindo os 3 forms (preenchimento por label, submit, Alert acessível, valores preservados, zero POST, sem reload, ocultação ao editar).
+- **Gates:** lint **0/0**; build **PASS** (21 rotas); Playwright **71 passed + 3 skipped** (37 testes / 74 execuções); `git diff --check` limpo.
 
 ---
 
@@ -440,10 +448,10 @@ Command exited with code 1
 | **P0** | 1 | QLT-001 — VERIFIED |
 | **P1** | 0 | — |
 | **P2** | 6 | QLT-002 — **VERIFIED**, QLT-003 — **VERIFIED**, QLT-005, QLT-006 — **VERIFIED**, QLT-010 — **VERIFIED**, QLT-013 — **VERIFIED** |
-| **P3** | 5 | QLT-004, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
+| **P3** | 5 | QLT-004 — **VERIFIED**, QLT-007 — **VERIFIED**, QLT-008 — **VERIFIED**, QLT-009, QLT-012 — VERIFIED |
 | **P4** | 1 | QLT-011 |
 
-**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-003, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
+**Total:** 13 findings (1 + 0 + 6 + 5 + 1 = 13). QLT-001, QLT-002, QLT-003, QLT-004, QLT-006, QLT-007, QLT-008, QLT-010, QLT-012 e QLT-013 estão VERIFIED; os demais permanecem pendentes.
 
 ---
 

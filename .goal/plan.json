@@ -1,0 +1,35 @@
+{
+  "goal": "Evolucao 028 - Contact forms: comportamento de demo (3 forms reais com feedback acessivel via Alert, sem backend)",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Implementacao funcional + testes: comportamento demo consistente nos 3 contact forms",
+      "acceptance": [
+        "os 3 forms reais identificados",
+        "submit interceptado sem backend",
+        "Alert da 027 reutilizado",
+        "role=status aria-live=polite no consumer",
+        "sem success fake",
+        "campos preservados",
+        "validacao nativa preservada",
+        "labels/acessibilidade preservadas",
+        "teste Playwright cobrindo os 3 forms",
+        "lint/build/e2e/diff-check verdes",
+        "sem dependencia nova",
+        "QLT-005 intacto"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Documentacao e fechamento do finding QLT-004",
+      "acceptance": [
+        "QLT-004 VERIFIED com evidencia real",
+        "roadmap 028 VERIFIED",
+        "CURRENT-STATE com numeros reais",
+        "CHANGELOG estado final",
+        "nenhum documento indevido alterado",
+        "diff-check limpo"
+      ]
+    }
+  ]
+}

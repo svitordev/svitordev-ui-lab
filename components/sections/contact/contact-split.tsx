@@ -1,9 +1,20 @@
+"use client";
+
 // components/sections/contact/contact-split.tsx
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function ContactSplit() {
+  const [demoVisible, setDemoVisible] = useState(false);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDemoVisible(true);
+  }
+
   return (
     <section id="contact" className="w-full bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
@@ -28,7 +39,11 @@ export function ContactSplit() {
           </div>
 
           {/* Coluna formulário */}
-          <form className="space-y-4 rounded-2xl border bg-background p-4 text-sm shadow-sm">
+          <form
+            className="space-y-4 rounded-2xl border bg-background p-4 text-sm shadow-sm"
+            onSubmit={handleSubmit}
+            onChange={() => setDemoVisible(false)}
+          >
             <div className="space-y-1">
               <label htmlFor="contact-split-name" className="text-xs font-medium">Nome</label>
               <Input id="contact-split-name" placeholder="Seu nome" />
@@ -56,6 +71,15 @@ export function ContactSplit() {
             <Button type="submit" size="sm" className="w-full md:w-auto">
               Enviar
             </Button>
+
+            {demoVisible ? (
+              <Alert role="status" aria-live="polite">
+                <AlertTitle>Demonstração concluída</AlertTitle>
+                <AlertDescription>
+                  Este formulário funciona apenas como demonstração. Nenhum dado foi enviado.
+                </AlertDescription>
+              </Alert>
+            ) : null}
           </form>
         </div>
       </div>

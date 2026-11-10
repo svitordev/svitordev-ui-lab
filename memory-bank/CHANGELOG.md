@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-10] — Evolução 028: Contact forms: comportamento de demo (VERIFIED — QLT-004)
+
+- **Os 3 contact forms reais** (`contact-simple`, `contact-details`, `contact-split`) agora interceptam o submit localmente (`preventDefault`) e exibem o primitive `Alert` da Evolução 027 com feedback explícito: **demo local, nenhum backend, nenhum envio real, feedback acessível** (`role="status"` + `aria-live="polite"` fornecidos pelo consumer — default do primitive intacto).
+- **Nenhum envio simulado:** sem API route, sem fetch, sem `setTimeout`/loading fake, sem mensagem de "enviado com sucesso"; validação nativa preservada; campos preservados após o submit demonstrativo; edição após o feedback oculta o aviso.
+- **Client boundary no menor escopo:** `"use client"` exatamente nos 3 arquivos dos forms; páginas e shell permanecem Server Components.
+- +1 teste Playwright abrangente cobrindo os 3 forms (preenchimento por label, submit, Alert acessível, valores preservados, zero POST, sem reload, ocultação ao editar). Suíte: 37 testes / 74 execuções — **71 passed + 3 skipped**. Lint **0/0**; build **PASS** (21 rotas); `git diff --check` limpo. Nenhuma dependência nova.
+- Contagens: sections 31, UI 10, total 50 (inalterado — nenhum component novo). **QLT-004 → VERIFIED.** QLT-005 inalterado (nenhuma prop/contrato novo introduzido).
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-004 VERIFIED + tabela/totais), `docs/ROADMAP-1000-EVOLUTIONS.md` (028 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 029).
+
+---
+
 ## [2026-11-09] — Evolução 027: Alert (primitive) (VERIFIED)
 
 - **Novo primitive `Alert`** (`components/ui/alert.tsx`) — 1 entrada de catálogo (exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants`); Server-compatible, sem `"use client"`; CVA; `data-slot`; sem `forwardRef`.

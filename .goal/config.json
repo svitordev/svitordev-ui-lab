@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "builder": {
+    "provider": "vscode-copilot-agent",
+    "model_display_name": "Strata DAILY_USE — Qwen3.8 Flash Next 256K",
+    "selection": "selected-in-vscode-chat",
+    "note": "This package cannot invoke the Copilot chat model directly; active agent must follow the skill."
+  },
+  "inspector": {
+    "provider": "antigravity-cli-google-signin",
+    "cli": "agy",
+    "model": "gemini-4-argon-high",
+    "review_protocol": ".github/skills/goal-orchestrator/references/MASTER-REVIEW-PROTOCOL.md",
+    "timeout_seconds": 900,
+    "quota_policy": {
+      "mode": "provider-managed",
+      "max_calls_per_task": 3,
+      "no_automatic_retry_on_limit": true
+    }
+  },
+  "workflow": {
+    "review_before_completion": true,
+    "max_review_attempts": 3,
+    "require_test_evidence": true,
+    "fail_closed": true,
+    "auto_complete_after_pass": true
+  },
+  "permissions": {
+    "allow_commit": false,
+    "allow_push": false,
+    "allow_deploy": false,
+    "allow_destructive_db": false
+  }
+}

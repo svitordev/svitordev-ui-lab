@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "goal": "Evolucao 028 - Contact forms: comportamento de demo (3 forms reais com feedback acessivel via Alert, sem backend)",
+  "current": 1,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Implementacao funcional + testes: comportamento demo consistente nos 3 contact forms",
+      "acceptance": [
+        "os 3 forms reais identificados",
+        "submit interceptado sem backend",
+        "Alert da 027 reutilizado",
+        "role=status aria-live=polite no consumer",
+        "sem success fake",
+        "campos preservados",
+        "validacao nativa preservada",
+        "labels/acessibilidade preservadas",
+        "teste Playwright cobrindo os 3 forms",
+        "lint/build/e2e/diff-check verdes",
+        "sem dependencia nova",
+        "QLT-005 intacto"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "e67cf9152c966e941cb9bc26f60805e00f3534dfaf9d6d393ad8ed41d50a9c7f",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "e67cf9152c966e941cb9bc26f60805e00f3534dfaf9d6d393ad8ed41d50a9c7f",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente em modo somente leitura concluÃ­da para a EvoluÃ§Ã£o 028 â€” Task T1 (comportamento demonstrativo consistente nos 3 contact forms). Todos os 12 critÃ©rios de aceite foram verificados diretamente no cÃ³digo-fonte e artefatos do workspace: (1) os 3 forms reais do QLT-004 (ContactSimple, ContactSplit e ContactDetails em components/sections/contact/) foram identificados e atualizados; (2) o submit Ã© interceptado via event.preventDefault() sem chamadas de rede, backend ou reload de pÃ¡gina; (3) o primitive Alert da EvoluÃ§Ã£o 027 (Alert, AlertTitle, AlertDescription) Ã© reutilizado sem modificaÃ§Ãµes em components/ui/alert.tsx; (4) role=\"status\" e aria-live=\"polite\" sÃ£o definidos no consumer ao exibir o Alert; (5) a mensagem Ã© explicitamente demonstrativa (\"DemonstraÃ§Ã£o concluÃ­da\" / \"Este formulÃ¡rio funciona apenas como demonstraÃ§Ã£o. Nenhum dado foi enviado.\"), sem simular envio real; (6) todos os valores preenchidos nos campos sÃ£o preservados apÃ³s o submit e editar qualquer campo oculta o aviso (onChange); (7) a validaÃ§Ã£o nativa do navegador foi preservada (sem noValidate e mantendo type=\"email\" em contact-simple-email); (8) todos os 10 pares label htmlFor/id da EvoluÃ§Ã£o 015 (QLT-008) permanecem intactos; (9) o novo teste Playwright em tests/smoke.spec.ts cobre o fluxo completo nos 3 forms (preenchimento por label, submit, Alert acessÃ­vel, preservaÃ§Ã£o de valores, ausÃªncia de POST/reload e ocultaÃ§Ã£o ao editar); (10) artefatos de build (.next/BUILD_ID, manifests com 21 rotas), resultado da suÃ­te Playwright (test-results/.last-run.json com status passed) e higiene de cÃ³digo/diff confirmados; (11) package.json inalterado, sem dependÃªncia nova; (12) QLT-005 intacto (os 3 componentes continuam sem props, sem antecipar migraÃ§Ã£o data-driven ou documentaÃ§Ã£o da T2).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "tests/smoke.spec.ts (linhas 1001-1090) exercita os 3 forms em /library/contact, valida Alert com role=status e aria-live=polite, preservacao de campos, ausencia de POST/reload e ocultacao ao editar; test-results/.last-run.json registra status=passed e failedTests=[].",
+            "name": "Playwright E2E â€” contact forms: submit demonstrativo exibe Alert acessivel sem envio real",
+            "status": "passed"
+          },
+          {
+            "evidence": "tests/smoke.spec.ts (linhas 236-289) preservado integralmente; 10 associacoes htmlFor/id nos 3 contact forms verificadas no codigo-fonte.",
+            "name": "Playwright E2E â€” contact forms: associacao label-campo com htmlFor/id, ids unicos e foco por label",
+            "status": "passed"
+          },
+          {
+            "evidence": "Artefatos em .next/BUILD_ID (UMUKbVtKOubXwn0z9jNgj), .next/app-path-routes-manifest.json (21 rotas) e inspecao estatica de tipos/imports nos 4 arquivos tocados sem erros ou warnings.",
+            "name": "Next.js Production Build & TypeScript / ESLint static verification",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-10T00:54:50.588807+00:00"
+      },
+      "block_reason": "Budget global 24h do Inspector esgotado por chamadas externas (goal-inspector-test3/test4, 2026-11-09 14:41/14:57/15:08 UTC). Implementacao T1 completa e gates verdes; revisao pendente ate liberacao da janela (~2026-11-10 14:41 UTC). Sem self-approval, sem pulo de revisao.",
+      "resumed_at": "2026-11-10T00:51:27.430259+00:00",
+      "resume_reason": "Operador autorizou retomada; bloqueio era exclusivamente o antigo orcamento local; implementacao T1 intacta desde o submit (fingerprint validado pelo controller)",
+      "completed_at": "2026-11-10T00:54:50.771602+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Documentacao e fechamento do finding QLT-004",
+      "acceptance": [
+        "QLT-004 VERIFIED com evidencia real",
+        "roadmap 028 VERIFIED",
+        "CURRENT-STATE com numeros reais",
+        "CHANGELOG estado final",
+        "nenhum documento indevido alterado",
+        "diff-check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "bfac30e92f842319dd80bbe4e6c1ab700077314dd15ac7452050378e0440c069",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "bfac30e92f842319dd80bbe4e6c1ab700077314dd15ac7452050378e0440c069",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente em modo leitura concluÃ­da para a Task T2 (DocumentaÃ§Ã£o e fechamento do finding QLT-004) da EvoluÃ§Ã£o 028 (Contact forms: comportamento de demo). Todos os critÃ©rios de aceite foram verificados diretamente nos arquivos do repositÃ³rio: (1) QLT-004 marcado como VERIFIED em QUALITY-REVIEW.md com seÃ§Ã£o completa de verificaÃ§Ã£o e atualizaÃ§Ã£o da tabela de distribuiÃ§Ã£o de prioridades (10 findings VERIFIED de 13); (2) EvoluÃ§Ã£o 028 marcada como IMPLEMENTADA / VERIFIED em docs/ROADMAP-1000-EVOLUTIONS.md (cabeÃ§alho do Lote 02, tabela resumo e seÃ§Ã£o detalhada 028); (3) memory-bank/CURRENT-STATE.md atualizado com nÃºmeros reais verificados no cÃ³digo e na suÃ­te (21 rotas, 31 sections, 10 UI, 7 site, 2 shells, 50 componentes no total, 37 smoke tests / 74 execuÃ§Ãµes = 71 passed + 3 skipped, prÃ³xima execuÃ§Ã£o 029); (4) memory-bank/CHANGELOG.md atualizado no topo com o registro final da EvoluÃ§Ã£o 028 preservando o histÃ³rico anterior; (5) nenhum documento fora de escopo (como COMPONENT-CATALOG.md, DESIGN-SYSTEM.md ou DECISIONS.md) foi alterado indevidamente; (6) arquivos modificados na evoluÃ§Ã£o inspecionados sem marcadores de conflito ou erros de whitespace (diff-check limpo).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Leitura direta de QUALITY-REVIEW.md (linhas 182-209 e 444-455): QLT-004 marcado como VERIFIED (2026-11-10) com evidÃªncia detalhada dos 3 forms, client boundary, teste Playwright e gates; tabela P3 e contagem total atualizadas.",
+            "name": "QLT-004 VERIFIED em QUALITY-REVIEW.md",
+            "status": "passed"
+          },
+          {
+            "evidence": "Leitura direta de docs/ROADMAP-1000-EVOLUTIONS.md (linhas 389, 401 e 439-444): Lote 02 atualizado com 028 VERIFIED (2026-11-10), linha 028 da tabela marcada VERIFIED com QLT-004 concluÃ­do e seÃ§Ã£o 028 detalhada.",
+            "name": "EvoluÃ§Ã£o 028 VERIFIED em docs/ROADMAP-1000-EVOLUTIONS.md",
+            "status": "passed"
+          },
+          {
+            "evidence": "Leitura direta de memory-bank/CURRENT-STATE.md (linhas 12, 40-41, 68-72, 90-99, 103) confrontada com tests/smoke.spec.ts (37 testes definidos, 3 skips mobile-only = 71 passed + 3 skipped em 74 execuÃ§Ãµes) e inventÃ¡rio real (31 sections, 10 UI, 7 site, 2 shells = 50 total; 21 rotas; prÃ³xima execuÃ§Ã£o 029).",
+            "name": "ConsistÃªncia de nÃºmeros reais em memory-bank/CURRENT-STATE.md",
+            "status": "passed"
+          },
+          {
+            "evidence": "Leitura direta de memory-bank/CHANGELOG.md (linhas 7-15): entrada [2026-11-10] da EvoluÃ§Ã£o 028 completa e coerente com o estado final, mantendo histÃ³rico prÃ©vio intacto.",
+            "name": "Registro final em memory-bank/CHANGELOG.md",
+            "status": "passed"
+          },
+          {
+            "evidence": "Leitura direta de docs/COMPONENT-CATALOG.md, docs/DESIGN-SYSTEM.md, docs/ARQUITETURA.md, docs/DEFINITION-OF-DONE.md, memory-bank/DECISIONS.md, PROJETO.md e README.md confirma que nenhum documento fora do escopo da T2 foi modificado indevidamente, e a inspeÃ§Ã£o dos arquivos tocados nÃ£o apresenta conflitos ou trailing whitespace.",
+            "name": "Escopo documental e integridade de formataÃ§Ã£o (diff-check)",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-10T12:00:35.893960+00:00"
+      },
+      "completed_at": "2026-11-10T12:00:36.083664+00:00"
+    }
+  ],
+  "created_at": "2026-11-09T22:07:09.666750+00:00",
+  "finished_at": "2026-11-10T12:00:36.083681+00:00"
+}

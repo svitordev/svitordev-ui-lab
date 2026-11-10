@@ -1,9 +1,20 @@
+"use client";
+
 // components/sections/contact/contact-simple.tsx
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function ContactSimple() {
+  const [demoVisible, setDemoVisible] = useState(false);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDemoVisible(true);
+  }
+
   return (
     <section id="contact" className="w-full bg-background">
       <div className="mx-auto max-w-3xl px-4 py-12 md:py-16">
@@ -17,7 +28,11 @@ export function ContactSimple() {
           </p>
         </div>
 
-        <form className="space-y-4 rounded-2xl border bg-muted/30 p-4 shadow-sm">
+        <form
+          className="space-y-4 rounded-2xl border bg-muted/30 p-4 shadow-sm"
+          onSubmit={handleSubmit}
+          onChange={() => setDemoVisible(false)}
+        >
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1 text-sm">
               <label htmlFor="contact-simple-name" className="text-xs font-medium">Nome</label>
@@ -48,6 +63,15 @@ export function ContactSimple() {
               Enviar mensagem
             </Button>
           </div>
+
+          {demoVisible ? (
+            <Alert role="status" aria-live="polite">
+              <AlertTitle>Demonstração concluída</AlertTitle>
+              <AlertDescription>
+                Este formulário funciona apenas como demonstração. Nenhum dado foi enviado.
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
           <p className="text-[11px] text-muted-foreground">
             Este formulário pode ser integrado com e-mail, ferramentas de atendimento ou CRM,

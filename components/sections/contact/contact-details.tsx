@@ -1,7 +1,11 @@
+"use client";
+
 // components/sections/contact/contact-details.tsx
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const contactInfo = [
@@ -26,6 +30,13 @@ const contactInfo = [
 ];
 
 export function ContactDetails() {
+  const [demoVisible, setDemoVisible] = useState(false);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDemoVisible(true);
+  }
+
   return (
     <section id="contact" className="w-full bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
@@ -61,7 +72,11 @@ export function ContactDetails() {
           </div>
 
           {/* Formulário resumido */}
-          <form className="space-y-4 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm">
+          <form
+            className="space-y-4 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm"
+            onSubmit={handleSubmit}
+            onChange={() => setDemoVisible(false)}
+          >
             <div className="space-y-1">
               <label htmlFor="contact-details-name" className="text-xs font-medium">Nome</label>
               <Input id="contact-details-name" placeholder="Seu nome" />
@@ -77,6 +92,15 @@ export function ContactDetails() {
             <Button type="submit" size="sm">
               Enviar mensagem
             </Button>
+
+            {demoVisible ? (
+              <Alert role="status" aria-live="polite">
+                <AlertTitle>Demonstração concluída</AlertTitle>
+                <AlertDescription>
+                  Este formulário funciona apenas como demonstração. Nenhum dado foi enviado.
+                </AlertDescription>
+              </Alert>
+            ) : null}
           </form>
         </div>
       </div>

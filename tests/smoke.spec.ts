@@ -997,3 +997,94 @@ test('alerts: primitive renderiza variantes e semantica base', async ({ page }) 
     ),
   ).toBe(true);
 });
+
+test('contact forms: submit demonstrativo exibe Alert acessivel sem envio real', async ({ page }) => {
+  await page.goto('/library/contact');
+
+  // Evidencia de ausencia de envio real: nenhum POST deve ocorrer durante os
+  // submits e a pagina nao pode recarregar (flag sobrevive ao submit —
+  // submit nativo com action/GET recarregaria a pagina e perderia a flag).
+  const posts: string[] = [];
+  page.on('request', (request) => {
+    if (request.method() === 'POST') posts.push(request.url());
+  });
+  await page.evaluate(() => {
+    (window as unknown as Record<string, boolean>).__goal028NoReload = true;
+  });
+
+  // Os 3 forms reais do QLT-004, escopados pelos headings das variants
+  // (mesmo padrao do teste de associacao label-campo).
+  const forms = [
+    {
+      heading: 'Fale com nossa equipe',
+      button: 'Enviar mensagem',
+      fields: {
+        Nome: 'Maria Demo',
+        'E-mail': 'maria@exemplo.com',
+        Assunto: 'Orcamento',
+        Mensagem: 'Mensagem de teste para o formulario centralizado.',
+      },
+    },
+    {
+      heading: 'Conte um pouco sobre o que você precisa',
+      button: 'Enviar',
+      fields: {
+        Nome: 'Joao Demo',
+        'E-mail ou WhatsApp': '(00) 90000-0000',
+        Assunto: 'Atendimento',
+        Mensagem: 'Mensagem de teste para o formulario split.',
+      },
+    },
+    {
+      heading: 'Canais de contato',
+      button: 'Enviar mensagem',
+      fields: {
+        Nome: 'Ana Demo',
+        Mensagem: 'Mensagem curta de teste.',
+      },
+    },
+  ];
+
+  for (const { heading, button, fields } of forms) {
+    const section = page
+      .getByRole('heading', { name: heading })
+      .locator('xpath=ancestor::section[1]');
+
+    for (const [label, value] of Object.entries(fields)) {
+      await section.getByLabel(label, { exact: true }).fill(value);
+    }
+    await section.getByRole('button', { name: button }).click();
+
+    // Feedback demonstrativo visivel, com live semantics fornecidas pelo consumer.
+    const alert = section.locator('[data-slot="alert"]');
+    await expect(alert).toHaveCount(1);
+    await expect(alert).toHaveAttribute('role', 'status');
+    await expect(alert).toHaveAttribute('aria-live', 'polite');
+    await expect(alert.getByText('Demonstração concluída')).toBeVisible();
+    await expect(
+      alert.getByText('Este formulário funciona apenas como demonstração. Nenhum dado foi enviado.'),
+    ).toBeVisible();
+
+    // Campos preservados — nada foi apagado como se tivesse ocorrido envio real.
+    for (const [label, value] of Object.entries(fields)) {
+      await expect(section.getByLabel(label, { exact: true })).toHaveValue(value);
+    }
+
+    // Sem envio real: permanece na rota esperada.
+    expect(page.url()).toContain('/library/contact');
+  }
+
+  expect(posts).toHaveLength(0);
+  expect(
+    await page.evaluate(
+      () => (window as unknown as Record<string, boolean>).__goal028NoReload === true,
+    ),
+  ).toBe(true);
+
+  // Edicao apos o feedback oculta o aviso demonstrativo (comportamento simples e consistente).
+  const first = page
+    .getByRole('heading', { name: 'Fale com nossa equipe' })
+    .locator('xpath=ancestor::section[1]');
+  await first.getByLabel('Assunto', { exact: true }).fill('Editando novamente');
+  await expect(first.locator('[data-slot="alert"]')).toHaveCount(0);
+});
