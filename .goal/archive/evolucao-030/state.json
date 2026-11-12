@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "goal": "Evolucao 030 - Tema: definir politica e alinhar implementacao (QLT-009); decisao A dark-only ou B light/dark com base na auditoria do codigo real",
+  "current": 2,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria + decisao arquitetural sem alterar producao",
+      "acceptance": [
+        "inventario real completo (tokens, root class, dark variants, componentes com dark:*, providers, color-scheme, preferencia do sistema)",
+        "matriz A/B com criterios de codigo/risco/complexidade/valor/divida/SSR/testabilidade",
+        "recomendacao unica e justificada pelo codigo",
+        "sem conclusao predeterminada",
+        "evidencia registrada em .goal",
+        "nenhuma alteracao de app/components/globals/package/docs oficiais",
+        "se a opcao recomendada exigir refactor maior que a 030, BLOCKED com divisao proposta"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "f2bd57e22a3bc35669e901fc6c5b23532001408e6df0912966b988c30adfe491",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "f2bd57e22a3bc35669e901fc6c5b23532001408e6df0912966b988c30adfe491",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente em modo somente-leitura concluÃ­da com veredito PASS para a Task T1 da EvoluÃ§Ã£o 030 (QLT-009). Todos os 7 critÃ©rios de aceite foram verificados contra o cÃ³digo real do repositÃ³rio em HEAD 12be374f334e1dd77bfcf22657132a118618ece6: (1) inventÃ¡rio real completo confirmado em .goal/evidence/T1-theme-audit.md cobrindo app/globals.css (@custom-variant dark na L6, paleta :root light inacessÃ­vel nas L57-146, bloco .dark ativo nas L151-215, ausÃªncia de color-scheme e prefers-color-scheme), app/layout.tsx (className=\"dark\" estÃ¡tico e suppressHydrationWarning na L23), ausÃªncia de next-themes/ThemeProvider/localStorage/matchMedia em package.json e no cÃ³digo, e mapeamento exato dos Ãºnicos 3 componentes com utilitÃ¡rios dark:* em todo o repositÃ³rio (components/ui/button.tsx nas linhas 8, 14, 16 e 20; components/ui/input.tsx nas linhas 11 e 13; components/ui/textarea.tsx na linha 10 â€” zero ocorrÃªncias nos demais 48 componentes e pÃ¡ginas); (2) matriz comparativa A/B completa com critÃ©rios de cÃ³digo, tokens, risco, complexidade, valor ao UI Lab, dÃ­vida tÃ©cnica, impacto em SSR/hydration, testabilidade e escopo; (3) recomendaÃ§Ã£o Ãºnica e fundamentada no cÃ³digo real (OpÃ§Ã£o A â€” Dark-only oficial); (4) avaliaÃ§Ã£o objetiva sem conclusÃ£o predeterminada; (5) evidÃªncia registrada em .goal/evidence/T1-theme-audit.md; (6) nenhuma alteraÃ§Ã£o em app/, components/, app/globals.css, package.json ou docs/memory-bank oficiais; (7) escopo da OpÃ§Ã£o A contido em T2/T3 sem necessidade de bloquear por refatoraÃ§Ã£o ampla.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Leitura direta de .goal/evidence/T1-theme-audit.md, .goal/state.json, .git/HEAD, .git/refs/heads/main (12be374), app/layout.tsx, app/globals.css, package.json, todos os 51 componentes em components/{ui,site,sections}/**, pÃ¡ginas em app/**, tests/smoke.spec.ts e documentaÃ§Ã£o oficial (QUALITY-REVIEW.md, docs/*, memory-bank/*) comprova a exatidÃ£o do inventÃ¡rio e a ausÃªncia de alteraÃ§Ãµes em arquivos de produÃ§Ã£o ou documentaÃ§Ã£o oficial durante T1.",
+            "name": "inspecao-estatica-t1-auditoria-e-escopo",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-10T13:25:12.847069+00:00"
+      },
+      "completed_at": "2026-11-10T13:25:13.022870+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Implementacao da politica aprovada + testes",
+      "acceptance": [
+        "implementacao exatamente a opcao aprovada na T1",
+        "sem segunda politica fantasma",
+        "sem toggle falso",
+        "sem dependencia nova sem justificativa independente",
+        "a11y do controle se houver",
+        "SSR/hydration seguros",
+        "testes cobrindo a politica final em rotas representativas",
+        "sem regressao na suíte existente",
+        "lint/build/e2e/diff-check verdes",
+        "QLT-005 e demais findings intactos"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "c78d615219784ef5d4a244ec50cef062862e514d891da75b0c26ab1e6db58f0a",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "c78d615219784ef5d4a244ec50cef062862e514d891da75b0c26ab1e6db58f0a",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente em modo somente-leitura concluÃ­da para a Task T2 (EvoluÃ§Ã£o 030 â€” Tema: definir polÃ­tica e alinhar implementaÃ§Ã£o / QLT-009). A implementaÃ§Ã£o aplica integralmente a OpÃ§Ã£o A (dark-only com paleta oficial Ãºnica no :root): (1) app/layout.tsx removeu className=\"dark\" do elemento <html>, mantendo <html lang=\"pt-BR\"> e Server Component seguro para SSR/hydration; (2) app/globals.css removeu @custom-variant dark, a paleta light morta e o bloco .dark, consolidando a paleta escura Ãºnica diretamente em :root com color-scheme: dark; (3) components/ui/button.tsx, components/ui/input.tsx e components/ui/textarea.tsx promoveram os valores antes condicionados por dark:* diretamente para as classes base, preservando a aparÃªncia visual sem depender de seletor .dark; (4) nenhum toggle falso foi criado e nenhuma dependÃªncia nova foi instalada (package.json e package-lock.json inalterados); (5) tests/smoke.spec.ts adicionou o teste 'tema: politica oficial dark-only com paleta unica aplicada em rotas representativas' cobrindo /, /blog, /library/landing, /library/alerts e /library/tabs (ausÃªncia de .dark no html, resoluÃ§Ã£o de --background igual a oklch(0.145 0 0), renderizaÃ§Ã£o de h1/main e zero overflow horizontal), com test-results/.last-run.json registrando status 'passed' (0 falhas) e build atualizado em .next/BUILD_ID; (6) QLT-005 e demais findings permanecem intactos. (ObservaÃ§Ã£o cosmÃ©tica nÃ£o-bloqueante: hÃ¡ um caractere de substituiÃ§Ã£o no comentÃ¡rio de cabeÃ§alho de app/globals.css:52.)",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "tests/smoke.spec.ts:1154-1199 adiciona o teste 'tema: politica oficial dark-only com paleta unica aplicada em rotas representativas' validando ausÃªncia de classe .dark em document.documentElement, resoluÃ§Ã£o computada de var(--background) igual a oklch(0.145 0 0), presenÃ§a de h1/main e zero overflow horizontal em /, /blog, /library/landing, /library/alerts e /library/tabs; test-results/.last-run.json registra {\"status\": \"passed\", \"failedTests\": []}.",
+            "name": "Playwright E2E smoke suite (incluindo teste da polÃ­tica de tema dark-only)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Artefatos de build atualizados em .next/BUILD_ID (7vLpECSM_MY0uD9XvwwPQ) e .next/routes-manifest.json com todas as 22 rotas compiladas sem erro de TypeScript.",
+            "name": "Next.js production build & TypeScript check",
+            "status": "passed"
+          },
+          {
+            "evidence": "InspeÃ§Ã£o estÃ¡tica completa dos arquivos alterados (app/layout.tsx, app/globals.css, components/ui/button.tsx, components/ui/input.tsx, components/ui/textarea.tsx, tests/smoke.spec.ts) confirma conformidade com ESLint 9 / Next core-web-vitals + TypeScript, sem imports nÃ£o utilizados, sem any e sem erros de sintaxe.",
+            "name": "ESLint & static code analysis",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-10T14:29:17.809052+00:00"
+      },
+      "completed_at": "2026-11-10T14:29:17.999102+00:00"
+    },
+    {
+      "id": "T3",
+      "description": "Documentacao + fechamento QLT-009",
+      "acceptance": [
+        "QUALITY-REVIEW QLT-009 VERIFIED com evidencia concreta da implementacao",
+        "DECISIONS com ADR de theme policy (contexto, alternativas, decisao, motivos, consequencias, opcao rejeitada, como revisar)",
+        "DESIGN-SYSTEM com a politica final real implementada",
+        "ROADMAP 030 VERIFIED e proxima 031",
+        "CURRENT-STATE com 001-030 e numeros reais",
+        "CHANGELOG somente estado final",
+        "nenhum outro finding alterado",
+        "diff-check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "ad2f1ade4220d35346e00ec0876ad3041e36866b1860b19cce50c6861b97f739",
+      "review": {
+        "task_id": "T3",
+        "fingerprint": "ad2f1ade4220d35346e00ec0876ad3041e36866b1860b19cce50c6861b97f739",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente em modo somente-leitura concluÃ­da com veredito PASS para a Task T3 da EvoluÃ§Ã£o 030 (DocumentaÃ§Ã£o + fechamento QLT-009). Todos os 8 critÃ©rios de aceite foram verificados diretamente nos arquivos reais do repositÃ³rio: (1) QUALITY-REVIEW.md marca QLT-009 como VERIFIED (2026-11-10) na seÃ§Ã£o do finding (L302-304), na tabela de distribuiÃ§Ã£o P3 (L451) e no total de findings (L454: 11 VERIFIED de 13, restando QLT-005 e QLT-011), com evidÃªncia concreta da implementaÃ§Ã£o da OpÃ§Ã£o A (DEC-011); (2) memory-bank/DECISIONS.md registra a DEC-011 (L77-87) com todos os campos exigidos do ADR de theme policy (Contexto, Alternativas, DecisÃ£o, Motivos, ConsequÃªncias, OpÃ§Ã£o rejeitada, Como revisar, Data e Impacto); (3) docs/DESIGN-SYSTEM.md reflete a polÃ­tica final real implementada (dark-only oficial via DEC-011, paleta Ãºnica no :root com color-scheme: dark, remoÃ§Ã£o de .dark e @custom-variant dark, resoluÃ§Ã£o inline dos 8 utilitÃ¡rios dark:* em button/input/textarea e remoÃ§Ã£o de className=\\\"dark\\\" e suppressHydrationWarning em app/layout.tsx); (4) docs/ROADMAP-1000-EVOLUTIONS.md marca a EvoluÃ§Ã£o 030 como IMPLEMENTADA / VERIFIED (L389, L403, L449-455, L476), responde ao checkpoint curto 030 e define 031 como prÃ³xima execuÃ§Ã£o; (5) memory-bank/CURRENT-STATE.md lista as evoluÃ§Ãµes 001â€“030 como VERIFIED, define 031 como prÃ³xima execuÃ§Ã£o e apresenta os nÃºmeros reais verificados no cÃ³digo (11 UI, 7 site, 31 sections, 2 shells = 51 componentes; 22 rotas; 39 testes Playwright / 78 execuÃ§Ãµes = 75 passed + 3 skipped; 13 findings com 11 VERIFIED e 2 pendentes); (6) memory-bank/CHANGELOG.md registra unicamente a entrada de estado final da EvoluÃ§Ã£o 030 (L7-15), preservando o histÃ³rico anterior; (7) nenhum outro finding foi alterado; (8) inspeÃ§Ã£o de formataÃ§Ã£o e whitespace confirma ausÃªncia de conflict markers ou trailing whitespace nos arquivos alterados.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Leitura direta e cruzada de QUALITY-REVIEW.md, memory-bank/DECISIONS.md, docs/DESIGN-SYSTEM.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md e .goal/evidence/T1-theme-audit.md contra o cÃ³digo real (app/globals.css, app/layout.tsx, components/ui/button.tsx, components/ui/input.tsx, components/ui/textarea.tsx, tests/smoke.spec.ts) confirma 100% de aderÃªncia aos 8 critÃ©rios de aceite da T3.",
+            "name": "Auditoria documental e cruzamento com cÃ³digo real (T3 / QLT-009)",
+            "status": "passed"
+          },
+          {
+            "evidence": "tests/smoke.spec.ts contÃ©m 39 testes (incluindo 'tema: politica oficial dark-only com paleta unica aplicada em rotas representativas' nas L1154-1199) e test-results/.last-run.json registra {\\\"status\\\": \\\"passed\\\", \\\"failedTests\\\": []}.",
+            "name": "Playwright E2E smoke suite (39 testes / 78 execuÃ§Ãµes)",
+            "status": "passed"
+          },
+          {
+            "evidence": ".next/BUILD_ID (7vLpECSM_MY0uD9XvwwPQ) presente e atualizado sem erros de compilaÃ§Ã£o ou TypeScript.",
+            "name": "Next.js production build & TypeScript check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-10T14:39:10.875911+00:00"
+      },
+      "completed_at": "2026-11-10T14:39:11.043827+00:00"
+    }
+  ],
+  "created_at": "2026-11-10T13:07:10.829465+00:00",
+  "finished_at": "2026-11-10T14:39:11.043842+00:00"
+}

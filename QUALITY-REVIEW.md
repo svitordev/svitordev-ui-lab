@@ -215,7 +215,13 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / Reutilização
 
-**Evidência:** Os 6 `site` components + 19 `sections` têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010) e `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer).
+**Evidência:** Os 6 `site` components + 18 `sections` têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010), `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer) e `hero-primary` (Evolução 031).
+
+**Verificação (Evolução 031, 2026-11-11):**
+
+- **`HeroPrimary`** migrado para contrato data-driven local (`HeroPrimaryAction`/`HeroPrimaryProps`) na linguagem dos contratos modernos do Lab (001/003/010/016): `title`/`actions` obrigatórios; `eyebrow?`/`description?`/`supportingText?`/`mediaTitle?`/`mediaBadge?` opcionais com renderização condicional; **sem defaults internos escondendo conteúdo**; consumer dono dos dados (`app/library/hero/page.tsx`); CTAs preservam os destinos da 026 como links reais; Server Component e visual preservados; union restrita `default | outline`; convenção 001.
+- **Contagem real no código: 25 → 24** (18 sections + 6 site). **QLT-005 permanece ISSUE_CONFIRMED / ABERTO** — falta migrar 24.
+- Gate: +1 teste Playwright dual-project do contrato via consumer; suíte 40 testes / 80 execuções — 77 passed + 3 skipped; lint 0/0; build PASS (22 rotas).
 
 **Arquivo(s):** `components/site/**`, `components/sections/**`
 

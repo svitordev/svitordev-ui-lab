@@ -1,6 +1,9 @@
 // app/library/hero/page.tsx
 import type { Metadata } from "next";
-import { HeroPrimary } from "@/components/sections/hero/hero-primary";
+import {
+  HeroPrimary,
+  type HeroPrimaryProps,
+} from "@/components/sections/hero/hero-primary";
 import {
   HeroCenterCta,
   type HeroCenterCtaProps,
@@ -24,6 +27,21 @@ type HeroItem = {
   name: string;
   description: string;
   preview: React.ReactNode;
+};
+
+const heroPrimaryDemo: HeroPrimaryProps = {
+  eyebrow: "Site institucional · Empresas e profissionais",
+  title: "Apresente sua empresa com clareza, profissionalismo e confiança.",
+  description:
+    "Uma página inicial pensada para explicar quem você é, em que atua e como pode ajudar seus clientes, com destaque para seus principais serviços e formas de contato.",
+  supportingText:
+    "Esse modelo funciona bem para escritórios, clínicas, consultorias e outros negócios que prestam serviços e querem uma presença online clara e organizada.",
+  actions: [
+    { label: "Ver serviços", href: "/#services", variant: "default" },
+    { label: "Falar com a equipe", href: "/#contact", variant: "outline" },
+  ],
+  mediaTitle: "Página inicial",
+  mediaBadge: "Visualização",
 };
 
 const heroCenterCtaDemo: HeroCenterCtaProps = {
@@ -72,7 +90,7 @@ const heros: HeroItem[] = [
     name: "Split layout (texto + preview)",
     description:
       "Mensagem à esquerda e preview à direita — a hero principal para a maioria das landings.",
-    preview: <HeroPrimary />,
+    preview: <HeroPrimary {...heroPrimaryDemo} />,
   },
   {
     id: "hero-center-cta",

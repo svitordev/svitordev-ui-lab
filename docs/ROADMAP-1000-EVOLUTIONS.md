@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; 031–050 planejadas e não iniciadas. Próxima execução: **031**.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; 032–050 planejadas e não iniciadas. Próxima execução: **032**.
 
 ## Visão geral
 
@@ -401,7 +401,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 | 028 | Contact forms: comportamento de demo ✅ VERIFIED | quality | Submit demonstrativo com Alert; explícito: sem backend real, sem envio fingido; estados só os que o contrato da demo justificar | 3 contact forms + teste | QLT-004 ✅ | 026, 027 | Médio |
 | 029 | Tabs (primitive) ✅ VERIFIED | UI | Tabs acessíveis (Radix — dependência a aprovar no Plan) | `components/ui/tabs.tsx` + demo | — | — | Médio |
 | 030 | Tema: definir política e alinhar implementação ✅ VERIFIED | quality | Decidir com base no produto: A) dark-only → explicitar código+DS e eliminar/reclassificar light enganoso; B) suportar light/dark → mecanismo real de acesso. Plan próprio antes de implementar | decisão + implementação alinhada | QLT-009 ✅ | — | Pequeno–médio |
-| 031 | Migrar hero-primary para contrato | refactor | QLT-005 incremental | contrato + demo | QLT-005 | 026 | Pequeno |
+| 031 | Migrar hero-primary para contrato ✅ VERIFIED | refactor | QLT-005 incremental | contrato + demo | QLT-005 (25→24, aberto) | 026 | Pequeno |
 | 032 | Migrar hero-steps + corrigir heading | refactor | Contrato + h1→h3 | contrato + heading hierarchy | QLT-005, QLT-011 | 026 | Pequeno |
 | 033 | Breadcrumbs (primitive) | UI | Navegação hierárquica | `components/ui/breadcrumbs.tsx` + demo | — | — | Pequeno |
 | 034 | Gallery (section) | section | Grid de mídia data-driven, estruturalmente distinta, **usando Tabs como parte funcional** (conjuntos reais da demo) | nova section + categoria + demo | — | 029 | Médio |
@@ -472,7 +472,7 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 
 - **QLT-003** — ✅ **VERIFIED pela 026** (2026-11-09): 10 botões mortos → 0; anchors `/#services`/`/#about` passaram a resolver por alvos reais na home; zero `href="#"`.
 - **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
-- **QLT-005** — hoje **25 componentes sem props** (19 sections + 6 site); o lote migra **11** (031, 032, 036×2, 037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
+- **QLT-005** — hoje **24 componentes sem props** (18 sections + 6 site) — **031 ✅ VERIFIED (2026-11-11): hero-primary migrado, 25 → 24**; o lote migra mais **10** (032, 036×2, 037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
 - **QLT-009** — ✅ **VERIFIED pela 030** (2026-11-10): decisão tomada (DEC-011 — dark-only oficial) E implementada de fato — paleta única no `:root`, sem `.dark`, sem `@custom-variant dark`, sem mecanismo fake; teste novo protege a política.
 - **QLT-011** — **parcialmente atacado na 032** (heading hierarchy) **e reauditado na 050** (comentários stale, nit do wrapper). Sem fechamento garantido.
 
@@ -482,9 +482,9 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 - **site (+2):** Consent preferences banner, Header with dropdown navigation.
 - **sections (+1):** Gallery.
 
-## Migrações do contrato (11)
+## Migrações do contrato (11 — 1 concluída: hero-primary ✅ 031)
 
-hero-primary, hero-steps, services-grid-simple, services-split-with-highlight, AboutTimeline, HeaderBasic, HeaderCentered, HeaderWithTopbar, FooterColumns, FooterCta, FooterSimple.
+hero-primary ✅ (031), hero-steps, services-grid-simple, services-split-with-highlight, AboutTimeline, HeaderBasic, HeaderCentered, HeaderWithTopbar, FooterColumns, FooterCta, FooterSimple.
 
 ## Compositions (6)
 

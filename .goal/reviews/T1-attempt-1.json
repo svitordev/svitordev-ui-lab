@@ -1,14 +1,24 @@
 {
   "task_id": "T1",
-  "fingerprint": "f2bd57e22a3bc35669e901fc6c5b23532001408e6df0912966b988c30adfe491",
+  "fingerprint": "de27b9e97f882ca33d358f92a32b4b6e351f51755f91948d1f10e316b677da45",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente em modo somente-leitura concluÃ­da com veredito PASS para a Task T1 da EvoluÃ§Ã£o 030 (QLT-009). Todos os 7 critÃ©rios de aceite foram verificados contra o cÃ³digo real do repositÃ³rio em HEAD 12be374f334e1dd77bfcf22657132a118618ece6: (1) inventÃ¡rio real completo confirmado em .goal/evidence/T1-theme-audit.md cobrindo app/globals.css (@custom-variant dark na L6, paleta :root light inacessÃ­vel nas L57-146, bloco .dark ativo nas L151-215, ausÃªncia de color-scheme e prefers-color-scheme), app/layout.tsx (className=\"dark\" estÃ¡tico e suppressHydrationWarning na L23), ausÃªncia de next-themes/ThemeProvider/localStorage/matchMedia em package.json e no cÃ³digo, e mapeamento exato dos Ãºnicos 3 componentes com utilitÃ¡rios dark:* em todo o repositÃ³rio (components/ui/button.tsx nas linhas 8, 14, 16 e 20; components/ui/input.tsx nas linhas 11 e 13; components/ui/textarea.tsx na linha 10 â€” zero ocorrÃªncias nos demais 48 componentes e pÃ¡ginas); (2) matriz comparativa A/B completa com critÃ©rios de cÃ³digo, tokens, risco, complexidade, valor ao UI Lab, dÃ­vida tÃ©cnica, impacto em SSR/hydration, testabilidade e escopo; (3) recomendaÃ§Ã£o Ãºnica e fundamentada no cÃ³digo real (OpÃ§Ã£o A â€” Dark-only oficial); (4) avaliaÃ§Ã£o objetiva sem conclusÃ£o predeterminada; (5) evidÃªncia registrada em .goal/evidence/T1-theme-audit.md; (6) nenhuma alteraÃ§Ã£o em app/, components/, app/globals.css, package.json ou docs/memory-bank oficiais; (7) escopo da OpÃ§Ã£o A contido em T2/T3 sem necessidade de bloquear por refatoraÃ§Ã£o ampla.",
+  "summary": "Auditoria independente da Task T1 (EvoluÃ§Ã£o 031 â€” Migrar HeroPrimary para contrato data-driven, QLT-005 incremental) concluÃ­da em modo somente leitura com veredito PASS. Todos os 11 critÃ©rios de aceite foram verificados diretamente nos arquivos reais do workspace: (1) auditoria prÃ©via e inventÃ¡rio de consumers registrados em .goal/evidence/T1-audit.md; (2) somente HeroPrimary (components/sections/hero/hero-primary.tsx) foi migrado para contrato tipado local (HeroPrimaryAction / HeroPrimaryProps), alinhado aos contratos modernos (HeroCenterCta, CtaSplitActions, PricingThreeTiers); (3) zero defaults internos escondendo conteÃºdo hardcoded; (4) app/library/hero/page.tsx atua como Ãºnico consumer real e dono dos dados (heroPrimaryDemo); (5) CTAs preservam os destinos da EvoluÃ§Ã£o 026 (/#services com variant default e /#contact com variant outline) como links reais via Button asChild + next/link (ConvenÃ§Ã£o 001); (6) estrutura visual, responsividade, polÃ­tica dark-only (DEC-011) e Server Component preservados; (7) sem 'use client' no componente ou na pÃ¡gina; (8) as outras 3 variantes de /library/hero (HeroCenterCta, HeroSteps, HeroMediaShowcase) permanecem intactas; (9) teste E2E adicionado em tests/smoke.spec.ts (linhas 186â€“240) validando contrato via consumer, hrefs, variantes (default vs outline por estilo computado), rÃ³tulos do mock visual e zero overflow horizontal (desktop e mobile); (10) package.json sem novas dependÃªncias; (11) artefatos de build (.next/trace-build, .next/server/app/library/hero.html) e de execuÃ§Ã£o Playwright (test-results/.last-run.json com status passed) confirmam gates verdes. AtualizaÃ§Ãµes documentais e de QLT-005 pertencem Ã  Task T2 (PENDING).",
   "findings": [],
   "tests": [
     {
-      "evidence": "Leitura direta de .goal/evidence/T1-theme-audit.md, .goal/state.json, .git/HEAD, .git/refs/heads/main (12be374), app/layout.tsx, app/globals.css, package.json, todos os 51 componentes em components/{ui,site,sections}/**, pÃ¡ginas em app/**, tests/smoke.spec.ts e documentaÃ§Ã£o oficial (QUALITY-REVIEW.md, docs/*, memory-bank/*) comprova a exatidÃ£o do inventÃ¡rio e a ausÃªncia de alteraÃ§Ãµes em arquivos de produÃ§Ã£o ou documentaÃ§Ã£o oficial durante T1.",
-      "name": "inspecao-estatica-t1-auditoria-e-escopo",
+      "evidence": "tests/smoke.spec.ts (linhas 186-240: teste 'hero primary data-driven: contrato renderizado pelo consumer com variantes preservadas e zero overflow') + test-results/.last-run.json (status: passed, failedTests: [])",
+      "name": "Playwright E2E smoke suite (incluindo teste hero primary data-driven desktop/mobile)",
+      "status": "passed"
+    },
+    {
+      "evidence": ".next/trace-build (run-turbopack, run-typescript, static-check, static-generation concluÃ­dos) + .next/BUILD_ID (e8VEhIjR6FSqXHHniZ2E7) + .next/server/app/library/hero.html contendo o HTML/RSC prerenderizado do HeroPrimary via props do consumer",
+      "name": "Next.js production build & TypeScript check (npm run build)",
+      "status": "passed"
+    },
+    {
+      "evidence": "InspeÃ§Ã£o estÃ¡tica de components/sections/hero/hero-primary.tsx, app/library/hero/page.tsx e tests/smoke.spec.ts contra eslint.config.mjs e tsconfig.json (strict: true, zero any, zero unused vars, zero conflitos ou erros de formataÃ§Ã£o)",
+      "name": "ESLint & diff-check estÃ¡tico",
       "status": "passed"
     }
   ],

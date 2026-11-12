@@ -1,45 +1,34 @@
 {
-  "goal": "Evolucao 030 - Tema: definir politica e alinhar implementacao (QLT-009); decisao A dark-only ou B light/dark com base na auditoria do codigo real",
+  "goal": "Evolucao 031 - Migrar HeroPrimary para contrato data-driven (QLT-005 incremental); consumer dono dos dados; visual/responsividade/Server Component preservados; demais 3 variants de /library/hero intactas",
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria + decisao arquitetural sem alterar producao",
+      "description": "Auditoria + migracao HeroPrimary para contrato + consumer data + testes + gates",
       "acceptance": [
-        "inventario real completo (tokens, root class, dark variants, componentes com dark:*, providers, color-scheme, preferencia do sistema)",
-        "matriz A/B com criterios de codigo/risco/complexidade/valor/divida/SSR/testabilidade",
-        "recomendacao unica e justificada pelo codigo",
-        "sem conclusao predeterminada",
-        "evidencia registrada em .goal",
-        "nenhuma alteracao de app/components/globals/package/docs oficiais",
-        "se a opcao recomendada exigir refactor maior que a 030, BLOCKED com divisao proposta"
+        "auditar hero-primary.tsx e app/library/hero/page.tsx e registrar inventario de consumers reais em .goal",
+        "migrar somente HeroPrimary para contrato tipado seguindo a linguagem dos contratos modernos do projeto (HeroCenterCta/CtaSplitActions/PricingThreeTiers)",
+        "sem defaults internos que escondam conteudo migrado",
+        "consumer dono dos dados",
+        "CTAs preservam destinos da 026 (/#services e /#contact) como links reais",
+        "visual, responsividade, dark-only DEC-011 e Server Component preservados",
+        "sem use client",
+        "as outras 3 variants de /library/hero permanecem intactas",
+        "teste minimo provando o contrato via consumer com hrefs, variants e zero overflow desktop/mobile",
+        "nenhuma dependencia nova",
+        "lint/build/e2e/diff-check verdes"
       ]
     },
     {
       "id": "T2",
-      "description": "Implementacao da politica aprovada + testes",
+      "description": "Documentacao + atualizacao incremental do QLT-005",
       "acceptance": [
-        "implementacao exatamente a opcao aprovada na T1",
-        "sem segunda politica fantasma",
-        "sem toggle falso",
-        "sem dependencia nova sem justificativa independente",
-        "a11y do controle se houver",
-        "SSR/hydration seguros",
-        "testes cobrindo a politica final em rotas representativas",
-        "sem regressao na suíte existente",
-        "lint/build/e2e/diff-check verdes",
-        "QLT-005 e demais findings intactos"
-      ]
-    },
-    {
-      "id": "T3",
-      "description": "Documentacao + fechamento QLT-009",
-      "acceptance": [
-        "QUALITY-REVIEW QLT-009 VERIFIED com evidencia concreta da implementacao",
-        "DECISIONS com ADR de theme policy (contexto, alternativas, decisao, motivos, consequencias, opcao rejeitada, como revisar)",
-        "DESIGN-SYSTEM com a politica final real implementada",
-        "ROADMAP 030 VERIFIED e proxima 031",
-        "CURRENT-STATE com 001-030 e numeros reais",
+        "QLT-005 atualizado incrementalmente com contagem real confirmada no codigo (esperado 25 para 24) e permanece aberto",
+        "COMPONENT-CATALOG atualizado no formato real sem nova entry",
+        "contagens 31/11/51",
+        "ROADMAP 031 VERIFIED e proxima 032 nao iniciada",
+        "CURRENT-STATE com 001-031 e numeros reais",
         "CHANGELOG somente estado final",
+        "DESIGN-SYSTEM e DECISIONS intocados se nenhuma convencao nova",
         "nenhum outro finding alterado",
         "diff-check limpo"
       ]

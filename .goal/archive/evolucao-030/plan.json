@@ -1,0 +1,48 @@
+{
+  "goal": "Evolucao 030 - Tema: definir politica e alinhar implementacao (QLT-009); decisao A dark-only ou B light/dark com base na auditoria do codigo real",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria + decisao arquitetural sem alterar producao",
+      "acceptance": [
+        "inventario real completo (tokens, root class, dark variants, componentes com dark:*, providers, color-scheme, preferencia do sistema)",
+        "matriz A/B com criterios de codigo/risco/complexidade/valor/divida/SSR/testabilidade",
+        "recomendacao unica e justificada pelo codigo",
+        "sem conclusao predeterminada",
+        "evidencia registrada em .goal",
+        "nenhuma alteracao de app/components/globals/package/docs oficiais",
+        "se a opcao recomendada exigir refactor maior que a 030, BLOCKED com divisao proposta"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Implementacao da politica aprovada + testes",
+      "acceptance": [
+        "implementacao exatamente a opcao aprovada na T1",
+        "sem segunda politica fantasma",
+        "sem toggle falso",
+        "sem dependencia nova sem justificativa independente",
+        "a11y do controle se houver",
+        "SSR/hydration seguros",
+        "testes cobrindo a politica final em rotas representativas",
+        "sem regressao na suíte existente",
+        "lint/build/e2e/diff-check verdes",
+        "QLT-005 e demais findings intactos"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Documentacao + fechamento QLT-009",
+      "acceptance": [
+        "QUALITY-REVIEW QLT-009 VERIFIED com evidencia concreta da implementacao",
+        "DECISIONS com ADR de theme policy (contexto, alternativas, decisao, motivos, consequencias, opcao rejeitada, como revisar)",
+        "DESIGN-SYSTEM com a politica final real implementada",
+        "ROADMAP 030 VERIFIED e proxima 031",
+        "CURRENT-STATE com 001-030 e numeros reais",
+        "CHANGELOG somente estado final",
+        "nenhum outro finding alterado",
+        "diff-check limpo"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "task_id": "T2",
+  "fingerprint": "c78d615219784ef5d4a244ec50cef062862e514d891da75b0c26ab1e6db58f0a",
+  "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+  "verdict": "APPROVED",
+  "summary": "Auditoria independente em modo somente-leitura concluÃ­da para a Task T2 (EvoluÃ§Ã£o 030 â€” Tema: definir polÃ­tica e alinhar implementaÃ§Ã£o / QLT-009). A implementaÃ§Ã£o aplica integralmente a OpÃ§Ã£o A (dark-only com paleta oficial Ãºnica no :root): (1) app/layout.tsx removeu className=\"dark\" do elemento <html>, mantendo <html lang=\"pt-BR\"> e Server Component seguro para SSR/hydration; (2) app/globals.css removeu @custom-variant dark, a paleta light morta e o bloco .dark, consolidando a paleta escura Ãºnica diretamente em :root com color-scheme: dark; (3) components/ui/button.tsx, components/ui/input.tsx e components/ui/textarea.tsx promoveram os valores antes condicionados por dark:* diretamente para as classes base, preservando a aparÃªncia visual sem depender de seletor .dark; (4) nenhum toggle falso foi criado e nenhuma dependÃªncia nova foi instalada (package.json e package-lock.json inalterados); (5) tests/smoke.spec.ts adicionou o teste 'tema: politica oficial dark-only com paleta unica aplicada em rotas representativas' cobrindo /, /blog, /library/landing, /library/alerts e /library/tabs (ausÃªncia de .dark no html, resoluÃ§Ã£o de --background igual a oklch(0.145 0 0), renderizaÃ§Ã£o de h1/main e zero overflow horizontal), com test-results/.last-run.json registrando status 'passed' (0 falhas) e build atualizado em .next/BUILD_ID; (6) QLT-005 e demais findings permanecem intactos. (ObservaÃ§Ã£o cosmÃ©tica nÃ£o-bloqueante: hÃ¡ um caractere de substituiÃ§Ã£o no comentÃ¡rio de cabeÃ§alho de app/globals.css:52.)",
+  "findings": [],
+  "tests": [
+    {
+      "evidence": "tests/smoke.spec.ts:1154-1199 adiciona o teste 'tema: politica oficial dark-only com paleta unica aplicada em rotas representativas' validando ausÃªncia de classe .dark em document.documentElement, resoluÃ§Ã£o computada de var(--background) igual a oklch(0.145 0 0), presenÃ§a de h1/main e zero overflow horizontal em /, /blog, /library/landing, /library/alerts e /library/tabs; test-results/.last-run.json registra {\"status\": \"passed\", \"failedTests\": []}.",
+      "name": "Playwright E2E smoke suite (incluindo teste da polÃ­tica de tema dark-only)",
+      "status": "passed"
+    },
+    {
+      "evidence": "Artefatos de build atualizados em .next/BUILD_ID (7vLpECSM_MY0uD9XvwwPQ) e .next/routes-manifest.json com todas as 22 rotas compiladas sem erro de TypeScript.",
+      "name": "Next.js production build & TypeScript check",
+      "status": "passed"
+    },
+    {
+      "evidence": "InspeÃ§Ã£o estÃ¡tica completa dos arquivos alterados (app/layout.tsx, app/globals.css, components/ui/button.tsx, components/ui/input.tsx, components/ui/textarea.tsx, tests/smoke.spec.ts) confirma conformidade com ESLint 9 / Next core-web-vitals + TypeScript, sem imports nÃ£o utilizados, sem any e sem erros de sintaxe.",
+      "name": "ESLint & static code analysis",
+      "status": "passed"
+    }
+  ],
+  "correction_prompt": "",
+  "source": "independent-antigravity-cli"
+}

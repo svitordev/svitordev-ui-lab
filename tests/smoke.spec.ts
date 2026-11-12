@@ -183,6 +183,62 @@ test('hero centralizada data-driven renderiza heading e CTAs como links reais', 
   );
 });
 
+test('hero primary data-driven: contrato renderizado pelo consumer com variantes preservadas e zero overflow', async ({ page }) => {
+  await page.goto('/library/hero');
+
+  // Escopo pela section própria da variante (ancestor::section[1] a partir do heading —
+  // padrão consolidado). Os textos abaixo são os dados do consumer
+  // (app/library/hero/page.tsx), provando que o conteúdo chega por props.
+  const hero = page
+    .getByRole('heading', {
+      level: 1,
+      name: 'Apresente sua empresa com clareza, profissionalismo e confiança.',
+    })
+    .locator('xpath=ancestor::section[1]');
+
+  await expect(
+    hero.getByText('Site institucional · Empresas e profissionais'),
+  ).toBeVisible();
+  await expect(
+    hero.getByRole('heading', {
+      level: 1,
+      name: 'Apresente sua empresa com clareza, profissionalismo e confiança.',
+    }),
+  ).toBeVisible();
+  await expect(
+    hero.getByText('Uma página inicial pensada para explicar quem você é'),
+  ).toBeVisible();
+  await expect(
+    hero.getByText('Esse modelo funciona bem para escritórios'),
+  ).toBeVisible();
+
+  // CTAs vindos do consumer: links reais com os destinos da 026 e variantes distintas
+  // (default sem borda; outline com borda — verificado por estilo computado).
+  const defaultCta = hero.getByRole('link', { name: 'Ver serviços' });
+  const outlineCta = hero.getByRole('link', { name: 'Falar com a equipe' });
+  await expect(defaultCta).toHaveAttribute('href', '/#services');
+  await expect(outlineCta).toHaveAttribute('href', '/#contact');
+  expect(await defaultCta.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe(
+    '0px',
+  );
+  expect(await outlineCta.evaluate((el) => getComputedStyle(el).borderTopWidth)).not.toBe(
+    '0px',
+  );
+
+  // Rótulos do mock visual vindos do consumer. Exact: "página inicial" também aparece
+  // como substring da descrição (getByText faz substring case-insensitive sem exact).
+  await expect(hero.getByText('Página inicial', { exact: true })).toBeVisible();
+  await expect(hero.getByText('Visualização', { exact: true })).toBeVisible();
+
+  // Zero overflow horizontal (dual-project: desktop 1280×720 + mobile 375×667).
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
 test('feature comparison: tabela semântica com headers, valores textuais e estados acessíveis', async ({ page }) => {
   await page.goto('/library/features');
 

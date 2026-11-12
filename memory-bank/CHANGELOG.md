@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-11] — Evolução 031: Migrar HeroPrimary para contrato (VERIFIED — QLT-005 incremental)
+
+- **`HeroPrimary`** (`components/sections/hero/hero-primary.tsx`) migrado para contrato data-driven local — visual e Server Component preservados: tipos locais `HeroPrimaryAction`/`HeroPrimaryProps`; `title`/`actions` obrigatórios; `eyebrow?`/`description?`/`supportingText?`/`mediaTitle?`/`mediaBadge?` opcionais com renderização condicional; sem defaults internos escondendo conteúdo; nenhuma abstração global nova; linguagem idêntica aos contratos 001/003/010/016 (union restrita `default | outline`, convenção 001 para links).
+- **Consumer dono dos dados:** `app/library/hero/page.tsx` (único consumer real) possui `heroPrimaryDemo`; demo visualmente equivalente. As outras 3 variants de `/library/hero` intactas (`HeroCenterCta` já migrado na 010; `HeroSteps` — heading pertence à 032; `HeroMediaShowcase` já data-driven).
+- **CTAs preservam os destinos da 026** como links reais: `Ver serviços → /#services` (default) e `Falar com a equipe → /#contact` (outline) — agora vindos do consumer.
+- +1 teste Playwright dual-project (contrato provado via consumer: conteúdo vindo de props, hrefs, variantes distintas por estilo computado, rótulos do mock, zero overflow). Suíte: 40 testes / 80 execuções — **77 passed + 3 skipped**. Lint **0/0**; build **PASS** (22 rotas); `git diff --check` limpo. Nenhuma dependência nova.
+- Contagens: sections 31, UI 11, total 51 (nenhum component novo); rotas 22. **QLT-005: 25 → 24 (18 sections + 6 site) — permanece ISSUE_CONFIRMED/ABERTO.** Nenhum outro finding alterado.
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-005 incremental), `docs/COMPONENT-CATALOG.md` (entry HeroPrimary), `docs/ROADMAP-1000-EVOLUTIONS.md` (031 VERIFIED), `memory-bank/CURRENT-STATE.md` (próxima execução: 032). `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção nova — contrato segue a linguagem existente).
+
+---
+
 ## [2026-11-10] — Evolução 030: Tema — política dark-only oficial (VERIFIED — QLT-009)
 
 - **Política final: DARK-ONLY oficial** (Opção A da auditoria; **DEC-011**). Paleta única oficial no `:root` de `app/globals.css` com os valores dark em uso; blocos `.dark` e `@custom-variant dark` removidos; `color-scheme: dark` adicionado ao `:root` (controles nativos alinhados ao tema). Nenhum mecanismo de tema fake: sem toggle, sem provider, sem script pré-hidratação, sem persistência.
