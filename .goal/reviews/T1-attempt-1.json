@@ -1,14 +1,14 @@
 {
   "task_id": "T1",
-  "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
+  "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria T1 concluída e verificada no workspace real. O arquivo .goal/evidence/T1-audit.md documenta todos os itens exigidos pelos critérios de aceite: padrões reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, named exports, Server Component puro sem 'use client'), uso de asChild via @radix-ui/react-slot já instalado (^1.2.4 em package.json) e lucide-react (^0.554.0 em package.json), API mínima restrita exatamente aos 6 exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem Ellipsis/Dropdown/Menu/Icon/Provider, contrato semântico e de acessibilidade (nav[aria-label='breadcrumb'] > ol > li, aria-current='page', separador decorativo com aria-hidden='true'), arquivos previstos para T2-T5, plano de testes Playwright, riscos e confirmação do consumer 045 no roadmap (linhas 406, 418 e 466 de docs/ROADMAP-1000-EVOLUTIONS.md). Nenhuma dependência nova adicionada e nenhum código de produção alterado.",
+  "summary": "Auditoria T1 da Evolução 034 (Gallery section consumindo Tabs da 029) verificada com sucesso contra o código real do repositório. O arquivo .goal/evidence/T1-audit.md documenta com precisão o contrato real de components/ui/tabs.tsx, os padrões data-driven das sections recentes (FaqAccordion, HeroMediaShowcase, StickyColumnSplit, FeatureComparison), a convenção de rotas/naming da Library (/library/gallery e components/sections/gallery/gallery-tabs.tsx), o padrão de mídia via placeholder estrutural HTML/Tailwind sem assets externos, a API mínima data-driven (GalleryItem, GallerySet, GalleryTabsProps) sem inflação, o client boundary mínimo (Server Component consumindo primitive Client uncontrolled), o plano de teste Playwright, as contagens esperadas (sections 31->32, total 52->53, rotas 23->24, testes 46->47) e a confirmação do consumer futuro 044 no roadmap, sem alterar código de produção nem adicionar dependências.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md (linhas 1-60), package.json (linhas 15 e 19), components/ui/button.tsx, components/ui/separator.tsx e docs/ROADMAP-1000-EVOLUTIONS.md (linhas 406, 418, 466). Tarefa exclusivamente de auditoria documental sem execução de suíte aplicável nesta etapa.",
-      "name": "audit-evidence-verification",
+      "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md, components/ui/tabs.tsx, components/sections/library-shell.tsx, components/sections/hero/hero-media-showcase.tsx, components/sections/faq/faq-accordion.tsx, components/sections/features/sticky-column-split.tsx, docs/ROADMAP-1000-EVOLUTIONS.md, docs/COMPONENT-CATALOG.md, tests/smoke.spec.ts e package.json. Task T1 é exclusivamente de investigação/auditoria, sem alteração de código de produção.",
+      "name": "T1-audit-verification",
       "status": "passed"
     }
   ],

@@ -23,6 +23,7 @@ const sectionLinks = [
   { href: "/library/alerts", label: "Alerts" },
   { href: "/library/tabs", label: "Tabs" },
   { href: "/library/breadcrumbs", label: "Breadcrumbs" },
+  { href: "/library/gallery", label: "Gallery" },
   { href: "/library/landing", label: "Landing" },
 ];
 

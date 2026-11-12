@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "goal": "Evolucao 033 - Breadcrumbs (primitive): novo UI primitive semantico (nav aria-label, ol, li, aria-current=page, separator decorativo aria-hidden), demo oficial /library/breadcrumbs, cobertura Playwright e documentacao. Consumer real planejado: 045 (nao implementar agora). Nenhuma nova dependencia. Server-compatible.",
+  "current": 4,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): padroes reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, asChild/Slot, named exports, Server/Client), dependencias em package.json (@radix-ui/react-slot, lucide-react), confirmacao do consumer 045 no roadmap, API final minima e contrato de semântica/a11y. Sem Ellipsis/Dropdown/Menu/Icon/Provider sem consumer.",
+      "acceptance": [
+        "Evidencia em .goal/evidence/T1-audit.md com: API final, semântica, asChild sim/nao, dependencias, Server/Client, arquivos previstos, testes necessarios, riscos e consumer 045",
+        "API minima sem exports extras alem de Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator",
+        "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria T1 concluída e verificada no workspace real. O arquivo .goal/evidence/T1-audit.md documenta todos os itens exigidos pelos critérios de aceite: padrões reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, named exports, Server Component puro sem 'use client'), uso de asChild via @radix-ui/react-slot já instalado (^1.2.4 em package.json) e lucide-react (^0.554.0 em package.json), API mínima restrita exatamente aos 6 exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem Ellipsis/Dropdown/Menu/Icon/Provider, contrato semântico e de acessibilidade (nav[aria-label='breadcrumb'] > ol > li, aria-current='page', separador decorativo com aria-hidden='true'), arquivos previstos para T2-T5, plano de testes Playwright, riscos e confirmação do consumer 045 no roadmap (linhas 406, 418 e 466 de docs/ROADMAP-1000-EVOLUTIONS.md). Nenhuma dependência nova adicionada e nenhum código de produção alterado.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md (linhas 1-60), package.json (linhas 15 e 19), components/ui/button.tsx, components/ui/separator.tsx e docs/ROADMAP-1000-EVOLUTIONS.md (linhas 406, 418, 466). Tarefa exclusivamente de auditoria documental sem execução de suíte aplicável nesta etapa.",
+            "name": "audit-evidence-verification",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T11:34:04.464771+00:00"
+      },
+      "completed_at": "2026-11-12T11:34:04.648906+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Implementar o primitive (components/ui/breadcrumb.tsx ou nome aprovado na T1) exatamente conforme API aprovada, sem demo ainda.",
+      "acceptance": [
+        "Somente os exports aprovados na T1, sem exports extras; data-slot, cn(), React.ComponentProps; sem forwardRef se o padrao atual nao usa",
+        "Semantica exata do contrato T1: nav com aria-label, ol, li, aria-current=page no BreadcrumbPage, separator decorativo aria-hidden; asChild via @radix-ui/react-slot apenas se aprovado na T1",
+        "Server-compatible sem 'use client'; sem estado, sem contexto, sem motion, sem dependencia nova, sem cor raw",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "d34773e7afeb534311fbc4879473b8c75699db22218526d95491d76ad276e36d",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "d34773e7afeb534311fbc4879473b8c75699db22218526d95491d76ad276e36d",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Implementação do primitive Breadcrumb em components/ui/breadcrumb.tsx auditada no workspace real e aprovada (PASS). O arquivo segue estritamente o contrato aprovado na T1 (.goal/evidence/T1-audit.md): exatamente os 6 named exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem exports extras; uso de React.ComponentProps, data-slot e cn() em todos os subcomponentes aplicáveis; sem forwardRef e sem 'use client' (Server Component puro, sem estado, contexto ou motion); semântica e acessibilidade corretas (nav com aria-label='breadcrumb' default sobrescrevível, ol, li, BreadcrumbLink com suporte a asChild via @radix-ui/react-slot já instalado, BreadcrumbPage como span com aria-current='page', BreadcrumbSeparator como li decorativo com role='presentation', aria-hidden='true' e ChevronRight de lucide-react sobrescrevível via children); uso exclusivo de tokens semânticos (text-muted-foreground, text-foreground) sem cores raw e sem novas dependências em package.json. Gates (npm run lint 0/0, npm run build PASS com 22 rotas, git diff --check limpo) registrados em .goal/evidence/T2-gates.md. Nenhuma página de demo antecipada nesta etapa.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Leitura direta de components/ui/breadcrumb.tsx (linhas 1-88), .goal/evidence/T1-audit.md (linhas 1-60) e package.json (linhas 1-37), confirmando contrato, tipagem TypeScript, semântica ARIA e ausência de dependências novas ou rotas antecipadas.",
+            "name": "static-code-and-contract-verification",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidência incorporada e registrada em .goal/evidence/T2-gates.md: npm run lint (0 erros, 0 warnings), npm run build (PASS, 22 rotas) e git diff --check (limpo).",
+            "name": "t2-quality-gates",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T11:38:17.160122+00:00"
+      },
+      "completed_at": "2026-11-12T11:38:17.335093+00:00"
+    },
+    {
+      "id": "T3",
+      "description": "Criar demo oficial /library/breadcrumbs no padrao moderno e integrar a navigation do library-shell (Breadcrumbs; Landing permanece a ultima showcase/composition). Nao reorganizar outras categorias.",
+      "acceptance": [
+        "app/library/breadcrumbs/page.tsx no padrao moderno (metadata, page header, entries locais tipadas, preview boxes, label Componente)",
+        "Link Breadcrumbs adicionado na navigation do library-shell sem reordenar outras categorias",
+        "Gates: npm run lint 0/0, npm run build PASS com a nova rota, git diff --check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
+      "review": {
+        "task_id": "T3",
+        "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T3 (Demo oficial /library/breadcrumbs e integração no library-shell) auditada e aprovada. O arquivo app/library/breadcrumbs/page.tsx foi criado como Server Component seguindo o padrão moderno (metadata, header, entries locais tipadas BreadcrumbsEntry, preview boxes e label Componente:) demonstrando o uso padrão e com asChild (next/link) do primitive Breadcrumb. O link para /library/breadcrumbs foi adicionado em components/sections/library-shell.tsx logo após Tabs, mantendo Landing como última entrada e sem reordenar outras categorias. Gates reportados nas evidências (lint 0/0, build PASS com 23 rotas incluindo /library/breadcrumbs, git diff --check limpo) são consistentes com a análise estática do código real.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Relatado nas evidências incorporadas: npm run lint com 0 erros e 0 warnings; confirmado por inspeção estática de app/library/breadcrumbs/page.tsx e components/sections/library-shell.tsx.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "Relatado nas evidências incorporadas: npm run build compilado com sucesso, TypeScript ok, 23 rotas incluindo /library/breadcrumbs; tipos e imports verificados contra components/ui/breadcrumb.tsx.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Relatado nas evidências incorporadas como limpo; verificado nos arquivos lidos sem whitespace inválido ou marcadores de conflito.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T11:40:57.288990+00:00"
+      },
+      "completed_at": "2026-11-12T11:40:57.459778+00:00"
+    },
+    {
+      "id": "T4",
+      "description": "Adicionar testes Playwright para breadcrumbs (a11y, semantica, teclado, focus-visible) e rodar os gates completos.",
+      "acceptance": [
+        "Testes cobrem nav landmark com accessible name, lista ordenada, links, aria-current=page, separator decorativo e foco visivel via teclado no demo",
+        "Suíte Playwright completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero overflow nas rotas afetadas",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 2,
+      "fingerprint": "4ccb219cd88ddceb2ebcbe3757cb1c6b231e0dca6412dc0232f19ac7a915ecb7",
+      "review": {
+        "task_id": "T4",
+        "fingerprint": "4ccb219cd88ddceb2ebcbe3757cb1c6b231e0dca6412dc0232f19ac7a915ecb7",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "A tarefa T4 (testes Playwright para breadcrumbs e execução dos gates completos) foi auditada no workspace real e nas evidências incorporadas, atendendo integralmente a todos os critérios de aceite: (1) 4 novos testes em tests/smoke.spec.ts (linhas 1334-1401) validam landmark nav com accessible name 'breadcrumb', lista ordenada (<ol>/listitem sem contar separadores decorativos), links ('Library' e 'Blog'), página atual com aria-current='page' (sem role='link'), separadores decorativos com aria-hidden='true', navegação por teclado com Tab entre links focáveis e pseudo-classe :focus-visible ativa; (2) suíte Playwright completa verde nos dois projetos (desktop 1280x720 e mobile 375x667) com 89 passed, 3 skipped históricos e 0 failed (E2E_EXIT=0), incluindo verificação de zero overflow horizontal em /library/breadcrumbs; (3) gates verificados com npm run lint 0 erros/0 warnings (LINT_EXIT=0), npm run build PASS com 23/23 páginas estáticas geradas incluindo /library/breadcrumbs (BUILD_EXIT=0) e git diff --check limpo (DIFFCHECK_EXIT=0).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "tests/smoke.spec.ts (linhas 1334-1401) + output bruto de npm run test:e2e: testes #85-#92 passando em [mobile] (375x667) e [desktop] (1280x720); suíte completa com 89 passed, 3 skipped, 0 failed (E2E_EXIT=0).",
+            "name": "npm run test:e2e (Playwright full suite + breadcrumbs specs)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Output incorporado de npm run lint: eslint concluído sem erros e sem warnings (LINT_EXIT=0).",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "Output incorporado de npm run build: TypeScript compilado com sucesso e 23/23 páginas geradas incluindo ○ /library/breadcrumbs (BUILD_EXIT=0).",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Output incorporado de git diff --check: sem erros de whitespace ou conflito (DIFFCHECK_EXIT=0).",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T12:10:26.723239+00:00"
+      },
+      "block_reason": "Revisão em estado BLOCKED. Em conformidade com as restrições do MODO PLAN (sem execução de comandos e sem uso de ferramentas de leitura fora do material incorporado) e com o Master Review Protocol ('V",
+      "unblocked_at": "2026-11-12T12:06:31.023785+00:00",
+      "unblock_reason": "Operador autorizou retomada da T4. O bloqueio foi exclusivamente por evidencia insuficiente fornecida ao Inspector; implementacao, fingerprint e working tree permanecem inalterados. Reapresentar evidencia verificavel completa sem alterar codigo, salvo finding funcional posterior do Inspector.",
+      "unblock_authorized_by_operator": true,
+      "completed_at": "2026-11-12T12:10:26.908060+00:00"
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG.md (entrada Breadcrumbs), ROADMAP-1000-EVOLUTIONS.md (033 VERIFIED, proxima 034), CURRENT-STATE.md, CHANGELOG.md e QUALITY-REVIEW.md se aplicavel.",
+      "acceptance": [
+        "COMPONENT-CATALOG.md com entrada Breadcrumbs na secao de UI primitives",
+        "ROADMAP marca 033 VERIFIED e proxima execucao 034; CURRENT-STATE e CHANGELOG refletem contagens reais (UI 12, total 52, rotas 23, Playwright real)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "244e113491e0e2a41389b239eea4fc97c9ee180464ff2f2a0fe63b5378f5ae76",
+      "review": {
+        "task_id": "T5",
+        "fingerprint": "244e113491e0e2a41389b239eea4fc97c9ee180464ff2f2a0fe63b5378f5ae76",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T5 (Documentação da Evolução 033 - Breadcrumbs) auditada e aprovada (PASS). COMPONENT-CATALOG.md inclui a entrada Breadcrumbs na seção de UI primitives (contagens atualizadas para 12 UI / 52 total) e o resumo do contrato alinhado ao código real de components/ui/breadcrumb.tsx. ROADMAP-1000-EVOLUTIONS.md registra 033 como VERIFIED (2026-11-12), atualiza o path real para components/ui/breadcrumb.tsx e define 034 como próxima execução. CURRENT-STATE.md e CHANGELOG.md refletem fielmente as contagens reais (UI 12, total 52, rotas 23, suíte Playwright 46 testes / 92 execuções = 89 passed + 3 skipped) e os gates (npm run lint 0/0, npm run build PASS com 23 rotas, git diff --check limpo). QUALITY-REVIEW.md permanece inalterado por não haver finding impactado.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas após as edições de documentação.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 (Compiled successfully, 23/23 páginas geradas) reportado nas evidências incorporadas.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "DIFFCHECK_EXIT=0 e diff bruto inspecionado sem erros de whitespace ou conflito nos 4 arquivos de documentação.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T12:16:00.649163+00:00"
+      },
+      "completed_at": "2026-11-12T12:16:00.837041+00:00"
+    }
+  ],
+  "created_at": "2026-11-12T11:31:20.950849+00:00",
+  "finished_at": "2026-11-12T12:16:00.837054+00:00"
+}

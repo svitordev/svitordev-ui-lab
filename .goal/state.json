@@ -1,209 +1,210 @@
 {
   "version": 1,
-  "goal": "Evolucao 033 - Breadcrumbs (primitive): novo UI primitive semantico (nav aria-label, ol, li, aria-current=page, separator decorativo aria-hidden), demo oficial /library/breadcrumbs, cobertura Playwright e documentacao. Consumer real planejado: 045 (nao implementar agora). Nenhuma nova dependencia. Server-compatible.",
+  "goal": "Evolucao 034 - Gallery (section) consumindo o Tabs primitive da 029: nova section data-driven + showcase oficial na Library + testes Playwright + documentacao. Consumer futuro planejado: 044 (nao implementar). Nao implementar 035. Nenhuma nova dependencia. Anti-inflacao: sem modal/lightbox/carousel/zoom/autoplay/pagination/filtering.",
   "current": 4,
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria (investigacao, sem alterar codigo de producao): padroes reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, asChild/Slot, named exports, Server/Client), dependencias em package.json (@radix-ui/react-slot, lucide-react), confirmacao do consumer 045 no roadmap, API final minima e contrato de semântica/a11y. Sem Ellipsis/Dropdown/Menu/Icon/Provider sem consumer.",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): auditar components/ui/tabs.tsx (exports, client boundary, API, styling, teclado Radix, data-slot, dependencia); auditar padroes modernos data-driven das sections recentes (contratos de props, item types, actions, midia, layout, heading, ids); auditar naming/rotas/ordenacao/convencao da Library e escolher o nome real da rota com base no padrao; auditar como o projeto representa midia visual (placeholder estrutural vs imagem) sem CMS/remote image/asset externo; confirmar consumer 044 no roadmap. Sem links falsos, sem estado manual duplicando Radix.",
       "acceptance": [
-        "Evidencia em .goal/evidence/T1-audit.md com: API final, semântica, asChild sim/nao, dependencias, Server/Client, arquivos previstos, testes necessarios, riscos e consumer 045",
-        "API minima sem exports extras alem de Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator",
+        "Evidencia em .goal/evidence/T1-audit.md com: API final, naming/path da section e da rota, client boundary justificado, padrao de midia, Tabs composition, testes necessarios, contagens esperadas, riscos e consumer 044",
+        "API minima data-driven (consumer controla heading, supporting text, tabs/items, midia, labels) sem inflacao (sem modal/carousel/zoom/pagination/filtering)",
         "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
+      "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
       "review": {
         "task_id": "T1",
-        "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
+        "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria T1 concluída e verificada no workspace real. O arquivo .goal/evidence/T1-audit.md documenta todos os itens exigidos pelos critérios de aceite: padrões reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, named exports, Server Component puro sem 'use client'), uso de asChild via @radix-ui/react-slot já instalado (^1.2.4 em package.json) e lucide-react (^0.554.0 em package.json), API mínima restrita exatamente aos 6 exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem Ellipsis/Dropdown/Menu/Icon/Provider, contrato semântico e de acessibilidade (nav[aria-label='breadcrumb'] > ol > li, aria-current='page', separador decorativo com aria-hidden='true'), arquivos previstos para T2-T5, plano de testes Playwright, riscos e confirmação do consumer 045 no roadmap (linhas 406, 418 e 466 de docs/ROADMAP-1000-EVOLUTIONS.md). Nenhuma dependência nova adicionada e nenhum código de produção alterado.",
+        "summary": "Auditoria T1 da Evolução 034 (Gallery section consumindo Tabs da 029) verificada com sucesso contra o código real do repositório. O arquivo .goal/evidence/T1-audit.md documenta com precisão o contrato real de components/ui/tabs.tsx, os padrões data-driven das sections recentes (FaqAccordion, HeroMediaShowcase, StickyColumnSplit, FeatureComparison), a convenção de rotas/naming da Library (/library/gallery e components/sections/gallery/gallery-tabs.tsx), o padrão de mídia via placeholder estrutural HTML/Tailwind sem assets externos, a API mínima data-driven (GalleryItem, GallerySet, GalleryTabsProps) sem inflação, o client boundary mínimo (Server Component consumindo primitive Client uncontrolled), o plano de teste Playwright, as contagens esperadas (sections 31->32, total 52->53, rotas 23->24, testes 46->47) e a confirmação do consumer futuro 044 no roadmap, sem alterar código de produção nem adicionar dependências.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md (linhas 1-60), package.json (linhas 15 e 19), components/ui/button.tsx, components/ui/separator.tsx e docs/ROADMAP-1000-EVOLUTIONS.md (linhas 406, 418, 466). Tarefa exclusivamente de auditoria documental sem execução de suíte aplicável nesta etapa.",
-            "name": "audit-evidence-verification",
+            "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md, components/ui/tabs.tsx, components/sections/library-shell.tsx, components/sections/hero/hero-media-showcase.tsx, components/sections/faq/faq-accordion.tsx, components/sections/features/sticky-column-split.tsx, docs/ROADMAP-1000-EVOLUTIONS.md, docs/COMPONENT-CATALOG.md, tests/smoke.spec.ts e package.json. Task T1 é exclusivamente de investigação/auditoria, sem alteração de código de produção.",
+            "name": "T1-audit-verification",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T11:34:04.464771+00:00"
+        "recorded_at": "2026-11-12T13:01:55.013762+00:00"
       },
-      "completed_at": "2026-11-12T11:34:04.648906+00:00"
+      "completed_at": "2026-11-12T13:01:55.189365+00:00"
     },
     {
       "id": "T2",
-      "description": "Implementar o primitive (components/ui/breadcrumb.tsx ou nome aprovado na T1) exatamente conforme API aprovada, sem demo ainda.",
+      "description": "Implementar exatamente uma nova section Gallery conforme decisao aprovada na T1 (path components/sections/gallery/...), consumindo o primitive Tabs da 029 sem recriar tab logic manualmente.",
       "acceptance": [
-        "Somente os exports aprovados na T1, sem exports extras; data-slot, cn(), React.ComponentProps; sem forwardRef se o padrao atual nao usa",
-        "Semantica exata do contrato T1: nav com aria-label, ol, li, aria-current=page no BreadcrumbPage, separator decorativo aria-hidden; asChild via @radix-ui/react-slot apenas se aprovado na T1",
-        "Server-compatible sem 'use client'; sem estado, sem contexto, sem motion, sem dependencia nova, sem cor raw",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+        "Uma unica section nova, sem variantes extras; conteudo 100% via props (consumer dono dos dados, sem demo content em defaults internos)",
+        "Usa Tabs/TabsList/TabsTrigger/TabsContent existentes; client boundary minimo justificado pela T1; sem estado manual; sem duplicar logica interna do Radix",
+        "Visual dark-only com tokens existentes, sem cores novas; responsividade, focus states e legibilidade coerentes com as sections existentes",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff relevante + outputs reais + exit codes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "d34773e7afeb534311fbc4879473b8c75699db22218526d95491d76ad276e36d",
+      "fingerprint": "4492276a5892b3ef954999149273e64221e898c59af2018cee95c459e693cff0",
       "review": {
         "task_id": "T2",
-        "fingerprint": "d34773e7afeb534311fbc4879473b8c75699db22218526d95491d76ad276e36d",
+        "fingerprint": "4492276a5892b3ef954999149273e64221e898c59af2018cee95c459e693cff0",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Implementação do primitive Breadcrumb em components/ui/breadcrumb.tsx auditada no workspace real e aprovada (PASS). O arquivo segue estritamente o contrato aprovado na T1 (.goal/evidence/T1-audit.md): exatamente os 6 named exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem exports extras; uso de React.ComponentProps, data-slot e cn() em todos os subcomponentes aplicáveis; sem forwardRef e sem 'use client' (Server Component puro, sem estado, contexto ou motion); semântica e acessibilidade corretas (nav com aria-label='breadcrumb' default sobrescrevível, ol, li, BreadcrumbLink com suporte a asChild via @radix-ui/react-slot já instalado, BreadcrumbPage como span com aria-current='page', BreadcrumbSeparator como li decorativo com role='presentation', aria-hidden='true' e ChevronRight de lucide-react sobrescrevível via children); uso exclusivo de tokens semânticos (text-muted-foreground, text-foreground) sem cores raw e sem novas dependências em package.json. Gates (npm run lint 0/0, npm run build PASS com 22 rotas, git diff --check limpo) registrados em .goal/evidence/T2-gates.md. Nenhuma página de demo antecipada nesta etapa.",
+        "summary": "A implementação da T2 (Evolução 034 — Gallery section via Tabs) cumpre integralmente todos os critérios de aceite: (1) cria exclusivamente a section `components/sections/gallery/gallery-tabs.tsx` sem variantes extras e com conteúdo 100% controlado via props (`GalleryItem`, `GallerySet`, `GalleryTabsProps`), sem dados de demo internos; (2) consome os primitivos `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` de `@/components/ui/tabs` (Evolução 029) de forma não controlada (`defaultValue={sets[0]?.id}`), mantendo `GalleryTabs` como Server Component (client boundary mínimo restrito ao primitive) e sem estado manual ou duplicação da lógica do Radix; (3) utiliza apenas tokens semânticos existentes (`bg-background`, `bg-muted/40`, `text-muted-foreground`, `border`), com grid responsivo (`sm:grid-cols-2 lg:grid-cols-3`), semântica HTML adequada (`section`, `h2`, `article`, `h3`, placeholder decorativo com `aria-hidden=\"true\"`) e sem inflação de escopo; (4) os quality gates (`npm run lint`, `npm run build` e `git diff --check`) foram reportados com exit code 0 e o diff completo foi apresentado.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Leitura direta de components/ui/breadcrumb.tsx (linhas 1-88), .goal/evidence/T1-audit.md (linhas 1-60) e package.json (linhas 1-37), confirmando contrato, tipagem TypeScript, semântica ARIA e ausência de dependências novas ou rotas antecipadas.",
-            "name": "static-code-and-contract-verification",
+            "evidence": "Exit 0 reportado nas evidências incorporadas: 0 erros e 0 warnings.",
+            "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "Evidência incorporada e registrada em .goal/evidence/T2-gates.md: npm run lint (0 erros, 0 warnings), npm run build (PASS, 22 rotas) e git diff --check (limpo).",
-            "name": "t2-quality-gates",
+            "evidence": "Exit 0 reportado nas evidências incorporadas: Compiled successfully in 2.2s, TypeScript ok, 23/23 páginas.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Exit 0 reportado nas evidências incorporadas, diff íntegro de 88 linhas para components/sections/gallery/gallery-tabs.tsx.",
+            "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T11:38:17.160122+00:00"
+        "recorded_at": "2026-11-12T13:05:03.972663+00:00"
       },
-      "completed_at": "2026-11-12T11:38:17.335093+00:00"
+      "completed_at": "2026-11-12T13:05:04.151100+00:00"
     },
     {
       "id": "T3",
-      "description": "Criar demo oficial /library/breadcrumbs no padrao moderno e integrar a navigation do library-shell (Breadcrumbs; Landing permanece a ultima showcase/composition). Nao reorganizar outras categorias.",
+      "description": "Criar o showcase oficial na Library na rota definida pela auditoria, com metadata como as demais paginas, e adicionar a entrada da Gallery na Library Shell respeitando a ordenacao atual (Landing na posicao vigente, sem reorganizar demais).",
       "acceptance": [
-        "app/library/breadcrumbs/page.tsx no padrao moderno (metadata, page header, entries locais tipadas, preview boxes, label Componente)",
-        "Link Breadcrumbs adicionado na navigation do library-shell sem reordenar outras categorias",
-        "Gates: npm run lint 0/0, npm run build PASS com a nova rota, git diff --check limpo"
+        "Demo no padrao moderno com minimo 3 tabs/items, titulos distintos, descricoes, midia/placeholders, troca real de tab e comportamento responsivo; conteudo neutro e generico",
+        "Entrada Gallery na Library Shell sem reordenar outras categorias",
+        "Gates: npm run lint 0/0, npm run build PASS com a nova rota (baseline 23 → 24), git diff --check limpo; evidencia com diff + outputs reais + exit codes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
+      "fingerprint": "3ed9755434b75bdfd36660a8ad25b7e92b8103102fd3bcf81d281f609a12cf75",
       "review": {
         "task_id": "T3",
-        "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
+        "fingerprint": "3ed9755434b75bdfd36660a8ad25b7e92b8103102fd3bcf81d281f609a12cf75",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T3 (Demo oficial /library/breadcrumbs e integração no library-shell) auditada e aprovada. O arquivo app/library/breadcrumbs/page.tsx foi criado como Server Component seguindo o padrão moderno (metadata, header, entries locais tipadas BreadcrumbsEntry, preview boxes e label Componente:) demonstrando o uso padrão e com asChild (next/link) do primitive Breadcrumb. O link para /library/breadcrumbs foi adicionado em components/sections/library-shell.tsx logo após Tabs, mantendo Landing como última entrada e sem reordenar outras categorias. Gates reportados nas evidências (lint 0/0, build PASS com 23 rotas incluindo /library/breadcrumbs, git diff --check limpo) são consistentes com a análise estática do código real.",
+        "summary": "Auditoria da T3 (Goal 034) concluída com veredito PASS com base exclusivamente nas evidências incorporadas pelo Builder (sem execução de comandos ou leitura externa pelo Inspector). A rota /library/gallery foi criada em app/library/gallery/page.tsx no padrão moderno da Library (Server Component, metadata, page header, GalleryEntry tipada, preview box e label Componente:), consumindo a section GalleryTabs (@/components/sections/gallery/gallery-tabs) com 3 tabs reais (Conjunto A com 3 itens, Conjunto B com 2 itens incluindo descrição longa, Conjunto C com 2 itens sendo um sem descrição), títulos e descrições distintos, placeholders estruturais aspect-video (aria-hidden), troca real de tab via Radix, grid responsivo 1->2->3 colunas e conteúdo neutro/genérico sem inflação de escopo. O diff de components/sections/library-shell.tsx confirma a adição de { href: \"/library/gallery\", label: \"Gallery\" } após Breadcrumbs, mantendo Landing na última posição sem reordenar as demais categorias. Os gates reportados pelo Builder (npm run lint, npm run build com 24/24 páginas de 23->24 e git diff --check) registraram exit 0.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Relatado nas evidências incorporadas: npm run lint com 0 erros e 0 warnings; confirmado por inspeção estática de app/library/breadcrumbs/page.tsx e components/sections/library-shell.tsx.",
+            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, 0 erros / 0 warnings.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "Relatado nas evidências incorporadas: npm run build compilado com sucesso, TypeScript ok, 23 rotas incluindo /library/breadcrumbs; tipos e imports verificados contra components/ui/breadcrumb.tsx.",
+            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, Compiled successfully in 2.7s, TypeScript ok, 24/24 páginas (baseline 23 -> 24 confirmado) com /library/gallery presente na listagem do build.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "Relatado nas evidências incorporadas como limpo; verificado nos arquivos lidos sem whitespace inválido ou marcadores de conflito.",
+            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0 e diff de components/sections/library-shell.tsx preservando a ordem das categorias com Landing por último.",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T11:40:57.288990+00:00"
+        "recorded_at": "2026-11-12T13:09:16.700817+00:00"
       },
-      "completed_at": "2026-11-12T11:40:57.459778+00:00"
+      "completed_at": "2026-11-12T13:09:16.913389+00:00"
     },
     {
       "id": "T4",
-      "description": "Adicionar testes Playwright para breadcrumbs (a11y, semantica, teclado, focus-visible) e rodar os gates completos.",
+      "description": "Adicionar cobertura Playwright de alto valor pelo consumer oficial da Library (sem inflar contagem): section renderiza, heading correto, tabs presentes, tab inicial com estado correto, clique troca conteudo, teclado troca/foca (setas/Home/End conforme cobertura existente — auditar antes de duplicar), conteudo ativo corresponde ao trigger, inativo nao aparece como ativo, zero overflow horizontal, mobile e desktop.",
       "acceptance": [
-        "Testes cobrem nav landmark com accessible name, lista ordenada, links, aria-current=page, separator decorativo e foco visivel via teclado no demo",
-        "Suíte Playwright completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero overflow nas rotas afetadas",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
-      ],
-      "status": "COMPLETED",
-      "attempts": 2,
-      "fingerprint": "4ccb219cd88ddceb2ebcbe3757cb1c6b231e0dca6412dc0232f19ac7a915ecb7",
-      "review": {
-        "task_id": "T4",
-        "fingerprint": "4ccb219cd88ddceb2ebcbe3757cb1c6b231e0dca6412dc0232f19ac7a915ecb7",
-        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
-        "verdict": "APPROVED",
-        "summary": "A tarefa T4 (testes Playwright para breadcrumbs e execução dos gates completos) foi auditada no workspace real e nas evidências incorporadas, atendendo integralmente a todos os critérios de aceite: (1) 4 novos testes em tests/smoke.spec.ts (linhas 1334-1401) validam landmark nav com accessible name 'breadcrumb', lista ordenada (<ol>/listitem sem contar separadores decorativos), links ('Library' e 'Blog'), página atual com aria-current='page' (sem role='link'), separadores decorativos com aria-hidden='true', navegação por teclado com Tab entre links focáveis e pseudo-classe :focus-visible ativa; (2) suíte Playwright completa verde nos dois projetos (desktop 1280x720 e mobile 375x667) com 89 passed, 3 skipped históricos e 0 failed (E2E_EXIT=0), incluindo verificação de zero overflow horizontal em /library/breadcrumbs; (3) gates verificados com npm run lint 0 erros/0 warnings (LINT_EXIT=0), npm run build PASS com 23/23 páginas estáticas geradas incluindo /library/breadcrumbs (BUILD_EXIT=0) e git diff --check limpo (DIFFCHECK_EXIT=0).",
-        "findings": [],
-        "tests": [
-          {
-            "evidence": "tests/smoke.spec.ts (linhas 1334-1401) + output bruto de npm run test:e2e: testes #85-#92 passando em [mobile] (375x667) e [desktop] (1280x720); suíte completa com 89 passed, 3 skipped, 0 failed (E2E_EXIT=0).",
-            "name": "npm run test:e2e (Playwright full suite + breadcrumbs specs)",
-            "status": "passed"
-          },
-          {
-            "evidence": "Output incorporado de npm run lint: eslint concluído sem erros e sem warnings (LINT_EXIT=0).",
-            "name": "npm run lint",
-            "status": "passed"
-          },
-          {
-            "evidence": "Output incorporado de npm run build: TypeScript compilado com sucesso e 23/23 páginas geradas incluindo ○ /library/breadcrumbs (BUILD_EXIT=0).",
-            "name": "npm run build",
-            "status": "passed"
-          },
-          {
-            "evidence": "Output incorporado de git diff --check: sem erros de whitespace ou conflito (DIFFCHECK_EXIT=0).",
-            "name": "git diff --check",
-            "status": "passed"
-          }
-        ],
-        "correction_prompt": "",
-        "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T12:10:26.723239+00:00"
-      },
-      "block_reason": "Revisão em estado BLOCKED. Em conformidade com as restrições do MODO PLAN (sem execução de comandos e sem uso de ferramentas de leitura fora do material incorporado) e com o Master Review Protocol ('V",
-      "unblocked_at": "2026-11-12T12:06:31.023785+00:00",
-      "unblock_reason": "Operador autorizou retomada da T4. O bloqueio foi exclusivamente por evidencia insuficiente fornecida ao Inspector; implementacao, fingerprint e working tree permanecem inalterados. Reapresentar evidencia verificavel completa sem alterar codigo, salvo finding funcional posterior do Inspector.",
-      "unblock_authorized_by_operator": true,
-      "completed_at": "2026-11-12T12:10:26.908060+00:00"
-    },
-    {
-      "id": "T5",
-      "description": "Documentacao: COMPONENT-CATALOG.md (entrada Breadcrumbs), ROADMAP-1000-EVOLUTIONS.md (033 VERIFIED, proxima 034), CURRENT-STATE.md, CHANGELOG.md e QUALITY-REVIEW.md se aplicavel.",
-      "acceptance": [
-        "COMPONENT-CATALOG.md com entrada Breadcrumbs na secao de UI primitives",
-        "ROADMAP marca 033 VERIFIED e proxima execucao 034; CURRENT-STATE e CHANGELOG refletem contagens reais (UI 12, total 52, rotas 23, Playwright real)",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+        "Testes cobrem comportamento, a11y, teclado e mobile com zero overflow; sem duplicar cobertura existente do primitive Tabs",
+        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia incorpora diff dos testes + output real + exit codes + contagens reais (sections 32, UI 12, total 53)"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "244e113491e0e2a41389b239eea4fc97c9ee180464ff2f2a0fe63b5378f5ae76",
+      "fingerprint": "8cf54984927c0601832f9170056b668232f907116fe64dc19521ffb224c6f79b",
       "review": {
-        "task_id": "T5",
-        "fingerprint": "244e113491e0e2a41389b239eea4fc97c9ee180464ff2f2a0fe63b5378f5ae76",
+        "task_id": "T4",
+        "fingerprint": "8cf54984927c0601832f9170056b668232f907116fe64dc19521ffb224c6f79b",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T5 (Documentação da Evolução 033 - Breadcrumbs) auditada e aprovada (PASS). COMPONENT-CATALOG.md inclui a entrada Breadcrumbs na seção de UI primitives (contagens atualizadas para 12 UI / 52 total) e o resumo do contrato alinhado ao código real de components/ui/breadcrumb.tsx. ROADMAP-1000-EVOLUTIONS.md registra 033 como VERIFIED (2026-11-12), atualiza o path real para components/ui/breadcrumb.tsx e define 034 como próxima execução. CURRENT-STATE.md e CHANGELOG.md refletem fielmente as contagens reais (UI 12, total 52, rotas 23, suíte Playwright 46 testes / 92 execuções = 89 passed + 3 skipped) e os gates (npm run lint 0/0, npm run build PASS com 23 rotas, git diff --check limpo). QUALITY-REVIEW.md permanece inalterado por não haver finding impactado.",
+        "summary": "T4 (Evolucao 034 - Testes Playwright Gallery + gates) auditada e aprovada. O teste adicionado em tests/smoke.spec.ts (linhas 1403-1446) valida o consumer oficial /library/gallery cobrindo hierarquia de headings (h1 -> h2 -> h3), tablist unico com 3 triggers dos dados do contrato (Conjunto A/B/C), estado inicial aria-selected=true com conteudo ativo correspondente, troca de aba por clique e por teclado (ArrowRight sem duplicar a cobertura exaustiva de ArrowLeft/Home/End do primitive Tabs na linha 1148), desmontagem de conteudo inativo (toHaveCount(0) + apenas 1 tabpanel visivel) e zero overflow horizontal nos projetos desktop (1280x720) e mobile (375x667). Todos os gates reportados passaram com exit code 0 (test:e2e 91 passed / 3 skipped / 0 failed em 94 execucoes, lint 0/0, build 24/24 rotas, git diff --check limpo) e contagens reais confirmadas (sections 32, UI 12, total 53).",
         "findings": [],
         "tests": [
           {
-            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas após as edições de documentação.",
+            "evidence": "npm run test:e2e -> exit 0 (94 execucoes: 91 passed, 3 skipped, 0 failed; ok 93 [desktop] e ok 94 [mobile] para 'gallery: tabs reais alternam conjuntos com conteudo dos dados (teclado + zero overflow)')",
+            "name": "npm run test:e2e",
+            "status": "passed"
+          },
+          {
+            "evidence": "npm run lint -> exit 0 (0 erros / 0 warnings)",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "BUILD_EXIT=0 (Compiled successfully, 23/23 páginas geradas) reportado nas evidências incorporadas.",
+            "evidence": "npm run build -> exit 0 (Compiled successfully, 24/24 paginas)",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "DIFFCHECK_EXIT=0 e diff bruto inspecionado sem erros de whitespace ou conflito nos 4 arquivos de documentação.",
+            "evidence": "git diff --check -> exit 0 (limpo)",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T12:16:00.649163+00:00"
+        "recorded_at": "2026-11-12T13:13:14.950562+00:00"
       },
-      "completed_at": "2026-11-12T12:16:00.837041+00:00"
+      "completed_at": "2026-11-12T13:13:15.135630+00:00"
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG com exatamente 1 entrada Gallery (status, path, API real, uso de Tabs, consumer futuro 044); ROADMAP marca 034 VERIFIED e proxima 035 (sem iniciar 035); CURRENT-STATE com 001-034, contagens, rota, Playwright real e proxima 035; CHANGELOG somente com o estado final (sem tentativas/FAIL/BLOCKED). QUALITY-REVIEW, DESIGN-SYSTEM e DECISIONS inalterados salvo achado real da T1.",
+      "acceptance": [
+        "Contagens reais refletidas: sections 32, UI 12, total 53, rotas 24, Playwright real; QLT-005 e QLT-011 preservados sem alteracao de contagem",
+        "ROADMAP: 034 VERIFIED, proxima execucao 035 — Consent preferences banner (nao iniciada)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "b7ae9d4cf1078a67636d7ffed4e81d2e674c26072dac2c4e20fc0bbea6d061e1",
+      "review": {
+        "task_id": "T5",
+        "fingerprint": "b7ae9d4cf1078a67636d7ffed4e81d2e674c26072dac2c4e20fc0bbea6d061e1",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T5 (Documentação da Evolução 034 — Gallery) auditada e aprovada (PASS). COMPONENT-CATALOG.md reflete exatamente 1 entrada GalleryTabs em components/sections/gallery/gallery-tabs.tsx com status Pronto, contrato real (GalleryItem, GallerySet, GalleryTabsProps), uso funcional do primitive Tabs (029), boundary Server/Client e consumer futuro 044, além das contagens reais (UI 12, site 7, sections 32, shells 2, total 53). ROADMAP-1000-EVOLUTIONS.md marca 034 como VERIFIED (2026-11-12), atualiza o path real da 034 e define 035 (Consent preferences banner) como próxima execução não iniciada. CURRENT-STATE.md registra 001–034 VERIFIED, contagens (sections 32, UI 12, total 53, rotas 24), Playwright real (47 testes / 94 execuções = 91 passed + 3 skipped) e próxima execução 035. CHANGELOG.md registra apenas o estado final da 034, sem tentativas/FAIL/BLOCKED. QUALITY-REVIEW.md (QLT-005 em 23 e QLT-011 parcial), DESIGN-SYSTEM.md e DECISIONS.md permanecem inalterados. Gates reportados com exit 0 (npm run lint, npm run build 24/24 páginas, git diff --check).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Reportado nas evidências da T5 com exit code 0 (0 erros / 0 warnings).",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "Reportado nas evidências da T5 com exit code 0 (Compiled successfully in 1958.3ms, 24/24 páginas).",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Reportado nas evidências da T5 com exit code 0 (sem erros de whitespace/conflito nos 4 arquivos documentais).",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T13:20:15.654284+00:00"
+      },
+      "completed_at": "2026-11-12T13:20:15.837932+00:00"
     }
   ],
-  "created_at": "2026-11-12T11:31:20.950849+00:00",
-  "finished_at": "2026-11-12T12:16:00.837054+00:00"
+  "created_at": "2026-11-12T12:56:56.700556+00:00",
+  "finished_at": "2026-11-12T13:20:15.837945+00:00"
 }

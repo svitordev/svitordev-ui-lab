@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-12] — Evolução 034: Gallery (section) (VERIFIED)
+
+- **`components/sections/gallery/gallery-tabs.tsx`** (`GalleryTabs`) — 1 entrada de catálogo: grid de mídia data-driven usando o primitive Tabs (029) como parte funcional — cada aba alterna um conjunto real de itens; contrato `GalleryTabsProps` (`eyebrow?`/`title`/`description?`/`sets`; `GallerySet` com `items: GalleryItem[]` — tipos locais); Server Component (client boundary apenas no primitive Tabs; estado é do Radix — uncontrolled, nenhum estado manual no Builder); mídia = placeholder estrutural HTML/Tailwind (padrão do projeto — sem `<img>`, sem asset externo, sem `next/image`, sem CMS); cards `article`/`h3`; header `h2`; somente tokens existentes; sem motion; **zero dependências novas**; Tabs intacto (nenhum finding que o justificasse).
+- **Demo:** nova rota `/library/gallery` no padrão moderno (metadata, page header, entry tipada, preview box, label Componente) — 3 conjuntos (3/2/2 itens, um item sem descrição para provar a renderização condicional do contrato); conteúdo neutro e genérico; link "Gallery" adicionado na Library Shell antes de Landing (Landing permanece a última; nada reordenado).
+- +1 teste Playwright dual-project (section + h2 da section, tablist com os 3 triggers dos dados, estado inicial correto, troca por clique, `ArrowRight` no consumer, painel inativo fora da árvore, 1 painel visível por vez, zero overflow). Suíte: 47 testes / 94 execuções — **91 passed + 3 skipped**. Lint **0/0**; build **PASS** (24 rotas, `/library/gallery` presente); `git diff --check` limpo.
+- Contagens: sections 31 → **32**, total 52 → **53**; UI 12 (inalterado); rotas 23 → **24**. **QLT-005 e QLT-011 preservados** (componente data-driven — nenhuma dívida nova; contagens inalteradas). Consumers planejados (044 — Composition: Services page; 046 — SaaS landing) não antecipados.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (grupo Gallery + contrato), `docs/ROADMAP-1000-EVOLUTIONS.md` (034 VERIFIED, próxima 035, path real), `memory-bank/CURRENT-STATE.md` (próxima execução: 035). `docs/DESIGN-SYSTEM.md`, `memory-bank/DECISIONS.md` e `QUALITY-REVIEW.md` inalterados (nenhuma convenção nova, nenhum finding alterado).
+
+---
+
 ## [2026-11-12] — Evolução 033: Breadcrumbs (primitive) (VERIFIED)
 
 - **`components/ui/breadcrumb.tsx`** (singular — convenção majoritária de nomes em `components/ui/`; o roadmap citava `breadcrumbs.tsx` e foi corrigido) — 1 entrada de catálogo com exatamente 6 exports `Breadcrumb`/`BreadcrumbList`/`BreadcrumbItem`/`BreadcrumbLink`/`BreadcrumbPage`/`BreadcrumbSeparator`; sem exports extras (sem Ellipsis/Dropdown/Menu/Icon/Provider — nenhum consumer real).

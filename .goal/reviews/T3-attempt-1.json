@@ -1,23 +1,23 @@
 {
   "task_id": "T3",
-  "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
+  "fingerprint": "3ed9755434b75bdfd36660a8ad25b7e92b8103102fd3bcf81d281f609a12cf75",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T3 (Demo oficial /library/breadcrumbs e integração no library-shell) auditada e aprovada. O arquivo app/library/breadcrumbs/page.tsx foi criado como Server Component seguindo o padrão moderno (metadata, header, entries locais tipadas BreadcrumbsEntry, preview boxes e label Componente:) demonstrando o uso padrão e com asChild (next/link) do primitive Breadcrumb. O link para /library/breadcrumbs foi adicionado em components/sections/library-shell.tsx logo após Tabs, mantendo Landing como última entrada e sem reordenar outras categorias. Gates reportados nas evidências (lint 0/0, build PASS com 23 rotas incluindo /library/breadcrumbs, git diff --check limpo) são consistentes com a análise estática do código real.",
+  "summary": "Auditoria da T3 (Goal 034) concluída com veredito PASS com base exclusivamente nas evidências incorporadas pelo Builder (sem execução de comandos ou leitura externa pelo Inspector). A rota /library/gallery foi criada em app/library/gallery/page.tsx no padrão moderno da Library (Server Component, metadata, page header, GalleryEntry tipada, preview box e label Componente:), consumindo a section GalleryTabs (@/components/sections/gallery/gallery-tabs) com 3 tabs reais (Conjunto A com 3 itens, Conjunto B com 2 itens incluindo descrição longa, Conjunto C com 2 itens sendo um sem descrição), títulos e descrições distintos, placeholders estruturais aspect-video (aria-hidden), troca real de tab via Radix, grid responsivo 1->2->3 colunas e conteúdo neutro/genérico sem inflação de escopo. O diff de components/sections/library-shell.tsx confirma a adição de { href: \"/library/gallery\", label: \"Gallery\" } após Breadcrumbs, mantendo Landing na última posição sem reordenar as demais categorias. Os gates reportados pelo Builder (npm run lint, npm run build com 24/24 páginas de 23->24 e git diff --check) registraram exit 0.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Relatado nas evidências incorporadas: npm run lint com 0 erros e 0 warnings; confirmado por inspeção estática de app/library/breadcrumbs/page.tsx e components/sections/library-shell.tsx.",
+      "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, 0 erros / 0 warnings.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "Relatado nas evidências incorporadas: npm run build compilado com sucesso, TypeScript ok, 23 rotas incluindo /library/breadcrumbs; tipos e imports verificados contra components/ui/breadcrumb.tsx.",
+      "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, Compiled successfully in 2.7s, TypeScript ok, 24/24 páginas (baseline 23 -> 24 confirmado) com /library/gallery presente na listagem do build.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "Relatado nas evidências incorporadas como limpo; verificado nos arquivos lidos sem whitespace inválido ou marcadores de conflito.",
+      "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0 e diff de components/sections/library-shell.tsx preservando a ordem das categorias com Landing por último.",
       "name": "git diff --check",
       "status": "passed"
     }

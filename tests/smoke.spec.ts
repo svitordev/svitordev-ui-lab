@@ -1399,3 +1399,48 @@ test('breadcrumbs: demo sem overflow horizontal nos dois viewports', async ({ pa
     ),
   ).toBe(true);
 });
+
+test('gallery: tabs reais alternam conjuntos com conteudo dos dados (teclado + zero overflow)', async ({ page }) => {
+  await page.goto('/library/gallery');
+
+  // Page header + heading da section (h1 pagina → h2 section → h3 cards).
+  await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Projetos em destaque' })).toBeVisible();
+
+  // Tablist com os 3 conjuntos do contrato (dados do consumer).
+  await expect(page.getByRole('tablist')).toHaveCount(1);
+  const tabA = page.getByRole('tab', { name: 'Conjunto A' });
+  const tabB = page.getByRole('tab', { name: 'Conjunto B' });
+  const tabC = page.getByRole('tab', { name: 'Conjunto C' });
+  await expect(tabA).toBeVisible();
+  await expect(tabB).toBeVisible();
+  await expect(tabC).toBeVisible();
+
+  // Estado inicial: primeira tab selecionada; painel mostra o conteudo do conjunto A.
+  await expect(tabA).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('heading', { level: 3, name: 'Peça de destaque' })).toBeVisible();
+
+  // Clique troca o conteudo ativo (painel inativo sai da arvore — Radix desmonta).
+  await tabB.click();
+  await expect(tabB).toHaveAttribute('aria-selected', 'true');
+  await expect(tabA).toHaveAttribute('aria-selected', 'false');
+  await expect(page.getByRole('heading', { level: 3, name: 'Outro conjunto, mesmos dados de contrato' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: 'Peça de destaque' })).toHaveCount(0);
+
+  // Teclado no consumer: foco ja esta em tabB; ArrowRight -> Conjunto C selecionado
+  // (cobertura completa de teclado do primitive ja existe no teste da 029).
+  await page.keyboard.press('ArrowRight');
+  await expect(tabC).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('heading', { level: 3, name: 'Item sem descrição' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: 'Outro conjunto, mesmos dados de contrato' })).toHaveCount(0);
+
+  // Conteudo inativo nao aparece como ativo: apenas 1 painel visivel por vez.
+  await expect(page.getByRole('tabpanel')).toHaveCount(1);
+
+  // Zero overflow horizontal (mobile 375 + desktop 1280).
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

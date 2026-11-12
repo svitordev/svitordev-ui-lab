@@ -1,0 +1,51 @@
+{
+  "goal": "Evolucao 033 - Breadcrumbs (primitive): novo UI primitive semantico (nav aria-label, ol, li, aria-current=page, separator decorativo aria-hidden), demo oficial /library/breadcrumbs, cobertura Playwright e documentacao. Consumer real planejado: 045 (nao implementar agora). Nenhuma nova dependencia. Server-compatible.",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): padroes reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, asChild/Slot, named exports, Server/Client), dependencias em package.json (@radix-ui/react-slot, lucide-react), confirmacao do consumer 045 no roadmap, API final minima e contrato de semântica/a11y. Sem Ellipsis/Dropdown/Menu/Icon/Provider sem consumer.",
+      "acceptance": [
+        "Evidencia em .goal/evidence/T1-audit.md com: API final, semântica, asChild sim/nao, dependencias, Server/Client, arquivos previstos, testes necessarios, riscos e consumer 045",
+        "API minima sem exports extras alem de Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator",
+        "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Implementar o primitive (components/ui/breadcrumb.tsx ou nome aprovado na T1) exatamente conforme API aprovada, sem demo ainda.",
+      "acceptance": [
+        "Somente os exports aprovados na T1, sem exports extras; data-slot, cn(), React.ComponentProps; sem forwardRef se o padrao atual nao usa",
+        "Semantica exata do contrato T1: nav com aria-label, ol, li, aria-current=page no BreadcrumbPage, separator decorativo aria-hidden; asChild via @radix-ui/react-slot apenas se aprovado na T1",
+        "Server-compatible sem 'use client'; sem estado, sem contexto, sem motion, sem dependencia nova, sem cor raw",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Criar demo oficial /library/breadcrumbs no padrao moderno e integrar a navigation do library-shell (Breadcrumbs; Landing permanece a ultima showcase/composition). Nao reorganizar outras categorias.",
+      "acceptance": [
+        "app/library/breadcrumbs/page.tsx no padrao moderno (metadata, page header, entries locais tipadas, preview boxes, label Componente)",
+        "Link Breadcrumbs adicionado na navigation do library-shell sem reordenar outras categorias",
+        "Gates: npm run lint 0/0, npm run build PASS com a nova rota, git diff --check limpo"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Adicionar testes Playwright para breadcrumbs (a11y, semantica, teclado, focus-visible) e rodar os gates completos.",
+      "acceptance": [
+        "Testes cobrem nav landmark com accessible name, lista ordenada, links, aria-current=page, separator decorativo e foco visivel via teclado no demo",
+        "Suíte Playwright completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero overflow nas rotas afetadas",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG.md (entrada Breadcrumbs), ROADMAP-1000-EVOLUTIONS.md (033 VERIFIED, proxima 034), CURRENT-STATE.md, CHANGELOG.md e QUALITY-REVIEW.md se aplicavel.",
+      "acceptance": [
+        "COMPONENT-CATALOG.md com entrada Breadcrumbs na secao de UI primitives",
+        "ROADMAP marca 033 VERIFIED e proxima execucao 034; CURRENT-STATE e CHANGELOG refletem contagens reais (UI 12, total 52, rotas 23, Playwright real)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ]
+    }
+  ]
+}

@@ -6,9 +6,9 @@
 
 - **12** UI components
 - **7** site components
-- **31** section components
+- **32** section components
 - **2** wrappers/shells
-- **Total: 52** componentes reutilizáveis relevantes
+- **Total: 53** componentes reutilizáveis relevantes
 
 ---
 
@@ -114,7 +114,7 @@ Contrato do Breadcrumbs (resumo):
 | FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
 
-## Section components — `components/sections/` (31)
+## Section components — `components/sections/` (32)
 
 ### Hero — `components/sections/hero/` (4)
 
@@ -340,6 +340,39 @@ Server/Client boundary: `FaqAccordion` = Server Component; Accordion primitive =
 Modo: `<Accordion type="single" collapsible>`, sem wrapper de estado próprio.
 
 Semântica: título da section em `h2`; perguntas usam o Header interno do Radix; Trigger permanece o `button` real do Radix; nenhum heading manual duplicado; ARIA de disclosure fornecida pelo Radix.
+
+### Gallery — `components/sections/gallery/` (1)
+
+| Nome | Path | Status | Observações |
+|---|---|---|---|
+| GalleryTabs | `components/sections/gallery/gallery-tabs.tsx` | Pronto | **Data-driven** (Evolução 034). Grid de mídia usando o primitive Tabs (029) como parte funcional — cada aba alterna um conjunto real de itens; contrato `GalleryTabsProps` (`eyebrow?`/`title`/`description?`/`sets`; `GallerySet` com `items: GalleryItem[]` — tipos locais); Server Component (client boundary apenas no primitive Tabs; estado é do Radix — uncontrolled, sem state wrapper próprio); mídia = placeholder estrutural HTML/Tailwind (padrão do projeto — sem `<img>`, sem asset externo, sem `next/image`); cards `article`/`h3`; header `h2`; somente tokens existentes; sem motion; nenhuma dependência nova; demo na `/library/gallery`; consumer planejado (ainda não executado): 044 — Composition: Services page |
+
+Contrato (resumo):
+
+```ts
+export type GalleryItem = {
+  id: string
+  title: string
+  description?: string
+}
+
+export type GallerySet = {
+  id: string
+  label: string
+  items: GalleryItem[]
+}
+
+export type GalleryTabsProps = {
+  eyebrow?: string
+  title: string
+  description?: string
+  sets: GallerySet[]
+}
+```
+
+Server/Client boundary: `GalleryTabs` = Server Component; Tabs primitive = Client Component. A página `/library/gallery` também é Server Component. Estado das tabs é do Radix (uncontrolled via `defaultValue`) — nenhum estado manual no Builder.
+
+Semântica: título da section em `h2`; cards `article` com `h3`; placeholder de mídia decorativo (`aria-hidden`, sem `<img>`); teclado/ARIA das tabs fornecidos pelo Radix (tablist/tab/tabpanel, setas, Home/End, `aria-selected`, `aria-controls`); painel inativo desmontado pelo Radix; sem links falsos.
 
 ## Wrappers / shells (2)
 
