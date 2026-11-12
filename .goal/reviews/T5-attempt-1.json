@@ -1,23 +1,23 @@
 {
   "task_id": "T5",
-  "fingerprint": "b7ae9d4cf1078a67636d7ffed4e81d2e674c26072dac2c4e20fc0bbea6d061e1",
+  "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T5 (Documentação da Evolução 034 — Gallery) auditada e aprovada (PASS). COMPONENT-CATALOG.md reflete exatamente 1 entrada GalleryTabs em components/sections/gallery/gallery-tabs.tsx com status Pronto, contrato real (GalleryItem, GallerySet, GalleryTabsProps), uso funcional do primitive Tabs (029), boundary Server/Client e consumer futuro 044, além das contagens reais (UI 12, site 7, sections 32, shells 2, total 53). ROADMAP-1000-EVOLUTIONS.md marca 034 como VERIFIED (2026-11-12), atualiza o path real da 034 e define 035 (Consent preferences banner) como próxima execução não iniciada. CURRENT-STATE.md registra 001–034 VERIFIED, contagens (sections 32, UI 12, total 53, rotas 24), Playwright real (47 testes / 94 execuções = 91 passed + 3 skipped) e próxima execução 035. CHANGELOG.md registra apenas o estado final da 034, sem tentativas/FAIL/BLOCKED. QUALITY-REVIEW.md (QLT-005 em 23 e QLT-011 parcial), DESIGN-SYSTEM.md e DECISIONS.md permanecem inalterados. Gates reportados com exit 0 (npm run lint, npm run build 24/24 páginas, git diff --check).",
+  "summary": "Auditoria da Task T5 (Evolução 035 — Documentação final do Consent preferences banner) concluída com veredito PASS. A inspeção direta dos arquivos do workspace confirma que todos os critérios de aceite foram integralmente atendidos: (1) docs/COMPONENT-CATALOG.md reflete as contagens reais (UI 12, site 8, sections 32, wrappers 2, total 54), atualiza as observações de FooterCta e FooterColumns e adiciona a seção Consent com 1 entrada (ConsentPreferences em components/site/consent/consent-preferences.tsx) documentando exports, client boundary, modelo de dados, storage key svitordev:consent-preferences:v1, fail-safe, reabertura via custom event, copy factual sem alegação de CMP jurídica e zero dependências novas; (2) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 035 como VERIFIED (2026-11-12) com o path real e define a 036 (Migrar services×2 para contrato) como próxima execução não iniciada, mantendo o consumer planejado 046 intacto; (3) memory-bank/CURRENT-STATE.md lista as evoluções 001–035 com contagens reais (site 8, sections 32, total 54, rotas 24, Playwright 53 testes / 106 execuções — 103 passed + 3 skipped), comportamento do consent e próxima execução 036; (4) memory-bank/CHANGELOG.md registra apenas o estado final da Evolução 035 preservando o histórico; (5) memory-bank/DECISIONS.md registra a DEC-012 com a política duradoura de consentimento do template; (6) QUALITY-REVIEW.md e docs/DESIGN-SYSTEM.md permanecem inalterados, preservando QLT-005 (23, aberto) e QLT-011 (parcial, aberto); (7) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
   "findings": [],
   "tests": [
     {
-      "evidence": "Reportado nas evidências da T5 com exit code 0 (0 erros / 0 warnings).",
+      "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas da T5.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "Reportado nas evidências da T5 com exit code 0 (Compiled successfully in 1958.3ms, 24/24 páginas).",
+      "evidence": "BUILD_EXIT=0 (24 rotas) reportado nas evidências incorporadas da T5.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "Reportado nas evidências da T5 com exit code 0 (sem erros de whitespace/conflito nos 4 arquivos documentais).",
+      "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de COMPONENT-CATALOG.md, ROADMAP-1000-EVOLUTIONS.md, CHANGELOG.md, CURRENT-STATE.md e DECISIONS.md confirma formatação íntegra.",
       "name": "git diff --check",
       "status": "passed"
     }

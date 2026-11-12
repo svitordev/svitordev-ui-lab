@@ -1,97 +1,111 @@
-# T1 — Auditoria Gallery (Goal 034)
+# T1 — Auditoria de privacidade + storage + arquitetura (Goal 035)
 
-Investigação apenas — nenhum código de produção alterado nesta task. Todas as constatações abaixo vêm de leitura direta do código atual (comandos e achados reais ao final).
+Investigação apenas — nenhum código de produção alterado nesta task. Todas as constatações vêm de grep/leitura direta do código atual (comandos reais ao final).
 
-## 1. Tabs atual auditado (`components/ui/tabs.tsx`)
+## 1. Tracking real encontrado (grep em `app/`+`components/`+`lib/` + `app/layout.tsx` + `package.json`)
 
-- Exports: `Tabs` / `TabsList` / `TabsTrigger` / `TabsContent` (exatamente 4, API pública preserva a do Radix).
-- Client boundary: `"use client"` está APENAS no primitive (decisão da 029). Server Components podem consumi-lo normalmente — é o que a página `/library/tabs` já faz.
-- API: `React.ComponentProps` do primitive Radix correspondente em cada export; controlled/uncontrolled via `value`/`defaultValue`/`onValueChange`; `orientation` preservada.
-- `data-slot`: `tabs` / `tabs-list` / `tabs-trigger` / `tabs-content`. `cn()` em todos.
-- Estilização: somente tokens (`bg-muted`, `text-muted-foreground`, `data-[state=active]:bg-background` etc.), focus-visible `ring` do projeto, transição `motion-safe`.
-- Teclado: herdado do Radix (activation mode automático — setas movem seleção e foco; Home/End). **Já existe cobertura no consumer da demo** (teste `tabs: primitive Radix com selecao por clique, teclado e paineis correspondentes`, smoke.spec.ts:1148 — cobre clique, ArrowRight, ArrowLeft, Home, End, aria-selected e associação aria-controls).
-- Dependência: `@radix-ui/react-tabs` ^1.2.1 (já instalada). **Nada em Tabs impede a Gallery — nenhum finding que justifique modificá-lo.**
+Grep: `cookie|cookies|document.cookie|localStorage|sessionStorage|analytics|gtag|googletagmanager|GoogleAnalytics|GA4|pixel|facebook|meta pixel|clarity|segment|posthog|mixpanel|tracking|consent` → **79 matches, todos falsos positivos de `tracking-wide`/`tracking-tight` (Tailwind letter-spacing)**. Zero ocorrências reais de cookie/storage/analytics/pixel/consent.
 
-## 2. Padrões modernos data-driven auditados
+- **Existe tracking não essencial? NÃO.**
+- **Existem cookies próprios? NÃO** (zero `document.cookie`, nenhuma cookie API).
+- **Existe analytics? NÃO** (sem gtag/GA4/PostHog/Mixpanel/Clarity/Segment; `package.json` sem nenhuma SDK de analytics).
+- **Existe publicidade/pixel? NÃO.**
+- **Existe armazenamento local atual? NÃO** — nenhum uso de `localStorage`/`sessionStorage` no código de produção. **Não há convenção de naming pré-existente** → adota-se a direção do plano: key namespaced versionada `svitordev:consent-preferences:v1`.
+- `app/layout.tsx`: Server Component puro, sem scripts externos, sem injeção de terceiros. `package.json`: nenhuma dependência de consent/CMP/analytics.
 
-De `feature-comparison.tsx`, `hero-media-showcase.tsx`, `hero-primary.tsx`/`hero-steps.tsx` (contratos 001/003/010/016) e `sticky-column-split.tsx`:
+**Consequência (regra crítica):** o componente **não pode afirmar** que bloqueia cookies de analytics/marketing — nenhuma integração existe. Ele **armazena preferências localmente** e **prepara a arquitetura**; a copy deve dizer exatamente isso.
 
-- Props: tipos locais exportados; `eyebrow?: string` + `title: string` obrigatório + `description?: string`; arrays de objetos no plural (`options`/`features`/`actions`/`steps`); opcionais condicionais sem defaults internos escondendo conteúdo.
-- Item types: `id` string para key; `label` para texto visível; campos de conteúdo opcionais com renderização condicional.
-- Header da section: bloco `eyebrow` (p, uppercase, xs) + `h2` + `description` (p, muted) — padrão FeatureComparison.
-- Cards de item: `article` com `h3` (padrão sticky-column-split) — hierarquia h1 (página) → h2 (section) → h3 (card).
-- Server Component quando não há estado próprio (FeatureComparison, HeroMediaShowcase, StickyColumnSplit são todos Server Components puros).
-- Sem links falsos (convenção 001 — só links reais; Gallery não precisa de links).
+## 2. Componentes de site — onde UI site-wide deve viver
 
-## 3. Library — naming real
+- `app/layout.tsx` (root, Server) → ponto arquitetural correto para o banner site-wide (renderiza o client leaf como filho direto; layout permanece Server).
+- Footer real do site: **`FooterCta`** via `app/(site)/layout.tsx` (home + blog). `FooterColumns`/`FooterSimple` são variants de catálogo; `FooterColumns` aparece na landing composition (`/library/landing`) — **não é o footer do site**.
+- **Ponto de reabertura aprovado:** `FooterCta` (linha final), único ponto de UI site-wide real. `FooterColumns` não é alterado (é demo de composition; alterá-lo inflaria escopo).
 
-- **Convenção real verificada: rota = nome do grupo do catálogo 1:1** (`features`→`/library/features`, `testimonials`→`/library/testimonials`, `newsletter`→`/library/newsletter`, `pricing`→`/library/pricing`, `contact`→`/library/contact`, `about`→`/library/about`). O roadmap nomeia a categoria **"Gallery"** → **rota `/library/gallery`**, grupo `components/sections/gallery/`.
-- Filename da section: precedente exato de "grupo + mecanismo" = `faq-accordion.tsx` (grupo faq, mecanismo accordion). Gallery usa Tabs como mecanismo → **`gallery-tabs.tsx`**, export **`GalleryTabs`** (named export, padrão do repo).
-- Library Shell: entrada adicionada após "Breadcrumbs", antes de "Landing" (Landing permanece a última; nada reordenado). Label no shell: "Gallery" (nome oficial do roadmap).
-- Metadata: `title: "Library · Gallery"` + `description` real, padrão das demos modernas (metadata + page header + entries locais tipadas + preview boxes + label `Componente:`).
+## 3. Primitives existentes
 
-## 4. Mídia — padrão real do projeto
+- `components/ui/`: accordion, alert, avatar, badge, button, card, input, separator, skeleton, tabs, textarea, breadcrumb. **Não existe Checkbox/Switch** → **HTML nativo acessível** (`<input type="checkbox">` estilizado com tokens; `<label htmlFor>` real). **Nenhum primitive novo, nenhuma instalação Radix.**
+- `Button` existente usado nas ações (sem `asChild` — ações são handlers, não links).
 
-- Grep em `app/`+`components/`+`lib/`: **zero assets de imagem reais usados** (único match: `/__avatar-009-missing__.svg` — src quebrado proposital do teste de fallback do Avatar). `public/` contém apenas os 5 SVGs default do framework, não usados por sections.
-- Padrão vigente de mídia visual: **media frame HTML/Tailwind** (HeroMediaShowcase — `figure` + moldura com chrome de janela, `bg-muted`, `rounded`, `shadow-sm`, sem `<img>`).
-- Decisão: **placeholder estrutural** — cada card do grid renderiza uma moldura decorativa (`div` com aspect-ratio + tokens `bg-muted`/`border`, `aria-hidden` quando puramente decorativa) + título + descrição. **Sem `<img>`, sem CMS, sem remote image, sem `next/image`, sem asset externo, sem stock photo.** Sem campo `image` na API (nenhum consumer passaria imagem — anti-inflação).
+## 4. Decisão de categorias — **Opção A (arquitetura preparada)**
 
-## 5. API final aprovada (derivada da auditoria — roadmap: "Grid de mídia data-driven, estruturalmente distinta, usando Tabs como parte funcional (conjuntos reais da demo)")
+Justificativa: o roadmap já nomeia o consumer real (044/046 — SaaS landing) e a evolução existe para estabelecer a arquitetura de preferências. Opção B (não expor categoria sem consumer) deixaria o banner sem o que personalizar — a própria evolução seria o consumer. **Copy factual obrigatória** (ver §8).
+
+## 5. Modelo de estado (contrato mínimo)
 
 ```ts
-export type GalleryItem = {
-  id: string;
-  title: string;
-  description?: string;
-};
-
-export type GallerySet = {
-  id: string;
-  label: string; // label do TabsTrigger
-  items: GalleryItem[]; // conjunto exibido no painel da tab
-};
-
-export type GalleryTabsProps = {
-  eyebrow?: string;
-  title: string;
-  description?: string;
-  sets: GallerySet[];
-};
+type ConsentPreferences = {
+  version: 1
+  necessary: true          // sempre true — nunca salvo como false
+  analytics: boolean
+  marketing: boolean
+  updatedAt?: string       // ISO local, informativo
+}
 ```
 
-- Tabs = conjuntos (sets); cada painel renderiza um **grid** de cards (moldura placeholder + título + descrição) — "conjuntos reais" do roadmap, não um item por tab.
-- Uncontrolled (`defaultValue={sets[0].id}`) — estado é do Radix, **nenhum estado manual no Builder**.
-- Server Component (consome o primitive client sem `"use client"` próprio — boundary mínimo: só o Tabs, como a página `/library/tabs` já faz).
-- Sem `image`/`icon`/`href`/`action` na API (nenhum consumer real os usaria agora; 044 consumirá conteúdo via props).
+- **Necessary:** sempre ativa, checkbox `checked` + `disabled` (nativo — disabled em checkbox checked mantém o estado visível e a semântica é clara), com explicação factual: cobre o armazenamento local das próprias preferências (este componente usa localStorage — é a única categoria realmente ativa hoje).
+- **Analytics/Marketing:** categorias opcionais reais do modelo, mas **sem side effect hoje** — a copy declara isso.
 
-## 6. A11y (contrato)
+## 6. Storage
 
-- Hierarquia: h1 (página demo) → h2 (section) → h3 (cards `article`).
-- Tabs: teclado/ARIA nativos do Radix (tablist/tab/tabpanel, setas, Home/End, aria-selected, aria-controls) — herdados, sem handlers customizados.
-- Conteúdo do painel corresponde ao trigger (associação real via Radix).
-- Placeholder de mídia decorativo: `aria-hidden="true"` (sem `<img>` com alt falso).
-- Sem links falsos; sem `role` inventado; focus-visible do primitive preservado.
-- Grid responsivo (1 col mobile → 2/3 desktop) com zero overflow em 375×667 e 1280×720.
+- **`localStorage`** (UI de preferências não precisa de backend nesta evolução).
+- Key: **`svitordev:consent-preferences:v1`** (namespaced + versionada; sem convenção pré-existente — §1).
+- Leitura **somente no client** (`useEffect` pós-mount); escrita em `localStorage.setItem` no save. JSON inválido / `version !== 1` / shape inválido → tratado como **ausência** (banner reaparece; nada quebra).
 
-## 7. Testes necessários (T4 — sem duplicar o teste do primitive)
+## 7. Comportamento
 
-Pelo consumer oficial `/library/gallery` (dual-project), 1 teste abrangente de alto valor: section renderiza com h2 correto; tablist com 3 triggers; tab inicial `aria-selected=true` com painel correspondente; clique na 2ª tab troca o conteúdo; conteúdo ativo corresponde ao trigger; conteúdo inativo não aparece como ativo; 1 passo de teclado (ArrowRight troca seleção — prova do wiring no consumer; cobertura completa já existe no teste do primitive, smoke.spec.ts:1148); zero overflow horizontal. Armadilhas conhecidas: `{ exact: true }` em nomes curtos; asserts sem acentos quando possível.
+- **Primeira visita** (sem key): banner aparece (pós-mount, sem leitura no render server).
+- **Decisão salva:** banner não reaparece automaticamente; refresh preserva.
+- **Reabertura:** controle real no FooterCta → painel reaparece com valores salvos carregados → usuário altera e salva (nova decisão sobrescreve).
+- **Ações:** `Aceitar opcionais` / `Recusar opcionais` / `Personalizar` (expansão **inline** — `<details>` nativo com checkboxes + `Salvar preferências`). Sem Dialog/modal novo. **Anti-dark-pattern:** Aceitar e Recusar com o mesmo peso visual (ambos `variant="outline"`); `Salvar preferências` como ação primária do painel expandido; nenhum botão escondido.
 
-## 8. Contagens esperadas
+## 8. Copy constraints (factual — zero fake compliance)
 
-- Sections 31 → **32** · UI 12 (inalterado) · total 52 → **53** · rotas 23 → **24** · Playwright 46 → **47 testes** (94 execuções: 91 passed + 3 skipped).
+- Dizer: preferências **armazenadas localmente neste navegador**; **nenhum dado é enviado** por este componente; **nenhuma integração externa (analytics/marketing) está ativa atualmente** — as escolhas preparam o comportamento futuro.
+- **Não dizer:** "bloqueamos cookies de analytics", "analytics foi desativado", "100% conforme LGPD/GDPR", nenhuma alegação jurídica.
 
-## 9. Riscos
+## 9. A11y
 
-- Baixo. Server Component consumindo client primitive é padrão comprovado (página tabs). Único risco real: asserts frágeis por substring (mitigado com `{ exact: true }`).
+- Banner **não-modal**: `<section>` com `aria-labelledby` apontando para heading interno (h2); **não captura foco** como modal (sem focus trap, sem autofocus); ordem de tabulação natural (banner no fim do DOM — filho último do body).
+- Checkboxes com `<label htmlFor>` real; necessary `disabled` + `checked` + explicação textual; estado `checked` nativo reportado.
+- `<details>`/`<summary>` nativos para Personalizar (divulgação acessível por teclado sem JS extra).
+- Status após salvar: painel/banner fecha (feedback visual) + `role="status"` **somente no painel de reabertura** após save — ver §11 (evita colisão com `getByRole('status')` da newsletter).
+- Reabertura: controle é `<button>` real com texto "Preferências de privacidade".
 
-## 10. Consumer futuro 044 (confirmado no roadmap, não implementar)
+## 10. Client boundary + comunicação
 
-- Roadmap: `044 | Composition: Services page | ... | — | 034, 036, 040` — depende da 034. A API acima atende 044 via props (conjuntos reais de serviços). Criação da Gallery justificada pela regra anti-inflação (consumer real planejado + Tabs como parte funcional).
+- `ConsentPreferencesBanner` = **Client Component** (storage + interação) — boundary mínimo, leaf isolado no root layout (layout permanece Server).
+- `ConsentPreferencesTrigger` = client leaf mínimo no FooterCta (Server).
+- **Comunicação:** custom event `svitordev:consent-preferences:open` (trigger → banner). Sem context global, sem lib de estado, sem dependência nova — menor acoplamento entre dois client leaves que não têm ancestral comum client.
+
+## 11. Interferência na suíte existente (auditada antes — sem helpers preventivos)
+
+- `button[aria-expanded]` (testes mobile nav, linhas 75/107/897): o banner **não usa** `aria-expanded` (usa `<details>` nativo) → zero interferência.
+- `getByRole('status')` (newsletter, linhas 352/375): `role="status"` só aparece **após save no painel de reabertura** — testes da newsletter não salvam consent → zero interferência.
+- `getByRole('checkbox')`: nenhum teste existente usa → livre.
+- Testes de overflow (`scrollWidth === clientWidth`): banner fixed bottom sem largura além do viewport → sem overflow.
+- Cliques em elementos cobertos: banner compacto no rodapé; suíte roda primeiro sem mudança em testes existentes; se houver interferência real, criar **helper mínimo explícito** (não `localStorage.setItem` em todos).
+
+## 12. Arquivos previstos
+
+- T2: `components/site/consent/consent-preferences.tsx` (novo — banner + trigger, um arquivo, um client boundary por folha).
+- T3: `app/layout.tsx` (renderizar o banner leaf) + `components/site/footers/footer-cta.tsx` (renderizar o trigger leaf).
+- T4: `tests/smoke.spec.ts` (+6 testes dual-project cobrindo os 7 cenários).
+- T5: catálogo (1 entrada site), roadmap (035 VERIFIED, próxima 036), CURRENT-STATE, CHANGELOG; `DECISIONS.md` — **avaliar DEC nova** apenas se a política (localStorage-only, zero integração fictícia, reabertura obrigatória) for tratada como duradoura (provável — é comportamento de template).
+
+## 13. Contagens esperadas (baseline REAL confirmado)
+
+- Catálogo real hoje: sections **32** · UI **12** · site **7** (o plano do usuário dizia 9 — divergência registrada, usa-se a realidade) · wrappers 2 · total **53**.
+- Pós-035: site **8**, total **54**; sections 32; rotas **24** (nenhuma nova); Playwright 47 → **53 testes** (106 execuções: 103 passed + 3 skipped).
+
+## 14. Riscos
+
+- **Hidratação:** banner renderizado condicionalmente com estado lido no mount — server renderiza vazio, client decide (sem mismatch; sem suppressHydrationWarning).
+- **Custom event em testes:** Playwright dispara cliques reais — sem dependência de timing além do normal; asserts com `expect.poll`/web-first onde necessário.
+- **Interferência visual em screenshots/overflow:** mitigada no §11; suíte valida.
+- Risco residual baixo — componente isolado, zero dependências.
 
 ## Material auditável (comandos reais desta task)
 
-- `grep "\.svg|\.png|\.jpg|next/image" em {app,components,lib}/**` → 1 match (avatar fallback teste) — nenhuma imagem real em produção.
-- `list public/` → file.svg, globe.svg, next.svg, vercel.svg, window.svg (defaults não usados).
-- Leituras: `components/ui/tabs.tsx` (79 linhas), `components/sections/features/feature-comparison.tsx`, `components/sections/hero/hero-media-showcase.tsx`, `tests/smoke.spec.ts` (teste do primitive na linha 1148), `docs/ROADMAP-1000-EVOLUTIONS.md` (linhas 407, 417), `docs/COMPONENT-CATALOG.md`.
-- Nenhuma alteração de código nesta task (T1 é investigação; gates de código aplicam-se às próximas tasks).
+- `grep "cookie|cookies|document.cookie|localStorage|sessionStorage|analytics|gtag|googletagmanager|GoogleAnalytics|GA4|pixel|facebook|meta pixel|clarity|segment|posthog|mixpanel|tracking|consent" em {app,components,lib}/**` → 79 matches, **todos** `tracking-*` do Tailwind (falsos positivos) — zero tracking/storage real.
+- Leituras: `app/layout.tsx` (Server, sem scripts), `app/(site)/layout.tsx` (usa FooterCta), `components/site/footers/footer-cta.tsx`, `package.json` (nenhuma SDK), `docs/COMPONENT-CATALOG.md` (contagens reais 32/12/7/2=53), `tests/smoke.spec.ts` (auditado `button[aria-expanded]`, `getByRole('status')`, `getByRole('checkbox')`).
+- Nenhuma alteração de código nesta task.

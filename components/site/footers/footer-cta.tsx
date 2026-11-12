@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+// Evolução 035 — trigger client leaf (Server Component permanece Server).
+import { ConsentPreferencesTrigger } from "@/components/site/consent/consent-preferences";
 
 export function FooterCta() {
   const year = new Date().getFullYear();
@@ -39,6 +41,8 @@ export function FooterCta() {
             Este rodapé pode ser adaptado para escritórios, clínicas, consultorias e outros
             negócios de serviços.
           </p>
+          {/* Evolução 035 — reabertura das preferências de privacidade. */}
+          <ConsentPreferencesTrigger />
         </div>
       </div>
     </footer>

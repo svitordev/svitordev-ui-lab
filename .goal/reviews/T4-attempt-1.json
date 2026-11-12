@@ -1,28 +1,28 @@
 {
   "task_id": "T4",
-  "fingerprint": "8cf54984927c0601832f9170056b668232f907116fe64dc19521ffb224c6f79b",
+  "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T4 (Evolucao 034 - Testes Playwright Gallery + gates) auditada e aprovada. O teste adicionado em tests/smoke.spec.ts (linhas 1403-1446) valida o consumer oficial /library/gallery cobrindo hierarquia de headings (h1 -> h2 -> h3), tablist unico com 3 triggers dos dados do contrato (Conjunto A/B/C), estado inicial aria-selected=true com conteudo ativo correspondente, troca de aba por clique e por teclado (ArrowRight sem duplicar a cobertura exaustiva de ArrowLeft/Home/End do primitive Tabs na linha 1148), desmontagem de conteudo inativo (toHaveCount(0) + apenas 1 tabpanel visivel) e zero overflow horizontal nos projetos desktop (1280x720) e mobile (375x667). Todos os gates reportados passaram com exit code 0 (test:e2e 91 passed / 3 skipped / 0 failed em 94 execucoes, lint 0/0, build 24/24 rotas, git diff --check limpo) e contagens reais confirmadas (sections 32, UI 12, total 53).",
+  "summary": "T4 aprovada (PASS). Os 6 novos testes em tests/smoke.spec.ts cobrem integralmente os cenarios exigidos para o banner de preferencias de privacidade (Evolucao 035): primeira visita com heading acessivel, copy factual, acoes de mesmo peso e abertura de Personalizar via teclado; aceitar opcionais com persistencia em localStorage e manutencao do estado oculto apos reload; recusar opcionais mantendo necessary: true e opcionais false apos reload; personalizacao por label associado (getByRole checkbox) e persistencia ao salvar; reabertura via teclado pelo botao do footer carregando o estado anterior, sobrescrevendo a decisao e anunciando via live region (role=status); fail-safe para localStorage corrompido sem quebrar a pagina e zero overflow horizontal nos dois viewports (desktop 1280x720 e mobile 375x667). O helper seedConsentDecision foi restrito exclusivamente aos 5 testes existentes com interferencia comprovada (contagem de input[id] e sobreposicao fisica do banner fixed bottom em mobile), sem aplicacao global. Gates reportados verdes (lint 0/0, build 24 rotas, test:e2e 103 passed / 3 skipped / 0 failed, git diff --check limpo) e contagens confirmadas (site 7 -> 8, total 53 -> 54, Playwright 47 -> 53 testes).",
   "findings": [],
   "tests": [
     {
-      "evidence": "npm run test:e2e -> exit 0 (94 execucoes: 91 passed, 3 skipped, 0 failed; ok 93 [desktop] e ok 94 [mobile] para 'gallery: tabs reais alternam conjuntos com conteudo dos dados (teclado + zero overflow)')",
+      "evidence": "tests/smoke.spec.ts (linhas 1455-1599): 6 novos testes cobrindo primeira visita, aceitar, recusar, personalizar, reabertura pelo footer, storage corrompido e zero overflow; 103 passed + 3 skipped (0 failed) nos projetos desktop e mobile (E2E_EXIT=0).",
       "name": "npm run test:e2e",
       "status": "passed"
     },
     {
-      "evidence": "npm run lint -> exit 0 (0 erros / 0 warnings)",
+      "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidencias da T4.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "npm run build -> exit 0 (Compiled successfully, 24/24 paginas)",
+      "evidence": "BUILD_EXIT=0 (24 rotas compiladas com sucesso) reportado nas evidencias da T4.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "git diff --check -> exit 0 (limpo)",
+      "evidence": "CHECK_EXIT=0 sem erros de whitespace ou formacao no diff.",
       "name": "git diff --check",
       "status": "passed"
     }

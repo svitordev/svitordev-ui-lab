@@ -1,14 +1,14 @@
 {
   "task_id": "T1",
-  "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
+  "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria T1 da Evolução 034 (Gallery section consumindo Tabs da 029) verificada com sucesso contra o código real do repositório. O arquivo .goal/evidence/T1-audit.md documenta com precisão o contrato real de components/ui/tabs.tsx, os padrões data-driven das sections recentes (FaqAccordion, HeroMediaShowcase, StickyColumnSplit, FeatureComparison), a convenção de rotas/naming da Library (/library/gallery e components/sections/gallery/gallery-tabs.tsx), o padrão de mídia via placeholder estrutural HTML/Tailwind sem assets externos, a API mínima data-driven (GalleryItem, GallerySet, GalleryTabsProps) sem inflação, o client boundary mínimo (Server Component consumindo primitive Client uncontrolled), o plano de teste Playwright, as contagens esperadas (sections 31->32, total 52->53, rotas 23->24, testes 46->47) e a confirmação do consumer futuro 044 no roadmap, sem alterar código de produção nem adicionar dependências.",
+  "summary": "Auditoria T1 (Goal 035 - Consent preferences banner) verificada com sucesso. O artefato .goal/evidence/T1-audit.md cobre integralmente todos os criterios de aceite: mapeamento factual de tracking/storage reais (SIM/NAO por tipo, confirmando 79 matches apenas de classes Tailwind tracking-*), identificacao correta do ponto de integracao site-wide (app/layout.tsx + FooterCta via app/(site)/layout.tsx, preservando FooterColumns restrito a landing composition), reutilizacao de primitives HTML nativos (input checkbox + details/summary sem novos primitives ou dependencias Radix), contrato de estado ConsentPreferences versionado na key svitordev:consent-preferences:v1, escolha justificada da Opcao A com restricoes estritas de copy factual (zero fake compliance e sem alegacoes LGPD/GDPR), client boundary minimo via CustomEvent (svitordev:consent-preferences:open), analise de nao-interferencia com seletores de testes existentes (button[aria-expanded], getByRole('status'), getByRole('checkbox')), baseline real do catalogo confirmado (site = 7, total = 53) e nenhuma alteracao em codigo de producao.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md, components/ui/tabs.tsx, components/sections/library-shell.tsx, components/sections/hero/hero-media-showcase.tsx, components/sections/faq/faq-accordion.tsx, components/sections/features/sticky-column-split.tsx, docs/ROADMAP-1000-EVOLUTIONS.md, docs/COMPONENT-CATALOG.md, tests/smoke.spec.ts e package.json. Task T1 é exclusivamente de investigação/auditoria, sem alteração de código de produção.",
-      "name": "T1-audit-verification",
+      "evidence": "Inspecao estatica das evidencias de auditoria (.goal/evidence/T1-audit.md): grep de tracking/storage, leitura de layouts, footer, catalogo e suite Playwright documentados sem alteracao de codigo de producao.",
+      "name": "T1-audit-evidence-verification",
       "status": "passed"
     }
   ],

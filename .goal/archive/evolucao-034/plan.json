@@ -1,0 +1,51 @@
+{
+  "goal": "Evolucao 034 - Gallery (section) consumindo o Tabs primitive da 029: nova section data-driven + showcase oficial na Library + testes Playwright + documentacao. Consumer futuro planejado: 044 (nao implementar). Nao implementar 035. Nenhuma nova dependencia. Anti-inflacao: sem modal/lightbox/carousel/zoom/autoplay/pagination/filtering.",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): auditar components/ui/tabs.tsx (exports, client boundary, API, styling, teclado Radix, data-slot, dependencia); auditar padroes modernos data-driven das sections recentes (contratos de props, item types, actions, midia, layout, heading, ids); auditar naming/rotas/ordenacao/convencao da Library e escolher o nome real da rota com base no padrao; auditar como o projeto representa midia visual (placeholder estrutural vs imagem) sem CMS/remote image/asset externo; confirmar consumer 044 no roadmap. Sem links falsos, sem estado manual duplicando Radix.",
+      "acceptance": [
+        "Evidencia em .goal/evidence/T1-audit.md com: API final, naming/path da section e da rota, client boundary justificado, padrao de midia, Tabs composition, testes necessarios, contagens esperadas, riscos e consumer 044",
+        "API minima data-driven (consumer controla heading, supporting text, tabs/items, midia, labels) sem inflacao (sem modal/carousel/zoom/pagination/filtering)",
+        "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Implementar exatamente uma nova section Gallery conforme decisao aprovada na T1 (path components/sections/gallery/...), consumindo o primitive Tabs da 029 sem recriar tab logic manualmente.",
+      "acceptance": [
+        "Uma unica section nova, sem variantes extras; conteudo 100% via props (consumer dono dos dados, sem demo content em defaults internos)",
+        "Usa Tabs/TabsList/TabsTrigger/TabsContent existentes; client boundary minimo justificado pela T1; sem estado manual; sem duplicar logica interna do Radix",
+        "Visual dark-only com tokens existentes, sem cores novas; responsividade, focus states e legibilidade coerentes com as sections existentes",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff relevante + outputs reais + exit codes"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Criar o showcase oficial na Library na rota definida pela auditoria, com metadata como as demais paginas, e adicionar a entrada da Gallery na Library Shell respeitando a ordenacao atual (Landing na posicao vigente, sem reorganizar demais).",
+      "acceptance": [
+        "Demo no padrao moderno com minimo 3 tabs/items, titulos distintos, descricoes, midia/placeholders, troca real de tab e comportamento responsivo; conteudo neutro e generico",
+        "Entrada Gallery na Library Shell sem reordenar outras categorias",
+        "Gates: npm run lint 0/0, npm run build PASS com a nova rota (baseline 23 → 24), git diff --check limpo; evidencia com diff + outputs reais + exit codes"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Adicionar cobertura Playwright de alto valor pelo consumer oficial da Library (sem inflar contagem): section renderiza, heading correto, tabs presentes, tab inicial com estado correto, clique troca conteudo, teclado troca/foca (setas/Home/End conforme cobertura existente — auditar antes de duplicar), conteudo ativo corresponde ao trigger, inativo nao aparece como ativo, zero overflow horizontal, mobile e desktop.",
+      "acceptance": [
+        "Testes cobrem comportamento, a11y, teclado e mobile com zero overflow; sem duplicar cobertura existente do primitive Tabs",
+        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia incorpora diff dos testes + output real + exit codes + contagens reais (sections 32, UI 12, total 53)"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG com exatamente 1 entrada Gallery (status, path, API real, uso de Tabs, consumer futuro 044); ROADMAP marca 034 VERIFIED e proxima 035 (sem iniciar 035); CURRENT-STATE com 001-034, contagens, rota, Playwright real e proxima 035; CHANGELOG somente com o estado final (sem tentativas/FAIL/BLOCKED). QUALITY-REVIEW, DESIGN-SYSTEM e DECISIONS inalterados salvo achado real da T1.",
+      "acceptance": [
+        "Contagens reais refletidas: sections 32, UI 12, total 53, rotas 24, Playwright real; QLT-005 e QLT-011 preservados sem alteracao de contagem",
+        "ROADMAP: 034 VERIFIED, proxima execucao 035 — Consent preferences banner (nao iniciada)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
+      ]
+    }
+  ]
+}

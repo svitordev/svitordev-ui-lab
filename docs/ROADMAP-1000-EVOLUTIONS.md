@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; 035–050 planejadas e não iniciadas. Próxima execução: **035**.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; **035 ✅ VERIFIED (2026-11-12)**; 036–050 planejadas e não iniciadas. Próxima execução: **036**.
 
 ## Visão geral
 
@@ -405,7 +405,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 | 032 | Migrar hero-steps + corrigir heading ✅ VERIFIED | refactor | Contrato + heading sem skip (h1→h3 rejeitado por evidência; steps h3→h2) | contrato + heading hierarchy | QLT-005 (24→23, aberto), QLT-011 (parcial) | 026 | Pequeno |
 | 033 | Breadcrumbs (primitive) | UI | Navegação hierárquica | `components/ui/breadcrumb.tsx` + demo (path real, singular — convenção do repositório, aprovado na auditoria T1) | — | — | Pequeno |
 | 034 | Gallery (section) | section | Grid de mídia data-driven, estruturalmente distinta, **usando Tabs como parte funcional** (conjuntos reais da demo) | `components/sections/gallery/gallery-tabs.tsx` + demo (path real, aprovado na auditoria T1) | — | 029 | Médio |
-| 035 | Consent preferences banner | site | Componente de UI/comportamento de consentimento (não compliance engine); persistência explícita, acessível, sem tracking real, demo segura | `components/site/consent-banner.tsx` + demo + teste | — | 026 | Pequeno |
+| 035 | Consent preferences banner ✅ VERIFIED | site | Componente de UI/comportamento de consentimento (não compliance engine); persistência explícita, acessível, sem tracking real, demo segura | `components/site/consent/consent-preferences.tsx` + integração (root layout + FooterCta) + testes (path real, aprovado na auditoria T1) | — | 026 | Pequeno |
 | 036 | Migrar services×2 para contrato | refactor | QLT-005 incremental | 2 contratos + demos | QLT-005 | 026 | Médio |
 | 037 | Migrar AboutTimeline para contrato | refactor | Preparar About composition; reduzir QLT-005 sem migração escondida | contrato + demo | QLT-005 | — | Pequeno |
 | 038 | Migrar headers×3 para API data-driven | refactor | Links/actions via props; consolidar padrão da 026; preservar MobileNav e acessibilidade (3 componentes pequenos — cabem numa evolução) | 3 contratos + demos | QLT-005 | 026 | Médio |

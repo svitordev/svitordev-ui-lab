@@ -85,3 +85,13 @@ Decisões arquiteturais aprovadas. Uma decisão por entrada: o que foi decidido,
 - **Como revisar:** Se um projeto derivado precisar de light/dark, introduzir o mecanismo na origem do projeto (provider + toggle + testes nos dois temas). O Lab só reabre esta decisão se ele próprio ganhar um segundo tema com consumer real. Para o Lab, esta decisão supera a leitura da DEC-004 (que permanece válida para projetos derivados).
 - **Data:** 2026-11-10
 - **Impacto:** `app/globals.css`, `app/layout.tsx`, `components/ui/button.tsx`, `components/ui/input.tsx`, `components/ui/textarea.tsx`, `tests/smoke.spec.ts`; QLT-009 → VERIFIED; `docs/DESIGN-SYSTEM.md` alinhado.
+
+## DEC-012 — Consent preferences (storage local apenas, zero integração fictícia)
+
+- **Contexto:** A Evolução 035 criou o componente de preferências de consentimento. O projeto não tem nenhum tracking real — auditoria da T1 (2026-11-12, `.goal/evidence/T1-audit.md`): zero cookies próprios, zero analytics/pixel, zero storage pré-existente (os 79 matches de grep eram todos `tracking-*` do Tailwind). O roadmap define o consumer real futuro: 046 (SaaS landing).
+- **Decisão:** Política duradoura do template: (1) preferências armazenadas **somente em `localStorage`** com key namespaced versionada (`svitordev:consent-preferences:v1`); (2) **zero integração fictícia** — a copy declara armazenamento local, nenhum envio de dados e nenhuma integração externa ativa; nenhuma alegação jurídica (LGPD/GDPR); (3) **reabertura obrigatória** — controle real no footer, sem dependência de recarregar a página; (4) comunicação mínima entre leaves via custom event — sem context global nem lib de estado; (5) anti-dark-pattern — Aceitar e Recusar com o mesmo peso visual.
+- **Motivo:** Não se pode afirmar que se bloqueiam trackers que não existem; a evolução estabelece a arquitetura de preferências para consumidores reais futuros. É comportamento de template — projetos derivados herdam a política.
+- **Consequências:** Categorias (necessary/analytics/marketing) existem no modelo com copy factual; JSON corrompido/versão incompatível tratado como ausência; `necessary` nunca persistido como false (é o armazenamento das próprias preferências — a única categoria realmente ativa hoje).
+- **Como revisar:** Quando uma integração real (analytics/marketing) for adicionada ao template ou a um projeto derivado, conectar o side effect às categorias salvas e atualizar a copy.
+- **Data:** 2026-11-12
+- **Impacto:** `components/site/consent/consent-preferences.tsx`, `app/layout.tsx`, `components/site/footers/footer-cta.tsx`, `tests/smoke.spec.ts`; catálogo site 7 → 8, total 53 → 54.

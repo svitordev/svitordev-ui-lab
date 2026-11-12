@@ -102,6 +102,7 @@ test('menu mobile do header basico abre pelo teclado e fecha com Escape devolven
 test('menu mobile do header com topbar abre pelo botao e fecha com clique fora', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'menu mobile existe apenas abaixo do breakpoint md');
 
+  await seedConsentDecision(page); // clique fora em (20,600) cairia sobre o banner em mobile
   await page.goto('/library/headers');
 
   const button = page.locator('button[aria-expanded]').nth(1);
@@ -290,6 +291,9 @@ test('reduced motion: hero media showcase permanece visivel sem animacao', async
 });
 
 test('contact forms: associacao label-campo com htmlFor/id, ids unicos e foco por label', async ({ page }) => {
+  // Evolução 035 — o banner de consentimento (site-wide) adiciona inputs com id à
+  // página; pré-semeia decisão salva para manter a contagem de ids dos 3 forms isolada.
+  await seedConsentDecision(page);
   await page.goto('/library/contact');
 
   // Escopo semântico pelos headings das variants (ordem visual não é contrato do teste).
@@ -345,6 +349,7 @@ test('contact forms: associacao label-campo com htmlFor/id, ids unicos e foco po
 });
 
 test('newsletter: success limpa o campo e mantem a live region acessivel', async ({ page }) => {
+  await seedConsentDecision(page); // banner fixed bottom cobriria o botão em mobile
   await page.goto('/library/newsletter');
 
   const input = page.getByLabel('Seu e-mail');
@@ -368,6 +373,7 @@ test('newsletter: success limpa o campo e mantem a live region acessivel', async
 });
 
 test('newsletter: error preserva o valor, edicao limpa e retry conclui com success', async ({ page }) => {
+  await seedConsentDecision(page); // banner fixed bottom cobriria o botão em mobile
   await page.goto('/library/newsletter');
 
   const input = page.getByLabel('Seu e-mail');
@@ -1055,6 +1061,7 @@ test('alerts: primitive renderiza variantes e semantica base', async ({ page }) 
 });
 
 test('contact forms: submit demonstrativo exibe Alert acessivel sem envio real', async ({ page }) => {
+  await seedConsentDecision(page); // banner fixed bottom cobriria botões Enviar em mobile
   await page.goto('/library/contact');
 
   // Evidencia de ausencia de envio real: nenhum POST deve ocorrer durante os
@@ -1438,6 +1445,152 @@ test('gallery: tabs reais alternam conjuntos com conteudo dos dados (teclado + z
   await expect(page.getByRole('tabpanel')).toHaveCount(1);
 
   // Zero overflow horizontal (mobile 375 + desktop 1280).
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+// Evolução 035 — consent preferences (banner site-wide + persistência local).
+// Sem helper global de localStorage: cada teste começa sem preferência (contexto novo
+// por teste) e só grava storage quando o cenário exige (storage corrompido).
+
+const CONSENT_KEY = 'svitordev:consent-preferences:v1';
+
+const consentHeading = (page: import('@playwright/test').Page) =>
+  page.getByRole('heading', { name: 'Preferências de privacidade' });
+
+const readConsent = async (page: import('@playwright/test').Page) =>
+  page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), CONSENT_KEY);
+
+// Helper mínimo explícito (auditado na T1): só para testes existentes cuja UI é
+// coberta pelo banner fixed bottom ou pela contagem global de ids. Não é aplicado
+// automaticamente em todos os testes.
+async function seedConsentDecision(page: import('@playwright/test').Page) {
+  await page.addInitScript((key) => {
+    localStorage.setItem(
+      key,
+      JSON.stringify({ version: 1, necessary: true, analytics: false, marketing: false }),
+    );
+  }, CONSENT_KEY);
+}
+
+test('consent: primeira visita mostra banner acessivel com acoes de mesmo peso', async ({ page }) => {
+  await page.goto('/');
+
+  // Banner não-modal: section com heading próprio (aria-labelledby), sem focus trap.
+  await expect(consentHeading(page)).toBeVisible();
+  await expect(
+    page.getByText('Suas preferências são armazenadas localmente neste navegador.'),
+  ).toBeVisible();
+
+  // Aceitar e Recusar com o mesmo peso (anti-dark-pattern): ambos botões reais e ativos.
+  const aceitar = page.getByRole('button', { name: 'Aceitar opcionais' });
+  const recusar = page.getByRole('button', { name: 'Recusar opcionais' });
+  await expect(aceitar).toBeVisible();
+  await expect(aceitar).toBeEnabled();
+  await expect(recusar).toBeVisible();
+  await expect(recusar).toBeEnabled();
+
+  // Teclado: painel Personalizar abre com Enter a partir do summary (details nativo).
+  await page.getByText('Personalizar').focus();
+  await page.keyboard.press('Enter');
+
+  // Necessários: sempre ativo, disabled com explicação factual no próprio label.
+  const necessary = page.getByRole('checkbox', { name: /^Necessários/ });
+  await expect(necessary).toBeChecked();
+  await expect(necessary).toBeDisabled();
+  await expect(page.getByRole('checkbox', { name: /^Analytics/ })).toBeVisible();
+});
+
+test('consent: aceitar opcionais persiste no storage e reload mantem banner oculto', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Aceitar opcionais' }).click();
+  await expect(consentHeading(page)).toBeHidden();
+
+  const stored = await readConsent(page);
+  expect(stored).toMatchObject({ version: 1, necessary: true, analytics: true, marketing: true });
+
+  await page.reload();
+  await expect(consentHeading(page)).toBeHidden();
+});
+
+test('consent: recusar opcionais salva analytics e marketing false com necessary true', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Recusar opcionais' }).click();
+  await expect(consentHeading(page)).toBeHidden();
+
+  const stored = await readConsent(page);
+  expect(stored).toMatchObject({ version: 1, necessary: true, analytics: false, marketing: false });
+
+  await page.reload();
+  await expect(consentHeading(page)).toBeHidden();
+});
+
+test('consent: personalizar altera categoria por label e salvar persiste decisao', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByText('Personalizar').click();
+  // Label real associado (htmlFor↔id): interação via label, não via CSS selector.
+  await page.getByRole('checkbox', { name: /^Analytics/ }).check();
+
+  // Em primeira visita, salvar fecha o banner (feedback visual — T1 §9); a live
+  // region role=status pertence ao painel reaberto (teste da reabertura abaixo).
+  await expect(page.getByRole('status')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Salvar preferências' }).click();
+  await expect(consentHeading(page)).toBeHidden();
+
+  const stored = await readConsent(page);
+  expect(stored).toMatchObject({ version: 1, necessary: true, analytics: true, marketing: false });
+});
+
+test('consent: reabertura pelo footer carrega estado anterior e nova decisao sobrescreve', async ({ page }) => {
+  await page.goto('/');
+
+  // Decisão inicial: recusar tudo.
+  await page.getByRole('button', { name: 'Recusar opcionais' }).click();
+  await expect(consentHeading(page)).toBeHidden();
+
+  // Reabertura por teclado no controle real do footer (botão com texto acessível).
+  const trigger = page.getByRole('button', { name: 'Preferências de privacidade' });
+  await expect(trigger).toBeVisible();
+  await trigger.focus();
+  await page.keyboard.press('Enter');
+  await expect(consentHeading(page)).toBeVisible();
+
+  // Estado anterior carregado no painel: ambos os opcionais desmarcados.
+  await page.getByText('Personalizar').click();
+  await expect(page.getByRole('checkbox', { name: /^Analytics/ })).not.toBeChecked();
+  await expect(page.getByRole('checkbox', { name: /^Marketing/ })).not.toBeChecked();
+
+  // Nova decisão sobrescreve: marketing ligado, analytics continua desligado.
+  await page.getByRole('checkbox', { name: /^Marketing/ }).check();
+  await page.getByRole('button', { name: 'Salvar preferências' }).click();
+
+  // Live region role=status só existe no painel após ação de save do usuário.
+  await expect(page.getByRole('status')).toContainText('Preferências salvas neste navegador.');
+
+  const stored = await readConsent(page);
+  expect(stored).toMatchObject({ version: 1, necessary: true, analytics: false, marketing: true });
+});
+
+test('consent: storage corrompido e tratado como ausencia sem quebrar a pagina', async ({ page }) => {
+  await page.goto('/');
+
+  await page.evaluate(
+    ([key]) => localStorage.setItem(key, '{json quebrado'),
+    [CONSENT_KEY],
+  );
+  await page.reload();
+
+  // Fail-safe: storage inválido = ausência → banner reaparece, página segue funcional.
+  await expect(consentHeading(page)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Recusar opcionais' })).toBeEnabled();
+
+  // Zero overflow horizontal nos dois viewports (banner fixed bottom, mobile 375 + desktop 1280).
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth === document.documentElement.clientWidth,

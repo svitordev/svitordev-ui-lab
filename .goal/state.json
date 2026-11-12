@@ -1,210 +1,210 @@
 {
   "version": 1,
-  "goal": "Evolucao 034 - Gallery (section) consumindo o Tabs primitive da 029: nova section data-driven + showcase oficial na Library + testes Playwright + documentacao. Consumer futuro planejado: 044 (nao implementar). Nao implementar 035. Nenhuma nova dependencia. Anti-inflacao: sem modal/lightbox/carousel/zoom/autoplay/pagination/filtering.",
+  "goal": "Evolucao 035 - Consent preferences banner (site): componente de preferencias com persistencia local (localStorage), acessibilidade e reabertura, integrado ao site. Zero fake compliance: nenhuma integracao real de trackers/analytics existe hoje e a copy deve ser factual. Sem novas dependencias. Baseline real do catalogo: site = 7 (nao 9).",
   "current": 4,
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria (investigacao, sem alterar codigo de producao): auditar components/ui/tabs.tsx (exports, client boundary, API, styling, teclado Radix, data-slot, dependencia); auditar padroes modernos data-driven das sections recentes (contratos de props, item types, actions, midia, layout, heading, ids); auditar naming/rotas/ordenacao/convencao da Library e escolher o nome real da rota com base no padrao; auditar como o projeto representa midia visual (placeholder estrutural vs imagem) sem CMS/remote image/asset externo; confirmar consumer 044 no roadmap. Sem links falsos, sem estado manual duplicando Radix.",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): rastrear tracking/storage reais (grep cookie/localStorage/analytics/gtag/pixel/consent em app/components/lib + layout raiz + package.json); identificar onde UI site-wide deve viver e qual footer realmente aparece (realidade: FooterCta via (site)/layout; FooterColumns so na landing composition); auditar primitives (sem Checkbox/Switch -> HTML nativo); definir modelo de estado, storage key namespaced versionada, categorias (Opcao A com copy factual ou Opcao B), primeira visita, reabertura, acoes sem dark pattern, a11y do banner nao-modal, client boundary minimo e mecanismo de comunicacao sem lib global; auditar interferencia com testes existentes (button[aria-expanded], getByRole status).",
       "acceptance": [
-        "Evidencia em .goal/evidence/T1-audit.md com: API final, naming/path da section e da rota, client boundary justificado, padrao de midia, Tabs composition, testes necessarios, contagens esperadas, riscos e consumer 044",
-        "API minima data-driven (consumer controla heading, supporting text, tabs/items, midia, labels) sem inflacao (sem modal/carousel/zoom/pagination/filtering)",
-        "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
+        "Evidencia em .goal/evidence/T1-audit.md com: tracking real encontrado (SIM/NAO por tipo), storage real, arquitetura escolhida, API/state, storage key, categorias, copy constraints, client boundary, integration point, reopen mechanism, testes, arquivos previstos e riscos",
+        "Copy factual: nenhuma alegacao de bloqueio de trackers inexistentes, nenhuma afirmacao de conformidade LGPD/GDPR; decisao A ou B registrada com justificativa anti-inflacao",
+        "Nenhuma dependencia nova; nenhum primitive novo sem necessidade real; nenhuma alteracao de codigo de producao nesta task"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
+      "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
       "review": {
         "task_id": "T1",
-        "fingerprint": "5fe4ec8d630901b0f8b3e23ee9329d239ff15817228c31b31e5cea0a54218f26",
+        "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria T1 da Evolução 034 (Gallery section consumindo Tabs da 029) verificada com sucesso contra o código real do repositório. O arquivo .goal/evidence/T1-audit.md documenta com precisão o contrato real de components/ui/tabs.tsx, os padrões data-driven das sections recentes (FaqAccordion, HeroMediaShowcase, StickyColumnSplit, FeatureComparison), a convenção de rotas/naming da Library (/library/gallery e components/sections/gallery/gallery-tabs.tsx), o padrão de mídia via placeholder estrutural HTML/Tailwind sem assets externos, a API mínima data-driven (GalleryItem, GallerySet, GalleryTabsProps) sem inflação, o client boundary mínimo (Server Component consumindo primitive Client uncontrolled), o plano de teste Playwright, as contagens esperadas (sections 31->32, total 52->53, rotas 23->24, testes 46->47) e a confirmação do consumer futuro 044 no roadmap, sem alterar código de produção nem adicionar dependências.",
+        "summary": "Auditoria T1 (Goal 035 - Consent preferences banner) verificada com sucesso. O artefato .goal/evidence/T1-audit.md cobre integralmente todos os criterios de aceite: mapeamento factual de tracking/storage reais (SIM/NAO por tipo, confirmando 79 matches apenas de classes Tailwind tracking-*), identificacao correta do ponto de integracao site-wide (app/layout.tsx + FooterCta via app/(site)/layout.tsx, preservando FooterColumns restrito a landing composition), reutilizacao de primitives HTML nativos (input checkbox + details/summary sem novos primitives ou dependencias Radix), contrato de estado ConsentPreferences versionado na key svitordev:consent-preferences:v1, escolha justificada da Opcao A com restricoes estritas de copy factual (zero fake compliance e sem alegacoes LGPD/GDPR), client boundary minimo via CustomEvent (svitordev:consent-preferences:open), analise de nao-interferencia com seletores de testes existentes (button[aria-expanded], getByRole('status'), getByRole('checkbox')), baseline real do catalogo confirmado (site = 7, total = 53) e nenhuma alteracao em codigo de producao.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md, components/ui/tabs.tsx, components/sections/library-shell.tsx, components/sections/hero/hero-media-showcase.tsx, components/sections/faq/faq-accordion.tsx, components/sections/features/sticky-column-split.tsx, docs/ROADMAP-1000-EVOLUTIONS.md, docs/COMPONENT-CATALOG.md, tests/smoke.spec.ts e package.json. Task T1 é exclusivamente de investigação/auditoria, sem alteração de código de produção.",
-            "name": "T1-audit-verification",
+            "evidence": "Inspecao estatica das evidencias de auditoria (.goal/evidence/T1-audit.md): grep de tracking/storage, leitura de layouts, footer, catalogo e suite Playwright documentados sem alteracao de codigo de producao.",
+            "name": "T1-audit-evidence-verification",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:01:55.013762+00:00"
+        "recorded_at": "2026-11-12T13:57:37.012521+00:00"
       },
-      "completed_at": "2026-11-12T13:01:55.189365+00:00"
+      "completed_at": "2026-11-12T13:57:37.205867+00:00"
     },
     {
       "id": "T2",
-      "description": "Implementar exatamente uma nova section Gallery conforme decisao aprovada na T1 (path components/sections/gallery/...), consumindo o primitive Tabs da 029 sem recriar tab logic manualmente.",
+      "description": "Implementar exatamente um novo componente site-level conforme decisao da T1 (path definido pela auditoria), com client boundary minimo apenas nele.",
       "acceptance": [
-        "Uma unica section nova, sem variantes extras; conteudo 100% via props (consumer dono dos dados, sem demo content em defaults internos)",
-        "Usa Tabs/TabsList/TabsTrigger/TabsContent existentes; client boundary minimo justificado pela T1; sem estado manual; sem duplicar logica interna do Radix",
-        "Visual dark-only com tokens existentes, sem cores novas; responsividade, focus states e legibilidade coerentes com as sections existentes",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff relevante + outputs reais + exit codes"
+        "Comportamento: sem preferencia salva -> banner aparece; decisao salva; refresh respeita; reabrir permite editar; nova decisao sobrescreve",
+        "Hydration segura: localStorage nunca lido durante render server; sem suppressHydrationWarning; storage corrompido/version invalida tratado como ausencia sem quebrar a pagina",
+        "UI com tokens existentes, Button existente quando aplicavel, dark-only DEC-011, sem cor raw; acoes com peso visual razoavel sem dark pattern; funcional em 375px e 1280px sem overflow",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + outputs reais + exit codes"
       ],
       "status": "COMPLETED",
-      "attempts": 1,
-      "fingerprint": "4492276a5892b3ef954999149273e64221e898c59af2018cee95c459e693cff0",
+      "attempts": 2,
+      "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
       "review": {
         "task_id": "T2",
-        "fingerprint": "4492276a5892b3ef954999149273e64221e898c59af2018cee95c459e693cff0",
+        "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "A implementação da T2 (Evolução 034 — Gallery section via Tabs) cumpre integralmente todos os critérios de aceite: (1) cria exclusivamente a section `components/sections/gallery/gallery-tabs.tsx` sem variantes extras e com conteúdo 100% controlado via props (`GalleryItem`, `GallerySet`, `GalleryTabsProps`), sem dados de demo internos; (2) consome os primitivos `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` de `@/components/ui/tabs` (Evolução 029) de forma não controlada (`defaultValue={sets[0]?.id}`), mantendo `GalleryTabs` como Server Component (client boundary mínimo restrito ao primitive) e sem estado manual ou duplicação da lógica do Radix; (3) utiliza apenas tokens semânticos existentes (`bg-background`, `bg-muted/40`, `text-muted-foreground`, `border`), com grid responsivo (`sm:grid-cols-2 lg:grid-cols-3`), semântica HTML adequada (`section`, `h2`, `article`, `h3`, placeholder decorativo com `aria-hidden=\"true\"`) e sem inflação de escopo; (4) os quality gates (`npm run lint`, `npm run build` e `git diff --check`) foram reportados com exit code 0 e o diff completo foi apresentado.",
+        "summary": "Auditoria da Task T2 (Evolução 035 - Consent preferences banner) concluída com veredito PASS. O componente components/site/consent/consent-preferences.tsx foi inspecionado diretamente no workspace e cumpre todos os critérios de aceite: (1) leitura pós-mount de localStorage em useEffect garante que a primeira visita exibe o banner, decisões são salvas em svitordev:consent-preferences:v1, o refresh respeita a decisão salva sem reexibir o banner, a reabertura via ConsentPreferencesTrigger carrega o estado salvo para edição, a nova decisão sobrescreve o storage e o botão Fechar permite fechar o painel de forma explícita; (2) hidratação segura sem leitura de localStorage no render server, sem suppressHydrationWarning, e parseStored trata JSON inválido ou versão/shape incompatível como ausência (fail-safe); (3) UI utiliza exclusivamente tokens semânticos existentes (dark-only DEC-011, sem cores raw), Button existente, ações Aceitar/Recusar com mesmo peso visual (variant outline, sem dark pattern), copy factual sem fake compliance e layout responsivo (375px e 1280px sem overflow); (4) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
         "findings": [],
         "tests": [
           {
-            "evidence": "Exit 0 reportado nas evidências incorporadas: 0 erros e 0 warnings.",
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings)",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "Exit 0 reportado nas evidências incorporadas: Compiled successfully in 2.2s, TypeScript ok, 23/23 páginas.",
+            "evidence": "BUILD_EXIT=0 (Compiled successfully in 1813.8ms; TypeScript ok; 24/24 páginas)",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "Exit 0 reportado nas evidências incorporadas, diff íntegro de 88 linhas para components/sections/gallery/gallery-tabs.tsx.",
+            "evidence": "CHECK_EXIT=0 (sem erros de whitespace/conflito)",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:05:03.972663+00:00"
+        "recorded_at": "2026-11-12T14:13:35.923341+00:00"
       },
-      "completed_at": "2026-11-12T13:05:04.151100+00:00"
+      "completed_at": "2026-11-12T14:13:36.111196+00:00"
     },
     {
       "id": "T3",
-      "description": "Criar o showcase oficial na Library na rota definida pela auditoria, com metadata como as demais paginas, e adicionar a entrada da Gallery na Library Shell respeitando a ordenacao atual (Landing na posicao vigente, sem reorganizar demais).",
+      "description": "Integrar o componente no ponto arquitetural correto (root layout server renderizando o client leaf, sem transformar o layout em client) e adicionar o controle real de reabertura no footer aprovado na T1, usando o mecanismo de comunicacao minimo aprovado (sem global state library, sem context global desnecessario, sem nova dependencia).",
       "acceptance": [
-        "Demo no padrao moderno com minimo 3 tabs/items, titulos distintos, descricoes, midia/placeholders, troca real de tab e comportamento responsivo; conteudo neutro e generico",
-        "Entrada Gallery na Library Shell sem reordenar outras categorias",
-        "Gates: npm run lint 0/0, npm run build PASS com a nova rota (baseline 23 → 24), git diff --check limpo; evidencia com diff + outputs reais + exit codes"
+        "Reabertura funcional: clique no controle -> painel reaparece com valores salvos carregados -> usuario pode alterar e salvar novamente",
+        "Sem rota nova (rotas permanecem 24); nenhuma rota de privacidade inventada; sem conteudo juridico fabricado",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia verificavel com diff + exit codes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "3ed9755434b75bdfd36660a8ad25b7e92b8103102fd3bcf81d281f609a12cf75",
+      "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
       "review": {
         "task_id": "T3",
-        "fingerprint": "3ed9755434b75bdfd36660a8ad25b7e92b8103102fd3bcf81d281f609a12cf75",
+        "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria da T3 (Goal 034) concluída com veredito PASS com base exclusivamente nas evidências incorporadas pelo Builder (sem execução de comandos ou leitura externa pelo Inspector). A rota /library/gallery foi criada em app/library/gallery/page.tsx no padrão moderno da Library (Server Component, metadata, page header, GalleryEntry tipada, preview box e label Componente:), consumindo a section GalleryTabs (@/components/sections/gallery/gallery-tabs) com 3 tabs reais (Conjunto A com 3 itens, Conjunto B com 2 itens incluindo descrição longa, Conjunto C com 2 itens sendo um sem descrição), títulos e descrições distintos, placeholders estruturais aspect-video (aria-hidden), troca real de tab via Radix, grid responsivo 1->2->3 colunas e conteúdo neutro/genérico sem inflação de escopo. O diff de components/sections/library-shell.tsx confirma a adição de { href: \"/library/gallery\", label: \"Gallery\" } após Breadcrumbs, mantendo Landing na última posição sem reordenar as demais categorias. Os gates reportados pelo Builder (npm run lint, npm run build com 24/24 páginas de 23->24 e git diff --check) registraram exit 0.",
+        "summary": "A integração da T3 (Evolução 035 — Consent preferences banner) foi auditada no código real do workspace e nas evidências incorporadas. Apenas app/layout.tsx e components/site/footers/footer-cta.tsx foram alterados, mantendo ambos como Server Components que renderizam os client leaves ConsentPreferencesBanner e ConsentPreferencesTrigger. A comunicação ocorre via Custom Event (svitordev:consent-preferences:open) sem biblioteca de estado global, sem Context global e sem novas dependências. O fluxo de reabertura recarrega os valores salvos do localStorage, sincroniza os checkboxes, reseta flags de fechamento/status e permite alterar e salvar novamente. Nenhuma rota nova ou conteúdo jurídico fictício foi adicionado, e os gates (lint 0/0, build PASS com 24 rotas, git diff --check limpo) estão comprovados.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, 0 erros / 0 warnings.",
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas e código de app/layout.tsx e components/site/footers/footer-cta.tsx verificado por leitura direta.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0, Compiled successfully in 2.7s, TypeScript ok, 24/24 páginas (baseline 23 -> 24 confirmado) com /library/gallery presente na listagem do build.",
+            "evidence": "BUILD_EXIT=0 (Compiled successfully, 24/24 páginas geradas, zero rota nova) reportado nas evidências incorporadas; app/layout.tsx e components/site/footers/footer-cta.tsx permanecem Server Components sem diretiva 'use client'.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "Evidência fornecida pelo Builder (não executado pelo Inspector): exit 0 e diff de components/sections/library-shell.tsx preservando a ordem das categorias com Landing por último.",
+            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de app/layout.tsx e components/site/footers/footer-cta.tsx confirma formatação limpa.",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:09:16.700817+00:00"
+        "recorded_at": "2026-11-12T14:17:01.959822+00:00"
       },
-      "completed_at": "2026-11-12T13:09:16.913389+00:00"
+      "completed_at": "2026-11-12T14:17:02.140060+00:00"
     },
     {
       "id": "T4",
-      "description": "Adicionar cobertura Playwright de alto valor pelo consumer oficial da Library (sem inflar contagem): section renderiza, heading correto, tabs presentes, tab inicial com estado correto, clique troca conteudo, teclado troca/foca (setas/Home/End conforme cobertura existente — auditar antes de duplicar), conteudo ativo corresponde ao trigger, inativo nao aparece como ativo, zero overflow horizontal, mobile e desktop.",
+      "description": "Adicionar cobertura Playwright de alto valor (sem inflar): primeira visita (banner + accessible name + acoes), aceitar (persistencia + reload continua oculto), recusar opcionais (necessary permanece true), personalizar (alternar categoria + salvar), reabrir (estado anterior carregado + nova decisao persiste), storage invalido (pagina nao quebra, estado seguro), zero overflow mobile+desktop. Auditar interferencia na suíte existente antes de qualquer helper; nao adicionar localStorage.setItem em todos os testes automaticamente.",
       "acceptance": [
-        "Testes cobrem comportamento, a11y, teclado e mobile com zero overflow; sem duplicar cobertura existente do primitive Tabs",
-        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures",
-        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia incorpora diff dos testes + output real + exit codes + contagens reais (sections 32, UI 12, total 53)"
+        "Acessibilidade coberta com roles reais (getByRole, labels, checkbox state, teclado, foco, botao de reabertura) em vez de CSS selectors faceis quando roles resolvem",
+        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures, sem helpers que mascarem bugs",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), npm run test:e2e, git diff --check limpo; evidencia com diff dos testes + outputs reais + exit codes + contagens (site 7 → 8, total 53 → 54)"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "8cf54984927c0601832f9170056b668232f907116fe64dc19521ffb224c6f79b",
+      "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
       "review": {
         "task_id": "T4",
-        "fingerprint": "8cf54984927c0601832f9170056b668232f907116fe64dc19521ffb224c6f79b",
+        "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T4 (Evolucao 034 - Testes Playwright Gallery + gates) auditada e aprovada. O teste adicionado em tests/smoke.spec.ts (linhas 1403-1446) valida o consumer oficial /library/gallery cobrindo hierarquia de headings (h1 -> h2 -> h3), tablist unico com 3 triggers dos dados do contrato (Conjunto A/B/C), estado inicial aria-selected=true com conteudo ativo correspondente, troca de aba por clique e por teclado (ArrowRight sem duplicar a cobertura exaustiva de ArrowLeft/Home/End do primitive Tabs na linha 1148), desmontagem de conteudo inativo (toHaveCount(0) + apenas 1 tabpanel visivel) e zero overflow horizontal nos projetos desktop (1280x720) e mobile (375x667). Todos os gates reportados passaram com exit code 0 (test:e2e 91 passed / 3 skipped / 0 failed em 94 execucoes, lint 0/0, build 24/24 rotas, git diff --check limpo) e contagens reais confirmadas (sections 32, UI 12, total 53).",
+        "summary": "T4 aprovada (PASS). Os 6 novos testes em tests/smoke.spec.ts cobrem integralmente os cenarios exigidos para o banner de preferencias de privacidade (Evolucao 035): primeira visita com heading acessivel, copy factual, acoes de mesmo peso e abertura de Personalizar via teclado; aceitar opcionais com persistencia em localStorage e manutencao do estado oculto apos reload; recusar opcionais mantendo necessary: true e opcionais false apos reload; personalizacao por label associado (getByRole checkbox) e persistencia ao salvar; reabertura via teclado pelo botao do footer carregando o estado anterior, sobrescrevendo a decisao e anunciando via live region (role=status); fail-safe para localStorage corrompido sem quebrar a pagina e zero overflow horizontal nos dois viewports (desktop 1280x720 e mobile 375x667). O helper seedConsentDecision foi restrito exclusivamente aos 5 testes existentes com interferencia comprovada (contagem de input[id] e sobreposicao fisica do banner fixed bottom em mobile), sem aplicacao global. Gates reportados verdes (lint 0/0, build 24 rotas, test:e2e 103 passed / 3 skipped / 0 failed, git diff --check limpo) e contagens confirmadas (site 7 -> 8, total 53 -> 54, Playwright 47 -> 53 testes).",
         "findings": [],
         "tests": [
           {
-            "evidence": "npm run test:e2e -> exit 0 (94 execucoes: 91 passed, 3 skipped, 0 failed; ok 93 [desktop] e ok 94 [mobile] para 'gallery: tabs reais alternam conjuntos com conteudo dos dados (teclado + zero overflow)')",
+            "evidence": "tests/smoke.spec.ts (linhas 1455-1599): 6 novos testes cobrindo primeira visita, aceitar, recusar, personalizar, reabertura pelo footer, storage corrompido e zero overflow; 103 passed + 3 skipped (0 failed) nos projetos desktop e mobile (E2E_EXIT=0).",
             "name": "npm run test:e2e",
             "status": "passed"
           },
           {
-            "evidence": "npm run lint -> exit 0 (0 erros / 0 warnings)",
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidencias da T4.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "npm run build -> exit 0 (Compiled successfully, 24/24 paginas)",
+            "evidence": "BUILD_EXIT=0 (24 rotas compiladas com sucesso) reportado nas evidencias da T4.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "git diff --check -> exit 0 (limpo)",
+            "evidence": "CHECK_EXIT=0 sem erros de whitespace ou formacao no diff.",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:13:14.950562+00:00"
+        "recorded_at": "2026-11-12T14:33:57.644623+00:00"
       },
-      "completed_at": "2026-11-12T13:13:15.135630+00:00"
+      "completed_at": "2026-11-12T14:33:57.857772+00:00"
     },
     {
       "id": "T5",
-      "description": "Documentacao: COMPONENT-CATALOG com exatamente 1 entrada Gallery (status, path, API real, uso de Tabs, consumer futuro 044); ROADMAP marca 034 VERIFIED e proxima 035 (sem iniciar 035); CURRENT-STATE com 001-034, contagens, rota, Playwright real e proxima 035; CHANGELOG somente com o estado final (sem tentativas/FAIL/BLOCKED). QUALITY-REVIEW, DESIGN-SYSTEM e DECISIONS inalterados salvo achado real da T1.",
+      "description": "Documentacao: COMPONENT-CATALOG com 1 entrada site component (path, comportamento, storage, reabertura, client boundary, zero dependencia nova, limitacoes reais — nao descrever como CMP juridica); ROADMAP marca 035 VERIFIED e proxima 036 (sem iniciar); CURRENT-STATE com 001-035, contagens, rotas, Playwright real e comportamento de consent; CHANGELOG somente estado final. QUALITY-REVIEW preserva QLT-005/011; DESIGN SYSTEM so se convencao global real; DECISIONS avaliar DEC nova apenas se a politica for duradoura.",
       "acceptance": [
-        "Contagens reais refletidas: sections 32, UI 12, total 53, rotas 24, Playwright real; QLT-005 e QLT-011 preservados sem alteracao de contagem",
-        "ROADMAP: 034 VERIFIED, proxima execucao 035 — Consent preferences banner (nao iniciada)",
+        "Contagens reais refletidas: site 8, sections 32, total 54, rotas 24, Playwright real; QLT-005 (23, aberto) e QLT-011 (parcial, aberto) preservados",
+        "ROADMAP: 035 VERIFIED, proxima execucao 036 — Migrar services x2 (nao iniciada)",
         "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "b7ae9d4cf1078a67636d7ffed4e81d2e674c26072dac2c4e20fc0bbea6d061e1",
+      "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
       "review": {
         "task_id": "T5",
-        "fingerprint": "b7ae9d4cf1078a67636d7ffed4e81d2e674c26072dac2c4e20fc0bbea6d061e1",
+        "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T5 (Documentação da Evolução 034 — Gallery) auditada e aprovada (PASS). COMPONENT-CATALOG.md reflete exatamente 1 entrada GalleryTabs em components/sections/gallery/gallery-tabs.tsx com status Pronto, contrato real (GalleryItem, GallerySet, GalleryTabsProps), uso funcional do primitive Tabs (029), boundary Server/Client e consumer futuro 044, além das contagens reais (UI 12, site 7, sections 32, shells 2, total 53). ROADMAP-1000-EVOLUTIONS.md marca 034 como VERIFIED (2026-11-12), atualiza o path real da 034 e define 035 (Consent preferences banner) como próxima execução não iniciada. CURRENT-STATE.md registra 001–034 VERIFIED, contagens (sections 32, UI 12, total 53, rotas 24), Playwright real (47 testes / 94 execuções = 91 passed + 3 skipped) e próxima execução 035. CHANGELOG.md registra apenas o estado final da 034, sem tentativas/FAIL/BLOCKED. QUALITY-REVIEW.md (QLT-005 em 23 e QLT-011 parcial), DESIGN-SYSTEM.md e DECISIONS.md permanecem inalterados. Gates reportados com exit 0 (npm run lint, npm run build 24/24 páginas, git diff --check).",
+        "summary": "Auditoria da Task T5 (Evolução 035 — Documentação final do Consent preferences banner) concluída com veredito PASS. A inspeção direta dos arquivos do workspace confirma que todos os critérios de aceite foram integralmente atendidos: (1) docs/COMPONENT-CATALOG.md reflete as contagens reais (UI 12, site 8, sections 32, wrappers 2, total 54), atualiza as observações de FooterCta e FooterColumns e adiciona a seção Consent com 1 entrada (ConsentPreferences em components/site/consent/consent-preferences.tsx) documentando exports, client boundary, modelo de dados, storage key svitordev:consent-preferences:v1, fail-safe, reabertura via custom event, copy factual sem alegação de CMP jurídica e zero dependências novas; (2) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 035 como VERIFIED (2026-11-12) com o path real e define a 036 (Migrar services×2 para contrato) como próxima execução não iniciada, mantendo o consumer planejado 046 intacto; (3) memory-bank/CURRENT-STATE.md lista as evoluções 001–035 com contagens reais (site 8, sections 32, total 54, rotas 24, Playwright 53 testes / 106 execuções — 103 passed + 3 skipped), comportamento do consent e próxima execução 036; (4) memory-bank/CHANGELOG.md registra apenas o estado final da Evolução 035 preservando o histórico; (5) memory-bank/DECISIONS.md registra a DEC-012 com a política duradoura de consentimento do template; (6) QUALITY-REVIEW.md e docs/DESIGN-SYSTEM.md permanecem inalterados, preservando QLT-005 (23, aberto) e QLT-011 (parcial, aberto); (7) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
         "findings": [],
         "tests": [
           {
-            "evidence": "Reportado nas evidências da T5 com exit code 0 (0 erros / 0 warnings).",
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas da T5.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "Reportado nas evidências da T5 com exit code 0 (Compiled successfully in 1958.3ms, 24/24 páginas).",
+            "evidence": "BUILD_EXIT=0 (24 rotas) reportado nas evidências incorporadas da T5.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "Reportado nas evidências da T5 com exit code 0 (sem erros de whitespace/conflito nos 4 arquivos documentais).",
+            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de COMPONENT-CATALOG.md, ROADMAP-1000-EVOLUTIONS.md, CHANGELOG.md, CURRENT-STATE.md e DECISIONS.md confirma formatação íntegra.",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:20:15.654284+00:00"
+        "recorded_at": "2026-11-12T14:44:00.996604+00:00"
       },
-      "completed_at": "2026-11-12T13:20:15.837932+00:00"
+      "completed_at": "2026-11-12T14:44:01.212458+00:00"
     }
   ],
-  "created_at": "2026-11-12T12:56:56.700556+00:00",
-  "finished_at": "2026-11-12T13:20:15.837945+00:00"
+  "created_at": "2026-11-12T13:54:43.617453+00:00",
+  "finished_at": "2026-11-12T14:44:01.212471+00:00"
 }

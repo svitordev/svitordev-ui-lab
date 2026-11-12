@@ -5,10 +5,10 @@
 ## Contagem total
 
 - **12** UI components
-- **7** site components
+- **8** site components
 - **32** section components
 - **2** wrappers/shells
-- **Total: 53** componentes reutilizáveis relevantes
+- **Total: 54** componentes reutilizáveis relevantes
 
 ---
 
@@ -95,7 +95,7 @@ Contrato do Breadcrumbs (resumo):
 
 `React.ComponentProps` do elemento nativo correspondente em cada export; `asChild` apenas em `BreadcrumbLink` (`@radix-ui/react-slot`, dependência existente); `data-slot` nos seis exports; separador decorativo com children sobrescrevíveis e sem prop `icon`; `BreadcrumbPage` não-link com `aria-current="page"` default. Server-compatible, sem estado, sem contexto, sem motion. Exports: `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`.
 
-## Site components — `components/site/` (7)
+## Site components — `components/site/` (8)
 
 ### Headers — `components/site/headers/` (4)
 
@@ -110,9 +110,15 @@ Contrato do Breadcrumbs (resumo):
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
-| FooterColumns | `components/site/footers/footer-columns.tsx` | Footer | Template | Média | Links/textos hardcoded; ano dinâmico |
-| FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão |
+| FooterColumns | `components/site/footers/footer-columns.tsx` | Footer | Template | Média | Links/textos hardcoded; ano dinâmico; **Evolução 035:** nenhum trigger — o ponto de reabertura é apenas no FooterCta (footer real do site) |
+| FooterCta | `components/site/footers/footer-cta.tsx` | Footer | Template | Média | CTA com botão; **Evolução 035:** renderiza `ConsentPreferencesTrigger` na linha final (Server permanece Server) |
 | FooterSimple | `components/site/footers/footer-simple.tsx` | Footer | Template | Média | Minimalista |
+
+### Consent — `components/site/consent/` (1)
+
+| Nome | Path | Tipo | Status | Reutilização | Observações |
+|---|---|---|---|---|---|
+| ConsentPreferences | `components/site/consent/consent-preferences.tsx` | Componente de comportamento (Client) | Pronto | Alta | **Evolução 035.** 1 entrada de catálogo com exports `ConsentPreferencesBanner` + `ConsentPreferencesTrigger` (mesmo client boundary); Client Component justificado (localStorage + interação); modelo `{version:1, necessary:true, analytics, marketing, updatedAt?}`; storage key namespaced versionada `svitordev:consent-preferences:v1`; JSON corrompido/versão incompatível tratado como ausência (fail-safe); leitura somente pós-mount (sem mismatch de hidratação, sem suppressHydrationWarning); banner não-modal (`section` + `aria-labelledby`, tabulação natural, sem focus trap); `<details>` nativo para Personalizar; labels reais htmlFor↔id; `role="status"` somente após ação de save; anti-dark-pattern (Aceitar e Recusar com o mesmo peso; Fechar ghost); copy factual — nenhuma integração externa ativa, nenhuma alegação jurídica; comunicação trigger→banner via custom event `svitordev:consent-preferences:open` (sem context global, sem lib de estado); DEC-012; integrado ao root layout (banner, filho último do body) e ao FooterCta (trigger); zero dependências novas; somente tokens; dark-only DEC-011 |
 
 ## Section components — `components/sections/` (32)
 

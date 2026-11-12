@@ -1,27 +1,60 @@
 {
   "task_id": "T2",
-  "fingerprint": "4492276a5892b3ef954999149273e64221e898c59af2018cee95c459e693cff0",
+  "fingerprint": "a42a6803ab98e0957e8f7d0cb092f5c6c098b2f6bf3b226c3d9f9d7788dd7f48",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
-  "verdict": "APPROVED",
-  "summary": "A implementação da T2 (Evolução 034 — Gallery section via Tabs) cumpre integralmente todos os critérios de aceite: (1) cria exclusivamente a section `components/sections/gallery/gallery-tabs.tsx` sem variantes extras e com conteúdo 100% controlado via props (`GalleryItem`, `GallerySet`, `GalleryTabsProps`), sem dados de demo internos; (2) consome os primitivos `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` de `@/components/ui/tabs` (Evolução 029) de forma não controlada (`defaultValue={sets[0]?.id}`), mantendo `GalleryTabs` como Server Component (client boundary mínimo restrito ao primitive) e sem estado manual ou duplicação da lógica do Radix; (3) utiliza apenas tokens semânticos existentes (`bg-background`, `bg-muted/40`, `text-muted-foreground`, `border`), com grid responsivo (`sm:grid-cols-2 lg:grid-cols-3`), semântica HTML adequada (`section`, `h2`, `article`, `h3`, placeholder decorativo com `aria-hidden=\"true\"`) e sem inflação de escopo; (4) os quality gates (`npm run lint`, `npm run build` e `git diff --check`) foram reportados com exit code 0 e o diff completo foi apresentado.",
-  "findings": [],
+  "verdict": "REJECTED",
+  "summary": "Auditoria da T2 (Goal 035) reprovada (FAIL). Embora o componente `components/site/consent/consent-preferences.tsx` respeite o client boundary mínimo, tokens visuais, ausência de dependências novas e leitura fora do server render, há dois defeitos funcionais diretos nos critérios de aceitação de comportamento: (1) o `useEffect` de mount não lê o `localStorage` (`readStored()`), fazendo com que `stored` permaneça `null` após refresh e o banner reapareça sempre; (2) ao reabrir o banner via `ConsentPreferencesTrigger` (`open = true`) e salvar pelo painel 'Personalizar' (`savePersonalized`), `open` permanece `true` sem opção de fechar o banner exceto clicando em 'Aceitar opcionais' ou 'Recusar opcionais' (o que sobrescreve a personalização).",
+  "findings": [
+    {
+      "evidence": "Em `components/site/consent/consent-preferences.tsx` (linhas 74-98), `stored` inicia como `null` e o `useEffect` (linhas 81-93) executa apenas `setMounted(true)` e registra o listener `OPEN_EVENT`, sem chamar `readStored()` na montagem. Como `const visible = mounted && (open || stored === null)` (linha 97), após qualquer refresh da página `mounted` passa a `true` e `stored` permanece `null`, exibindo o banner novamente mesmo quando já há decisão válida salva no `localStorage`.",
+      "file": "components/site/consent/consent-preferences.tsx",
+      "id": "QLT-001",
+      "location": "components/site/consent/consent-preferences.tsx:74-98",
+      "problem": "O `ConsentPreferencesBanner` não lê o `localStorage` no `useEffect` de mount; por isso, após refresh da página, `stored` continua `null` e o banner sempre reaparece, violando o critério de aceitação 'refresh respeita'.",
+      "required_fix": "No `useEffect` de mount, chamar `const current = readStored()` e atualizar `setStored(current)`, `setAnalytics(current?.analytics ?? false)` e `setMarketing(current?.marketing ?? false)` antes/junto de `setMounted(true)`.",
+      "severity": "CRITICAL"
+    },
+    {
+      "evidence": "Em `components/site/consent/consent-preferences.tsx` (linhas 110-114), `savePersonalized` atualiza `stored` e `saved`, mas não chama `setOpen(false)`. Na primeira visita (`open === false`), salvar fecha o banner imediatamente porque `stored` deixa de ser `null` (`visible` vira `false`, tornando `saved`/`role=\"status\"` inalcançável). Porém, quando reaberto pelo `ConsentPreferencesTrigger` (`open === true`), clicar em 'Salvar preferências' mantém `open === true` e não há botão de fechar no banner; os únicos botões que fecham o banner ('Aceitar opcionais' e 'Recusar opcionais') sobrescrevem a escolha personalizada com `(true, true)` ou `(false, false)`.",
+      "file": "components/site/consent/consent-preferences.tsx",
+      "id": "QLT-002",
+      "location": "components/site/consent/consent-preferences.tsx:97-114",
+      "problem": "Fluxo de reabertura e edição via 'Personalizar' -> 'Salvar preferências' deixa o banner preso aberto (`open === true`) sem ação de fechamento que preserve as escolhas personalizadas.",
+      "required_fix": "Fazer `savePersonalized` fechar o banner após persistir (`setOpen(false)`), alinhado com `decide`, ou disponibilizar controle explícito de fechamento que preserve as preferências recém-salvas.",
+      "severity": "HIGH"
+    },
+    {
+      "evidence": "O relato incorporou um diff sintetizado de 174 linhas sem acentuação (enquanto o arquivo real possui 189 linhas) e resumiu `npm run lint`, `npm run build` e `git diff --check` em uma linha cada, sem os outputs brutos dos comandos.",
+      "file": "components/site/consent/consent-preferences.tsx",
+      "id": "QLT-003",
+      "location": "components/site/consent/consent-preferences.tsx:1-189",
+      "problem": "Evidência de diff e outputs dos gates incompleta em relação ao critério 'evidencia com diff + outputs reais + exit codes'.",
+      "required_fix": "Anexar o `git diff` real completo e os outputs reais de terminal (com exit codes) de `npm run lint`, `npm run build` e `git diff --check` após aplicar as correções.",
+      "severity": "LOW"
+    }
+  ],
   "tests": [
     {
-      "evidence": "Exit 0 reportado nas evidências incorporadas: 0 erros e 0 warnings.",
+      "evidence": "Relato do Builder indica `npm run lint` exit 0 (0 erros / 0 warnings), porém sem output bruto anexado e antes da correção dos bugs funcionais.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "Exit 0 reportado nas evidências incorporadas: Compiled successfully in 2.2s, TypeScript ok, 23/23 páginas.",
+      "evidence": "Relato do Builder indica `npm run build` exit 0 (Compiled successfully in 3.0s, 24/24 páginas), porém sem output bruto anexado e antes da correção dos bugs funcionais.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "Exit 0 reportado nas evidências incorporadas, diff íntegro de 88 linhas para components/sections/gallery/gallery-tabs.tsx.",
+      "evidence": "Relato do Builder indica `git diff --check` exit 0.",
       "name": "git diff --check",
       "status": "passed"
+    },
+    {
+      "evidence": "Inspeção estática de `components/site/consent/consent-preferences.tsx:81-98` comprova falha no comportamento de refresh e reabertura/edição.",
+      "name": "behavioral-audit:persist-refresh-reopen",
+      "status": "failed"
     }
   ],
-  "correction_prompt": "",
+  "correction_prompt": "Corrija os defeitos funcionais em `components/site/consent/consent-preferences.tsx` e revalide os gates da T2:\n\n1. **Leitura de `localStorage` no mount (refresh respeita decisão salva):**\n   - No `React.useEffect` de montagem do `ConsentPreferencesBanner`, leia `const current = readStored()` e sincronize `setStored(current)`, `setAnalytics(current?.analytics ?? false)` e `setMarketing(current?.marketing ?? false)` junto com `setMounted(true)`.\n   - Mantenha a renderização inicial (server e primeiro render client pré-effect) retornando `null` sem ler `localStorage` no render e sem `suppressHydrationWarning`.\n\n2. **Fechamento consistente ao salvar preferências personalizadas (`savePersonalized`):**\n   - Em `savePersonalized`, feche o banner após salvar (`setOpen(false)`), de forma consistente com `decide`, permitindo que após reabrir via `ConsentPreferencesTrigger` (`open === true`) o usuário edite os checkboxes e clique em \"Salvar preferências\" para sobrescrever a decisão e fechar o banner sem ficar preso com o banner aberto na tela (ou remova o estado morto `saved` se o banner fechar ao salvar, ou forneça botão explícito de fechar caso o painel permaneça aberto após salvar).\n\n3. **Evidências de Gates e Diff Real:**\n   - Reexecute `npm run lint`, `npm run build` e `git diff --check` e forneça na evidência o `git diff` real do arquivo e os outputs reais completos com exit codes.",
   "source": "independent-antigravity-cli"
 }
