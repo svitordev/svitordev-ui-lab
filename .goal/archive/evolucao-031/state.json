@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "goal": "Evolucao 031 - Migrar HeroPrimary para contrato data-driven (QLT-005 incremental); consumer dono dos dados; visual/responsividade/Server Component preservados; demais 3 variants de /library/hero intactas",
+  "current": 1,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria + migracao HeroPrimary para contrato + consumer data + testes + gates",
+      "acceptance": [
+        "auditar hero-primary.tsx e app/library/hero/page.tsx e registrar inventario de consumers reais em .goal",
+        "migrar somente HeroPrimary para contrato tipado seguindo a linguagem dos contratos modernos do projeto (HeroCenterCta/CtaSplitActions/PricingThreeTiers)",
+        "sem defaults internos que escondam conteudo migrado",
+        "consumer dono dos dados",
+        "CTAs preservam destinos da 026 (/#services e /#contact) como links reais",
+        "visual, responsividade, dark-only DEC-011 e Server Component preservados",
+        "sem use client",
+        "as outras 3 variants de /library/hero permanecem intactas",
+        "teste minimo provando o contrato via consumer com hrefs, variants e zero overflow desktop/mobile",
+        "nenhuma dependencia nova",
+        "lint/build/e2e/diff-check verdes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "de27b9e97f882ca33d358f92a32b4b6e351f51755f91948d1f10e316b677da45",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "de27b9e97f882ca33d358f92a32b4b6e351f51755f91948d1f10e316b677da45",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente da Task T1 (EvoluÃ§Ã£o 031 â€” Migrar HeroPrimary para contrato data-driven, QLT-005 incremental) concluÃ­da em modo somente leitura com veredito PASS. Todos os 11 critÃ©rios de aceite foram verificados diretamente nos arquivos reais do workspace: (1) auditoria prÃ©via e inventÃ¡rio de consumers registrados em .goal/evidence/T1-audit.md; (2) somente HeroPrimary (components/sections/hero/hero-primary.tsx) foi migrado para contrato tipado local (HeroPrimaryAction / HeroPrimaryProps), alinhado aos contratos modernos (HeroCenterCta, CtaSplitActions, PricingThreeTiers); (3) zero defaults internos escondendo conteÃºdo hardcoded; (4) app/library/hero/page.tsx atua como Ãºnico consumer real e dono dos dados (heroPrimaryDemo); (5) CTAs preservam os destinos da EvoluÃ§Ã£o 026 (/#services com variant default e /#contact com variant outline) como links reais via Button asChild + next/link (ConvenÃ§Ã£o 001); (6) estrutura visual, responsividade, polÃ­tica dark-only (DEC-011) e Server Component preservados; (7) sem 'use client' no componente ou na pÃ¡gina; (8) as outras 3 variantes de /library/hero (HeroCenterCta, HeroSteps, HeroMediaShowcase) permanecem intactas; (9) teste E2E adicionado em tests/smoke.spec.ts (linhas 186â€“240) validando contrato via consumer, hrefs, variantes (default vs outline por estilo computado), rÃ³tulos do mock visual e zero overflow horizontal (desktop e mobile); (10) package.json sem novas dependÃªncias; (11) artefatos de build (.next/trace-build, .next/server/app/library/hero.html) e de execuÃ§Ã£o Playwright (test-results/.last-run.json com status passed) confirmam gates verdes. AtualizaÃ§Ãµes documentais e de QLT-005 pertencem Ã  Task T2 (PENDING).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "tests/smoke.spec.ts (linhas 186-240: teste 'hero primary data-driven: contrato renderizado pelo consumer com variantes preservadas e zero overflow') + test-results/.last-run.json (status: passed, failedTests: [])",
+            "name": "Playwright E2E smoke suite (incluindo teste hero primary data-driven desktop/mobile)",
+            "status": "passed"
+          },
+          {
+            "evidence": ".next/trace-build (run-turbopack, run-typescript, static-check, static-generation concluÃ­dos) + .next/BUILD_ID (e8VEhIjR6FSqXHHniZ2E7) + .next/server/app/library/hero.html contendo o HTML/RSC prerenderizado do HeroPrimary via props do consumer",
+            "name": "Next.js production build & TypeScript check (npm run build)",
+            "status": "passed"
+          },
+          {
+            "evidence": "InspeÃ§Ã£o estÃ¡tica de components/sections/hero/hero-primary.tsx, app/library/hero/page.tsx e tests/smoke.spec.ts contra eslint.config.mjs e tsconfig.json (strict: true, zero any, zero unused vars, zero conflitos ou erros de formataÃ§Ã£o)",
+            "name": "ESLint & diff-check estÃ¡tico",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T00:55:46.830761+00:00"
+      },
+      "block_reason": "Budget provider-managed: limite LOCAL por tarefa (3) atingido para task_id T1; ledger 24h contem as 3 chamadas da Evolucao 030 (colisao de task_id entre goals). Aguardando decisao do operador.",
+      "resumed_at": "2026-11-12T00:51:45.887203+00:00",
+      "resume_reason": "Bloqueio causado por colisao de budget entre Goals (task_id T1 herdado do Goal 030 arquivado); ferramenta global corrigida em 2026-11-11 com isolamento por goal_id; implementacao da T1 preservada sem alteracao",
+      "completed_at": "2026-11-12T00:55:47.112392+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Documentacao + atualizacao incremental do QLT-005",
+      "acceptance": [
+        "QLT-005 atualizado incrementalmente com contagem real confirmada no codigo (esperado 25 para 24) e permanece aberto",
+        "COMPONENT-CATALOG atualizado no formato real sem nova entry",
+        "contagens 31/11/51",
+        "ROADMAP 031 VERIFIED e proxima 032 nao iniciada",
+        "CURRENT-STATE com 001-031 e numeros reais",
+        "CHANGELOG somente estado final",
+        "DESIGN-SYSTEM e DECISIONS intocados se nenhuma convencao nova",
+        "nenhum outro finding alterado",
+        "diff-check limpo"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "28be5057135dda1c9bbb534b26153905a388cee5eea5d2a61ba4c3ffad68dbb1",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "28be5057135dda1c9bbb534b26153905a388cee5eea5d2a61ba4c3ffad68dbb1",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente da Task T2 (EvoluÃ§Ã£o 031 â€” DocumentaÃ§Ã£o + atualizaÃ§Ã£o incremental do QLT-005) concluÃ­da em modo somente leitura com veredito PASS. Todos os 9 critÃ©rios de aceite da T2 e o objetivo geral da EvoluÃ§Ã£o 031 foram verificados diretamente nos arquivos reais do workspace: (1) QLT-005 em QUALITY-REVIEW.md atualizado incrementalmente com a contagem real confirmada no cÃ³digo (25 -> 24: 18 sections + 6 site sem props) e mantido aberto ([!] ISSUE_CONFIRMED); (2) docs/COMPONENT-CATALOG.md atualizado no formato real na entrada existente de HeroPrimary (Status: Pronto, Data-driven EvoluÃ§Ã£o 031), sem nova entry; (3) contagens reais preservadas e consistentes em 31 sections / 11 UI / 7 site / 2 shells = 51 total (22 rotas); (4) docs/ROADMAP-1000-EVOLUTIONS.md registra a EvoluÃ§Ã£o 031 como VERIFIED e a prÃ³xima 032 (hero-steps + heading) como nÃ£o iniciada (components/sections/hero/hero-steps.tsx intocado); (5) memory-bank/CURRENT-STATE.md atualizado com as evoluÃ§Ãµes 001â€“031 concluÃ­das e nÃºmeros reais (40 testes / 80 execuÃ§Ãµes, 77 passed + 3 skipped, 22 rotas, QLT-005 = 24); (6) memory-bank/CHANGELOG.md registra apenas o estado final da EvoluÃ§Ã£o 031, preservando o histÃ³rico anterior; (7) docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md permaneceram intocados, pois nenhuma convenÃ§Ã£o ou decisÃ£o arquitetural nova foi introduzida; (8) nenhum outro finding alÃ©m do QLT-005 foi alterado em QUALITY-REVIEW.md; (9) arquivos modificados inspecionados sem erros de formataÃ§Ã£o ou marcadores de conflito (diff-check limpo) e artefatos de build (.next/BUILD_ID) e Playwright (test-results/.last-run.json com status passed) Ã­ntegros.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "test-results/.last-run.json (status: passed, failedTests: []) + tests/smoke.spec.ts (40 testes / 80 execuÃ§Ãµes: 77 passed + 3 skipped, incluindo teste 'hero primary data-driven: contrato renderizado pelo consumer com variantes preservadas e zero overflow' nas linhas 186-240)",
+            "name": "Playwright E2E smoke suite (tests/smoke.spec.ts)",
+            "status": "passed"
+          },
+          {
+            "evidence": ".next/BUILD_ID (2gCeyEIPqlnEN3KH3fbzE) + cÃ³digo-fonte e pÃ¡ginas Server Components verificados sem alteraÃ§Ãµes que quebrem tipagem ou build (22 rotas)",
+            "name": "Next.js production build & TypeScript check (npm run build)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Leitura direta integral de QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md, docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md sem marcadores de conflito, erros de sintaxe ou trailing whitespace",
+            "name": "RevisÃ£o documental e diff-check estÃ¡tico",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T01:04:07.087122+00:00"
+      },
+      "completed_at": "2026-11-12T01:04:07.354585+00:00"
+    }
+  ],
+  "created_at": "2026-11-10T22:09:20.253260+00:00",
+  "finished_at": "2026-11-12T01:04:07.354603+00:00"
+}

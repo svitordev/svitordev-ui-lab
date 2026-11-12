@@ -1253,3 +1253,80 @@ test('tema: politica oficial dark-only com paleta unica aplicada em rotas repres
     ).toBe(true);
   }
 });
+
+test('hero steps: conteudo do componente vem dos dados do consumer (contrato)', async ({ page }) => {
+  await page.goto('/library/hero');
+
+  // Conteúdo provém dos dados passados pelo consumer (heroStepsDemo na página da Library) —
+  // o componente não carrega hardcode próprio (Evolução 032).
+  await expect(
+    page.getByRole('heading', { name: 'Transformando ideia em sistema web em poucos passos.' }),
+  ).toBeVisible();
+  await expect(
+    page.getByText('Nada de processos gigantes e burocráticos. Aqui você fala diretamente com o dev, sem intermediários, e acompanha o projeto de perto.'),
+  ).toBeVisible();
+
+  // Steps na ordem dos dados (bounding box, sem nth frágil — vale para desktop e mobile).
+  const stepNames = ['1. Conversa rápida', '2. Proposta clara', '3. Entrega + suporte'];
+  const ys: number[] = [];
+  for (const name of stepNames) {
+    const heading = page.getByRole('heading', { name });
+    await expect(heading).toBeVisible();
+    const box = await heading.boundingBox();
+    expect(box).not.toBeNull();
+    ys.push(box!.y);
+  }
+  for (let i = 1; i < ys.length; i++) {
+    expect(ys[i]).toBeGreaterThan(ys[i - 1]);
+  }
+
+  // Descrições dos steps vêm do contrato (campo description de cada item).
+  await expect(page.getByText('Você me explica o que precisa e o tipo de negócio que tem.')).toBeVisible();
+  await expect(page.getByText('Resumo em texto o que vou fazer, prazos e valor, sem enrolação.')).toBeVisible();
+  await expect(page.getByText('Implementação, ajustes finos e suporte para você usar no dia a dia.')).toBeVisible();
+
+  // CTA real (convenção 001 — caminho interno → next/link), dados do consumer.
+  await expect(page.getByRole('link', { name: 'Quero conversar sobre um projeto' })).toHaveAttribute('href', '/#contact');
+
+  // Supporting text dos dados do consumer.
+  await expect(
+    page.getByText('Esses mesmos blocos você pode reaproveitar em qualquer landing comercial, trocando só o contexto e os textos.'),
+  ).toBeVisible();
+
+  // Zero overflow horizontal (mobile 375 + desktop 1280).
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+test('hero steps: hierarquia de headings sem skip (principal h1 + steps h2)', async ({ page }) => {
+  await page.goto('/library/hero');
+
+  // QLT-011 (evidence: hero-steps pulava h1 → h3). O planejamento histórico sugeria
+  // h1 → h3 no heading principal, mas a home compõe HeroSteps como primeira section e
+  // o h1 do componente é o único h1 da página (testes da home o protegem). Correção
+  // correta provada pelo código: steps sobem para h2 — hierarquia h1 → h2, sem skip.
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Transformando ideia em sistema web em poucos passos.' }),
+  ).toBeVisible();
+
+  // Steps no nível 2 — o skip h1 → h3 deixou de existir.
+  for (const name of ['1. Conversa rápida', '2. Proposta clara', '3. Entrega + suporte']) {
+    await expect(page.getByRole('heading', { level: 2, name })).toBeVisible();
+  }
+
+  // Conteúdo dos cards preservado (visual inalterado — apenas o nível semântico mudou).
+  await expect(page.getByText('Você me explica o que precisa e o tipo de negócio que tem.')).toBeVisible();
+
+  // CTA real (convenção 001).
+  await expect(page.getByRole('link', { name: 'Quero conversar sobre um projeto' })).toHaveAttribute('href', '/#contact');
+
+  // Zero overflow horizontal (mobile 375 + desktop 1280).
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

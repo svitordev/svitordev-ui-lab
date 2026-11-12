@@ -1,0 +1,36 @@
+{
+  "task_id": "T4",
+  "fingerprint": "db05996c91c72e9d3c0e15a16e19bbd2a02e773f94fc72bd75777d9f57a0bbed",
+  "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+  "verdict": "REJECTED",
+  "summary": "Auditoria independente da T4 (DocumentaÃ§Ã£o + atualizaÃ§Ã£o incremental dos findings da EvoluÃ§Ã£o 032) reprovada (FAIL) por inconsistÃªncia interna em `memory-bank/CURRENT-STATE.md` (seÃ§Ãµes `## Estado de qualidade` e `### PrÃ³xima fase` nas linhas 98â€“109 permaneceram com o estado da 031: Playwright 40/80, QLT-005 em 24, 032 nÃ£o iniciada e prÃ³xima execuÃ§Ã£o 032) e falta de recÃ¡lculo explÃ­cito das evidÃªncias restantes de `QLT-011` em `QUALITY-REVIEW.md` (`lang=\"pt-BR\"` jÃ¡ resolvido em `app/layout.tsx:23` na 023). Demais arquivos (`docs/COMPONENT-CATALOG.md`, `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/CHANGELOG.md`, `docs/DESIGN-SYSTEM.md`, `memory-bank/DECISIONS.md`) estÃ£o corretos.",
+  "findings": [
+    {
+      "evidence": "Em `memory-bank/CURRENT-STATE.md`: (1) linha 98 ainda informa `**40 smoke tests / 80 execuÃ§Ãµes** (77 passed + 3 skipped`; (2) linha 101 ainda informa `**QLT-005:** continua aberto, com duas ocorrÃªncias a menos (pricing-three-tiers â€” EvoluÃ§Ã£o 016; hero-primary â€” EvoluÃ§Ã£o 031); contagem real no cÃ³digo: **24** (18 sections + 6 site)` e nÃ£o menciona `QLT-011` parcial; (3) linha 109 (`### PrÃ³xima fase`) ainda informa `032â€“050 planejadas e nÃ£o iniciadas ... PrÃ³xima execuÃ§Ã£o: EvoluÃ§Ã£o 032 â€” Migrar hero-steps + corrigir heading (QLT-005 incremental + QLT-011)`.",
+      "file": "memory-bank/CURRENT-STATE.md",
+      "id": "DOC-001",
+      "location": "memory-bank/CURRENT-STATE.md:98-109",
+      "problem": "As seÃ§Ãµes `## Estado de qualidade` e `### PrÃ³xima fase` de `memory-bank/CURRENT-STATE.md` ficaram desatualizadas com os dados da EvoluÃ§Ã£o 031, contradizendo o topo do prÃ³prio arquivo (linhas 12, 44â€“45) e descumprindo o critÃ©rio de aceite da T4 (`CURRENT-STATE com 001-032, QLT-005 real, QLT-011 parcial, component count, rotas, Playwright e proxima 033`).",
+      "required_fix": "Atualizar as linhas 98, 101 e 109 de `memory-bank/CURRENT-STATE.md` com: Playwright `42 smoke tests / 84 execuÃ§Ãµes (81 passed + 3 skipped)`, `QLT-005` com `hero-steps` (EvoluÃ§Ã£o 032) e contagem real `23 (17 sections + 6 site)`, `QLT-011` parcial (NÃƒO VERIFIED), e `### PrÃ³xima fase` com `032 âœ… VERIFIED`, `033â€“050 planejadas e nÃ£o iniciadas` e `PrÃ³xima execuÃ§Ã£o: EvoluÃ§Ã£o 033 â€” Breadcrumbs (primitive)`.",
+      "severity": "MEDIUM"
+    },
+    {
+      "evidence": "Em `QUALITY-REVIEW.md:368`, o item `- lang=\"pt-br\" â€” capitalizaÃ§Ã£o recomendada pt-BR.` continua listado como evidÃªncia aberta sem marcaÃ§Ã£o de resolvido, embora `app/layout.tsx:23` jÃ¡ esteja com `<html lang=\"pt-BR\">` (normalizado na EvoluÃ§Ã£o 023) e o prÃ³prio `memory-bank/CHANGELOG.md:13` registre `itens restantes (comentÃ¡rios stale, nit do wrapper; item lang jÃ¡ resolvido na 023)`.",
+      "file": "QUALITY-REVIEW.md",
+      "id": "DOC-002",
+      "location": "QUALITY-REVIEW.md:364-372",
+      "problem": "Na atualizaÃ§Ã£o parcial do `QLT-011` em `QUALITY-REVIEW.md`, a evidÃªncia do `hero-steps` foi marcada como resolvida na 032, mas as evidÃªncias restantes nÃ£o foram recalculadas contra o cÃ³digo real (`app/layout.tsx:23` jÃ¡ possui `lang=\"pt-BR\"` desde a 023, restando abertas apenas as 3 evidÃªncias em `app/library/layout.tsx`, `app/(site)/page.tsx` e `app/(site)/layout.tsx`).",
+      "required_fix": "Em `QUALITY-REVIEW.md` (seÃ§Ã£o `QLT-011`), marcar o item `lang=\"pt-br\"` como jÃ¡ resolvido na EvoluÃ§Ã£o 023 (`app/layout.tsx` usa `lang=\"pt-BR\"`) e explicitar as 3 evidÃªncias restantes em aberto (`app/library/layout.tsx`, `app/(site)/page.tsx`, `app/(site)/layout.tsx`), mantendo `QLT-011` aberto (`[!] ISSUE_CONFIRMED`, parcial, NÃƒO VERIFIED).",
+      "severity": "LOW"
+    }
+  ],
+  "tests": [
+    {
+      "evidence": "Leitura estÃ¡tica de `tests/smoke.spec.ts` confirma 42 declaraÃ§Ãµes `test(...)` (incluindo os 2 novos testes de `hero-steps` nas linhas 1257 e 1304) e 3 skips mobile-only (linhas 71, 103 e 886), totalizando 42 testes / 84 execuÃ§Ãµes (81 passed + 3 skipped).",
+      "name": "Playwright smoke suite count verification (read-only)",
+      "status": "passed"
+    }
+  ],
+  "correction_prompt": "Corrija os seguintes pontos documentais da T4 (sem tocar em codigo de producao ou testes):\n\n1. Em `memory-bank/CURRENT-STATE.md`:\n   - Na linha 98 (`## Estado de qualidade`), atualize a contagem do Playwright de `**40 smoke tests / 80 execuÃ§Ãµes** (77 passed + 3 skipped` para `**42 smoke tests / 84 execuÃ§Ãµes** (81 passed + 3 skipped`.\n   - Na linha 101 (`## Estado de qualidade`), atualize o resumo de `QLT-005` para incluir `hero-steps` (EvoluÃ§Ã£o 032) e a contagem real `**23** (17 sections + 6 site)` (em vez de `24 (18 sections + 6 site)`), e registre o estado parcial de `QLT-011` (heading do `hero-steps` resolvido na 032; itens restantes pendentes para reauditoria na 050, NÃƒO VERIFIED).\n   - Na linha 109 (`### PrÃ³xima fase`), atualize o progresso do Lote 02 para incluir `032 âœ… VERIFIED (2026-11-11 â€” HeroSteps migrado para contrato data-driven + heading corrigido, QLT-005 incremental 24 â†’ 23, QLT-011 parcial); 033â€“050 planejadas e nÃ£o iniciadas` e atualize `PrÃ³xima execuÃ§Ã£o:` de `EvoluÃ§Ã£o 032` para `EvoluÃ§Ã£o 033 â€” Breadcrumbs (primitive). Aguardar ordem de inÃ­cio.`\n\n2. Em `QUALITY-REVIEW.md` (seÃ§Ã£o `QLT-011`, linhas 364â€“372):\n   - Recalcule explicitamente as evidÃªncias restantes conforme o cÃ³digo real (`app/layout.tsx` jÃ¡ possui `<html lang=\"pt-BR\">` desde a EvoluÃ§Ã£o 023, conforme vocÃª mesmo anotou no `CHANGELOG.md`): marque o item `lang=\"pt-br\"` como jÃ¡ resolvido na EvoluÃ§Ã£o 023 e explicite as 3 evidÃªncias que permanecem abertas (`app/library/layout.tsx`, `app/(site)/page.tsx` e `app/(site)/layout.tsx`), mantendo o status de `QLT-011` como `[!] ISSUE_CONFIRMED` (parcial, NÃƒO VERIFIED).",
+  "source": "independent-antigravity-cli"
+}

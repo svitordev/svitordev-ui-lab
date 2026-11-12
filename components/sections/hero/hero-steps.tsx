@@ -2,22 +2,37 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const steps = [
-  {
-    title: "1. Conversa rápida",
-    desc: "Você me explica o que precisa e o tipo de negócio que tem.",
-  },
-  {
-    title: "2. Proposta clara",
-    desc: "Resumo em texto o que vou fazer, prazos e valor, sem enrolação.",
-  },
-  {
-    title: "3. Entrega + suporte",
-    desc: "Implementação, ajustes finos e suporte para você usar no dia a dia.",
-  },
-];
+export type HeroStep = {
+  title: string;
+  description: string;
+};
 
-export function HeroSteps() {
+export type HeroStepsAction = {
+  label: string;
+  href: string;
+  variant?: "default" | "outline";
+};
+
+export type HeroStepsProps = {
+  title: string;
+  description?: string;
+  steps: HeroStep[];
+  action?: HeroStepsAction;
+  supportingText?: string;
+};
+
+// Convenção 001: interno (começa com "/" mas não "//") → next/link; protocolo/externo → <a>.
+function isInternalHref(href: string) {
+  return href.startsWith("/") && !href.startsWith("//");
+}
+
+export function HeroSteps({
+  title,
+  description,
+  steps,
+  action,
+  supportingText,
+}: HeroStepsProps) {
   return (
     <section className="w-full bg-muted/40">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
@@ -25,17 +40,24 @@ export function HeroSteps() {
           {/* Coluna texto */}
           <div className="space-y-6">
             <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-              Transformando ideia em sistema web em poucos passos.
+              {title}
             </h1>
 
-            <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
-              Nada de processos gigantes e burocráticos. Aqui você fala diretamente com o dev,
-              sem intermediários, e acompanha o projeto de perto.
-            </p>
+            {description ? (
+              <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
+                {description}
+              </p>
+            ) : null}
 
-            <Button size="lg" asChild>
-              <Link href="/#contact">Quero conversar sobre um projeto</Link>
-            </Button>
+            {action ? (
+              <Button variant={action.variant ?? "default"} size="lg" asChild>
+                {isInternalHref(action.href) ? (
+                  <Link href={action.href}>{action.label}</Link>
+                ) : (
+                  <a href={action.href}>{action.label}</a>
+                )}
+              </Button>
+            ) : null}
           </div>
 
           {/* Coluna steps */}
@@ -45,14 +67,15 @@ export function HeroSteps() {
                 key={step.title}
                 className="rounded-xl border bg-background/80 p-4 shadow-sm"
               >
-                <h3 className="text-sm font-semibold">{step.title}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">{step.desc}</p>
+                <h2 className="text-sm font-semibold">{step.title}</h2>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {step.description}
+                </p>
               </div>
             ))}
-            <p className="text-[11px] text-muted-foreground">
-              Esses mesmos blocos você pode reaproveitar em qualquer landing comercial,
-              trocando só o contexto e os textos.
-            </p>
+            {supportingText ? (
+              <p className="text-[11px] text-muted-foreground">{supportingText}</p>
+            ) : null}
           </div>
         </div>
       </div>

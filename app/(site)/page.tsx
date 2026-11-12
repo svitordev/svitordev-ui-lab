@@ -3,13 +3,41 @@ import type { Metadata } from "next";
 import { AboutSplit } from "@/components/sections/about/about-split";
 import { ContactSplit } from "@/components/sections/contact/contact-split";
 import { CtaSimple } from "@/components/sections/cta/cta-simple";
-import { HeroSteps } from "@/components/sections/hero/hero-steps";
+import {
+  HeroSteps,
+  type HeroStepsProps,
+} from "@/components/sections/hero/hero-steps";
 import {
   PricingThreeTiers,
   type PricingThreeTiersProps,
 } from "@/components/sections/pricing/pricing-three-tiers";
 import { ServicesWithIcons } from "@/components/sections/services/services-with-icons";
 import { TestimonialsGrid } from "@/components/sections/testimonials/testimonials-grid";
+
+// Copy da hero da home — dados do consumer (Evolução 032).
+// CTA usa o anchor real #contact — a própria home renderiza ContactSplit (id="contact").
+const heroStepsHomeData: HeroStepsProps = {
+  title: "Transformando ideia em sistema web em poucos passos.",
+  description:
+    "Nada de processos gigantes e burocráticos. Aqui você fala diretamente com o dev, sem intermediários, e acompanha o projeto de perto.",
+  steps: [
+    {
+      title: "1. Conversa rápida",
+      description: "Você me explica o que precisa e o tipo de negócio que tem.",
+    },
+    {
+      title: "2. Proposta clara",
+      description: "Resumo em texto o que vou fazer, prazos e valor, sem enrolação.",
+    },
+    {
+      title: "3. Entrega + suporte",
+      description: "Implementação, ajustes finos e suporte para você usar no dia a dia.",
+    },
+  ],
+  action: { label: "Quero conversar sobre um projeto", href: "/#contact" },
+  supportingText:
+    "Esses mesmos blocos você pode reaproveitar em qualquer landing comercial, trocando só o contexto e os textos.",
+};
 
 // Copy original da pricing da home, movida para o consumer (Evolução 016).
 // Anual é dado explícito do consumer (12x o mensal, sem cálculo no componente).
@@ -70,7 +98,7 @@ export const metadata: Metadata = {
 export default function SiteHomePage() {
   return (
     <>
-      <HeroSteps />
+      <HeroSteps {...heroStepsHomeData} />
       {/* Âncoras da navegação da home (Evolução 026): os IDs são alvos dos links
           /#services e /#about dos headers/footers e pertencem à composição da home,
           não aos componentes reutilizáveis. */}

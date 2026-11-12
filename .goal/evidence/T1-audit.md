@@ -1,66 +1,83 @@
-# T1 Audit — Evolução 031 (HeroPrimary → contrato data-driven)
+# T1 Audit — Evolução 032 (HeroSteps → contrato data-driven + heading QLT-011)
 
-Baseline: branch main, HEAD = origin/main = 4409956, working tree limpo no início da task.
+Baseline: branch main, HEAD = origin/main = 6a181fd (031 commitada/pushada pelo usuário), working tree limpo no início da task (exceto `.goal/` runtime, fora do fingerprint).
 
-## Inventário de consumers reais de `HeroPrimary`
+## Consumers reais de `HeroSteps` (grep `**/*.{ts,tsx,md}` — sem assumir quantidade)
 
 | Consumer | Contexto | Precisa mudar? |
 |---|---|---|
-| `app/library/hero/page.tsx` | Único consumer real — entry `hero-primary` (1ª de 4 variants), renderiza `<HeroPrimary />` sem props | Sim — passa a ser dono dos dados da demo |
-| `tests/smoke.spec.ts` (~L461) | Smoke do padrão moderno da página (`firstId: 'hero-primary'`) | Não — textos da página/shell preservados |
-| `tests/smoke.spec.ts` (~L922–923) | Teste dos destinos da 026: `Ver serviços → /#services`, `Falar com a equipe → /#contact` em `/library/hero` | Não — nomes e hrefs preservados pelo consumer |
-| `tests/smoke.spec.ts` (~L160) | Teste da hero centralizada, escopo `ancestor::section[1]` (comentário cita HeroPrimary como motivo do escopo) | Não — HeroCenterCta intocado |
-| `docs/COMPONENT-CATALOG.md` (L105) | Entry existente (classificada `Template`) | T2 (documentação) |
-| `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/*` | Referências textuais | T2 |
+| `app/(site)/page.tsx` (L73) | Home — HeroSteps é a **primeira section** da composição | Sim — passa a dono dos dados |
+| `app/library/hero/page.tsx` (L107) | Entry `hero-steps` (1 das 4 variants), renderiza `<HeroSteps />` | Sim — passa a dono dos dados |
+| `tests/smoke.spec.ts` L980 | Teste dos destinos da 026 (`Quero conversar sobre um projeto → /#contact` via `a[href]` + texto) | Não — consumer preserva os mesmos dados |
+| `docs/COMPONENT-CATALOG.md` L106 | Entry existente (classificada `Template`) | T4 (documentação) |
+| `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/*` | Referências textuais | T4 |
 
-Nenhum outro uso de `HeroPrimary`/`hero-primary` no código (grep `**/*.{ts,tsx,md}`).
+## `/library/hero` — quantidade real de variants: 4
 
-## Hardcode real no componente (confirmado no código)
+`hero-primary` (migrada 031), `hero-center-cta` (migrada 010), `hero-steps` (alvo da 032), `hero-media-showcase` (migrada 003/012). A 032 altera SOMENTE `hero-steps`; as outras 3 permanecem intactas.
+
+## Inventário de hardcode real em `hero-steps.tsx` (confirmado no código)
 
 Conteúdo → migra para props:
-1. eyebrow: `Site institucional · Empresas e profissionais`
-2. título (h1): `Apresente sua empresa com clareza, profissionalismo e confiança.`
-3. descrição: `Uma página inicial pensada para explicar quem você é...`
-4. supporting text: `Esse modelo funciona bem para escritórios, clínicas...`
-5. CTAs (2): `Ver serviços → /#services` (default) e `Falar com a equipe → /#contact` (outline) — destinos da 026 preservados como dados do consumer
-6. rótulos textuais do mock visual: `Página inicial` (esquerda) e `Visualização` (direita) — strings legíveis, conteúdo customizável por cliente (mesma natureza dos placeholders QLT-005)
+1. título (h1): `Transformando ideia em sistema web em poucos passos.`
+2. descrição: `Nada de processos gigantes e burocráticos...`
+3. steps: array de módulo com 3 itens `{title, desc}` — números embutidos nos títulos (`1.`, `2.`, `3.`) são conteúdo do consumer
+4. CTA: label `Quero conversar sobre um projeto` → `/#contact` (destino corrigido na 026), variant default, `size="lg"`
+5. supporting text (parágrafo rodapé da coluna steps): `Esses mesmos blocos você pode reaproveitar...`
 
-Estrutura → permanece interna:
-- section/divs, grid das colunas, spacing, breakpoints (`md:`), container `max-w-6xl`, tokens visuais
-- caixas do mock visual (shapes), `size="lg"` dos botões, `text-transform` do eyebrow
+Estrutura → permanece interna: grid `md:grid-cols-[...]`, cards, spacing, breakpoints, tokens, `size="lg"` do Button. Sem eyebrow no componente (não vira prop inventada).
 
-## Linguagem de contrato do projeto (referências estudadas)
+## Contratos modernos estudados (linguagem derivada, sem 3ª forma)
 
-- Design System (Evolução 001): contrato mínimo e local ao componente; `title` e `actions` obrigatórios; `eyebrow`/`description`/`supportingText` opcionais; `actions[].variant` restrito a `default | outline`; sem props cosméticas; sem render-props.
-- `CtaAction` (001), `HeroCenterAction` (010), `HeroAction` (003/012), `PricingAction` (016): todos `{ label; href; variant?: "default" | "outline" }`, tipo local exportado por componente — não existe tipo de action global; cada componente define o seu com a mesma forma. Convenção 001: href interno (`/` mas não `//`) → `next/link`; protocolo/externo → `<a>`.
-- HeroMediaShowcase: media frame é estrutura pura (shapes); texto do frame (`mediaCaption`) vem do consumer — precedente direto para os rótulos do mock.
+- Design System (001): contrato mínimo local; `title` obrigatório; opcionais condicionais; `variant` restrito `default | outline`; sem props cosméticas; convenção 001 para links.
+- `CtaAction` (001), `HeroCenterAction` (010), `HeroAction` (003/012), `PricingAction` (016), `HeroPrimaryAction` (031): todos `{ label; href; variant?: "default" | "outline" }`, tipo local exportado.
+- Naming DS: `description` (não `desc`); `supportingText` para parágrafo complementar (padrão 001/010/016).
 
-## Contrato final derivado
+## Contrato proposto (API mínima derivada do componente real)
 
 ```ts
-export type HeroPrimaryAction = { label: string; href: string; variant?: "default" | "outline" };
-export type HeroPrimaryProps = {
-  eyebrow?: string;
+export type HeroStep = { title: string; description: string };
+export type HeroStepsAction = { label: string; href: string; variant?: "default" | "outline" };
+export type HeroStepsProps = {
   title: string;
   description?: string;
+  steps: HeroStep[];
+  action?: HeroStepsAction;
   supportingText?: string;
-  actions: HeroPrimaryAction[];
-  mediaTitle?: string;
-  mediaBadge?: string;
 };
 ```
 
-- Sem defaults internos (proibido esconder hardcode); opcionais com renderização condicional; `actions` obrigatório (Design System).
-- Server Component preservado; nenhum estado/handler; nenhum `"use client"`; nenhuma dependência nova.
-- Visual/responsividade/dark-only (DEC-011) preservados — refactor de contrato, não redesign.
+- `title` e `steps` obrigatórios (essência do componente — "hero com steps"); `description`/`action`/`supportingText` opcionais com renderização condicional.
+- **Sem defaults** (proibido esconder hardcode); consumers donos dos dados (home + library, cada um com seus dados explícitos; sem arquivo global de fixtures).
+- Server Component preservado; nenhum estado/handler; nenhuma dependência nova.
 
-## Testes
+## Heading / QLT-011 — conclusão provada pelo código (planejamento histórico NÃO confirmado)
 
-- Cobertura existente preservada: padrão moderno (L461), destinos 026 (L922–923), hero centralizada (L160).
-- +1 teste novo dual-project provando o contrato via consumer: eyebrow/título/descrição/supporting text/rótulos do mock vindos dos dados da página; CTAs como links reais com hrefs e variantes distintas (estilo computado); zero overflow nos dois viewports.
-- Projeção: 39 → 40 testes; 78 → 80 execuções; 75 → 77 passed; 3 skipped.
+- Evidência exata do QLT-011: "`hero-steps` pula heading (h1 → h3)" — o skip é entre o heading principal do componente (h1) e os steps (h3).
+- O roadmap sugere `h1 → h3` no heading principal. **O código refuta:** na home, HeroSteps é a primeira section e seu h1 é o **único h1 da página**; os outros 6 blocos da home usam h2/h3. Dois testes existentes protegem isso: `home carrega com main, banner e um heading nivel 1` (linha 4 do smoke) e o teste de navegação mobile da 025 (assert h1 após navegar para `/`). Migrar o heading principal para h3 deixaria a home sem h1 e quebraria os dois testes.
+- **Correção correta: steps `h3 → h2`** (elimina o skip: h1 → h2, parent–filho correto; visual preservado — os cards já têm classes explícitas `text-sm font-semibold`, tag não afeta o tamanho). Heading principal permanece h1.
+- Na Library, o h1 do componente dentro da entry h2 é inversão — padrão pré-existente dos outros heroes já migrados (HeroCenterCta/HeroMediaShowcase, VERIFIED, fora do escopo da 032). A 032 corrige apenas o skip evidenciado.
+- QLT-011 possui outros itens (comentários stale em `library/layout.tsx` e `(site)/page.tsx`, `<div>` wrapper no `(site)/layout.tsx`; o item `lang` já foi resolvido na 023). **QLT-011 NÃO fecha na 032** — atualização parcial e factual na T4.
 
-## Escopo
+## Arquivos exatos
 
-- Migração: somente `HeroPrimary`. `HeroCenterCta` (já migrado na 010), `HeroSteps` (heading → 032/QLT-011) e `HeroMediaShowcase` (já data-driven) intactos.
-- QLT-005: 25 → 24 (1 ocorrência migrada), permanece ISSUE_CONFIRMED/ABERTO.
+- **T2 (contrato):** `components/sections/hero/hero-steps.tsx`, `app/(site)/page.tsx`, `app/library/hero/page.tsx`, `tests/smoke.spec.ts` (+1 teste do contrato via consumer, dual-project). Heading NÃO tocado na T2 (isolado na T3).
+- **T3 (heading):** `components/sections/hero/hero-steps.tsx` (steps h3→h2), `tests/smoke.spec.ts` (+1 teste de hierarquia via `getByRole heading level`).
+- **T4 (docs):** `QUALITY-REVIEW.md`, `docs/COMPONENT-CATALOG.md`, `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/CURRENT-STATE.md`, `memory-bank/CHANGELOG.md`. DESIGN-SYSTEM e DECISIONS intocados (nenhuma convenção nova).
+
+## Testes necessários
+
+- T2: +1 teste dual-project provando o contrato pelo consumer na Library: título/descrição/steps (ordem)/CTA href/supporting text vindos dos dados da página; zero overflow nos dois viewports.
+- T3: +1 teste provando a hierarquia corrigida (heading principal nível 1 + steps nível 2 via `getByRole`, conteúdo visível, CTA link real, zero overflow); home mantém h1 (testes existentes cobrem).
+- Testes existentes impactados: nenhum além dos acima (verificado: asserções de heading em outras rotas não tocam HeroSteps; teste da 026 usa `a[href]` + texto, preservado pelo consumer).
+
+## Riscos
+
+- Nível de heading é fixo num componente reutilizável usado em 2 contextos com hierarquias diferentes — decisão documentada: corrigir o skip (evidência QLT-011) sem quebrar a home; inversão na Library é o padrão dos heroes já migrados.
+- Renomear `desc` → `description` no tipo: breaking apenas interno (consumers novos); sem consumidores externos ao repo.
+
+## Impacto esperado
+
+- **QLT-005: 24 → 23** (HeroSteps migrado), permanece ISSUE_CONFIRMED/ABERTO.
+- **QLT-011: parcial** — evidência do hero-steps resolvida; itens restantes permanecem; NÃO marcar VERIFIED.
+- Contagens: 31/11/51 inalteradas; rotas 22; nenhuma dependência nova.

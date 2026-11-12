@@ -8,7 +8,10 @@ import {
   HeroCenterCta,
   type HeroCenterCtaProps,
 } from "@/components/sections/hero/hero-center-cta";
-import { HeroSteps } from "@/components/sections/hero/hero-steps";
+import {
+  HeroSteps,
+  type HeroStepsProps,
+} from "@/components/sections/hero/hero-steps";
 import {
   HeroMediaShowcase,
   type HeroMediaShowcaseProps,
@@ -84,6 +87,29 @@ const heroMediaShowcaseDemo: HeroMediaShowcaseProps = {
   mediaCaption: "Painel ilustrativo montado com HTML e Tailwind — sem imagem.",
 };
 
+const heroStepsDemo: HeroStepsProps = {
+  title: "Transformando ideia em sistema web em poucos passos.",
+  description:
+    "Nada de processos gigantes e burocráticos. Aqui você fala diretamente com o dev, sem intermediários, e acompanha o projeto de perto.",
+  steps: [
+    {
+      title: "1. Conversa rápida",
+      description: "Você me explica o que precisa e o tipo de negócio que tem.",
+    },
+    {
+      title: "2. Proposta clara",
+      description: "Resumo em texto o que vou fazer, prazos e valor, sem enrolação.",
+    },
+    {
+      title: "3. Entrega + suporte",
+      description: "Implementação, ajustes finos e suporte para você usar no dia a dia.",
+    },
+  ],
+  action: { label: "Quero conversar sobre um projeto", href: "/#contact" },
+  supportingText:
+    "Esses mesmos blocos você pode reaproveitar em qualquer landing comercial, trocando só o contexto e os textos.",
+};
+
 const heros: HeroItem[] = [
   {
     id: "hero-primary",
@@ -104,7 +130,7 @@ const heros: HeroItem[] = [
     name: "Hero com etapas do processo",
     description:
       "Mostra o caminho até a contratação em etapas antes da chamada para ação.",
-    preview: <HeroSteps />,
+    preview: <HeroSteps {...heroStepsDemo} />,
   },
   {
     id: "hero-media-showcase",

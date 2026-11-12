@@ -1,0 +1,37 @@
+{
+  "goal": "Evolucao 031 - Migrar HeroPrimary para contrato data-driven (QLT-005 incremental); consumer dono dos dados; visual/responsividade/Server Component preservados; demais 3 variants de /library/hero intactas",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria + migracao HeroPrimary para contrato + consumer data + testes + gates",
+      "acceptance": [
+        "auditar hero-primary.tsx e app/library/hero/page.tsx e registrar inventario de consumers reais em .goal",
+        "migrar somente HeroPrimary para contrato tipado seguindo a linguagem dos contratos modernos do projeto (HeroCenterCta/CtaSplitActions/PricingThreeTiers)",
+        "sem defaults internos que escondam conteudo migrado",
+        "consumer dono dos dados",
+        "CTAs preservam destinos da 026 (/#services e /#contact) como links reais",
+        "visual, responsividade, dark-only DEC-011 e Server Component preservados",
+        "sem use client",
+        "as outras 3 variants de /library/hero permanecem intactas",
+        "teste minimo provando o contrato via consumer com hrefs, variants e zero overflow desktop/mobile",
+        "nenhuma dependencia nova",
+        "lint/build/e2e/diff-check verdes"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Documentacao + atualizacao incremental do QLT-005",
+      "acceptance": [
+        "QLT-005 atualizado incrementalmente com contagem real confirmada no codigo (esperado 25 para 24) e permanece aberto",
+        "COMPONENT-CATALOG atualizado no formato real sem nova entry",
+        "contagens 31/11/51",
+        "ROADMAP 031 VERIFIED e proxima 032 nao iniciada",
+        "CURRENT-STATE com 001-031 e numeros reais",
+        "CHANGELOG somente estado final",
+        "DESIGN-SYSTEM e DECISIONS intocados se nenhuma convencao nova",
+        "nenhum outro finding alterado",
+        "diff-check limpo"
+      ]
+    }
+  ]
+}

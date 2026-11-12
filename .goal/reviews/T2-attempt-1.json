@@ -1,24 +1,14 @@
 {
   "task_id": "T2",
-  "fingerprint": "28be5057135dda1c9bbb534b26153905a388cee5eea5d2a61ba4c3ffad68dbb1",
+  "fingerprint": "57cc04e9284af1fbb7cd0e6647530c15ea6ade8ac3631e409137f0d072df81c4",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da Task T2 (EvoluÃ§Ã£o 031 â€” DocumentaÃ§Ã£o + atualizaÃ§Ã£o incremental do QLT-005) concluÃ­da em modo somente leitura com veredito PASS. Todos os 9 critÃ©rios de aceite da T2 e o objetivo geral da EvoluÃ§Ã£o 031 foram verificados diretamente nos arquivos reais do workspace: (1) QLT-005 em QUALITY-REVIEW.md atualizado incrementalmente com a contagem real confirmada no cÃ³digo (25 -> 24: 18 sections + 6 site sem props) e mantido aberto ([!] ISSUE_CONFIRMED); (2) docs/COMPONENT-CATALOG.md atualizado no formato real na entrada existente de HeroPrimary (Status: Pronto, Data-driven EvoluÃ§Ã£o 031), sem nova entry; (3) contagens reais preservadas e consistentes em 31 sections / 11 UI / 7 site / 2 shells = 51 total (22 rotas); (4) docs/ROADMAP-1000-EVOLUTIONS.md registra a EvoluÃ§Ã£o 031 como VERIFIED e a prÃ³xima 032 (hero-steps + heading) como nÃ£o iniciada (components/sections/hero/hero-steps.tsx intocado); (5) memory-bank/CURRENT-STATE.md atualizado com as evoluÃ§Ãµes 001â€“031 concluÃ­das e nÃºmeros reais (40 testes / 80 execuÃ§Ãµes, 77 passed + 3 skipped, 22 rotas, QLT-005 = 24); (6) memory-bank/CHANGELOG.md registra apenas o estado final da EvoluÃ§Ã£o 031, preservando o histÃ³rico anterior; (7) docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md permaneceram intocados, pois nenhuma convenÃ§Ã£o ou decisÃ£o arquitetural nova foi introduzida; (8) nenhum outro finding alÃ©m do QLT-005 foi alterado em QUALITY-REVIEW.md; (9) arquivos modificados inspecionados sem erros de formataÃ§Ã£o ou marcadores de conflito (diff-check limpo) e artefatos de build (.next/BUILD_ID) e Playwright (test-results/.last-run.json com status passed) Ã­ntegros.",
+  "summary": "Auditoria independente da T2 (EvoluÃ§Ã£o 032 â€” MigraÃ§Ã£o data-driven de HeroSteps + consumers + testes) concluÃ­da com veredito PASS. Todos os 9 critÃ©rios de aceite foram verificados diretamente no cÃ³digo real do repositÃ³rio: (1) HeroSteps (components/sections/hero/hero-steps.tsx) implementa exatamente o contrato aprovado na T1 (HeroStep, HeroStepsAction, HeroStepsProps), mantendo as demais 3 variants de /library/hero intactas; (2) todo o conteÃºdo configurÃ¡vel saiu do componente sem fallbacks internos e foi movido exclusivamente para os 2 consumers reais identificados na T1 (app/(site)/page.tsx com heroStepsHomeData e app/library/hero/page.tsx com heroStepsDemo); (3) o CTA preserva o destino corrigido na EvoluÃ§Ã£o 026 (/#contact) como link semÃ¢ntico real via Button asChild + next/link (convenÃ§Ã£o 001); (4) steps tipados e data-driven com ordem e textos preservados; (5) visual, markup estrutural, spacing, typography, responsividade e polÃ­tica dark-only (DEC-011) preservados sem redesign; (6) Server Component preservado (sem 'use client') e nenhuma dependÃªncia nova em package.json; (7) hierarquia de headings mantida intacta na T2 (h1 principal e h3 nos steps, isolada para a T3); (8) adicionado 1 teste Playwright dual-project em tests/smoke.spec.ts (L1257-L1302) provando o contrato pelo consumer real (title, description, steps e sua ordem vertical, descriÃ§Ãµes dos steps, CTA link e href /#contact, supportingText e zero overflow horizontal em desktop e mobile); (9) evidÃªncias de build (.next/BUILD_ID), testes (test-results/.last-run.json com status passed e 0 falhas), lint/TypeScript e higiene de diff verificadas.",
   "findings": [],
   "tests": [
     {
-      "evidence": "test-results/.last-run.json (status: passed, failedTests: []) + tests/smoke.spec.ts (40 testes / 80 execuÃ§Ãµes: 77 passed + 3 skipped, incluindo teste 'hero primary data-driven: contrato renderizado pelo consumer com variantes preservadas e zero overflow' nas linhas 186-240)",
-      "name": "Playwright E2E smoke suite (tests/smoke.spec.ts)",
-      "status": "passed"
-    },
-    {
-      "evidence": ".next/BUILD_ID (2gCeyEIPqlnEN3KH3fbzE) + cÃ³digo-fonte e pÃ¡ginas Server Components verificados sem alteraÃ§Ãµes que quebrem tipagem ou build (22 rotas)",
-      "name": "Next.js production build & TypeScript check (npm run build)",
-      "status": "passed"
-    },
-    {
-      "evidence": "Leitura direta integral de QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md, docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md sem marcadores de conflito, erros de sintaxe ou trailing whitespace",
-      "name": "RevisÃ£o documental e diff-check estÃ¡tico",
+      "evidence": "Verificado em components/sections/hero/hero-steps.tsx, app/(site)/page.tsx, app/library/hero/page.tsx e tests/smoke.spec.ts (L1257-L1302), alÃ©m de test-results/.last-run.json (status: passed, failedTests: []) e .next/BUILD_ID.",
+      "name": "playwright-e2e-and-static-verification-T2-hero-steps",
       "status": "passed"
     }
   ],

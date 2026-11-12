@@ -215,13 +215,19 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / Reutilização
 
-**Evidência:** Os 6 `site` components + 18 `sections` têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010), `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer) e `hero-primary` (Evolução 031).
+**Evidência:** Os 6 `site` components + as `sections` restantes têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010), `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer), `hero-primary` (Evolução 031) e `hero-steps` (Evolução 032).
 
 **Verificação (Evolução 031, 2026-11-11):**
 
 - **`HeroPrimary`** migrado para contrato data-driven local (`HeroPrimaryAction`/`HeroPrimaryProps`) na linguagem dos contratos modernos do Lab (001/003/010/016): `title`/`actions` obrigatórios; `eyebrow?`/`description?`/`supportingText?`/`mediaTitle?`/`mediaBadge?` opcionais com renderização condicional; **sem defaults internos escondendo conteúdo**; consumer dono dos dados (`app/library/hero/page.tsx`); CTAs preservam os destinos da 026 como links reais; Server Component e visual preservados; union restrita `default | outline`; convenção 001.
 - **Contagem real no código: 25 → 24** (18 sections + 6 site). **QLT-005 permanece ISSUE_CONFIRMED / ABERTO** — falta migrar 24.
 - Gate: +1 teste Playwright dual-project do contrato via consumer; suíte 40 testes / 80 execuções — 77 passed + 3 skipped; lint 0/0; build PASS (22 rotas).
+
+**Verificação (Evolução 032, 2026-11-11):**
+
+- **`HeroSteps`** migrado para contrato data-driven local (`HeroStep`/`HeroStepsAction`/`HeroStepsProps`) na linguagem dos contratos modernos do Lab (001/003/010/016): `title`/`steps` obrigatórios; `description?`/`action?`/`supportingText?` opcionais com renderização condicional; **sem defaults internos escondendo conteúdo**; campo `desc` renomeado para `description` (naming do DS); consumers donos dos dados (`app/(site)/page.tsx` + `app/library/hero/page.tsx`); CTA preserva o destino da 026 (`/#contact`) como link real; Server Component e visual preservados; union restrita `default | outline`; convenção 001. Heading: steps subiram de h3 para h2 (elimina o skip do QLT-011; heading principal permanece h1 — é o único h1 da home).
+- **Contagem real no código: 24 → 23** (17 sections + 6 site). **QLT-005 permanece ISSUE_CONFIRMED / ABERTO** — falta migrar 23.
+- Gate: +2 testes Playwright dual-project (contrato via consumer + hierarquia de headings); suíte 42 testes / 84 execuções — 81 passed + 3 skipped; lint 0/0; build PASS (22 rotas).
 
 **Arquivo(s):** `components/site/**`, `components/sections/**`
 
@@ -351,16 +357,18 @@ Command exited with code 1
 
 ### QLT-011 — Ruídos de acessibilidade menor e de código
 
-**Status:** [!] ISSUE_CONFIRMED
+**Status:** [!] ISSUE_CONFIRMED — **parcialmente resolvido (Evolução 032, 2026-11-11):** evidência do `hero-steps` eliminada (heading hierarchy corrigida, teste novo via `getByRole`); itens restantes permanecem abertos (reaudição na 050). **NÃO VERIFIED.**
 **Prioridade:** P4
 **Categoria:** Acessibilidade / Código
 
 **Evidência:**
-- `hero-steps` pula heading (h1 → h3).
+- `hero-steps` pula heading (h1 → h3). ✅ **RESOLVIDO na Evolução 032 (2026-11-11)** — correção provada pelo código: steps subiram para h2 (elimina o skip); o palpite do roadmap (`h1 → h3` no heading principal) foi rejeitado porque a home compõe HeroSteps como primeira section e o h1 do componente é o único h1 da página (protegido por 2 testes existentes).
 - `app/library/layout.tsx` reimporta `../globals.css` (redundante, dedupado pelo App Router) e traz comentário de cabeçalho desatualizado (`// app/sections/layout.tsx`).
-- Comento de dev deixado em `app/(site)/page.tsx` (`{ // depois você adiciona outras sections ... }`).
-- `lang="pt-br"` — capitalização recomendada `pt-BR`.
-- `app/(site)/layout.tsx` usa `<div>` wrapper em vez de conteúdo direto do `<body>` (nit semântico).
+- Comento de dev deixado em `app/(site)/page.tsx` (`{ // depois você adiciona outras sections ... }`). **Ainda aberto.**
+- `lang="pt-br"` — capitalização recomendada `pt-BR`. ✅ **RESOLVIDO na Evolução 023 (2026-11-09)** — `app/layout.tsx` já possui `<html lang="pt-BR">`.
+- `app/(site)/layout.tsx` usa `<div>` wrapper em vez de conteúdo direto do `<body>` (nit semântico). **Ainda aberto.**
+
+**Evidências restantes (reaudição na 050):** 3 — `app/library/layout.tsx` (reimport + comentário), comentário em `app/(site)/page.tsx`, `<div>` wrapper em `app/(site)/layout.tsx`.
 
 **Arquivo(s):** `components/sections/hero/hero-steps.tsx`, `app/library/layout.tsx`, `app/(site)/page.tsx`, `app/layout.tsx`, `app/(site)/layout.tsx`
 

@@ -4,6 +4,17 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-11] — Evolução 032: Migrar HeroSteps para contrato + corrigir heading (VERIFIED — QLT-005 incremental, QLT-011 parcial)
+
+- **`HeroSteps`** (`components/sections/hero/hero-steps.tsx`) migrado para contrato data-driven local — visual e Server Component preservados: tipos locais `HeroStep`/`HeroStepsAction`/`HeroStepsProps`; `title`/`steps` obrigatórios; `description?`/`action?`/`supportingText?` opcionais com renderização condicional; sem defaults internos escondendo conteúdo; campo `desc` renomeado para `description` (naming do DS); linguagem idêntica aos contratos 001/003/010/016 (union restrita `default | outline`, convenção 001 para links).
+- **Heading corrigido (QLT-011, provado pelo código):** steps `h3 → h2` — elimina o skip h1 → h3. O palpite do roadmap (`h1 → h3` no heading principal) foi **rejeitado por evidência**: na home o HeroSteps é a primeira section e seu h1 é o único h1 da página (2 testes existentes o protegem). Heading principal permanece h1; visual preservado (classes explícitas nos cards).
+- **Consumers donos dos dados:** `app/(site)/page.tsx` (`heroStepsHomeData`) e `app/library/hero/page.tsx` (`heroStepsDemo`) — copy preservada; CTA mantém o destino da 026 (`/#contact`) como link real. As outras 3 variants de `/library/hero` intactas.
+- +2 testes Playwright dual-project (contrato provado via consumer: conteúdo vindo de dados, ordem dos steps, CTA link real, zero overflow; hierarquia de headings via `getByRole`). Suíte: 42 testes / 84 execuções — **81 passed + 3 skipped**. Lint **0/0**; build **PASS** (22 rotas); `git diff --check` limpo. Nenhuma dependência nova.
+- Contagens: sections 31, UI 11, total 51 (nenhum component novo); rotas 22. **QLT-005: 24 → 23 (17 sections + 6 site) — permanece ISSUE_CONFIRMED/ABERTO.** **QLT-011: parcial** — evidência do hero-steps resolvida; itens restantes (comentários stale, nit do wrapper; item `lang` já resolvido na 023); **NÃO VERIFIED** (reaudição na 050).
+- Documentação atualizada: `QUALITY-REVIEW.md` (QLT-005 incremental + QLT-011 parcial), `docs/COMPONENT-CATALOG.md` (entry HeroSteps), `docs/ROADMAP-1000-EVOLUTIONS.md` (032 VERIFIED, próxima 033), `memory-bank/CURRENT-STATE.md` (próxima execução: 033). `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção nova — contrato segue a linguagem existente).
+
+---
+
 ## [2026-11-11] — Evolução 031: Migrar HeroPrimary para contrato (VERIFIED — QLT-005 incremental)
 
 - **`HeroPrimary`** (`components/sections/hero/hero-primary.tsx`) migrado para contrato data-driven local — visual e Server Component preservados: tipos locais `HeroPrimaryAction`/`HeroPrimaryProps`; `title`/`actions` obrigatórios; `eyebrow?`/`description?`/`supportingText?`/`mediaTitle?`/`mediaBadge?` opcionais com renderização condicional; sem defaults internos escondendo conteúdo; nenhuma abstração global nova; linguagem idêntica aos contratos 001/003/010/016 (union restrita `default | outline`, convenção 001 para links).
