@@ -4,15 +4,15 @@
 
 ## Contagem total
 
-- **11** UI components
+- **12** UI components
 - **7** site components
 - **31** section components
 - **2** wrappers/shells
-- **Total: 51** componentes reutilizáveis relevantes
+- **Total: 52** componentes reutilizáveis relevantes
 
 ---
 
-## UI components — `components/ui/` (11)
+## UI components — `components/ui/` (12)
 
 | Nome | Path | Tipo | Status | Reutilização | Observações |
 |---|---|---|---|---|---|
@@ -27,6 +27,7 @@
 | Accordion | `components/ui/accordion.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 017.** Compound primitive acessível de disclosure; baseado em `@radix-ui/react-accordion` (^1.3.1, dependência aprovada); Client Component; API nativa do Radix preservada — `type="single"` (com `collapsible`) / `type="multiple"`, controlled (`value`/`onValueChange`) e uncontrolled (`defaultValue`), sem state wrapper próprio; exatamente 4 exports públicos `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent` (o `Header` do Radix é interno ao Trigger, sem export); keyboard semantics e ARIA (`aria-expanded`, associação Trigger/Content) fornecidos pelo Radix, sem handlers customizados; focus-visible coerente com Button; `ChevronDown` decorativo com `aria-hidden="true"` explícito, rotaciona 180° pelo `data-state` do Trigger — a rotação acontece também com reduced motion (instantânea), apenas a transição é `motion-safe`; Content sem animação, spacing neutro, `overflow-hidden`; `data-slot` (`accordion`/`accordion-item`/`accordion-trigger`/`accordion-content`); `className` via `cn()` nos quatro; visual neutro sem Card/shadow; primeiro consumer real: `FaqAccordion` (Evolução 018); validação runtime visual/keyboard concluída na Evolução 018 — single, collapsible, ARIA, keyboard, foco, Chevron e reduced motion confirmados |
 | Alert | `components/ui/alert.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 027.** Primitive estático de feedback; Server Component, zero dependências; CVA com variantes `default`/`destructive` (somente tokens existentes — nenhum token novo, nenhuma cor raw); `data-slot` (`alert`/`alert-title`/`alert-description`); `cn()`; `React.ComponentProps<"div">` nos três exports — aceita props HTML normais; NÃO impõe `role`/`aria-live` (semântica live é do consumer); destructive com styling contextual também na description; sem `forwardRef`, sem `asChild`, sem sizes, sem motion, sem ícone automático (suporta `svg` como child); exports `Alert`/`AlertTitle`/`AlertDescription` + `alertVariants` (1 entrada de catálogo); demo em `/library/alerts`; consumers planejados (ainda não executados): 028 — Contact forms e 042 — Contact page |
 | Tabs | `components/ui/tabs.tsx` | Primitive de UI (Radix) | Pronto | Alta | **Evolução 029.** Primitive de abas; baseado em `@radix-ui/react-tabs` (^1.2.1, única dependência nova — teclado/foco/ARIA nativos do Radix, consistência com Accordion/Avatar; a versão `^1.3.1` citada no plano não existe no registry); Client Component (boundary apenas no primitive); API pública preserva a API do Radix — controlled/uncontrolled via `value`/`defaultValue`/`onValueChange`, `orientation` preservada pelas props do Root; activation mode padrão do Radix preservado (automático — setas movem seleção e foco; Home/End; sem wrappers ou estado extra); `data-slot` (`tabs`/`tabs-list`/`tabs-trigger`/`tabs-content`); `cn()`; `React.ComponentProps` do primitive Radix correspondente em cada export; visual somente tokens (focus-visible `ring` do projeto, `bg-muted`, `data-[state=active]` com `bg-background`/`shadow-sm`, disabled `opacity-50`); transição CSS simples `motion-safe`; sem variants extras; exports `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` (1 entrada de catálogo); demo em `/library/tabs`; consumer planejado (ainda não executado): 034 — Gallery |
+| Breadcrumbs | `components/ui/breadcrumb.tsx` | Primitive de UI (nativo) | Pronto | Alta | **Evolução 033.** Navegação hierárquica semântica; Server Component; zero dependências novas (`@radix-ui/react-slot` e `lucide-react` já existentes); exatamente 6 exports `Breadcrumb`/`BreadcrumbList`/`BreadcrumbItem`/`BreadcrumbLink`/`BreadcrumbPage`/`BreadcrumbSeparator`; `nav` com `aria-label="breadcrumb"` default sobrescrevível; `ol`/`li` na semântica; `BreadcrumbPage` não-link com `aria-current="page"` default; separador decorativo `role="presentation"` + `aria-hidden="true"` com `ChevronRight` default (lucide-react), children sobrescrevível, sem prop `icon`; `asChild` via Slot somente em `BreadcrumbLink`; `data-slot` nos seis; `cn()`; `React.ComponentProps`; sem `forwardRef`, sem estado, sem contexto, sem motion, sem cor raw; demo em `/library/breadcrumbs`; consumer planejado (ainda não executado): 045 — Blog article layout |
 
 Contrato do Separator (resumo):
 
@@ -75,6 +76,24 @@ Contrato do Tabs (resumo — API nativa do Radix preservada):
 ```
 
 Exports: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Controlled/uncontrolled via `value`/`defaultValue`/`onValueChange` do Radix; `orientation` do Radix preservada; activation mode padrão (automático) sem wrappers.
+
+Contrato do Breadcrumbs (resumo):
+
+```tsx
+<Breadcrumb> {/* nav, aria-label="breadcrumb" default */}
+  <BreadcrumbList> {/* ol */}
+    <BreadcrumbItem> {/* li */}
+      <BreadcrumbLink href="...">...</BreadcrumbLink> {/* a; asChild via Slot */}
+    </BreadcrumbItem>
+    <BreadcrumbSeparator /> {/* li decorativo, aria-hidden, ChevronRight default */}
+    <BreadcrumbItem>
+      <BreadcrumbPage>...</BreadcrumbPage> {/* span não-link, aria-current="page" */}
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+`React.ComponentProps` do elemento nativo correspondente em cada export; `asChild` apenas em `BreadcrumbLink` (`@radix-ui/react-slot`, dependência existente); `data-slot` nos seis exports; separador decorativo com children sobrescrevíveis e sem prop `icon`; `BreadcrumbPage` não-link com `aria-current="page"` default. Server-compatible, sem estado, sem contexto, sem motion. Exports: `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`.
 
 ## Site components — `components/site/` (7)
 

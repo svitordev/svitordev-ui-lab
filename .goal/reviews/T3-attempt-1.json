@@ -1,14 +1,24 @@
 {
   "task_id": "T3",
-  "fingerprint": "8747e22f653f710c88fa35c2009c62de6391027069ffa20cd52987ba82ad184f",
+  "fingerprint": "3ce5559cfa9aff375c49ad94319e7fe74c2d42dfade232d909e5170e148cfcc8",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da T3 (EvoluÃ§Ã£o 032 â€” CorreÃ§Ã£o de heading + regressÃ£o de acessibilidade + gates) concluÃ­da com veredito PASS. Todos os 6 critÃ©rios de aceite foram verificados contra o estado real do repositÃ³rio: (1) aplicada exatamente a correÃ§Ã£o de heading aprovada na T1 exclusivamente em HeroSteps (components/sections/hero/hero-steps.tsx L70: tÃ­tulos dos steps alterados de <h3> para <h2>, mantendo o heading principal como <h1> na L42); (2) hierarquia semÃ¢ntica corrigida (h1 -> h2, eliminando o skip h1 -> h3 apontado no QLT-011), preservando integralmente o styling visual via classes explÃ­citas (className='text-sm font-semibold') e o conteÃºdo dos steps; (3) QLT-011 mantido como [!] ISSUE_CONFIRMED em QUALITY-REVIEW.md (L354/L458), sem ser marcado como VERIFIED pois a EvoluÃ§Ã£o 032 trata apenas a evidÃªncia do HeroSteps; (4) adicionado teste Playwright dual-project em tests/smoke.spec.ts (L1304-L1332: 'hero steps: hierarquia de headings sem skip (principal h1 + steps h2)') validando via getByRole('heading', { level: 1 }) e getByRole('heading', { level: 2 }) os nÃ­veis semÃ¢nticos corretos, conteÃºdo visÃ­vel dos cards, CTA como link real (/ #contact) operÃ¡vel por teclado, zero overflow horizontal em desktop (1280x720) e mobile (375x667), e ausÃªncia de regressÃ£o nas demais 3 variants de /library/hero; (5) confirmado que nenhum outro heading ou componente foi alterado; (6) gates verificados por evidÃªncia real de build (.next/BUILD_ID = fMLNgvjrmo8i9tcPL5KdH, .next/server/app/library/hero.html e .next/server/app/index.html renderizando <h2 class='text-sm font-semibold'> nos 3 steps), suÃ­te Playwright (test-results/.last-run.json com status 'passed' e failedTests: []) e higiene de cÃ³digo/diff.",
+  "summary": "T3 (Demo oficial /library/breadcrumbs e integração no library-shell) auditada e aprovada. O arquivo app/library/breadcrumbs/page.tsx foi criado como Server Component seguindo o padrão moderno (metadata, header, entries locais tipadas BreadcrumbsEntry, preview boxes e label Componente:) demonstrando o uso padrão e com asChild (next/link) do primitive Breadcrumb. O link para /library/breadcrumbs foi adicionado em components/sections/library-shell.tsx logo após Tabs, mantendo Landing como última entrada e sem reordenar outras categorias. Gates reportados nas evidências (lint 0/0, build PASS com 23 rotas incluindo /library/breadcrumbs, git diff --check limpo) são consistentes com a análise estática do código real.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Verificado em components/sections/hero/hero-steps.tsx (L42 h1 e L70 h2), tests/smoke.spec.ts (L1304-L1332), .next/server/app/library/hero.html, .next/server/app/index.html e test-results/.last-run.json (status: passed, failedTests: []).",
-      "name": "playwright-e2e-and-static-verification-T3-hero-steps-heading",
+      "evidence": "Relatado nas evidências incorporadas: npm run lint com 0 erros e 0 warnings; confirmado por inspeção estática de app/library/breadcrumbs/page.tsx e components/sections/library-shell.tsx.",
+      "name": "npm run lint",
+      "status": "passed"
+    },
+    {
+      "evidence": "Relatado nas evidências incorporadas: npm run build compilado com sucesso, TypeScript ok, 23 rotas incluindo /library/breadcrumbs; tipos e imports verificados contra components/ui/breadcrumb.tsx.",
+      "name": "npm run build",
+      "status": "passed"
+    },
+    {
+      "evidence": "Relatado nas evidências incorporadas como limpo; verificado nos arquivos lidos sem whitespace inválido ou marcadores de conflito.",
+      "name": "git diff --check",
       "status": "passed"
     }
   ],

@@ -1,83 +1,60 @@
-# T1 Audit — Evolução 032 (HeroSteps → contrato data-driven + heading QLT-011)
+# T1 — Auditoria Breadcrumbs (Goal 033)
 
-Baseline: branch main, HEAD = origin/main = 6a181fd (031 commitada/pushada pelo usuário), working tree limpo no início da task (exceto `.goal/` runtime, fora do fingerprint).
+Investigação apenas (nenhum código de produção alterado nesta task). Fontes: código atual (`components/ui/*`, `package.json`), roadmap (linhas 406, 418, 466).
 
-## Consumers reais de `HeroSteps` (grep `**/*.{ts,tsx,md}` — sem assumir quantidade)
+## Padrões reais verificados no código
 
-| Consumer | Contexto | Precisa mudar? |
-|---|---|---|
-| `app/(site)/page.tsx` (L73) | Home — HeroSteps é a **primeira section** da composição | Sim — passa a dono dos dados |
-| `app/library/hero/page.tsx` (L107) | Entry `hero-steps` (1 das 4 variants), renderiza `<HeroSteps />` | Sim — passa a dono dos dados |
-| `tests/smoke.spec.ts` L980 | Teste dos destinos da 026 (`Quero conversar sobre um projeto → /#contact` via `a[href]` + texto) | Não — consumer preserva os mesmos dados |
-| `docs/COMPONENT-CATALOG.md` L106 | Entry existente (classificada `Template`) | T4 (documentação) |
-| `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/*` | Referências textuais | T4 |
+- Primitives usam `React.ComponentProps<"elemento">`, `data-slot="<nome>"`, `cn()` de `@/lib/utils`, named exports, sem `forwardRef`, sem `"use client"` (Server Components puros).
+- `asChild` existe apenas onde há Slot: `button.tsx` usa `import { Slot } from "@radix-ui/react-slot"` (dependência `^1.2.4` já instalada — confirmada em `package.json`).
+- `lucide-react ^0.554.0` já instalado (confirmado em `package.json`).
+- Nomenclatura de arquivos em `components/ui/`: majoritariamente singular (accordion, alert, avatar, badge, button, card, input, separator, skeleton, textarea; exceção tabs).
 
-## `/library/hero` — quantidade real de variants: 4
+## Decisão de nome/path
 
-`hero-primary` (migrada 031), `hero-center-cta` (migrada 010), `hero-steps` (alvo da 032), `hero-media-showcase` (migrada 003/012). A 032 altera SOMENTE `hero-steps`; as outras 3 permanecem intactas.
+- **`components/ui/breadcrumb.tsx` (singular)** — segue a convenção majoritária real do repositório (10/11 singular) e o upstream shadcn/ui. O roadmap (linha 406) dizia `breadcrumbs.tsx`; a T5 atualizará o roadmap para o path real aprovado aqui.
 
-## Inventário de hardcode real em `hero-steps.tsx` (confirmado no código)
+## API final aprovada (exatamente 6 exports, nada extra)
 
-Conteúdo → migra para props:
-1. título (h1): `Transformando ideia em sistema web em poucos passos.`
-2. descrição: `Nada de processos gigantes e burocráticos...`
-3. steps: array de módulo com 3 itens `{title, desc}` — números embutidos nos títulos (`1.`, `2.`, `3.`) são conteúdo do consumer
-4. CTA: label `Quero conversar sobre um projeto` → `/#contact` (destino corrigido na 026), variant default, `size="lg"`
-5. supporting text (parágrafo rodapé da coluna steps): `Esses mesmos blocos você pode reaproveitar...`
+1. `Breadcrumb` — `<nav>` com `aria-label="breadcrumb"` default (sobrescrevível via props `React.ComponentProps<"nav">`); sem heading hardcoded.
+2. `BreadcrumbList` — `<ol>` com flex + wrap responsivo (`flex flex-wrap items-center gap-1.5` + `text-sm`), `data-slot="breadcrumb-list"`.
+3. `BreadcrumbItem` — `<li>` simples (`flex items-center gap-1.5`), `data-slot="breadcrumb-item"`, sem semântica extra.
+4. `BreadcrumbLink` — `<a>` por padrão; `asChild` via `@radix-ui/react-slot` (opção B — permitida: dependência existe e já é padrão no repo via Button); `data-slot="breadcrumb-link"`; estilo link discreto (`break-words` para hierarquia longa, sem sublinhado default agressivo).
+5. `BreadcrumbPage` — elemento não-link (`<span>`) com `aria-current="page"` default, `data-slot="breadcrumb-page"`, fonte de peso médio.
+6. `BreadcrumbSeparator` — decorativo: wrapper `<li aria-hidden="true">` (ou span com aria-hidden) com default `ChevronRight` de `lucide-react`; consumer pode sobrescrever via `children`; **sem** prop `icon`.
 
-Estrutura → permanece interna: grid `md:grid-cols-[...]`, cards, spacing, breakpoints, tokens, `size="lg"` do Button. Sem eyebrow no componente (não vira prop inventada).
+Sem `BreadcrumbEllipsis`, Dropdown, Menu, Icon, Provider — nenhum consumer real hoje (045 precisa apenas dos 6 acima).
 
-## Contratos modernos estudados (linguagem derivada, sem 3ª forma)
+## Semântica / a11y (contrato)
 
-- Design System (001): contrato mínimo local; `title` obrigatório; opcionais condicionais; `variant` restrito `default | outline`; sem props cosméticas; convenção 001 para links.
-- `CtaAction` (001), `HeroCenterAction` (010), `HeroAction` (003/012), `PricingAction` (016), `HeroPrimaryAction` (031): todos `{ label; href; variant?: "default" | "outline" }`, tipo local exportado.
-- Naming DS: `description` (não `desc`); `supportingText` para parágrafo complementar (padrão 001/010/016).
+- Estrutura: `nav[aria-label] > ol > li > (a | span[aria-current=page])`, separadores decorativos `aria-hidden="true"` fora da árvore de acessibilidade.
+- Server-compatible: sem estado, sem contexto, sem motion, sem hooks de cliente; sem `"use client"`.
+- Tokens: apenas tokens semânticos existentes via classes utilitárias padrão do padrão shadcn (`text-muted-foreground`, `hover:text-foreground`, `text-foreground`), sem cor raw.
 
-## Contrato proposto (API mínima derivada do componente real)
+## Dependências
 
-```ts
-export type HeroStep = { title: string; description: string };
-export type HeroStepsAction = { label: string; href: string; variant?: "default" | "outline" };
-export type HeroStepsProps = {
-  title: string;
-  description?: string;
-  steps: HeroStep[];
-  action?: HeroStepsAction;
-  supportingText?: string;
-};
-```
+- Nenhuma nova. Usa apenas: `@radix-ui/react-slot` (instalada), `lucide-react` (instalada), `cn()` local, `react`.
 
-- `title` e `steps` obrigatórios (essência do componente — "hero com steps"); `description`/`action`/`supportingText` opcionais com renderização condicional.
-- **Sem defaults** (proibido esconder hardcode); consumers donos dos dados (home + library, cada um com seus dados explícitos; sem arquivo global de fixtures).
-- Server Component preservado; nenhum estado/handler; nenhuma dependência nova.
+## Arquivos previstos
 
-## Heading / QLT-011 — conclusão provada pelo código (planejamento histórico NÃO confirmado)
+- T2: `components/ui/breadcrumb.tsx` (criação — nada de demo ainda).
+- T3: `app/library/breadcrumbs/page.tsx` (criação, padrão moderno) + `components/sections/library-shell.tsx` (adicionar link "Breadcrumbs" na navigation, Landing permanece última, sem reordenar).
+- T4: `tests/smoke.spec.ts` (novos testes: landmark nav com accessible name "breadcrumb", lista ordenada ol, links presentes, aria-current=page no item atual, separador aria-hidden, foco visível por teclado).
+- T5: `docs/COMPONENT-CATALOG.md`, `docs/ROADMAP-1000-EVOLUTIONS.md` (033 VERIFIED, path real `breadcrumb.tsx`, próxima 034), `memory-bank/CURRENT-STATE.md`, `memory-bank/CHANGELOG.md`.
 
-- Evidência exata do QLT-011: "`hero-steps` pula heading (h1 → h3)" — o skip é entre o heading principal do componente (h1) e os steps (h3).
-- O roadmap sugere `h1 → h3` no heading principal. **O código refuta:** na home, HeroSteps é a primeira section e seu h1 é o **único h1 da página**; os outros 6 blocos da home usam h2/h3. Dois testes existentes protegem isso: `home carrega com main, banner e um heading nivel 1` (linha 4 do smoke) e o teste de navegação mobile da 025 (assert h1 após navegar para `/`). Migrar o heading principal para h3 deixaria a home sem h1 e quebraria os dois testes.
-- **Correção correta: steps `h3 → h2`** (elimina o skip: h1 → h2, parent–filho correto; visual preservado — os cards já têm classes explícitas `text-sm font-semibold`, tag não afeta o tamanho). Heading principal permanece h1.
-- Na Library, o h1 do componente dentro da entry h2 é inversão — padrão pré-existente dos outros heroes já migrados (HeroCenterCta/HeroMediaShowcase, VERIFIED, fora do escopo da 032). A 032 corrige apenas o skip evidenciado.
-- QLT-011 possui outros itens (comentários stale em `library/layout.tsx` e `(site)/page.tsx`, `<div>` wrapper no `(site)/layout.tsx`; o item `lang` já foi resolvido na 023). **QLT-011 NÃO fecha na 032** — atualização parcial e factual na T4.
+## Testes necessários (T4)
 
-## Arquivos exatos
-
-- **T2 (contrato):** `components/sections/hero/hero-steps.tsx`, `app/(site)/page.tsx`, `app/library/hero/page.tsx`, `tests/smoke.spec.ts` (+1 teste do contrato via consumer, dual-project). Heading NÃO tocado na T2 (isolado na T3).
-- **T3 (heading):** `components/sections/hero/hero-steps.tsx` (steps h3→h2), `tests/smoke.spec.ts` (+1 teste de hierarquia via `getByRole heading level`).
-- **T4 (docs):** `QUALITY-REVIEW.md`, `docs/COMPONENT-CATALOG.md`, `docs/ROADMAP-1000-EVOLUTIONS.md`, `memory-bank/CURRENT-STATE.md`, `memory-bank/CHANGELOG.md`. DESIGN-SYSTEM e DECISIONS intocados (nenhuma convenção nova).
-
-## Testes necessários
-
-- T2: +1 teste dual-project provando o contrato pelo consumer na Library: título/descrição/steps (ordem)/CTA href/supporting text vindos dos dados da página; zero overflow nos dois viewports.
-- T3: +1 teste provando a hierarquia corrigida (heading principal nível 1 + steps nível 2 via `getByRole`, conteúdo visível, CTA link real, zero overflow); home mantém h1 (testes existentes cobrem).
-- Testes existentes impactados: nenhum além dos acima (verificado: asserções de heading em outras rotas não tocam HeroSteps; teste da 026 usa `a[href]` + texto, preservado pelo consumer).
+- `getByRole('navigation', { name: 'breadcrumb' })` no demo.
+- Assert `ol` com `li` filhos na ordem correta; link do nível raiz presente.
+- Item atual: `aria-current="page"` presente e não é link.
+- Separadores: `aria-hidden="true"` (decorativos, fora da árvore de acessibilidade).
+- Foco: teclado alcança o link com foco visível (padrão focus-visible global já existente).
+- Armadilhas conhecidas (memória): `getByText` é substring case-insensitive → usar `{ exact: true }` para textos curtos; Radix/Playwright sem `require` em run_playwright_code.
 
 ## Riscos
 
-- Nível de heading é fixo num componente reutilizável usado em 2 contextos com hierarquias diferentes — decisão documentada: corrigir o skip (evidência QLT-011) sem quebrar a home; inversão na Library é o padrão dos heroes já migrados.
-- Renomear `desc` → `description` no tipo: breaking apenas interno (consumers novos); sem consumidores externos ao repo.
+- Baixo. Componente puro, sem estado. Risco único: asserts frágeis por substring (mitigado com `{ exact: true }`).
+- Roadmap será corrigido na T5 para o path real (`breadcrumb.tsx`), mantendo consistência catálogo↔código.
 
-## Impacto esperado
+## Consumer 045 (confirmada, não implementar agora)
 
-- **QLT-005: 24 → 23** (HeroSteps migrado), permanece ISSUE_CONFIRMED/ABERTO.
-- **QLT-011: parcial** — evidência do hero-steps resolvida; itens restantes permanecem; NÃO marcar VERIFIED.
-- Contagens: 31/11/51 inalteradas; rotas 22; nenhuma dependência nova.
+- Roadmap linha 418: 045 (Blog article layout) depende de 033; linha 466: Breadcrumbs 033 → Blog article layout 045. A API acima atende 045 sem exports extras.

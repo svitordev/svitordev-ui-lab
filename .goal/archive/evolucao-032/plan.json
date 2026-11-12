@@ -1,0 +1,60 @@
+{
+  "goal": "Evolucao 032 - Migrar HeroSteps para contrato data-driven + corrigir heading (QLT-005 incremental 24->23; QLT-011 parcial); consumers donos dos dados; visual/responsividade/Server Component preservados; demais variants de /library/hero intactas",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria HeroSteps + contrato + evidencia (investigacao; sem alterar codigo de producao)",
+      "acceptance": [
+        "ler hero-steps.tsx e pesquisar TODOS os consumers reais sem assumir quantidade, registrando tabela consumer/rota-conteudo/precisa-mudar na evidencia",
+        "confirmar quantidade real de variants em /library/hero; a 032 altera somente HeroSteps",
+        "inventario de hardcode real separando conteudo configuravel de estrutura interna (classes/grid/spacing/breakpoints/layout/tokens nunca viram props)",
+        "contrato derivado dos contratos modernos reais (HeroPrimary pos-031, HeroCenterCta, HeroMediaShowcase, CtaSplitActions) sem criar nova linguagem de actions",
+        "heading QLT-011 provado pelo codigo/estrutura real (elemento, nivel atual, nivel esperado, consumers, porque semanticamente correto) sem aplicacao cega de h1->h3",
+        "contrato proposto sem defaults que escondam hardcode; consumer dono dos dados",
+        "registrar em .goal/evidence: consumers, hardcodes, API proposta, heading, arquivos exatos T2/T3, testes necessarios, riscos, impacto QLT-005 e QLT-011",
+        "nenhuma alteracao em codigo de producao durante T1"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Migracao data-driven de HeroSteps + consumers + testes",
+      "acceptance": [
+        "implementar exatamente a API aprovada na T1 somente em HeroSteps",
+        "conteudo configuravel sai do componente e vai para TODOS e SOMENTE os consumers reais identificados na T1; nenhum fallback interno com conteudo antigo",
+        "CTA preserva o destino corrigido na 026 como link semantico real",
+        "steps tipados, data-driven, ordem e conteudo demonstrado preservados, sem JSX desnecessario",
+        "visual, markup estrutural, spacing, typography, responsividade e dark-only DEC-011 preservados; sem redesign",
+        "Server Component preservado; sem use client; nenhuma dependencia nova",
+        "heading NAO corrigido na T2 (isolado para T3), salvo inseparabilidade tecnica documentada",
+        "cobertura minima adicionada/ajustada provando o contrato pelo consumer real (title, description, steps, CTA, href, ordem, zero overflow, desktop/mobile quando aplicavel) sem duplicar testes existentes sem valor",
+        "lint/build/e2e/diff-check verdes"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Correcao de heading + regressao de acessibilidade + gates",
+      "acceptance": [
+        "aplicar exatamente a correcao de heading aprovada na T1, apenas em HeroSteps",
+        "hierarquia melhorada sem novo heading skip; styling preservado via classes; conteudo inalterado",
+        "QLT-011 NAO marcado como VERIFIED (a 032 resolve apenas a evidencia do HeroSteps)",
+        "teste de acessibilidade minimo via getByRole heading level provando nivel correto, coerencia semantica da variant, conteudo visivel, teclado/link CTA preservado, zero overflow, nenhuma regressao nas demais Hero variants",
+        "nenhum outro heading alterado",
+        "lint/build/e2e/diff-check verdes"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Documentacao + atualizacao incremental dos findings",
+      "acceptance": [
+        "QUALITY-REVIEW QLT-005 atualizado incrementalmente com contagem real confirmada no codigo (esperado 24 para 23) e permanece aberto",
+        "QUALITY-REVIEW QLT-011 atualizado factual e parcialmente (HeroSteps heading corrigido na 032); nao marcar VERIFIED se outros itens continuarem; recalcular evidencias restantes",
+        "COMPONENT-CATALOG: atualizar a entry existente de HeroSteps no formato real, sem nova entry; contagens 31/11/51",
+        "ROADMAP: 032 VERIFIED somente apos T1-T4 aprovadas; proxima 033 nao iniciada",
+        "CURRENT-STATE com 001-032, QLT-005 real, QLT-011 parcial, component count, rotas, Playwright e proxima 033",
+        "CHANGELOG somente estado final (sem failures, correction prompts ou chamadas do Inspector)",
+        "DESIGN-SYSTEM e DECISIONS inalterados se nenhuma convencao nova surgiu",
+        "diff-check limpo"
+      ]
+    }
+  ]
+}

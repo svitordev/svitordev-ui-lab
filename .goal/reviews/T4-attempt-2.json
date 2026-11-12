@@ -1,14 +1,29 @@
 {
   "task_id": "T4",
-  "fingerprint": "9c4c283c2081916c80b926b1b0a98d0b2ec675f37496c1a55686a4299e8af251",
+  "fingerprint": "4ccb219cd88ddceb2ebcbe3757cb1c6b231e0dca6412dc0232f19ac7a915ecb7",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da T4 (EvoluÃ§Ã£o 032 â€” DocumentaÃ§Ã£o + atualizaÃ§Ã£o incremental dos findings) concluÃ­da com veredito PASS. Todos os 8 critÃ©rios de aceite foram verificados contra o estado real do repositÃ³rio: (1) QUALITY-REVIEW.md atualizado incrementalmente no QLT-005 (L218, L226-L230, L464) com a migraÃ§Ã£o de HeroSteps e contagem real confirmada no cÃ³digo de 24 para 23 componentes sem props (17 sections + 6 site), mantendo o status [!] ISSUE_CONFIRMED / aberto; (2) QUALITY-REVIEW.md atualizado factual e parcialmente no QLT-011 (L360, L365, L371, L466) registrando a resoluÃ§Ã£o do skip de heading em hero-steps (steps h3 -> h2, mantendo h1 principal) sem marcar o finding como VERIFIED, recalculando as 3 evidÃªncias restantes para reauditoria na 050; (3) docs/COMPONENT-CATALOG.md atualizado na entry existente de HeroSteps (L106) para status Pronto e formato data-driven real (HeroStep, HeroStepsAction, HeroStepsProps, consumers home e /library/hero, hierarquia h1 + h2), sem criar nova entry e preservando as contagens exatas (31 sections / 11 UI / 7 site / 2 wrappers = 51 total); (4) docs/ROADMAP-1000-EVOLUTIONS.md atualizado com a EvoluÃ§Ã£o 032 marcada como VERIFIED (L389, L405, L475, L477, L485-L487) apÃ³s T1-T3 aprovadas e T4 concluÃ­da, mantendo a EvoluÃ§Ã£o 033 (Breadcrumbs) nÃ£o iniciada; (5) memory-bank/CURRENT-STATE.md atualizado com o histÃ³rico 001-032 (L44), QLT-005 real (23), QLT-011 parcial (nÃ£o VERIFIED), contagens 31/11/51, 22 rotas, Playwright (42 testes / 84 execuÃ§Ãµes â€” 81 passed + 3 skipped) e prÃ³xima execuÃ§Ã£o 033; (6) memory-bank/CHANGELOG.md atualizado no topo (L7-L15) contendo exclusivamente o estado final consolidado da EvoluÃ§Ã£o 032, sem registros de falhas intermediÃ¡rias, correction prompts ou chamadas do Inspector; (7) docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md preservados inalterados, pois nenhuma convenÃ§Ã£o ou decisÃ£o arquitetural nova surgiu; (8) higiene de diff e formataÃ§Ã£o verificadas nos arquivos alterados, alÃ©m de build (.next/BUILD_ID) e Ãºltima execuÃ§Ã£o Playwright (test-results/.last-run.json com status 'passed' e failedTests: []).",
+  "summary": "A tarefa T4 (testes Playwright para breadcrumbs e execução dos gates completos) foi auditada no workspace real e nas evidências incorporadas, atendendo integralmente a todos os critérios de aceite: (1) 4 novos testes em tests/smoke.spec.ts (linhas 1334-1401) validam landmark nav com accessible name 'breadcrumb', lista ordenada (<ol>/listitem sem contar separadores decorativos), links ('Library' e 'Blog'), página atual com aria-current='page' (sem role='link'), separadores decorativos com aria-hidden='true', navegação por teclado com Tab entre links focáveis e pseudo-classe :focus-visible ativa; (2) suíte Playwright completa verde nos dois projetos (desktop 1280x720 e mobile 375x667) com 89 passed, 3 skipped históricos e 0 failed (E2E_EXIT=0), incluindo verificação de zero overflow horizontal em /library/breadcrumbs; (3) gates verificados com npm run lint 0 erros/0 warnings (LINT_EXIT=0), npm run build PASS com 23/23 páginas estáticas geradas incluindo /library/breadcrumbs (BUILD_EXIT=0) e git diff --check limpo (DIFFCHECK_EXIT=0).",
   "findings": [],
   "tests": [
     {
-      "evidence": "Leitura direta de QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md, docs/DESIGN-SYSTEM.md, memory-bank/DECISIONS.md, components/sections/hero/hero-steps.tsx, app/(site)/page.tsx, app/library/hero/page.tsx, tests/smoke.spec.ts, .next/BUILD_ID e test-results/.last-run.json confirma todos os 8 critÃ©rios de aceite da T4.",
-      "name": "documentation-and-findings-audit-T4-evolution-032",
+      "evidence": "tests/smoke.spec.ts (linhas 1334-1401) + output bruto de npm run test:e2e: testes #85-#92 passando em [mobile] (375x667) e [desktop] (1280x720); suíte completa com 89 passed, 3 skipped, 0 failed (E2E_EXIT=0).",
+      "name": "npm run test:e2e (Playwright full suite + breadcrumbs specs)",
+      "status": "passed"
+    },
+    {
+      "evidence": "Output incorporado de npm run lint: eslint concluído sem erros e sem warnings (LINT_EXIT=0).",
+      "name": "npm run lint",
+      "status": "passed"
+    },
+    {
+      "evidence": "Output incorporado de npm run build: TypeScript compilado com sucesso e 23/23 páginas geradas incluindo ○ /library/breadcrumbs (BUILD_EXIT=0).",
+      "name": "npm run build",
+      "status": "passed"
+    },
+    {
+      "evidence": "Output incorporado de git diff --check: sem erros de whitespace ou conflito (DIFFCHECK_EXIT=0).",
+      "name": "git diff --check",
       "status": "passed"
     }
   ],

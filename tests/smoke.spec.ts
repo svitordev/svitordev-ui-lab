@@ -1330,3 +1330,72 @@ test('hero steps: hierarquia de headings sem skip (principal h1 + steps h2)', as
     ),
   ).toBe(true);
 });
+
+test('breadcrumbs: landmark nav com accessible name e lista ordenada', async ({ page }) => {
+  await page.goto('/library/breadcrumbs');
+
+  // Landmark de navegacao com nome acessivel (padrao breadcrumb).
+  const navs = page.getByRole('navigation', { name: 'breadcrumb' });
+  await expect(navs).toHaveCount(2);
+
+  // Listas ordenadas na arvore de acessibilidade (separadores decorativos nao contam).
+  const firstList = navs.first().locator('ol');
+  await expect(firstList).toBeVisible();
+  await expect(firstList.getByRole('listitem')).toHaveCount(2);
+
+  const secondList = navs.nth(1).locator('ol');
+  await expect(secondList).toBeVisible();
+  await expect(secondList.getByRole('listitem')).toHaveCount(3);
+
+  // Ordem dos niveis no demo de 3 itens (asChild + next/link).
+  const items = secondList.getByRole('listitem');
+  await expect(items.nth(0)).toContainText('Library');
+  await expect(items.nth(1)).toContainText('Blog');
+  await expect(items.nth(2)).toContainText('Breadcrumbs');
+});
+
+test('breadcrumbs: links, aria-current=page e separador decorativo', async ({ page }) => {
+  await page.goto('/library/breadcrumbs');
+
+  // Links raiz presentes (exact evita substring — armadilha conhecida do getByText/getByRole).
+  await expect(page.getByRole('link', { name: 'Library', exact: true })).toHaveCount(2);
+  await expect(page.getByRole('link', { name: 'Blog', exact: true })).toHaveCount(1);
+
+  // Pagina atual: span com aria-current=page (nao e link).
+  const current = page.locator('[data-slot="breadcrumb-page"]');
+  await expect(current).toHaveCount(2);
+  await expect(current.first()).toHaveAttribute('aria-current', 'page');
+  await expect(current.first()).not.toHaveAttribute('role', 'link');
+
+  // Separadores decorativos: aria-hidden=true, fora da arvore de acessibilidade.
+  const separators = page.locator('[data-slot="breadcrumb-separator"]');
+  await expect(separators).toHaveCount(3);
+  for (let i = 0; i < 3; i++) {
+    await expect(separators.nth(i)).toHaveAttribute('aria-hidden', 'true');
+  }
+});
+
+test('breadcrumbs: teclado percorre os links com foco visivel', async ({ page }) => {
+  await page.goto('/library/breadcrumbs');
+
+  const firstLink = page.getByRole('link', { name: 'Library', exact: true }).first();
+  await firstLink.focus();
+  await expect(firstLink).toBeFocused();
+
+  // Tab avanca para o proximo link focavel (pagina atual nao e link e separador esta fora da arvore).
+  await page.keyboard.press('Tab');
+  const nextLink = page.getByRole('link', { name: 'Library', exact: true }).nth(1);
+  await expect(nextLink).toBeFocused();
+  expect(await page.locator('*:focus-visible').count()).toBeGreaterThan(0);
+});
+
+test('breadcrumbs: demo sem overflow horizontal nos dois viewports', async ({ page }) => {
+  await page.goto('/library/breadcrumbs');
+
+  await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

@@ -22,6 +22,7 @@ const sectionLinks = [
   { href: "/library/faq", label: "FAQ" },
   { href: "/library/alerts", label: "Alerts" },
   { href: "/library/tabs", label: "Tabs" },
+  { href: "/library/breadcrumbs", label: "Breadcrumbs" },
   { href: "/library/landing", label: "Landing" },
 ];
 

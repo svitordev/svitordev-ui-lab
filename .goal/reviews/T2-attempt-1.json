@@ -1,14 +1,19 @@
 {
   "task_id": "T2",
-  "fingerprint": "57cc04e9284af1fbb7cd0e6647530c15ea6ade8ac3631e409137f0d072df81c4",
+  "fingerprint": "d34773e7afeb534311fbc4879473b8c75699db22218526d95491d76ad276e36d",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da T2 (EvoluÃ§Ã£o 032 â€” MigraÃ§Ã£o data-driven de HeroSteps + consumers + testes) concluÃ­da com veredito PASS. Todos os 9 critÃ©rios de aceite foram verificados diretamente no cÃ³digo real do repositÃ³rio: (1) HeroSteps (components/sections/hero/hero-steps.tsx) implementa exatamente o contrato aprovado na T1 (HeroStep, HeroStepsAction, HeroStepsProps), mantendo as demais 3 variants de /library/hero intactas; (2) todo o conteÃºdo configurÃ¡vel saiu do componente sem fallbacks internos e foi movido exclusivamente para os 2 consumers reais identificados na T1 (app/(site)/page.tsx com heroStepsHomeData e app/library/hero/page.tsx com heroStepsDemo); (3) o CTA preserva o destino corrigido na EvoluÃ§Ã£o 026 (/#contact) como link semÃ¢ntico real via Button asChild + next/link (convenÃ§Ã£o 001); (4) steps tipados e data-driven com ordem e textos preservados; (5) visual, markup estrutural, spacing, typography, responsividade e polÃ­tica dark-only (DEC-011) preservados sem redesign; (6) Server Component preservado (sem 'use client') e nenhuma dependÃªncia nova em package.json; (7) hierarquia de headings mantida intacta na T2 (h1 principal e h3 nos steps, isolada para a T3); (8) adicionado 1 teste Playwright dual-project em tests/smoke.spec.ts (L1257-L1302) provando o contrato pelo consumer real (title, description, steps e sua ordem vertical, descriÃ§Ãµes dos steps, CTA link e href /#contact, supportingText e zero overflow horizontal em desktop e mobile); (9) evidÃªncias de build (.next/BUILD_ID), testes (test-results/.last-run.json com status passed e 0 falhas), lint/TypeScript e higiene de diff verificadas.",
+  "summary": "Implementação do primitive Breadcrumb em components/ui/breadcrumb.tsx auditada no workspace real e aprovada (PASS). O arquivo segue estritamente o contrato aprovado na T1 (.goal/evidence/T1-audit.md): exatamente os 6 named exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem exports extras; uso de React.ComponentProps, data-slot e cn() em todos os subcomponentes aplicáveis; sem forwardRef e sem 'use client' (Server Component puro, sem estado, contexto ou motion); semântica e acessibilidade corretas (nav com aria-label='breadcrumb' default sobrescrevível, ol, li, BreadcrumbLink com suporte a asChild via @radix-ui/react-slot já instalado, BreadcrumbPage como span com aria-current='page', BreadcrumbSeparator como li decorativo com role='presentation', aria-hidden='true' e ChevronRight de lucide-react sobrescrevível via children); uso exclusivo de tokens semânticos (text-muted-foreground, text-foreground) sem cores raw e sem novas dependências em package.json. Gates (npm run lint 0/0, npm run build PASS com 22 rotas, git diff --check limpo) registrados em .goal/evidence/T2-gates.md. Nenhuma página de demo antecipada nesta etapa.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Verificado em components/sections/hero/hero-steps.tsx, app/(site)/page.tsx, app/library/hero/page.tsx e tests/smoke.spec.ts (L1257-L1302), alÃ©m de test-results/.last-run.json (status: passed, failedTests: []) e .next/BUILD_ID.",
-      "name": "playwright-e2e-and-static-verification-T2-hero-steps",
+      "evidence": "Leitura direta de components/ui/breadcrumb.tsx (linhas 1-88), .goal/evidence/T1-audit.md (linhas 1-60) e package.json (linhas 1-37), confirmando contrato, tipagem TypeScript, semântica ARIA e ausência de dependências novas ou rotas antecipadas.",
+      "name": "static-code-and-contract-verification",
+      "status": "passed"
+    },
+    {
+      "evidence": "Evidência incorporada e registrada em .goal/evidence/T2-gates.md: npm run lint (0 erros, 0 warnings), npm run build (PASS, 22 rotas) e git diff --check (limpo).",
+      "name": "t2-quality-gates",
       "status": "passed"
     }
   ],

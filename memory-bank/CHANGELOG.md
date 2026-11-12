@@ -4,6 +4,19 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-12] — Evolução 033: Breadcrumbs (primitive) (VERIFIED)
+
+- **`components/ui/breadcrumb.tsx`** (singular — convenção majoritária de nomes em `components/ui/`; o roadmap citava `breadcrumbs.tsx` e foi corrigido) — 1 entrada de catálogo com exatamente 6 exports `Breadcrumb`/`BreadcrumbList`/`BreadcrumbItem`/`BreadcrumbLink`/`BreadcrumbPage`/`BreadcrumbSeparator`; sem exports extras (sem Ellipsis/Dropdown/Menu/Icon/Provider — nenhum consumer real).
+- **Semântica/a11y:** `nav` com `aria-label="breadcrumb"` default sobrescrevível; `ol`/`li`; `BreadcrumbPage` não-link com `aria-current="page"` default; separador decorativo `role="presentation"` + `aria-hidden="true"` com `ChevronRight` default (lucide-react), children sobrescrevíveis, sem prop `icon`; `asChild` via Slot somente em `BreadcrumbLink` (`@radix-ui/react-slot`, dependência existente — padrão do repo via Button).
+- **Padrões:** Server Component; `data-slot` nos seis exports; `cn()`; `React.ComponentProps`; sem `forwardRef`, sem estado, sem contexto, sem motion, sem cor raw (somente tokens); **zero dependências novas**.
+- **Demo:** nova rota `/library/breadcrumbs` no padrão moderno (metadata, page header, entries tipadas, preview boxes, label Componente) — 2 entries: caminho simples (`BreadcrumbLink` `<a>`) e 3 níveis com `asChild` + `next/link`; link "Breadcrumbs" adicionado na Library Shell antes de Landing (Landing permanece a última; nada reordenado).
+- +4 testes Playwright dual-project (landmark nav com accessible name + lista ordenada pela árvore de acessibilidade; links + `aria-current="page"` + separadores `aria-hidden`; teclado com foco visível; zero overflow). Suíte: 46 testes / 92 execuções — **89 passed + 3 skipped**. Lint **0/0**; build **PASS** (23 rotas, `/library/breadcrumbs` presente); `git diff --check` limpo.
+- Contagens: UI 11 → **12**, total 51 → **52**; rotas 22 → **23**. Consumer planejado (045 — Blog article layout) não antecipado. Nenhum finding de QUALITY-REVIEW alterado.
+- **Processo (Goal Orchestrator):** T1–T5 aprovadas pelo Inspector; T4 teve um BLOCKED procedural na 1ª revisão (evidência resumida sem diff/outputs brutos), retomado por autorização explícita do operador com evidência verificável completa — nenhum código alterado na retomada; nenhuma self-approval.
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada Breadcrumbs + contrato), `docs/ROADMAP-1000-EVOLUTIONS.md` (033 VERIFIED, próxima 034, path real), `memory-bank/CURRENT-STATE.md` (próxima execução: 034). `docs/DESIGN-SYSTEM.md`, `memory-bank/DECISIONS.md` e `QUALITY-REVIEW.md` inalterados (nenhuma convenção nova, nenhum finding alterado).
+
+---
+
 ## [2026-11-11] — Evolução 032: Migrar HeroSteps para contrato + corrigir heading (VERIFIED — QLT-005 incremental, QLT-011 parcial)
 
 - **`HeroSteps`** (`components/sections/hero/hero-steps.tsx`) migrado para contrato data-driven local — visual e Server Component preservados: tipos locais `HeroStep`/`HeroStepsAction`/`HeroStepsProps`; `title`/`steps` obrigatórios; `description?`/`action?`/`supportingText?` opcionais com renderização condicional; sem defaults internos escondendo conteúdo; campo `desc` renomeado para `description` (naming do DS); linguagem idêntica aos contratos 001/003/010/016 (union restrita `default | outline`, convenção 001 para links).

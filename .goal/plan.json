@@ -1,59 +1,50 @@
 {
-  "goal": "Evolucao 032 - Migrar HeroSteps para contrato data-driven + corrigir heading (QLT-005 incremental 24->23; QLT-011 parcial); consumers donos dos dados; visual/responsividade/Server Component preservados; demais variants de /library/hero intactas",
+  "goal": "Evolucao 033 - Breadcrumbs (primitive): novo UI primitive semantico (nav aria-label, ol, li, aria-current=page, separator decorativo aria-hidden), demo oficial /library/breadcrumbs, cobertura Playwright e documentacao. Consumer real planejado: 045 (nao implementar agora). Nenhuma nova dependencia. Server-compatible.",
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria HeroSteps + contrato + evidencia (investigacao; sem alterar codigo de producao)",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): padroes reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, asChild/Slot, named exports, Server/Client), dependencias em package.json (@radix-ui/react-slot, lucide-react), confirmacao do consumer 045 no roadmap, API final minima e contrato de semântica/a11y. Sem Ellipsis/Dropdown/Menu/Icon/Provider sem consumer.",
       "acceptance": [
-        "ler hero-steps.tsx e pesquisar TODOS os consumers reais sem assumir quantidade, registrando tabela consumer/rota-conteudo/precisa-mudar na evidencia",
-        "confirmar quantidade real de variants em /library/hero; a 032 altera somente HeroSteps",
-        "inventario de hardcode real separando conteudo configuravel de estrutura interna (classes/grid/spacing/breakpoints/layout/tokens nunca viram props)",
-        "contrato derivado dos contratos modernos reais (HeroPrimary pos-031, HeroCenterCta, HeroMediaShowcase, CtaSplitActions) sem criar nova linguagem de actions",
-        "heading QLT-011 provado pelo codigo/estrutura real (elemento, nivel atual, nivel esperado, consumers, porque semanticamente correto) sem aplicacao cega de h1->h3",
-        "contrato proposto sem defaults que escondam hardcode; consumer dono dos dados",
-        "registrar em .goal/evidence: consumers, hardcodes, API proposta, heading, arquivos exatos T2/T3, testes necessarios, riscos, impacto QLT-005 e QLT-011",
-        "nenhuma alteracao em codigo de producao durante T1"
+        "Evidencia em .goal/evidence/T1-audit.md com: API final, semântica, asChild sim/nao, dependencias, Server/Client, arquivos previstos, testes necessarios, riscos e consumer 045",
+        "API minima sem exports extras alem de Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator",
+        "Nenhuma nova dependencia e nenhuma alteracao de codigo de producao nesta task"
       ]
     },
     {
       "id": "T2",
-      "description": "Migracao data-driven de HeroSteps + consumers + testes",
+      "description": "Implementar o primitive (components/ui/breadcrumb.tsx ou nome aprovado na T1) exatamente conforme API aprovada, sem demo ainda.",
       "acceptance": [
-        "implementar exatamente a API aprovada na T1 somente em HeroSteps",
-        "conteudo configuravel sai do componente e vai para TODOS e SOMENTE os consumers reais identificados na T1; nenhum fallback interno com conteudo antigo",
-        "CTA preserva o destino corrigido na 026 como link semantico real",
-        "steps tipados, data-driven, ordem e conteudo demonstrado preservados, sem JSX desnecessario",
-        "visual, markup estrutural, spacing, typography, responsividade e dark-only DEC-011 preservados; sem redesign",
-        "Server Component preservado; sem use client; nenhuma dependencia nova",
-        "heading NAO corrigido na T2 (isolado para T3), salvo inseparabilidade tecnica documentada",
-        "cobertura minima adicionada/ajustada provando o contrato pelo consumer real (title, description, steps, CTA, href, ordem, zero overflow, desktop/mobile quando aplicavel) sem duplicar testes existentes sem valor",
-        "lint/build/e2e/diff-check verdes"
+        "Somente os exports aprovados na T1, sem exports extras; data-slot, cn(), React.ComponentProps; sem forwardRef se o padrao atual nao usa",
+        "Semantica exata do contrato T1: nav com aria-label, ol, li, aria-current=page no BreadcrumbPage, separator decorativo aria-hidden; asChild via @radix-ui/react-slot apenas se aprovado na T1",
+        "Server-compatible sem 'use client'; sem estado, sem contexto, sem motion, sem dependencia nova, sem cor raw",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
       ]
     },
     {
       "id": "T3",
-      "description": "Correcao de heading + regressao de acessibilidade + gates",
+      "description": "Criar demo oficial /library/breadcrumbs no padrao moderno e integrar a navigation do library-shell (Breadcrumbs; Landing permanece a ultima showcase/composition). Nao reorganizar outras categorias.",
       "acceptance": [
-        "aplicar exatamente a correcao de heading aprovada na T1, apenas em HeroSteps",
-        "hierarquia melhorada sem novo heading skip; styling preservado via classes; conteudo inalterado",
-        "QLT-011 NAO marcado como VERIFIED (a 032 resolve apenas a evidencia do HeroSteps)",
-        "teste de acessibilidade minimo via getByRole heading level provando nivel correto, coerencia semantica da variant, conteudo visivel, teclado/link CTA preservado, zero overflow, nenhuma regressao nas demais Hero variants",
-        "nenhum outro heading alterado",
-        "lint/build/e2e/diff-check verdes"
+        "app/library/breadcrumbs/page.tsx no padrao moderno (metadata, page header, entries locais tipadas, preview boxes, label Componente)",
+        "Link Breadcrumbs adicionado na navigation do library-shell sem reordenar outras categorias",
+        "Gates: npm run lint 0/0, npm run build PASS com a nova rota, git diff --check limpo"
       ]
     },
     {
       "id": "T4",
-      "description": "Documentacao + atualizacao incremental dos findings",
+      "description": "Adicionar testes Playwright para breadcrumbs (a11y, semantica, teclado, focus-visible) e rodar os gates completos.",
       "acceptance": [
-        "QUALITY-REVIEW QLT-005 atualizado incrementalmente com contagem real confirmada no codigo (esperado 24 para 23) e permanece aberto",
-        "QUALITY-REVIEW QLT-011 atualizado factual e parcialmente (HeroSteps heading corrigido na 032); nao marcar VERIFIED se outros itens continuarem; recalcular evidencias restantes",
-        "COMPONENT-CATALOG: atualizar a entry existente de HeroSteps no formato real, sem nova entry; contagens 31/11/51",
-        "ROADMAP: 032 VERIFIED somente apos T1-T4 aprovadas; proxima 033 nao iniciada",
-        "CURRENT-STATE com 001-032, QLT-005 real, QLT-011 parcial, component count, rotas, Playwright e proxima 033",
-        "CHANGELOG somente estado final (sem failures, correction prompts ou chamadas do Inspector)",
-        "DESIGN-SYSTEM e DECISIONS inalterados se nenhuma convencao nova surgiu",
-        "diff-check limpo"
+        "Testes cobrem nav landmark com accessible name, lista ordenada, links, aria-current=page, separator decorativo e foco visivel via teclado no demo",
+        "Suíte Playwright completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero overflow nas rotas afetadas",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG.md (entrada Breadcrumbs), ROADMAP-1000-EVOLUTIONS.md (033 VERIFIED, proxima 034), CURRENT-STATE.md, CHANGELOG.md e QUALITY-REVIEW.md se aplicavel.",
+      "acceptance": [
+        "COMPONENT-CATALOG.md com entrada Breadcrumbs na secao de UI primitives",
+        "ROADMAP marca 033 VERIFIED e proxima execucao 034; CURRENT-STATE e CHANGELOG refletem contagens reais (UI 12, total 52, rotas 23, Playwright real)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo"
       ]
     }
   ]

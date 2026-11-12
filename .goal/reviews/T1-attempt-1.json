@@ -1,14 +1,14 @@
 {
   "task_id": "T1",
-  "fingerprint": "a3d18e5c23325cb5900e41299c318a21115b4e8e03844b1772a0243ad3a5ce6f",
+  "fingerprint": "3f554055441daf259f519da517f705bd9217f2453ffd7d35f49600c19979cf06",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da T1 (EvoluÃ§Ã£o 032) concluÃ­da com veredito PASS. Todos os 8 critÃ©rios de aceite foram verificados contra o cÃ³digo real do repositÃ³rio: (1) hero-steps.tsx lido integralmente e todos os consumers reais mapeados (app/(site)/page.tsx e app/library/hero/page.tsx como consumers de cÃ³digo que passam a donos dos dados; tests/smoke.spec.ts L980 e docs mapeados); (2) confirmadas as 4 variants reais em /library/hero (hero-primary, hero-center-cta, hero-steps, hero-media-showcase), sendo apenas HeroSteps alvo da 032; (3) inventÃ¡rio de hardcode separando conteÃºdo configurÃ¡vel (title, description, steps, action, supportingText) da estrutura interna (grid, cards, spacing, breakpoints, tokens, Button size='lg'); (4) contrato proposto (HeroStep, HeroStepsAction, HeroStepsProps) derivado fielmente dos contratos modernos (001/003/010/016/031) sem nova linguagem de actions; (5) anÃ¡lise do heading QLT-011 comprovada pelo cÃ³digo e testes reais (manter h1 principal pois Ã© o Ãºnico h1 da home '/' exigido pelos testes de smoke L4 e L916, e corrigir os tÃ­tulos dos steps de h3 para h2 eliminando o skip h1->h3 sem alterar classes visuais); (6) contrato sem defaults que escondam hardcode; (7) evidÃªncia completa registrada em .goal/evidence/T1-audit.md; (8) nenhuma alteraÃ§Ã£o em cÃ³digo de produÃ§Ã£o durante a T1 (HEAD = origin/main = 6a181fd).",
+  "summary": "Auditoria T1 concluída e verificada no workspace real. O arquivo .goal/evidence/T1-audit.md documenta todos os itens exigidos pelos critérios de aceite: padrões reais dos primitives em components/ui (React.ComponentProps, data-slot, cn, named exports, Server Component puro sem 'use client'), uso de asChild via @radix-ui/react-slot já instalado (^1.2.4 em package.json) e lucide-react (^0.554.0 em package.json), API mínima restrita exatamente aos 6 exports (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator) sem Ellipsis/Dropdown/Menu/Icon/Provider, contrato semântico e de acessibilidade (nav[aria-label='breadcrumb'] > ol > li, aria-current='page', separador decorativo com aria-hidden='true'), arquivos previstos para T2-T5, plano de testes Playwright, riscos e confirmação do consumer 045 no roadmap (linhas 406, 418 e 466 de docs/ROADMAP-1000-EVOLUTIONS.md). Nenhuma dependência nova adicionada e nenhum código de produção alterado.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Leitura direta de components/sections/hero/hero-steps.tsx, app/(site)/page.tsx, app/library/hero/page.tsx, tests/smoke.spec.ts, QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md e .goal/evidence/T1-audit.md confirma todos os critÃ©rios de aceite da T1 e ausÃªncia de modificaÃ§Ãµes em cÃ³digo de produÃ§Ã£o.",
-      "name": "static-audit-T1-hero-steps",
+      "evidence": "Verificado por leitura direta de .goal/evidence/T1-audit.md (linhas 1-60), package.json (linhas 15 e 19), components/ui/button.tsx, components/ui/separator.tsx e docs/ROADMAP-1000-EVOLUTIONS.md (linhas 406, 418, 466). Tarefa exclusivamente de auditoria documental sem execução de suíte aplicável nesta etapa.",
+      "name": "audit-evidence-verification",
       "status": "passed"
     }
   ],
