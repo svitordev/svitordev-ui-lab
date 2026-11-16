@@ -1,0 +1,51 @@
+{
+  "goal": "Evolucao 035 - Consent preferences banner (site): componente de preferencias com persistencia local (localStorage), acessibilidade e reabertura, integrado ao site. Zero fake compliance: nenhuma integracao real de trackers/analytics existe hoje e a copy deve ser factual. Sem novas dependencias. Baseline real do catalogo: site = 7 (nao 9).",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): rastrear tracking/storage reais (grep cookie/localStorage/analytics/gtag/pixel/consent em app/components/lib + layout raiz + package.json); identificar onde UI site-wide deve viver e qual footer realmente aparece (realidade: FooterCta via (site)/layout; FooterColumns so na landing composition); auditar primitives (sem Checkbox/Switch -> HTML nativo); definir modelo de estado, storage key namespaced versionada, categorias (Opcao A com copy factual ou Opcao B), primeira visita, reabertura, acoes sem dark pattern, a11y do banner nao-modal, client boundary minimo e mecanismo de comunicacao sem lib global; auditar interferencia com testes existentes (button[aria-expanded], getByRole status).",
+      "acceptance": [
+        "Evidencia em .goal/evidence/T1-audit.md com: tracking real encontrado (SIM/NAO por tipo), storage real, arquitetura escolhida, API/state, storage key, categorias, copy constraints, client boundary, integration point, reopen mechanism, testes, arquivos previstos e riscos",
+        "Copy factual: nenhuma alegacao de bloqueio de trackers inexistentes, nenhuma afirmacao de conformidade LGPD/GDPR; decisao A ou B registrada com justificativa anti-inflacao",
+        "Nenhuma dependencia nova; nenhum primitive novo sem necessidade real; nenhuma alteracao de codigo de producao nesta task"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Implementar exatamente um novo componente site-level conforme decisao da T1 (path definido pela auditoria), com client boundary minimo apenas nele.",
+      "acceptance": [
+        "Comportamento: sem preferencia salva -> banner aparece; decisao salva; refresh respeita; reabrir permite editar; nova decisao sobrescreve",
+        "Hydration segura: localStorage nunca lido durante render server; sem suppressHydrationWarning; storage corrompido/version invalida tratado como ausencia sem quebrar a pagina",
+        "UI com tokens existentes, Button existente quando aplicavel, dark-only DEC-011, sem cor raw; acoes com peso visual razoavel sem dark pattern; funcional em 375px e 1280px sem overflow",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + outputs reais + exit codes"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Integrar o componente no ponto arquitetural correto (root layout server renderizando o client leaf, sem transformar o layout em client) e adicionar o controle real de reabertura no footer aprovado na T1, usando o mecanismo de comunicacao minimo aprovado (sem global state library, sem context global desnecessario, sem nova dependencia).",
+      "acceptance": [
+        "Reabertura funcional: clique no controle -> painel reaparece com valores salvos carregados -> usuario pode alterar e salvar novamente",
+        "Sem rota nova (rotas permanecem 24); nenhuma rota de privacidade inventada; sem conteudo juridico fabricado",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia verificavel com diff + exit codes"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Adicionar cobertura Playwright de alto valor (sem inflar): primeira visita (banner + accessible name + acoes), aceitar (persistencia + reload continua oculto), recusar opcionais (necessary permanece true), personalizar (alternar categoria + salvar), reabrir (estado anterior carregado + nova decisao persiste), storage invalido (pagina nao quebra, estado seguro), zero overflow mobile+desktop. Auditar interferencia na suíte existente antes de qualquer helper; nao adicionar localStorage.setItem em todos os testes automaticamente.",
+      "acceptance": [
+        "Acessibilidade coberta com roles reais (getByRole, labels, checkbox state, teclado, foco, botao de reabertura) em vez de CSS selectors faceis quando roles resolvem",
+        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures, sem helpers que mascarem bugs",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), npm run test:e2e, git diff --check limpo; evidencia com diff dos testes + outputs reais + exit codes + contagens (site 7 → 8, total 53 → 54)"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG com 1 entrada site component (path, comportamento, storage, reabertura, client boundary, zero dependencia nova, limitacoes reais — nao descrever como CMP juridica); ROADMAP marca 035 VERIFIED e proxima 036 (sem iniciar); CURRENT-STATE com 001-035, contagens, rotas, Playwright real e comportamento de consent; CHANGELOG somente estado final. QUALITY-REVIEW preserva QLT-005/011; DESIGN SYSTEM so se convencao global real; DECISIONS avaliar DEC nova apenas se a politica for duradoura.",
+      "acceptance": [
+        "Contagens reais refletidas: site 8, sections 32, total 54, rotas 24, Playwright real; QLT-005 (23, aberto) e QLT-011 (parcial, aberto) preservados",
+        "ROADMAP: 035 VERIFIED, proxima execucao 036 — Migrar services x2 (nao iniciada)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
+      ]
+    }
+  ]
+}

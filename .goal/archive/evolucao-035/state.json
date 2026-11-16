@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "goal": "Evolucao 035 - Consent preferences banner (site): componente de preferencias com persistencia local (localStorage), acessibilidade e reabertura, integrado ao site. Zero fake compliance: nenhuma integracao real de trackers/analytics existe hoje e a copy deve ser factual. Sem novas dependencias. Baseline real do catalogo: site = 7 (nao 9).",
+  "current": 4,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria (investigacao, sem alterar codigo de producao): rastrear tracking/storage reais (grep cookie/localStorage/analytics/gtag/pixel/consent em app/components/lib + layout raiz + package.json); identificar onde UI site-wide deve viver e qual footer realmente aparece (realidade: FooterCta via (site)/layout; FooterColumns so na landing composition); auditar primitives (sem Checkbox/Switch -> HTML nativo); definir modelo de estado, storage key namespaced versionada, categorias (Opcao A com copy factual ou Opcao B), primeira visita, reabertura, acoes sem dark pattern, a11y do banner nao-modal, client boundary minimo e mecanismo de comunicacao sem lib global; auditar interferencia com testes existentes (button[aria-expanded], getByRole status).",
+      "acceptance": [
+        "Evidencia em .goal/evidence/T1-audit.md com: tracking real encontrado (SIM/NAO por tipo), storage real, arquitetura escolhida, API/state, storage key, categorias, copy constraints, client boundary, integration point, reopen mechanism, testes, arquivos previstos e riscos",
+        "Copy factual: nenhuma alegacao de bloqueio de trackers inexistentes, nenhuma afirmacao de conformidade LGPD/GDPR; decisao A ou B registrada com justificativa anti-inflacao",
+        "Nenhuma dependencia nova; nenhum primitive novo sem necessidade real; nenhuma alteracao de codigo de producao nesta task"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria T1 (Goal 035 - Consent preferences banner) verificada com sucesso. O artefato .goal/evidence/T1-audit.md cobre integralmente todos os criterios de aceite: mapeamento factual de tracking/storage reais (SIM/NAO por tipo, confirmando 79 matches apenas de classes Tailwind tracking-*), identificacao correta do ponto de integracao site-wide (app/layout.tsx + FooterCta via app/(site)/layout.tsx, preservando FooterColumns restrito a landing composition), reutilizacao de primitives HTML nativos (input checkbox + details/summary sem novos primitives ou dependencias Radix), contrato de estado ConsentPreferences versionado na key svitordev:consent-preferences:v1, escolha justificada da Opcao A com restricoes estritas de copy factual (zero fake compliance e sem alegacoes LGPD/GDPR), client boundary minimo via CustomEvent (svitordev:consent-preferences:open), analise de nao-interferencia com seletores de testes existentes (button[aria-expanded], getByRole('status'), getByRole('checkbox')), baseline real do catalogo confirmado (site = 7, total = 53) e nenhuma alteracao em codigo de producao.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Inspecao estatica das evidencias de auditoria (.goal/evidence/T1-audit.md): grep de tracking/storage, leitura de layouts, footer, catalogo e suite Playwright documentados sem alteracao de codigo de producao.",
+            "name": "T1-audit-evidence-verification",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T13:57:37.012521+00:00"
+      },
+      "completed_at": "2026-11-12T13:57:37.205867+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Implementar exatamente um novo componente site-level conforme decisao da T1 (path definido pela auditoria), com client boundary minimo apenas nele.",
+      "acceptance": [
+        "Comportamento: sem preferencia salva -> banner aparece; decisao salva; refresh respeita; reabrir permite editar; nova decisao sobrescreve",
+        "Hydration segura: localStorage nunca lido durante render server; sem suppressHydrationWarning; storage corrompido/version invalida tratado como ausencia sem quebrar a pagina",
+        "UI com tokens existentes, Button existente quando aplicavel, dark-only DEC-011, sem cor raw; acoes com peso visual razoavel sem dark pattern; funcional em 375px e 1280px sem overflow",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + outputs reais + exit codes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 2,
+      "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria da Task T2 (Evolução 035 - Consent preferences banner) concluída com veredito PASS. O componente components/site/consent/consent-preferences.tsx foi inspecionado diretamente no workspace e cumpre todos os critérios de aceite: (1) leitura pós-mount de localStorage em useEffect garante que a primeira visita exibe o banner, decisões são salvas em svitordev:consent-preferences:v1, o refresh respeita a decisão salva sem reexibir o banner, a reabertura via ConsentPreferencesTrigger carrega o estado salvo para edição, a nova decisão sobrescreve o storage e o botão Fechar permite fechar o painel de forma explícita; (2) hidratação segura sem leitura de localStorage no render server, sem suppressHydrationWarning, e parseStored trata JSON inválido ou versão/shape incompatível como ausência (fail-safe); (3) UI utiliza exclusivamente tokens semânticos existentes (dark-only DEC-011, sem cores raw), Button existente, ações Aceitar/Recusar com mesmo peso visual (variant outline, sem dark pattern), copy factual sem fake compliance e layout responsivo (375px e 1280px sem overflow); (4) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings)",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 (Compiled successfully in 1813.8ms; TypeScript ok; 24/24 páginas)",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "CHECK_EXIT=0 (sem erros de whitespace/conflito)",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T14:13:35.923341+00:00"
+      },
+      "completed_at": "2026-11-12T14:13:36.111196+00:00"
+    },
+    {
+      "id": "T3",
+      "description": "Integrar o componente no ponto arquitetural correto (root layout server renderizando o client leaf, sem transformar o layout em client) e adicionar o controle real de reabertura no footer aprovado na T1, usando o mecanismo de comunicacao minimo aprovado (sem global state library, sem context global desnecessario, sem nova dependencia).",
+      "acceptance": [
+        "Reabertura funcional: clique no controle -> painel reaparece com valores salvos carregados -> usuario pode alterar e salvar novamente",
+        "Sem rota nova (rotas permanecem 24); nenhuma rota de privacidade inventada; sem conteudo juridico fabricado",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia verificavel com diff + exit codes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
+      "review": {
+        "task_id": "T3",
+        "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "A integração da T3 (Evolução 035 — Consent preferences banner) foi auditada no código real do workspace e nas evidências incorporadas. Apenas app/layout.tsx e components/site/footers/footer-cta.tsx foram alterados, mantendo ambos como Server Components que renderizam os client leaves ConsentPreferencesBanner e ConsentPreferencesTrigger. A comunicação ocorre via Custom Event (svitordev:consent-preferences:open) sem biblioteca de estado global, sem Context global e sem novas dependências. O fluxo de reabertura recarrega os valores salvos do localStorage, sincroniza os checkboxes, reseta flags de fechamento/status e permite alterar e salvar novamente. Nenhuma rota nova ou conteúdo jurídico fictício foi adicionado, e os gates (lint 0/0, build PASS com 24 rotas, git diff --check limpo) estão comprovados.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas e código de app/layout.tsx e components/site/footers/footer-cta.tsx verificado por leitura direta.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 (Compiled successfully, 24/24 páginas geradas, zero rota nova) reportado nas evidências incorporadas; app/layout.tsx e components/site/footers/footer-cta.tsx permanecem Server Components sem diretiva 'use client'.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de app/layout.tsx e components/site/footers/footer-cta.tsx confirma formatação limpa.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T14:17:01.959822+00:00"
+      },
+      "completed_at": "2026-11-12T14:17:02.140060+00:00"
+    },
+    {
+      "id": "T4",
+      "description": "Adicionar cobertura Playwright de alto valor (sem inflar): primeira visita (banner + accessible name + acoes), aceitar (persistencia + reload continua oculto), recusar opcionais (necessary permanece true), personalizar (alternar categoria + salvar), reabrir (estado anterior carregado + nova decisao persiste), storage invalido (pagina nao quebra, estado seguro), zero overflow mobile+desktop. Auditar interferencia na suíte existente antes de qualquer helper; nao adicionar localStorage.setItem em todos os testes automaticamente.",
+      "acceptance": [
+        "Acessibilidade coberta com roles reais (getByRole, labels, checkbox state, teclado, foco, botao de reabertura) em vez de CSS selectors faceis quando roles resolvem",
+        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures, sem helpers que mascarem bugs",
+        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), npm run test:e2e, git diff --check limpo; evidencia com diff dos testes + outputs reais + exit codes + contagens (site 7 → 8, total 53 → 54)"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
+      "review": {
+        "task_id": "T4",
+        "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T4 aprovada (PASS). Os 6 novos testes em tests/smoke.spec.ts cobrem integralmente os cenarios exigidos para o banner de preferencias de privacidade (Evolucao 035): primeira visita com heading acessivel, copy factual, acoes de mesmo peso e abertura de Personalizar via teclado; aceitar opcionais com persistencia em localStorage e manutencao do estado oculto apos reload; recusar opcionais mantendo necessary: true e opcionais false apos reload; personalizacao por label associado (getByRole checkbox) e persistencia ao salvar; reabertura via teclado pelo botao do footer carregando o estado anterior, sobrescrevendo a decisao e anunciando via live region (role=status); fail-safe para localStorage corrompido sem quebrar a pagina e zero overflow horizontal nos dois viewports (desktop 1280x720 e mobile 375x667). O helper seedConsentDecision foi restrito exclusivamente aos 5 testes existentes com interferencia comprovada (contagem de input[id] e sobreposicao fisica do banner fixed bottom em mobile), sem aplicacao global. Gates reportados verdes (lint 0/0, build 24 rotas, test:e2e 103 passed / 3 skipped / 0 failed, git diff --check limpo) e contagens confirmadas (site 7 -> 8, total 53 -> 54, Playwright 47 -> 53 testes).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "tests/smoke.spec.ts (linhas 1455-1599): 6 novos testes cobrindo primeira visita, aceitar, recusar, personalizar, reabertura pelo footer, storage corrompido e zero overflow; 103 passed + 3 skipped (0 failed) nos projetos desktop e mobile (E2E_EXIT=0).",
+            "name": "npm run test:e2e",
+            "status": "passed"
+          },
+          {
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidencias da T4.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 (24 rotas compiladas com sucesso) reportado nas evidencias da T4.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "CHECK_EXIT=0 sem erros de whitespace ou formacao no diff.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T14:33:57.644623+00:00"
+      },
+      "completed_at": "2026-11-12T14:33:57.857772+00:00"
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao: COMPONENT-CATALOG com 1 entrada site component (path, comportamento, storage, reabertura, client boundary, zero dependencia nova, limitacoes reais — nao descrever como CMP juridica); ROADMAP marca 035 VERIFIED e proxima 036 (sem iniciar); CURRENT-STATE com 001-035, contagens, rotas, Playwright real e comportamento de consent; CHANGELOG somente estado final. QUALITY-REVIEW preserva QLT-005/011; DESIGN SYSTEM so se convencao global real; DECISIONS avaliar DEC nova apenas se a politica for duradoura.",
+      "acceptance": [
+        "Contagens reais refletidas: site 8, sections 32, total 54, rotas 24, Playwright real; QLT-005 (23, aberto) e QLT-011 (parcial, aberto) preservados",
+        "ROADMAP: 035 VERIFIED, proxima execucao 036 — Migrar services x2 (nao iniciada)",
+        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
+      "review": {
+        "task_id": "T5",
+        "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria da Task T5 (Evolução 035 — Documentação final do Consent preferences banner) concluída com veredito PASS. A inspeção direta dos arquivos do workspace confirma que todos os critérios de aceite foram integralmente atendidos: (1) docs/COMPONENT-CATALOG.md reflete as contagens reais (UI 12, site 8, sections 32, wrappers 2, total 54), atualiza as observações de FooterCta e FooterColumns e adiciona a seção Consent com 1 entrada (ConsentPreferences em components/site/consent/consent-preferences.tsx) documentando exports, client boundary, modelo de dados, storage key svitordev:consent-preferences:v1, fail-safe, reabertura via custom event, copy factual sem alegação de CMP jurídica e zero dependências novas; (2) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 035 como VERIFIED (2026-11-12) com o path real e define a 036 (Migrar services×2 para contrato) como próxima execução não iniciada, mantendo o consumer planejado 046 intacto; (3) memory-bank/CURRENT-STATE.md lista as evoluções 001–035 com contagens reais (site 8, sections 32, total 54, rotas 24, Playwright 53 testes / 106 execuções — 103 passed + 3 skipped), comportamento do consent e próxima execução 036; (4) memory-bank/CHANGELOG.md registra apenas o estado final da Evolução 035 preservando o histórico; (5) memory-bank/DECISIONS.md registra a DEC-012 com a política duradoura de consentimento do template; (6) QUALITY-REVIEW.md e docs/DESIGN-SYSTEM.md permanecem inalterados, preservando QLT-005 (23, aberto) e QLT-011 (parcial, aberto); (7) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas da T5.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 (24 rotas) reportado nas evidências incorporadas da T5.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de COMPONENT-CATALOG.md, ROADMAP-1000-EVOLUTIONS.md, CHANGELOG.md, CURRENT-STATE.md e DECISIONS.md confirma formatação íntegra.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-12T14:44:00.996604+00:00"
+      },
+      "completed_at": "2026-11-12T14:44:01.212458+00:00"
+    }
+  ],
+  "created_at": "2026-11-12T13:54:43.617453+00:00",
+  "finished_at": "2026-11-12T14:44:01.212471+00:00"
+}

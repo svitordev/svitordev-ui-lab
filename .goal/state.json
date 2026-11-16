@@ -1,210 +1,232 @@
 {
   "version": 1,
-  "goal": "Evolucao 035 - Consent preferences banner (site): componente de preferencias com persistencia local (localStorage), acessibilidade e reabertura, integrado ao site. Zero fake compliance: nenhuma integracao real de trackers/analytics existe hoje e a copy deve ser factual. Sem novas dependencias. Baseline real do catalogo: site = 7 (nao 9).",
+  "goal": "Evolucao 036 - Migrar duas sections de Services para contratos data-driven, reduzindo QLT-005 incrementalmente (baseline 23, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-035: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 53 testes (106 execucoes, 103 passed + 3 skipped).",
   "current": 4,
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria (investigacao, sem alterar codigo de producao): rastrear tracking/storage reais (grep cookie/localStorage/analytics/gtag/pixel/consent em app/components/lib + layout raiz + package.json); identificar onde UI site-wide deve viver e qual footer realmente aparece (realidade: FooterCta via (site)/layout; FooterColumns so na landing composition); auditar primitives (sem Checkbox/Switch -> HTML nativo); definir modelo de estado, storage key namespaced versionada, categorias (Opcao A com copy factual ou Opcao B), primeira visita, reabertura, acoes sem dark pattern, a11y do banner nao-modal, client boundary minimo e mecanismo de comunicacao sem lib global; auditar interferencia com testes existentes (button[aria-expanded], getByRole status).",
+      "description": "Auditoria das duas Services + contratos (investigacao, sem alterar codigo de producao)",
       "acceptance": [
-        "Evidencia em .goal/evidence/T1-audit.md com: tracking real encontrado (SIM/NAO por tipo), storage real, arquitetura escolhida, API/state, storage key, categorias, copy constraints, client boundary, integration point, reopen mechanism, testes, arquivos previstos e riscos",
-        "Copy factual: nenhuma alegacao de bloqueio de trackers inexistentes, nenhuma afirmacao de conformidade LGPD/GDPR; decisao A ou B registrada com justificativa anti-inflacao",
-        "Nenhuma dependencia nova; nenhum primitive novo sem necessidade real; nenhuma alteracao de codigo de producao nesta task"
+        "Evidencia .goal/evidence/T1-audit.md com tabela de TODOS os componentes de services (path, consumers, hardcoded, data-driven, entra na 036), hardcodes separados de estrutura interna, contratos aprovados A e B, icon strategy, CTA strategy, previsao QLT-005, testes necessarios, arquivos previstos e riscos",
+        "exatamente 2 services selecionadas conforme roadmap/codigo real sem assumir nomes antes da auditoria",
+        "nenhuma alteracao de codigo de producao nesta task"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
+      "fingerprint": "a134574487418155e146be3e57d325f32116c2e74641df52cb7a1545930e7d12",
       "review": {
         "task_id": "T1",
-        "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
+        "fingerprint": "a134574487418155e146be3e57d325f32116c2e74641df52cb7a1545930e7d12",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria T1 (Goal 035 - Consent preferences banner) verificada com sucesso. O artefato .goal/evidence/T1-audit.md cobre integralmente todos os criterios de aceite: mapeamento factual de tracking/storage reais (SIM/NAO por tipo, confirmando 79 matches apenas de classes Tailwind tracking-*), identificacao correta do ponto de integracao site-wide (app/layout.tsx + FooterCta via app/(site)/layout.tsx, preservando FooterColumns restrito a landing composition), reutilizacao de primitives HTML nativos (input checkbox + details/summary sem novos primitives ou dependencias Radix), contrato de estado ConsentPreferences versionado na key svitordev:consent-preferences:v1, escolha justificada da Opcao A com restricoes estritas de copy factual (zero fake compliance e sem alegacoes LGPD/GDPR), client boundary minimo via CustomEvent (svitordev:consent-preferences:open), analise de nao-interferencia com seletores de testes existentes (button[aria-expanded], getByRole('status'), getByRole('checkbox')), baseline real do catalogo confirmado (site = 7, total = 53) e nenhuma alteracao em codigo de producao.",
+        "summary": "Auditoria T1 da Evolução 036 verificada com sucesso contra o workspace real. O arquivo .goal/evidence/T1-audit.md documenta a tabela completa dos 3 componentes em components/sections/services/** (ServicesWithIcons, ServicesGridSimple, ServicesSplitWithHighlight) com paths, consumers reais (app/(site)/page.tsx e app/library/services/page.tsx), status hardcoded/data-driven e seleção fundamentada de exatamente 2 componentes (ServicesWithIcons como Service A e ServicesGridSimple como Service B, mantendo ServicesSplitWithHighlight na dívida: services 3 -> 1). Separação entre hardcodes e estrutura interna, contratos locais ServicesWithIconsProps e ServicesGridSimpleProps, icon strategy (React.ComponentType<{ className?: string }>), CTA strategy (sem actions), previsão QLT-005 (23 -> 21, mantendo ISSUE_CONFIRMED/ABERTO), lacunas reais de testes em tests/smoke.spec.ts, arquivos previstos (T2-T5) e riscos foram todos confirmados sem nenhuma alteração em código de produção.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Inspecao estatica das evidencias de auditoria (.goal/evidence/T1-audit.md): grep de tracking/storage, leitura de layouts, footer, catalogo e suite Playwright documentados sem alteracao de codigo de producao.",
-            "name": "T1-audit-evidence-verification",
+            "evidence": "Tarefa T1 é exclusivamente de investigação/auditoria documental (.goal/evidence/T1-audit.md) sem alteração de código de produção; leitura direta confirmou os arquivos de produção intactos e as referências reais em tests/smoke.spec.ts (linhas 525, 984, 1004-1032).",
+            "name": "verificacao-estatica-auditoria-t1",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T13:57:37.012521+00:00"
+        "recorded_at": "2026-11-16T14:27:52.675247+00:00"
       },
-      "completed_at": "2026-11-12T13:57:37.205867+00:00"
+      "completed_at": "2026-11-16T14:27:52.862626+00:00"
     },
     {
       "id": "T2",
-      "description": "Implementar exatamente um novo componente site-level conforme decisao da T1 (path definido pela auditoria), com client boundary minimo apenas nele.",
+      "description": "Migrar Service A conforme contrato aprovado na T1",
       "acceptance": [
-        "Comportamento: sem preferencia salva -> banner aparece; decisao salva; refresh respeita; reabrir permite editar; nova decisao sobrescreve",
-        "Hydration segura: localStorage nunca lido durante render server; sem suppressHydrationWarning; storage corrompido/version invalida tratado como ausencia sem quebrar a pagina",
-        "UI com tokens existentes, Button existente quando aplicavel, dark-only DEC-011, sem cor raw; acoes com peso visual razoavel sem dark pattern; funcional em 375px e 1280px sem overflow",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + outputs reais + exit codes"
+        "Contrato implementado sem default mascarando hardcode, consumer dono dos dados, copy e comportamento preservados",
+        "visual, destinos, boundary Server/Client e heading levels preservados",
+        "gates lint 0/0, build PASS, git diff --check limpo com evidencia de diff + outputs reais + exit codes"
       ],
       "status": "COMPLETED",
-      "attempts": 2,
-      "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
+      "attempts": 1,
+      "fingerprint": "6044ed9d79bb1503baabbab184782cc53101a2f7f649cbc69df973f4e318f298",
       "review": {
         "task_id": "T2",
-        "fingerprint": "1440af9dcae9c09de37534220eb29035752766e60212fba6a89cf1f54c187fce",
+        "fingerprint": "6044ed9d79bb1503baabbab184782cc53101a2f7f649cbc69df973f4e318f298",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria da Task T2 (Evolução 035 - Consent preferences banner) concluída com veredito PASS. O componente components/site/consent/consent-preferences.tsx foi inspecionado diretamente no workspace e cumpre todos os critérios de aceite: (1) leitura pós-mount de localStorage em useEffect garante que a primeira visita exibe o banner, decisões são salvas em svitordev:consent-preferences:v1, o refresh respeita a decisão salva sem reexibir o banner, a reabertura via ConsentPreferencesTrigger carrega o estado salvo para edição, a nova decisão sobrescreve o storage e o botão Fechar permite fechar o painel de forma explícita; (2) hidratação segura sem leitura de localStorage no render server, sem suppressHydrationWarning, e parseStored trata JSON inválido ou versão/shape incompatível como ausência (fail-safe); (3) UI utiliza exclusivamente tokens semânticos existentes (dark-only DEC-011, sem cores raw), Button existente, ações Aceitar/Recusar com mesmo peso visual (variant outline, sem dark pattern), copy factual sem fake compliance e layout responsivo (375px e 1280px sem overflow); (4) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
+        "summary": "T2 auditada e aprovada (PASS). A leitura direta dos arquivos reais do workspace confirma que ServicesWithIcons (components/sections/services/services-with-icons.tsx) foi migrado para o contrato data-driven local (ServiceWithIcon e ServicesWithIconsProps) sem defaults internos mascarando hardcode. Os dois consumers reais — app/(site)/page.tsx (servicesHomeData) e app/library/services/page.tsx (servicesWithIconsDemo com preview: React.ReactNode no padrao de app/library/hero/page.tsx) — assumiram a propriedade integral da copy e dos icones (Globe2, LayoutDashboard, Workflow) preservando 1:1 textos, classes Tailwind, hierarquia de headings (h2/h3), ancora #services na home, ordem/ids no catalogo (/library/services) e boundary Server Component. ServicesGridSimple e ServicesSplitWithHighlight permanecem intactos para a proxima etapa. Gates reportados nas evidencias (lint 0/0 com exit 0, build PASS com exit 0, git diff --check com exit 0 e Playwright focado 6/6 passed com exit 0) estao completos e consistentes com o codigo inspecionado.",
         "findings": [],
         "tests": [
           {
-            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings)",
+            "evidence": "Evidencia incorporada pelo Builder: npm run lint -> LINT_EXIT=0 (0 erros / 0 warnings). Consistente com a inspecao estatica dos 3 arquivos alterados.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "BUILD_EXIT=0 (Compiled successfully in 1813.8ms; TypeScript ok; 24/24 páginas)",
+            "evidence": "Evidencia incorporada pelo Builder: npm run build -> BUILD_EXIT=0 (Compiled successfully in 3.9s). Tipagens ServicesWithIconsProps e ServiceWithIcon verificadas nos arquivos reais.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "CHECK_EXIT=0 (sem erros de whitespace/conflito)",
+            "evidence": "Evidencia incorporada pelo Builder: git diff --check -> CHECK_EXIT=0. Arquivos lidos sem erros de whitespace ou marcadores de conflito.",
             "name": "git diff --check",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidencia incorporada pelo Builder: npx playwright test -g \"rotas sem smoke|navegacao representativa|landing: compoe\" -> TEST_EXIT=0 (6 passed apos encerrar servidor dev orfao PID 8816).",
+            "name": "playwright focused suite (services library & home)",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T14:13:35.923341+00:00"
+        "recorded_at": "2026-11-16T14:48:26.524590+00:00"
       },
-      "completed_at": "2026-11-12T14:13:36.111196+00:00"
+      "completed_at": "2026-11-16T14:48:26.722751+00:00"
     },
     {
       "id": "T3",
-      "description": "Integrar o componente no ponto arquitetural correto (root layout server renderizando o client leaf, sem transformar o layout em client) e adicionar o controle real de reabertura no footer aprovado na T1, usando o mecanismo de comunicacao minimo aprovado (sem global state library, sem context global desnecessario, sem nova dependencia).",
+      "description": "Migrar Service B conforme contrato aprovado na T1",
       "acceptance": [
-        "Reabertura funcional: clique no controle -> painel reaparece com valores salvos carregados -> usuario pode alterar e salvar novamente",
-        "Sem rota nova (rotas permanecem 24); nenhuma rota de privacidade inventada; sem conteudo juridico fabricado",
-        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), git diff --check limpo; evidencia verificavel com diff + exit codes"
+        "Contrato implementado sem default mascarando hardcode, consumer dono dos dados, copy e comportamento preservados",
+        "visual, destinos, boundary e heading preservados",
+        "T2 permanece integra sem alteracao indevida",
+        "gates lint 0/0, build PASS, git diff --check limpo com evidencia auditavel"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
+      "fingerprint": "e270ffae5a03f3fe401f7662151603ff470c01e1f807279aea343b23d3d20400",
       "review": {
         "task_id": "T3",
-        "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
+        "fingerprint": "e270ffae5a03f3fe401f7662151603ff470c01e1f807279aea343b23d3d20400",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "A integração da T3 (Evolução 035 — Consent preferences banner) foi auditada no código real do workspace e nas evidências incorporadas. Apenas app/layout.tsx e components/site/footers/footer-cta.tsx foram alterados, mantendo ambos como Server Components que renderizam os client leaves ConsentPreferencesBanner e ConsentPreferencesTrigger. A comunicação ocorre via Custom Event (svitordev:consent-preferences:open) sem biblioteca de estado global, sem Context global e sem novas dependências. O fluxo de reabertura recarrega os valores salvos do localStorage, sincroniza os checkboxes, reseta flags de fechamento/status e permite alterar e salvar novamente. Nenhuma rota nova ou conteúdo jurídico fictício foi adicionado, e os gates (lint 0/0, build PASS com 24 rotas, git diff --check limpo) estão comprovados.",
+        "summary": "T3 verificada com sucesso (PASS). O componente ServicesGridSimple (components/sections/services/services-grid-simple.tsx) foi migrado para o contrato data-driven aprovado (ServiceGridItem e ServicesGridSimpleProps), sem valores default mascarando hardcode. O unico consumer (app/library/services/page.tsx) detem os dados (servicesGridSimpleDemo) preservando 1:1 a copy original, classes Tailwind, hierarquia de headings (h2/h3) e boundary de Server Component. As entregas da T2 (services-with-icons.tsx e app/(site)/page.tsx) e o componente fora do escopo (services-split-with-highlight.tsx) permanecem integros. Gates de qualidade (lint, build, git diff --check e Playwright) reportados com exit code 0 nas evidencias da task.",
         "findings": [],
         "tests": [
           {
-            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas e código de app/layout.tsx e components/site/footers/footer-cta.tsx verificado por leitura direta.",
+            "evidence": "Evidencia reportada pelo Builder: npm run lint -> LINT_EXIT=0 (0 erros / 0 warnings) e leitura direta dos arquivos TS/TSX sem violacoes.",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "BUILD_EXIT=0 (Compiled successfully, 24/24 páginas geradas, zero rota nova) reportado nas evidências incorporadas; app/layout.tsx e components/site/footers/footer-cta.tsx permanecem Server Components sem diretiva 'use client'.",
+            "evidence": "Evidencia reportada pelo Builder: npm run build -> BUILD_EXIT=0 (Compiled successfully in 1824.1ms) e contratos TypeScript validados nos arquivos reais.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de app/layout.tsx e components/site/footers/footer-cta.tsx confirma formatação limpa.",
+            "evidence": "Evidencia reportada pelo Builder: git diff --check -> CHECK_EXIT=0.",
             "name": "git diff --check",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidencia reportada pelo Builder: npx playwright test -g \"rotas sem smoke\" -> TEST_EXIT=0, 2 passed (desktop + mobile cobrindo /library/services com firstId: services-grid-simple).",
+            "name": "npx playwright test -g \"rotas sem smoke\"",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T14:17:01.959822+00:00"
+        "recorded_at": "2026-11-16T14:52:41.204065+00:00"
       },
-      "completed_at": "2026-11-12T14:17:02.140060+00:00"
+      "completed_at": "2026-11-16T14:52:41.392484+00:00"
     },
     {
       "id": "T4",
-      "description": "Adicionar cobertura Playwright de alto valor (sem inflar): primeira visita (banner + accessible name + acoes), aceitar (persistencia + reload continua oculto), recusar opcionais (necessary permanece true), personalizar (alternar categoria + salvar), reabrir (estado anterior carregado + nova decisao persiste), storage invalido (pagina nao quebra, estado seguro), zero overflow mobile+desktop. Auditar interferencia na suíte existente antes de qualquer helper; nao adicionar localStorage.setItem em todos os testes automaticamente.",
+      "description": "Regressao integrada + Playwright",
       "acceptance": [
-        "Acessibilidade coberta com roles reais (getByRole, labels, checkbox state, teclado, foco, botao de reabertura) em vez de CSS selectors faceis quando roles resolvem",
-        "Suite completa verde nos dois projetos (desktop 1280x720 + mobile 375x667), zero failures, sem helpers que mascarem bugs",
-        "Gates: npm run lint 0/0, npm run build PASS (24 rotas), npm run test:e2e, git diff --check limpo; evidencia com diff dos testes + outputs reais + exit codes + contagens (site 7 → 8, total 53 → 54)"
+        "Auditoria de testes existentes primeiro, cobrir apenas lacunas reais provando os dois contratos via consumers (renderizacao, heading, items, ordem, CTA/href) em desktop e mobile com zero overflow",
+        "suite completa verde nos dois projetos sem helpers mascarando bugs",
+        "gates lint 0/0, build PASS (24 rotas), test:e2e, git diff --check limpo com contagens reais"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
+      "fingerprint": "881d43362e8af413bfaa89cbb881adfbb93e13ef7f4a56a171f12b713c55c342",
       "review": {
         "task_id": "T4",
-        "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
+        "fingerprint": "881d43362e8af413bfaa89cbb881adfbb93e13ef7f4a56a171f12b713c55c342",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T4 aprovada (PASS). Os 6 novos testes em tests/smoke.spec.ts cobrem integralmente os cenarios exigidos para o banner de preferencias de privacidade (Evolucao 035): primeira visita com heading acessivel, copy factual, acoes de mesmo peso e abertura de Personalizar via teclado; aceitar opcionais com persistencia em localStorage e manutencao do estado oculto apos reload; recusar opcionais mantendo necessary: true e opcionais false apos reload; personalizacao por label associado (getByRole checkbox) e persistencia ao salvar; reabertura via teclado pelo botao do footer carregando o estado anterior, sobrescrevendo a decisao e anunciando via live region (role=status); fail-safe para localStorage corrompido sem quebrar a pagina e zero overflow horizontal nos dois viewports (desktop 1280x720 e mobile 375x667). O helper seedConsentDecision foi restrito exclusivamente aos 5 testes existentes com interferencia comprovada (contagem de input[id] e sobreposicao fisica do banner fixed bottom em mobile), sem aplicacao global. Gates reportados verdes (lint 0/0, build 24 rotas, test:e2e 103 passed / 3 skipped / 0 failed, git diff --check limpo) e contagens confirmadas (site 7 -> 8, total 53 -> 54, Playwright 47 -> 53 testes).",
+        "summary": "Inspeção independente concluída em modo somente leitura para a tarefa T4 (Regressão integrada + Playwright) da Evolução 036. Foi verificado diretamente no código real do workspace (`tests/smoke.spec.ts`, `app/library/services/page.tsx`, `app/(site)/page.tsx`, `components/sections/services/services-grid-simple.tsx`, `components/sections/services/services-with-icons.tsx`, `components/sections/services/services-split-with-highlight.tsx` e `package.json`) que: (1) os 2 novos testes em `tests/smoke.spec.ts` (linhas 1604–1666) cobrem exatamente a lacuna real dos dois contratos migrados (`ServicesGridSimple` e `ServicesWithIcons`) via consumers reais (`/library/services` e `/`), validando headings, descrição, ordem dos 6 h3 na Library e 3 h3 na Home, contagem de ícones SVG escopada por section, preservação de `ServicesSplitWithHighlight` e zero overflow horizontal nos dois viewports (desktop e mobile), sem helpers que mascarem bugs e sem acoplamento a classes Tailwind (nota: embora o resumo textual do Builder tenha citado rótulos diferentes na prosa, o código real em `tests/smoke.spec.ts` reflete exatamente a copy real dos consumers); (2) zero dependência nova em `package.json`; (3) evidências dos gates reportadas completas e consistentes (`npm run lint` 0/0, `npm run build` PASS com 24 rotas, `git diff --check` limpo, `npm run test:e2e` com 55 testes / 110 execuções: 107 passed + 3 skipped). Veredito: PASS.",
         "findings": [],
         "tests": [
           {
-            "evidence": "tests/smoke.spec.ts (linhas 1455-1599): 6 novos testes cobrindo primeira visita, aceitar, recusar, personalizar, reabertura pelo footer, storage corrompido e zero overflow; 103 passed + 3 skipped (0 failed) nos projetos desktop e mobile (E2E_EXIT=0).",
+            "evidence": "Evidência incorporada pelo Builder: `npm run lint` (exit 0, 0 erros / 0 warnings). Código inspecionado em `tests/smoke.spec.ts` sem violações de lint ou tipagem.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidência incorporada pelo Builder: `npm run build` (exit 0, PASS, 24 rotas geradas). Contratos tipados verificados por leitura em `components/sections/services/*` e consumers em `app/library/services/page.tsx` e `app/(site)/page.tsx`.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidência incorporada pelo Builder: `npx playwright test -g \"services:\"` (exit 0, 4 passed = 2 testes × 2 viewports) e código real verificado em `tests/smoke.spec.ts` (linhas 1604–1666).",
+            "name": "npx playwright test -g \"services:\"",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidência incorporada pelo Builder: `npm run test:e2e` (exit 0, 55 testes × 2 projetos = 110 execuções, 107 passed + 3 skipped).",
             "name": "npm run test:e2e",
             "status": "passed"
           },
           {
-            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidencias da T4.",
-            "name": "npm run lint",
-            "status": "passed"
-          },
-          {
-            "evidence": "BUILD_EXIT=0 (24 rotas compiladas com sucesso) reportado nas evidencias da T4.",
-            "name": "npm run build",
-            "status": "passed"
-          },
-          {
-            "evidence": "CHECK_EXIT=0 sem erros de whitespace ou formacao no diff.",
+            "evidence": "Evidência incorporada pelo Builder: `git diff --check` (exit 0, limpo).",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T14:33:57.644623+00:00"
+        "recorded_at": "2026-11-16T15:16:19.062296+00:00"
       },
-      "completed_at": "2026-11-12T14:33:57.857772+00:00"
+      "completed_at": "2026-11-16T15:16:19.242033+00:00"
     },
     {
       "id": "T5",
-      "description": "Documentacao: COMPONENT-CATALOG com 1 entrada site component (path, comportamento, storage, reabertura, client boundary, zero dependencia nova, limitacoes reais — nao descrever como CMP juridica); ROADMAP marca 035 VERIFIED e proxima 036 (sem iniciar); CURRENT-STATE com 001-035, contagens, rotas, Playwright real e comportamento de consent; CHANGELOG somente estado final. QUALITY-REVIEW preserva QLT-005/011; DESIGN SYSTEM so se convencao global real; DECISIONS avaliar DEC nova apenas se a politica for duradoura.",
+      "description": "Documentacao + QLT-005",
       "acceptance": [
-        "Contagens reais refletidas: site 8, sections 32, total 54, rotas 24, Playwright real; QLT-005 (23, aberto) e QLT-011 (parcial, aberto) preservados",
-        "ROADMAP: 035 VERIFIED, proxima execucao 036 — Migrar services x2 (nao iniciada)",
-        "Gates: npm run lint 0/0, npm run build PASS, git diff --check limpo; evidencia com diff + exit codes"
+        "QUALITY-REVIEW com QLT-005 real (23 para 21 se ambos estavam no finding, permanece ABERTO, nunca VERIFIED) registrando exatamente os 2 componentes removidos da dívida, QLT-011 preservado",
+        "catalogo atualiza entradas existentes sem criar componentes",
+        "ROADMAP marca 036 VERIFIED e proxima 037 sem iniciar",
+        "CURRENT-STATE e CHANGELOG somente estado final",
+        "gates lint 0/0, build PASS, git diff --check limpo"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
+      "fingerprint": "fedd06e43d8676e1dfb358410a8ac81040210aac29262ea8229f3835c1d68b22",
       "review": {
         "task_id": "T5",
-        "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
+        "fingerprint": "fedd06e43d8676e1dfb358410a8ac81040210aac29262ea8229f3835c1d68b22",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria da Task T5 (Evolução 035 — Documentação final do Consent preferences banner) concluída com veredito PASS. A inspeção direta dos arquivos do workspace confirma que todos os critérios de aceite foram integralmente atendidos: (1) docs/COMPONENT-CATALOG.md reflete as contagens reais (UI 12, site 8, sections 32, wrappers 2, total 54), atualiza as observações de FooterCta e FooterColumns e adiciona a seção Consent com 1 entrada (ConsentPreferences em components/site/consent/consent-preferences.tsx) documentando exports, client boundary, modelo de dados, storage key svitordev:consent-preferences:v1, fail-safe, reabertura via custom event, copy factual sem alegação de CMP jurídica e zero dependências novas; (2) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 035 como VERIFIED (2026-11-12) com o path real e define a 036 (Migrar services×2 para contrato) como próxima execução não iniciada, mantendo o consumer planejado 046 intacto; (3) memory-bank/CURRENT-STATE.md lista as evoluções 001–035 com contagens reais (site 8, sections 32, total 54, rotas 24, Playwright 53 testes / 106 execuções — 103 passed + 3 skipped), comportamento do consent e próxima execução 036; (4) memory-bank/CHANGELOG.md registra apenas o estado final da Evolução 035 preservando o histórico; (5) memory-bank/DECISIONS.md registra a DEC-012 com a política duradoura de consentimento do template; (6) QUALITY-REVIEW.md e docs/DESIGN-SYSTEM.md permanecem inalterados, preservando QLT-005 (23, aberto) e QLT-011 (parcial, aberto); (7) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
+        "summary": "Auditoria independente da T5 (Documentação + QLT-005 da Evolução 036) concluída com veredito PASS. Todos os 5 critérios de aceite foram verificados diretamente nos arquivos reais do repositório: (1) QUALITY-REVIEW.md registra a redução incremental real do QLT-005 de 23 para 21 (15 sections + 6 site), mantendo o status ISSUE_CONFIRMED / ABERTO (nunca VERIFIED), documentando exatamente os 2 componentes migrados (services-with-icons e services-grid-simple), a permanência de services-split-with-highlight na dívida e preservando QLT-011 intacto; (2) docs/COMPONENT-CATALOG.md atualiza apenas as 2 entradas existentes de ServicesGridSimple e ServicesWithIcons como Pronto / Data-driven (Evolução 036) sem inflar contagens (12 UI, 8 site, 32 sections, 2 wrappers, total 54); (3) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 036 como VERIFIED (2026-11-16), atualiza a seção e a lista de migrações do QLT-005 (23→21) e define a 037 como próxima sem iniciá-la; (4) memory-bank/CURRENT-STATE.md e memory-bank/CHANGELOG.md registram exclusivamente o estado final consolidado da Evolução 036 (com docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md inalterados); (5) gates reportados verdes: npm run lint (0/0), npm run build (PASS, 24 rotas) e git diff --check limpo.",
         "findings": [],
         "tests": [
           {
-            "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas da T5.",
+            "evidence": "Exit 0 — 0 erros / 0 warnings (evidência T5 + inspeção dos arquivos alterados).",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "BUILD_EXIT=0 (24 rotas) reportado nas evidências incorporadas da T5.",
+            "evidence": "Exit 0 — build de produção PASS com 24/24 rotas geradas, zero rota nova.",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de COMPONENT-CATALOG.md, ROADMAP-1000-EVOLUTIONS.md, CHANGELOG.md, CURRENT-STATE.md e DECISIONS.md confirma formatação íntegra.",
+            "evidence": "Exit 0 — diff limpo sem erros de whitespace ou marcadores de conflito.",
             "name": "git diff --check",
+            "status": "passed"
+          },
+          {
+            "evidence": "Executado e aprovado na T4 (55 testes / 110 execuções — 107 passed + 3 skipped); não re-executado na T5 por tratar-se de alteração exclusivamente documental.",
+            "name": "Playwright smoke suite (T4)",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-12T14:44:00.996604+00:00"
+        "recorded_at": "2026-11-16T15:30:17.311507+00:00"
       },
-      "completed_at": "2026-11-12T14:44:01.212458+00:00"
+      "completed_at": "2026-11-16T15:30:17.486070+00:00"
     }
   ],
-  "created_at": "2026-11-12T13:54:43.617453+00:00",
-  "finished_at": "2026-11-12T14:44:01.212471+00:00"
+  "created_at": "2026-11-16T14:18:45.635128+00:00",
+  "finished_at": "2026-11-16T15:30:17.486083+00:00"
 }

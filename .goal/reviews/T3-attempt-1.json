@@ -1,24 +1,29 @@
 {
   "task_id": "T3",
-  "fingerprint": "b8b687e8bc14023a25ea585168434a1db4da406772143c08c6023ae4922a35ca",
+  "fingerprint": "e270ffae5a03f3fe401f7662151603ff470c01e1f807279aea343b23d3d20400",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "A integração da T3 (Evolução 035 — Consent preferences banner) foi auditada no código real do workspace e nas evidências incorporadas. Apenas app/layout.tsx e components/site/footers/footer-cta.tsx foram alterados, mantendo ambos como Server Components que renderizam os client leaves ConsentPreferencesBanner e ConsentPreferencesTrigger. A comunicação ocorre via Custom Event (svitordev:consent-preferences:open) sem biblioteca de estado global, sem Context global e sem novas dependências. O fluxo de reabertura recarrega os valores salvos do localStorage, sincroniza os checkboxes, reseta flags de fechamento/status e permite alterar e salvar novamente. Nenhuma rota nova ou conteúdo jurídico fictício foi adicionado, e os gates (lint 0/0, build PASS com 24 rotas, git diff --check limpo) estão comprovados.",
+  "summary": "T3 verificada com sucesso (PASS). O componente ServicesGridSimple (components/sections/services/services-grid-simple.tsx) foi migrado para o contrato data-driven aprovado (ServiceGridItem e ServicesGridSimpleProps), sem valores default mascarando hardcode. O unico consumer (app/library/services/page.tsx) detem os dados (servicesGridSimpleDemo) preservando 1:1 a copy original, classes Tailwind, hierarquia de headings (h2/h3) e boundary de Server Component. As entregas da T2 (services-with-icons.tsx e app/(site)/page.tsx) e o componente fora do escopo (services-split-with-highlight.tsx) permanecem integros. Gates de qualidade (lint, build, git diff --check e Playwright) reportados com exit code 0 nas evidencias da task.",
   "findings": [],
   "tests": [
     {
-      "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas e código de app/layout.tsx e components/site/footers/footer-cta.tsx verificado por leitura direta.",
+      "evidence": "Evidencia reportada pelo Builder: npm run lint -> LINT_EXIT=0 (0 erros / 0 warnings) e leitura direta dos arquivos TS/TSX sem violacoes.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "BUILD_EXIT=0 (Compiled successfully, 24/24 páginas geradas, zero rota nova) reportado nas evidências incorporadas; app/layout.tsx e components/site/footers/footer-cta.tsx permanecem Server Components sem diretiva 'use client'.",
+      "evidence": "Evidencia reportada pelo Builder: npm run build -> BUILD_EXIT=0 (Compiled successfully in 1824.1ms) e contratos TypeScript validados nos arquivos reais.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de app/layout.tsx e components/site/footers/footer-cta.tsx confirma formatação limpa.",
+      "evidence": "Evidencia reportada pelo Builder: git diff --check -> CHECK_EXIT=0.",
       "name": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "evidence": "Evidencia reportada pelo Builder: npx playwright test -g \"rotas sem smoke\" -> TEST_EXIT=0, 2 passed (desktop + mobile cobrindo /library/services com firstId: services-grid-simple).",
+      "name": "npx playwright test -g \"rotas sem smoke\"",
       "status": "passed"
     }
   ],

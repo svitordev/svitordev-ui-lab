@@ -1,111 +1,118 @@
-# T1 — Auditoria de privacidade + storage + arquitetura (Goal 035)
+# T1 — Auditoria das duas Services + contratos (Goal 036)
 
-Investigação apenas — nenhum código de produção alterado nesta task. Todas as constatações vêm de grep/leitura direta do código atual (comandos reais ao final).
+Investigação apenas — nenhum código de produção alterado nesta task. Todas as constatações vêm de leitura/grep direto do código atual (comandos reais ao final).
 
-## 1. Tracking real encontrado (grep em `app/`+`components/`+`lib/` + `app/layout.tsx` + `package.json`)
+## 1. Tabela completa — `components/sections/services/**` (todos os componentes)
 
-Grep: `cookie|cookies|document.cookie|localStorage|sessionStorage|analytics|gtag|googletagmanager|GoogleAnalytics|GA4|pixel|facebook|meta pixel|clarity|segment|posthog|mixpanel|tracking|consent` → **79 matches, todos falsos positivos de `tracking-wide`/`tracking-tight` (Tailwind letter-spacing)**. Zero ocorrências reais de cookie/storage/analytics/pixel/consent.
+| Componente | Path | Consumers reais | Hardcoded? | Já data-driven? | Entra na 036? |
+|---|---|---|---|---|---|
+| ServicesWithIcons | `components/sections/services/services-with-icons.tsx` | **home** (`app/(site)/page.tsx` L14/L106) + Library (`app/library/services/page.tsx`) | SIM (zero props; array interno `servicesWithIcons` com title/desc/Icon) | NÃO | **SIM — Service A** |
+| ServicesGridSimple | `components/sections/services/services-grid-simple.tsx` | Library (`app/library/services/page.tsx`) | SIM (zero props; array interno `services` com title/desc + heading/desc de seção) | NÃO | **SIM — Service B** |
+| ServicesSplitWithHighlight | `components/sections/services/services-split-with-highlight.tsx` | Library (`app/library/services/page.tsx`) | SIM (zero props; `mainService`, `secondaryPoints`, caixa "Exemplo de uso", copy de adaptação) | NÃO | NÃO — fica na dívida |
 
-- **Existe tracking não essencial? NÃO.**
-- **Existem cookies próprios? NÃO** (zero `document.cookie`, nenhuma cookie API).
-- **Existe analytics? NÃO** (sem gtag/GA4/PostHog/Mixpanel/Clarity/Segment; `package.json` sem nenhuma SDK de analytics).
-- **Existe publicidade/pixel? NÃO.**
-- **Existe armazenamento local atual? NÃO** — nenhum uso de `localStorage`/`sessionStorage` no código de produção. **Não há convenção de naming pré-existente** → adota-se a direção do plano: key namespaced versionada `svitordev:consent-preferences:v1`.
-- `app/layout.tsx`: Server Component puro, sem scripts externos, sem injeção de terceiros. `package.json`: nenhuma dependência de consent/CMP/analytics.
+**Seleção (exatamente 2):** ServicesWithIcons + ServicesGridSimple. Justificativa:
+- **ServicesWithIcons** é o único service com **consumer real fora da Library** (home) — a migração prova o contrato com consumer dono dos dados imediatamente (padrão 031/032).
+- **ServicesGridSimple** é a forma canônica da família grid (heading + description + items[] com título/descrição) — encaixa diretamente na linguagem dos contratos modernos sem campos one-off.
+- **ServicesSplitWithHighlight permanece hardcoded**: estrutura heterogênea (bloco principal + caixa de exemplo + lista de bullets + copy meta-demo "Este bloco pode ser adaptado...") — o contrato seria um saco de campos únicos sem segundo consumer à vista; conteúdo é a própria demo de adaptabilidade (anti-inflação). A projeção do roadmap pós-lote confirma: **services 3 → 1** após a 036.
+- Os dois migrados compartilham forma conceitual coerente (heading + description + lista de cards), mas **sem abstração compartilhada** — cada um define seus tipos locais (padrão de todos os contratos do Lab: `HeroPrimaryProps`, `HeroStepsProps`, `GalleryTabsProps` são locais).
 
-**Consequência (regra crítica):** o componente **não pode afirmar** que bloqueia cookies de analytics/marketing — nenhuma integração existe. Ele **armazena preferências localmente** e **prepara a arquitetura**; a copy deve dizer exatamente isso.
+## 2. Consumers mapeados (grep real em `app/**`)
 
-## 2. Componentes de site — onde UI site-wide deve viver
+- `app/(site)/page.tsx`: importa e renderiza `<ServicesWithIcons />` (L14, L106) — **único consumer fora da Library**.
+- `app/library/services/page.tsx`: os 3 via `ServicesItem[]` com `Component: React.ComponentType` renderizado sem props — **a página precisará ser adaptada para passar dados** (consumer dono dos dados; `React.ComponentType` sem props não compila com props obrigatórias no TS strict).
+- Landing composition (`/library/landing`): **não usa** nenhum service (grep não casa) — nada a migrar lá.
+- Nenhum outro import de services no repositório.
 
-- `app/layout.tsx` (root, Server) → ponto arquitetural correto para o banner site-wide (renderiza o client leaf como filho direto; layout permanece Server).
-- Footer real do site: **`FooterCta`** via `app/(site)/layout.tsx` (home + blog). `FooterColumns`/`FooterSimple` são variants de catálogo; `FooterColumns` aparece na landing composition (`/library/landing`) — **não é o footer do site**.
-- **Ponto de reabertura aprovado:** `FooterCta` (linha final), único ponto de UI site-wide real. `FooterColumns` não é alterado (é demo de composition; alterá-lo inflaria escopo).
+## 3. Inventário de hardcode (o que sai do componente)
 
-## 3. Primitives existentes
+**ServicesWithIcons (A):** heading da seção ("Serviços que geram resultado para o seu negócio"), description da seção, array de 3 items (title, desc, **Icon**). Estrutura interna permanece: grid `md:grid-cols-3`, cards `rounded-2xl border bg-muted/20`, container do ícone `h-10 w-10 rounded-xl bg-muted`, `h-5 w-5 text-muted-foreground`, tokens, dark-only.
 
-- `components/ui/`: accordion, alert, avatar, badge, button, card, input, separator, skeleton, tabs, textarea, breadcrumb. **Não existe Checkbox/Switch** → **HTML nativo acessível** (`<input type="checkbox">` estilizado com tokens; `<label htmlFor>` real). **Nenhum primitive novo, nenhuma instalação Radix.**
-- `Button` existente usado nas ações (sem `asChild` — ações são handlers, não links).
+**ServicesGridSimple (B):** heading ("Como sua empresa ajuda os clientes"), description da seção, array de 3 items (title, desc). Estrutura interna permanece: grid `md:grid-cols-3`, cards `rounded-xl border bg-background`, tokens, dark-only.
 
-## 4. Decisão de categorias — **Opção A (arquitetura preparada)**
+**Nenhum dos dois tem CTA hoje** → contrato sem actions (não inventar API sem uso).
 
-Justificativa: o roadmap já nomeia o consumer real (044/046 — SaaS landing) e a evolução existe para estabelecer a arquitetura de preferências. Opção B (não expor categoria sem consumer) deixaria o banner sem o que personalizar — a própria evolução seria o consumer. **Copy factual obrigatória** (ver §8).
+## 4. Contratos aprovados (linguagem dos contratos modernos 001/003/010/016/031/032)
 
-## 5. Modelo de estado (contrato mínimo)
+**Service A — `services-with-icons.tsx`:**
 
 ```ts
-type ConsentPreferences = {
-  version: 1
-  necessary: true          // sempre true — nunca salvo como false
-  analytics: boolean
-  marketing: boolean
-  updatedAt?: string       // ISO local, informativo
-}
+type ServiceWithIcon = {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+type ServicesWithIconsProps = {
+  title: string;
+  description?: string;
+  services: ServiceWithIcon[];
+};
 ```
 
-- **Necessary:** sempre ativa, checkbox `checked` + `disabled` (nativo — disabled em checkbox checked mantém o estado visível e a semântica é clara), com explicação factual: cobre o armazenamento local das próprias preferências (este componente usa localStorage — é a única categoria realmente ativa hoje).
-- **Analytics/Marketing:** categorias opcionais reais do modelo, mas **sem side effect hoje** — a copy declara isso.
+**Service B — `services-grid-simple.tsx`:**
 
-## 6. Storage
+```ts
+type ServiceGridItem = {
+  title: string;
+  description: string;
+};
 
-- **`localStorage`** (UI de preferências não precisa de backend nesta evolução).
-- Key: **`svitordev:consent-preferences:v1`** (namespaced + versionada; sem convenção pré-existente — §1).
-- Leitura **somente no client** (`useEffect` pós-mount); escrita em `localStorage.setItem` no save. JSON inválido / `version !== 1` / shape inválido → tratado como **ausência** (banner reaparece; nada quebra).
+type ServicesGridSimpleProps = {
+  title: string;
+  description?: string;
+  services: ServiceGridItem[];
+};
+```
 
-## 7. Comportamento
+- `title`/`services` obrigatórios; `description?` opcional com renderização condicional; **sem defaults internos escondendo conteúdo**; `desc` → `description` (naming do DS, precedente 032).
+- Tipos locais por componente — **sem tipo compartilhado** entre A e B (cada contrato é independente; abstração só para reduzir linhas é proibida).
 
-- **Primeira visita** (sem key): banner aparece (pós-mount, sem leitura no render server).
-- **Decisão salva:** banner não reaparece automaticamente; refresh preserva.
-- **Reabertura:** controle real no FooterCta → painel reaparece com valores salvos carregados → usuário altera e salva (nova decisão sobrescreve).
-- **Ações:** `Aceitar opcionais` / `Recusar opcionais` / `Personalizar` (expansão **inline** — `<details>` nativo com checkboxes + `Salvar preferências`). Sem Dialog/modal novo. **Anti-dark-pattern:** Aceitar e Recusar com o mesmo peso visual (ambos `variant="outline"`); `Salvar preferências` como ação primária do painel expandido; nenhum botão escondido.
+## 5. Icon strategy
 
-## 8. Copy constraints (factual — zero fake compliance)
+- **A:** consumer fornece `icon` como **componente** (`React.ComponentType<{ className?: string }>`) — `lucide-react` é dependência existente; home passa `Globe2`/`LayoutDashboard`/`Workflow`; página da Library idem. O componente mantém o **markup estrutural** do ícone (container `h-10 w-10 rounded-xl bg-muted`, `h-5 w-5 text-muted-foreground`) — o consumer decide **qual** ícone, não como ele é emoldurado.
+- Lookup global por string arbitrária: **rejeitado** (sem necessidade — nenhum padrão assim no repo; `contact-details` usa `Icon:` como componente nos dados locais, mesma direção).
+- **B:** sem ícones — nada a decidir.
 
-- Dizer: preferências **armazenadas localmente neste navegador**; **nenhum dado é enviado** por este componente; **nenhuma integração externa (analytics/marketing) está ativa atualmente** — as escolhas preparam o comportamento futuro.
-- **Não dizer:** "bloqueamos cookies de analytics", "analytics foi desativado", "100% conforme LGPD/GDPR", nenhuma alegação jurídica.
+## 6. CTA strategy
 
-## 9. A11y
+Nenhum dos dois componentes migrados tem CTA hoje → **nenhuma action entra no contrato** (não inventar API sem consumer). Convenção 001 permanece documentada para contratos futuros com actions.
 
-- Banner **não-modal**: `<section>` com `aria-labelledby` apontando para heading interno (h2); **não captura foco** como modal (sem focus trap, sem autofocus); ordem de tabulação natural (banner no fim do DOM — filho último do body).
-- Checkboxes com `<label htmlFor>` real; necessary `disabled` + `checked` + explicação textual; estado `checked` nativo reportado.
-- `<details>`/`<summary>` nativos para Personalizar (divulgação acessível por teclado sem JS extra).
-- Status após salvar: painel/banner fecha (feedback visual) + `role="status"` **somente no painel de reabertura** após save — ver §11 (evita colisão com `getByRole('status')` da newsletter).
-- Reabertura: controle é `<button>` real com texto "Preferências de privacidade".
+## 7. QLT-005 — previsão (não atualizar na T1)
 
-## 10. Client boundary + comunicação
+- Baseline real confirmado em `QUALITY-REVIEW.md`: **23 (17 sections + 6 site), ISSUE_CONFIRMED/ABERTO**.
+- Os 2 componentes migrados **estão na dívida** → previsão pós-036: **23 → 21** (15 sections + 6 site). **Permanece ABERTO** — nunca VERIFIED.
+- Consistência com a projeção do roadmap pós-lote: services 3 → 1 ✓.
 
-- `ConsentPreferencesBanner` = **Client Component** (storage + interação) — boundary mínimo, leaf isolado no root layout (layout permanece Server).
-- `ConsentPreferencesTrigger` = client leaf mínimo no FooterCta (Server).
-- **Comunicação:** custom event `svitordev:consent-preferences:open` (trigger → banner). Sem context global, sem lib de estado, sem dependência nova — menor acoplamento entre dois client leaves que não têm ancestral comum client.
+## 8. Heading / a11y
 
-## 11. Interferência na suíte existente (auditada antes — sem helpers preventivos)
+Ambos: `h2` da seção + `h3` dos cards — **hierarquia preservada sem alteração** (QLT-011 não é objetivo da 036; nenhum ajuste de heading necessário para preservar semântica na migração).
 
-- `button[aria-expanded]` (testes mobile nav, linhas 75/107/897): o banner **não usa** `aria-expanded` (usa `<details>` nativo) → zero interferência.
-- `getByRole('status')` (newsletter, linhas 352/375): `role="status"` só aparece **após save no painel de reabertura** — testes da newsletter não salvam consent → zero interferência.
-- `getByRole('checkbox')`: nenhum teste existente usa → livre.
-- Testes de overflow (`scrollWidth === clientWidth`): banner fixed bottom sem largura além do viewport → sem overflow.
-- Cliques em elementos cobertos: banner compacto no rodapé; suíte roda primeiro sem mudança em testes existentes; se houver interferência real, criar **helper mínimo explícito** (não `localStorage.setItem` em todos).
+## 9. Visual — zero redesign
 
-## 12. Arquivos previstos
+Layout, grid, breakpoints, spacing, classes, tokens, dark-only DEC-011 e conteúdo atual (copy exata movida para os consumers) preservados integralmente. Nenhuma rota nova, nenhum componente novo, nenhuma dependência nova.
 
-- T2: `components/site/consent/consent-preferences.tsx` (novo — banner + trigger, um arquivo, um client boundary por folha).
-- T3: `app/layout.tsx` (renderizar o banner leaf) + `components/site/footers/footer-cta.tsx` (renderizar o trigger leaf).
-- T4: `tests/smoke.spec.ts` (+6 testes dual-project cobrindo os 7 cenários).
-- T5: catálogo (1 entrada site), roadmap (035 VERIFIED, próxima 036), CURRENT-STATE, CHANGELOG; `DECISIONS.md` — **avaliar DEC nova** apenas se a política (localStorage-only, zero integração fictícia, reabertura obrigatória) for tratada como duradoura (provável — é comportamento de template).
+## 10. Testes — lacunas reais (T4)
 
-## 13. Contagens esperadas (baseline REAL confirmado)
+- Existentes que tocam services: `/library/services` via shell (linha 525 — visita + `firstId: 'services-grid-simple'`; **ordem das entries da shell não pode mudar**); âncoras `#services` da home/landing (linhas 220/759–764/984/1004–1025). **Nenhum teste atual asserta conteúdo dos components services.**
+- Lacunas reais a cobrir (dual-project): contrato de A provado via consumer oficial (Library: heading, 3 items, ordem, ícones; home: copy real preservada); contrato de B via consumer (heading, 3 items, ordem); zero overflow nos dois viewports; SplitWithHighlight continua renderizando (regressão da página intacta).
+- Sem helpers que mascarem bugs; sem duplicar teste sem valor.
 
-- Catálogo real hoje: sections **32** · UI **12** · site **7** (o plano do usuário dizia 9 — divergência registrada, usa-se a realidade) · wrappers 2 · total **53**.
-- Pós-035: site **8**, total **54**; sections 32; rotas **24** (nenhuma nova); Playwright 47 → **53 testes** (106 execuções: 103 passed + 3 skipped).
+## 11. Arquivos previstos
 
-## 14. Riscos
+- **T2 (Service A):** `components/sections/services/services-with-icons.tsx` + `app/(site)/page.tsx` + `app/library/services/page.tsx`.
+- **T3 (Service B):** `components/sections/services/services-grid-simple.tsx` + `app/library/services/page.tsx`.
+- **T4:** `tests/smoke.spec.ts` (apenas lacunas reais).
+- **T5:** `QUALITY-REVIEW.md` (QLT-005 23→21, aberto), `docs/COMPONENT-CATALOG.md` (entradas existentes marcadas data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (036 VERIFIED, próxima 037), `memory-bank/CURRENT-STATE.md`, `memory-bank/CHANGELOG.md`. `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção/decisão nova).
 
-- **Hidratação:** banner renderizado condicionalmente com estado lido no mount — server renderiza vazio, client decide (sem mismatch; sem suppressHydrationWarning).
-- **Custom event em testes:** Playwright dispara cliques reais — sem dependência de timing além do normal; asserts com `expect.poll`/web-first onde necessário.
-- **Interferência visual em screenshots/overflow:** mitigada no §11; suíte valida.
-- Risco residual baixo — componente isolado, zero dependências.
+## 12. Riscos
+
+- **Type da página da Library:** `Component: React.ComponentType` (sem props) não compila com props obrigatórias — adaptação mínima e explícita na página (consumer passa os dados), sem mudar o padrão das entries da shell.
+- **Copy da home:** deve ser movida 1:1 para o consumer (testes de âncora/heading da home não podem regredir).
+- **Ordem das entries da Library:** `firstId: 'services-grid-simple'` é assertado — não reordenar.
+- Risco baixo — migração mecânica de dados com contrato mínimo; zero mudança visual.
 
 ## Material auditável (comandos reais desta task)
 
-- `grep "cookie|cookies|document.cookie|localStorage|sessionStorage|analytics|gtag|googletagmanager|GoogleAnalytics|GA4|pixel|facebook|meta pixel|clarity|segment|posthog|mixpanel|tracking|consent" em {app,components,lib}/**` → 79 matches, **todos** `tracking-*` do Tailwind (falsos positivos) — zero tracking/storage real.
-- Leituras: `app/layout.tsx` (Server, sem scripts), `app/(site)/layout.tsx` (usa FooterCta), `components/site/footers/footer-cta.tsx`, `package.json` (nenhuma SDK), `docs/COMPONENT-CATALOG.md` (contagens reais 32/12/7/2=53), `tests/smoke.spec.ts` (auditado `button[aria-expanded]`, `getByRole('status')`, `getByRole('checkbox')`).
+- `grep "services-grid-simple|services-split-with-highlight|services-with-icons|ServicesGridSimple|ServicesSplitWithHighlight|ServicesWithIcons" em app/**` → 11 matches em 2 arquivos (home + library/services) — consumers completos.
+- Leituras integrais: os 3 componentes de `components/sections/services/`, `app/library/services/page.tsx`, `components/sections/hero/hero-primary.tsx` (linguagem de contrato), `QUALITY-REVIEW.md` §QLT-005 (baseline 23), `docs/COMPONENT-CATALOG.md` (3 entradas Template), `tests/smoke.spec.ts` (grep services — nenhuma cobertura de conteúdo).
 - Nenhuma alteração de código nesta task.

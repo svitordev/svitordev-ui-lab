@@ -1,14 +1,14 @@
 {
   "task_id": "T1",
-  "fingerprint": "53abca30254f71f7fe978a22ec7ea4b990c6726709ae97e9b7236bb2069871b4",
+  "fingerprint": "a134574487418155e146be3e57d325f32116c2e74641df52cb7a1545930e7d12",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria T1 (Goal 035 - Consent preferences banner) verificada com sucesso. O artefato .goal/evidence/T1-audit.md cobre integralmente todos os criterios de aceite: mapeamento factual de tracking/storage reais (SIM/NAO por tipo, confirmando 79 matches apenas de classes Tailwind tracking-*), identificacao correta do ponto de integracao site-wide (app/layout.tsx + FooterCta via app/(site)/layout.tsx, preservando FooterColumns restrito a landing composition), reutilizacao de primitives HTML nativos (input checkbox + details/summary sem novos primitives ou dependencias Radix), contrato de estado ConsentPreferences versionado na key svitordev:consent-preferences:v1, escolha justificada da Opcao A com restricoes estritas de copy factual (zero fake compliance e sem alegacoes LGPD/GDPR), client boundary minimo via CustomEvent (svitordev:consent-preferences:open), analise de nao-interferencia com seletores de testes existentes (button[aria-expanded], getByRole('status'), getByRole('checkbox')), baseline real do catalogo confirmado (site = 7, total = 53) e nenhuma alteracao em codigo de producao.",
+  "summary": "Auditoria T1 da Evolução 036 verificada com sucesso contra o workspace real. O arquivo .goal/evidence/T1-audit.md documenta a tabela completa dos 3 componentes em components/sections/services/** (ServicesWithIcons, ServicesGridSimple, ServicesSplitWithHighlight) com paths, consumers reais (app/(site)/page.tsx e app/library/services/page.tsx), status hardcoded/data-driven e seleção fundamentada de exatamente 2 componentes (ServicesWithIcons como Service A e ServicesGridSimple como Service B, mantendo ServicesSplitWithHighlight na dívida: services 3 -> 1). Separação entre hardcodes e estrutura interna, contratos locais ServicesWithIconsProps e ServicesGridSimpleProps, icon strategy (React.ComponentType<{ className?: string }>), CTA strategy (sem actions), previsão QLT-005 (23 -> 21, mantendo ISSUE_CONFIRMED/ABERTO), lacunas reais de testes em tests/smoke.spec.ts, arquivos previstos (T2-T5) e riscos foram todos confirmados sem nenhuma alteração em código de produção.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Inspecao estatica das evidencias de auditoria (.goal/evidence/T1-audit.md): grep de tracking/storage, leitura de layouts, footer, catalogo e suite Playwright documentados sem alteracao de codigo de producao.",
-      "name": "T1-audit-evidence-verification",
+      "evidence": "Tarefa T1 é exclusivamente de investigação/auditoria documental (.goal/evidence/T1-audit.md) sem alteração de código de produção; leitura direta confirmou os arquivos de produção intactos e as referências reais em tests/smoke.spec.ts (linhas 525, 984, 1004-1032).",
+      "name": "verificacao-estatica-auditoria-t1",
       "status": "passed"
     }
   ],

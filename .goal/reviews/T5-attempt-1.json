@@ -1,24 +1,29 @@
 {
   "task_id": "T5",
-  "fingerprint": "466daeb7e9cd7f0aad86f2be9695db4921aa2ee8b5c3c96249db43490c6e123e",
+  "fingerprint": "fedd06e43d8676e1dfb358410a8ac81040210aac29262ea8229f3835c1d68b22",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria da Task T5 (Evolução 035 — Documentação final do Consent preferences banner) concluída com veredito PASS. A inspeção direta dos arquivos do workspace confirma que todos os critérios de aceite foram integralmente atendidos: (1) docs/COMPONENT-CATALOG.md reflete as contagens reais (UI 12, site 8, sections 32, wrappers 2, total 54), atualiza as observações de FooterCta e FooterColumns e adiciona a seção Consent com 1 entrada (ConsentPreferences em components/site/consent/consent-preferences.tsx) documentando exports, client boundary, modelo de dados, storage key svitordev:consent-preferences:v1, fail-safe, reabertura via custom event, copy factual sem alegação de CMP jurídica e zero dependências novas; (2) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 035 como VERIFIED (2026-11-12) com o path real e define a 036 (Migrar services×2 para contrato) como próxima execução não iniciada, mantendo o consumer planejado 046 intacto; (3) memory-bank/CURRENT-STATE.md lista as evoluções 001–035 com contagens reais (site 8, sections 32, total 54, rotas 24, Playwright 53 testes / 106 execuções — 103 passed + 3 skipped), comportamento do consent e próxima execução 036; (4) memory-bank/CHANGELOG.md registra apenas o estado final da Evolução 035 preservando o histórico; (5) memory-bank/DECISIONS.md registra a DEC-012 com a política duradoura de consentimento do template; (6) QUALITY-REVIEW.md e docs/DESIGN-SYSTEM.md permanecem inalterados, preservando QLT-005 (23, aberto) e QLT-011 (parcial, aberto); (7) gates reportados com exit code 0 (npm run lint, npm run build, git diff --check).",
+  "summary": "Auditoria independente da T5 (Documentação + QLT-005 da Evolução 036) concluída com veredito PASS. Todos os 5 critérios de aceite foram verificados diretamente nos arquivos reais do repositório: (1) QUALITY-REVIEW.md registra a redução incremental real do QLT-005 de 23 para 21 (15 sections + 6 site), mantendo o status ISSUE_CONFIRMED / ABERTO (nunca VERIFIED), documentando exatamente os 2 componentes migrados (services-with-icons e services-grid-simple), a permanência de services-split-with-highlight na dívida e preservando QLT-011 intacto; (2) docs/COMPONENT-CATALOG.md atualiza apenas as 2 entradas existentes de ServicesGridSimple e ServicesWithIcons como Pronto / Data-driven (Evolução 036) sem inflar contagens (12 UI, 8 site, 32 sections, 2 wrappers, total 54); (3) docs/ROADMAP-1000-EVOLUTIONS.md marca a Evolução 036 como VERIFIED (2026-11-16), atualiza a seção e a lista de migrações do QLT-005 (23→21) e define a 037 como próxima sem iniciá-la; (4) memory-bank/CURRENT-STATE.md e memory-bank/CHANGELOG.md registram exclusivamente o estado final consolidado da Evolução 036 (com docs/DESIGN-SYSTEM.md e memory-bank/DECISIONS.md inalterados); (5) gates reportados verdes: npm run lint (0/0), npm run build (PASS, 24 rotas) e git diff --check limpo.",
   "findings": [],
   "tests": [
     {
-      "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidências incorporadas da T5.",
+      "evidence": "Exit 0 — 0 erros / 0 warnings (evidência T5 + inspeção dos arquivos alterados).",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "BUILD_EXIT=0 (24 rotas) reportado nas evidências incorporadas da T5.",
+      "evidence": "Exit 0 — build de produção PASS com 24/24 rotas geradas, zero rota nova.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "CHECK_EXIT=0 reportado nas evidências incorporadas; inspeção direta de COMPONENT-CATALOG.md, ROADMAP-1000-EVOLUTIONS.md, CHANGELOG.md, CURRENT-STATE.md e DECISIONS.md confirma formatação íntegra.",
+      "evidence": "Exit 0 — diff limpo sem erros de whitespace ou marcadores de conflito.",
       "name": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "evidence": "Executado e aprovado na T4 (55 testes / 110 execuções — 107 passed + 3 skipped); não re-executado na T5 por tratar-se de alteração exclusivamente documental.",
+      "name": "Playwright smoke suite (T4)",
       "status": "passed"
     }
   ],

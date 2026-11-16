@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-16] — Evolução 036: Migrar services×2 para contrato (VERIFIED — QLT-005 incremental)
+
+- **`components/sections/services/services-with-icons.tsx`** (`ServicesWithIcons`) e **`components/sections/services/services-grid-simple.tsx`** (`ServicesGridSimple`) — os 2 migrados da dívida pela auditoria da 036 (`ServicesSplitWithHighlight` permanece hardcoded na dívida). Contratos data-driven locais na linguagem dos contratos modernos do Lab: `ServiceWithIcon`/`ServicesWithIconsProps` (`icon` = componente React — lucide-react, dependência real do projeto) e `ServiceGridItem`/`ServicesGridSimpleProps` (sem icon API, sem actions — nada que o componente não tenha hoje); `title`/`services` obrigatórios; `description?` opcional com renderização condicional; sem defaults internos; `desc` → `description` (naming do DS); Server Components e visual preservados (estrutura, classes, tokens e heading levels h2/h3 intactos).
+- **Consumers donos dos dados:** `app/(site)/page.tsx` (`servicesHomeData`) e `app/library/services/page.tsx` (`servicesGridSimpleDemo`/`servicesWithIconsDemo` — preview `React.ReactNode`, padrão das páginas heterogêneas) com copy 1:1; ordem e ids das entries preservados; nenhum componente novo, nenhuma rota nova, **zero dependências novas**.
+- +2 testes Playwright dual-project (contratos provados via consumers reais: headings/copy específicas dos data objects, ordem dos 6 h3 na Library, ícones escopados semanticamente, Split intacto, zero overflow). Suíte: 55 testes / 110 execuções — **107 passed + 3 skipped**. Lint **0/0**; build **PASS** (24 rotas); `git diff --check` limpo.
+- Contagens: catálogo **32 sections / 12 UI / 8 site / total 54** (inalterado — migração de contrato, não de contagem); rotas **24** (nenhuma nova). **QLT-005: 23 → 21 (15 sections + 6 site), permanece ABERTO. QLT-011 preservado.**
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (as 2 entradas existentes marcadas data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (036 VERIFIED, próxima 037), `memory-bank/CURRENT-STATE.md` (001–036, próxima execução: 037). `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção nova, nenhuma decisão nova).
+
+---
+
 ## [2026-11-12] — Evolução 035: Consent preferences banner (site) (VERIFIED)
 
 - **`components/site/consent/consent-preferences.tsx`** (`ConsentPreferencesBanner` + `ConsentPreferencesTrigger` — 1 entrada de catálogo, mesmo client boundary) — Client Component justificado (localStorage + interação); modelo `{version:1, necessary:true, analytics, marketing, updatedAt?}`; storage key namespaced versionada `svitordev:consent-preferences:v1`; JSON corrompido/versão incompatível tratado como ausência (fail-safe); leitura somente pós-mount (sem mismatch de hidratação, sem suppressHydrationWarning); banner não-modal (`section` + `aria-labelledby`, tabulação natural, sem focus trap); `<details>` nativo para Personalizar; labels reais htmlFor↔id; `role="status"` somente após ação de save; anti-dark-pattern (Aceitar e Recusar com o mesmo peso; Fechar ghost); copy factual — armazenamento local, nenhum dado enviado, nenhuma integração externa ativa, nenhuma alegação jurídica; **zero dependências novas**; somente tokens; dark-only DEC-011.

@@ -1,24 +1,21 @@
-Você é o Inspector do Goal Orchestrator para o Goal 035 (Svitordev UI Lab).
+Você é o Inspector do Goal Orchestrator para o Goal 036 (Svitordev UI Lab).
 
-REVISAÇÃO: T2 — Implementação Consent Preferences + gates.
+REVISAÇÃO: T2 — Service A migrada (ServicesWithIcons).
 
 MÉTODO: leitura direta dos arquivos reais no workspace. Evidência anexada como DADOS
-(`.goal/evidence/T2-gates.md` — diff integral do arquivo novo + resultados de gates com
-exit codes). Não confie em narrativas suas: verifique no disco.
+(`.goal/evidence/T2-attempt-1.md` — diffs reais + comandos executados + exit codes).
+Não confie em narrativas: verifique no disco.
 
-CONTRATO DA T2 (da T1 APPROVED): exatamente 1 componente site-level novo
-(`components/site/consent/consent-preferences.tsx`) com `ConsentPreferencesBanner` e
-`ConsentPreferencesTrigger` (mesmo arquivo/client boundary, precedente `alert.tsx`),
-"use client" apenas nele, storage `svitordev:consent-preferences:v1`, modelo
-`{version:1, necessary:true, analytics:boolean, marketing:boolean, updatedAt?}`,
-JSON corrompido/versão incompatível tratado como ausência, leitura somente pós-mount
-(sem leitura no server render), sem suppressHydrationWarning, Aceitar/Recusar com mesmo
-peso visual, painel Personalizar com 3 checkboxes com labels reais, Salvar anuncia via
-role="status" somente após ação, copy factual sem alegação jurídica, sem dependências
-novas, somente tokens, dark-only.
+CONTRATO DA T2 (da T1 APPROVED): Service A = `components/sections/services/
+services-with-icons.tsx` com `ServiceWithIcon {title, description, icon:
+React.ComponentType<{className?: string}>}` e props `{title, description?, services[]}`;
+tipos locais; sem defaults internos; `desc` → `description`; sem actions (nenhum CTA hoje);
+consumers donos dos dados com copy 1:1 (`app/(site)/page.tsx` home +
+`app/library/services/page.tsx`); Server Component preservado; zero redesign; GridSimple e
+SplitWithHighlight NÃO tocados (B é a próxima task).
 
-GATES REAIS (você deve reexecutar ou verificar por leitura; exit codes esperados 0):
-- `npm run lint` → 0/0
+GATES REAIS (verifique por leitura/reexecução; esperados 0):
+- `npm run lint` → exit 0, 0/0
 - `npm run build` → exit 0
 - `git diff --check` → exit 0
 
@@ -27,25 +24,18 @@ Não execute comandos. Se precisar de evidência que não consegue obter por lei
 retorne verdict BLOCKED explicando o que falta.
 
 CRITÉRIOS DE REVISÃO (todos verificáveis no disco):
-1. Exatamente 1 arquivo de produção novo: `components/site/consent/consent-preferences.tsx`
-   com os 2 exports nomeados; nenhum outro arquivo de produção alterado nesta task
-   (`.goal/` não conta).
-2. `"use client"` presente; storage key e modelo de dados exatamente como no contrato;
-   `necessary` nunca persistido como false.
-3. JSON corrompido e versão incompatível → tratado como ausência (parseStored com
-   try/catch + validação de shape); leitura de storage somente pós-mount (useEffect),
-   server render não toca localStorage; sem suppressHydrationWarning.
-4. Comportamento: sem preferência salva → banner visível pós-mount; decisão salva →
-   não reaparece automaticamente; reabertura via custom event; nova decisão sobrescreve.
-5. Anti-dark-pattern: Aceitar e Recusar com o mesmo variant/peso; painel Personalizar com
-   3 checkboxes, todos com label real associado (htmlFor↔id); necessary checked+disabled
-   com explicação factual.
-6. role="status" exibido somente após ação de save do usuário (não estático).
-7. Copy factual: nenhuma alegação jurídica (LGPD/GDPR/legally binding); nenhuma alegação
-   de integração ativa; armazenamento local declarado.
-8. Zero dependências novas (apenas React, Button existente, cn); somente tokens (nenhuma
-   cor raw); dark-only; sem overflow em 375/1280 (fixed inset-x-0 bottom-0).
-9. Gates reais: lint 0/0, build exit 0, git diff --check exit 0 (verificados por você).
+1. `services-with-icons.tsx`: contrato exatamente como aprovado (tipos locais exportados,
+   obrigatórios vs opcionais condicionais, sem defaults mascarando hardcode); estrutura
+   interna, classes, tokens e heading levels (h2/h3) intactos; Server Component preservado.
+2. `app/(site)/page.tsx`: dados do consumer com copy 1:1 do conteúdo original (títulos,
+   descrições, ícones Globe2/LayoutDashboard/Workflow na ordem original); spread no JSX.
+3. `app/library/services/page.tsx`: `preview: React.ReactNode` (padrão da página de hero);
+   ordem e ids das entries preservados (services-grid-simple primeiro); copy demo 1:1.
+4. GridSimple e SplitWithHighlight sem nenhuma alteração (git diff deve mostrar apenas os
+   3 arquivos do contrato + `.goal/`).
+5. Gates reais por você: lint 0/0, build exit 0, git diff --check exit 0.
+6. O incidente do dev server órfão na evidência é plausível e não mascarou defeito
+   (re-execução verde sem alterar asserts).
 
 FORMATO DE SAÍDA: JSON estrito conforme o schema — verdict, confidence, findings,
 required_corrections, evidence_reviewed, inspector_calls_used.

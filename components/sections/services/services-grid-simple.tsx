@@ -1,31 +1,34 @@
 // components/sections/services/services-grid-simple.tsx
-const services = [
-  {
-    title: "Serviços principais",
-    desc: "Destaque os serviços que são o centro do seu trabalho, explicando de forma simples o que cada um resolve.",
-  },
-  {
-    title: "Atendimento personalizado",
-    desc: "Mostre como o atendimento é adaptado à realidade de cada cliente, reforçando proximidade, confiança e clareza.",
-  },
-  {
-    title: "Suporte e acompanhamento",
-    desc: "Explique como funciona o acompanhamento após a contratação: canais de contato, horários e tipo de suporte oferecido.",
-  },
-];
+// Evolução 036 — contrato data-driven local (QLT-005 incremental). O consumer é
+// dono dos dados; o componente mantém apenas a estrutura (grid, cards) com tokens
+// existentes. Sem ícones — nada de icon API; sem CTA — nada de actions.
 
-export function ServicesGridSimple() {
+export type ServiceGridItem = {
+  title: string;
+  description: string;
+};
+
+export type ServicesGridSimpleProps = {
+  title: string;
+  description?: string;
+  services: ServiceGridItem[];
+};
+
+export function ServicesGridSimple({
+  title,
+  description,
+  services,
+}: ServicesGridSimpleProps) {
   return (
     <section className="w-full bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
         <div className="mb-8 space-y-2 text-center">
           <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
-            Como sua empresa ajuda os clientes
+            {title}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Uma visão geral dos principais serviços, deixando claro o que o cliente pode
-            esperar ao escolher o seu atendimento.
-          </p>
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -35,7 +38,7 @@ export function ServicesGridSimple() {
               className="rounded-xl border bg-background p-4 text-left text-sm shadow-sm"
             >
               <h3 className="mb-2 text-base font-semibold">{service.title}</h3>
-              <p className="text-xs text-muted-foreground">{service.desc}</p>
+              <p className="text-xs text-muted-foreground">{service.description}</p>
             </div>
           ))}
         </div>

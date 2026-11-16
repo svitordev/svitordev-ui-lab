@@ -1597,3 +1597,70 @@ test('consent: storage corrompido e tratado como ausencia sem quebrar a pagina',
     ),
   ).toBe(true);
 });
+
+// Evolução 036 — contratos data-driven de Services provados via consumers (roles reais,
+// conteúdo específico dos consumers, sem asserts de classes Tailwind).
+
+test('services: página da Library prova os dois contratos via consumer (headings, ordem, ícone, Split intacto, zero overflow)', async ({ page }) => {
+  await page.goto('/library/services');
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Services / Serviços' })).toBeVisible();
+
+  // Headings vindos dos dados dos consumers (contratos B e A).
+  await expect(page.getByRole('heading', { level: 2, name: 'Como sua empresa ajuda os clientes' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Serviços que geram resultado para o seu negócio' })).toBeVisible();
+  // SplitWithHighlight (ainda hardcoded — fora da 036) continua renderizando.
+  await expect(page.getByRole('heading', { level: 2, name: 'Serviço principal para o seu dia a dia' })).toBeVisible();
+
+  // Ordem dos items na árvore de acessibilidade: grid (3) primeiro, com ícones (3) depois.
+  const h3s = page.getByRole('heading', { level: 3 });
+  await expect(h3s).toHaveCount(6);
+  await expect(h3s.nth(0)).toHaveText('Serviços principais');
+  await expect(h3s.nth(1)).toHaveText('Atendimento personalizado');
+  await expect(h3s.nth(2)).toHaveText('Suporte e acompanhamento');
+  await expect(h3s.nth(3)).toHaveText('Atendimento especializado');
+  await expect(h3s.nth(4)).toHaveText('Gestão e organização');
+  await expect(h3s.nth(5)).toHaveText('Otimização de processos');
+
+  // Ícones renderizados a partir dos dados do consumer (só o contrato A tem icon).
+  // Escopo no preview do componente — a Library Shell injeta 1 svg próprio na página.
+  const sectionA = page
+    .getByRole('heading', { level: 2, name: 'Serviços que geram resultado para o seu negócio' })
+    .locator('xpath=ancestor::section[1]');
+  await expect(sectionA.locator('svg')).toHaveCount(3);
+
+  // Zero overflow horizontal nos dois viewports.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+test('services: home mantém a copy real do contrato migrado (consumer dono dos dados)', async ({ page }) => {
+  await page.goto('/');
+
+  // Seção de services da home (escopo semântico pelo heading — mesmo padrão dos testes de contact).
+  const section = page
+    .getByRole('heading', { level: 2, name: 'Serviços que geram resultado para o seu negócio' })
+    .locator('xpath=ancestor::section[1]');
+  await expect(section).toBeVisible();
+  await expect(
+    section.getByText('O foco é facilitar a rotina, dar mais segurança nas decisões e melhorar a experiência de quem é atendido pela sua empresa.'),
+  ).toBeVisible();
+
+  // Os 3 cards originais da home, na ordem, com os 3 ícones (dados do consumer).
+  const h3s = section.getByRole('heading', { level: 3 });
+  await expect(h3s).toHaveCount(3);
+  await expect(h3s.nth(0)).toHaveText('Atendimento especializado');
+  await expect(h3s.nth(1)).toHaveText('Gestão e organização');
+  await expect(h3s.nth(2)).toHaveText('Otimização de processos');
+  await expect(section.locator('svg')).toHaveCount(3);
+
+  // Zero overflow horizontal nos dois viewports.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

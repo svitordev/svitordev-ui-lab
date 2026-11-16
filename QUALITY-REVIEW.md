@@ -215,7 +215,7 @@ Command exited with code 1
 **Prioridade:** P2
 **Categoria:** Componentes / Reutilização
 
-**Evidência:** Os 6 `site` components + as `sections` restantes têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010), `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer), `hero-primary` (Evolução 031) e `hero-steps` (Evolução 032).
+**Evidência:** Os 6 `site` components + as `sections` restantes têm **zero props**; todo texto/telefone/e-mail hardcoded (`Sua Empresa`, `(00) 00000-0000`, `contato@suaempresa.com`). Apenas `components/ui/*`, `library-shell.tsx` e os componentes já migrados para o contrato de props aceitam props. O catálogo já classifica os templates restantes de `site/` e `sections/` como "templates" — condizente, mas sem contrato de props. Migrações registradas: `hero-center-cta` (Evolução 010), `pricing-three-tiers` (Evolução 016 — planos, preços, features, actions e featured agora vêm do consumer), `hero-primary` (Evolução 031), `hero-steps` (Evolução 032) e `services-with-icons` + `services-grid-simple` (Evolução 036).
 
 **Verificação (Evolução 031, 2026-11-11):**
 
@@ -228,6 +228,12 @@ Command exited with code 1
 - **`HeroSteps`** migrado para contrato data-driven local (`HeroStep`/`HeroStepsAction`/`HeroStepsProps`) na linguagem dos contratos modernos do Lab (001/003/010/016): `title`/`steps` obrigatórios; `description?`/`action?`/`supportingText?` opcionais com renderização condicional; **sem defaults internos escondendo conteúdo**; campo `desc` renomeado para `description` (naming do DS); consumers donos dos dados (`app/(site)/page.tsx` + `app/library/hero/page.tsx`); CTA preserva o destino da 026 (`/#contact`) como link real; Server Component e visual preservados; union restrita `default | outline`; convenção 001. Heading: steps subiram de h3 para h2 (elimina o skip do QLT-011; heading principal permanece h1 — é o único h1 da home).
 - **Contagem real no código: 24 → 23** (17 sections + 6 site). **QLT-005 permanece ISSUE_CONFIRMED / ABERTO** — falta migrar 23.
 - Gate: +2 testes Playwright dual-project (contrato via consumer + hierarquia de headings); suíte 42 testes / 84 execuções — 81 passed + 3 skipped; lint 0/0; build PASS (22 rotas).
+
+**Verificação (Evolução 036, 2026-11-16):**
+
+- **`ServicesWithIcons`** e **`ServicesGridSimple`** migrados para contratos data-driven locais (`ServiceWithIcon`/`ServicesWithIconsProps` e `ServiceGridItem`/`ServicesGridSimpleProps`) na linguagem dos contratos modernos do Lab (001/003/010/016): `title`/`services` obrigatórios; `description?` opcional com renderização condicional; **sem defaults internos escondendo conteúdo**; `icon` apenas onde o componente já tinha ícone (componente React — lucide-react, dependência real do projeto); sem icon API no grid-simple e sem actions em nenhum dos dois (nenhum CTA hoje); campo `desc` renomeado para `description` (naming do DS); consumers donos dos dados (`app/(site)/page.tsx` + `app/library/services/page.tsx`, copy 1:1); Server Components e visual preservados (estrutura, classes, tokens e heading levels h2/h3 intactos); `ServicesSplitWithHighlight` permanece hardcoded — fica na dívida (seleção dos 2 migrados documentada na auditoria da 036).
+- **Contagem real no código: 23 → 21** (15 sections + 6 site). **QLT-005 permanece ISSUE_CONFIRMED / ABERTO** — falta migrar 21.
+- Gate: +2 testes Playwright dual-project (contratos provados via consumers reais — headings/copy específicos, ordem, ícones escopados semanticamente, Split intacto, zero overflow); suíte 55 testes / 110 execuções — 107 passed + 3 skipped; lint 0/0; build PASS (24 rotas); `git diff --check` limpo.
 
 **Arquivo(s):** `components/site/**`, `components/sections/**`
 

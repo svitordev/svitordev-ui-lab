@@ -11,8 +11,40 @@ import {
   PricingThreeTiers,
   type PricingThreeTiersProps,
 } from "@/components/sections/pricing/pricing-three-tiers";
-import { ServicesWithIcons } from "@/components/sections/services/services-with-icons";
+import {
+  ServicesWithIcons,
+  type ServicesWithIconsProps,
+} from "@/components/sections/services/services-with-icons";
 import { TestimonialsGrid } from "@/components/sections/testimonials/testimonials-grid";
+import { Globe2, LayoutDashboard, Workflow } from "lucide-react";
+
+// Copy original dos services da home, movida para o consumer (Evolução 036).
+// Ícones = componentes lucide-react passados pelo consumer (dados reais).
+const servicesHomeData: ServicesWithIconsProps = {
+  title: "Serviços que geram resultado para o seu negócio",
+  description:
+    "O foco é facilitar a rotina, dar mais segurança nas decisões e melhorar a experiência de quem é atendido pela sua empresa.",
+  services: [
+    {
+      title: "Atendimento especializado",
+      description:
+        "Serviços pensados para as necessidades reais dos clientes, com foco em orientação clara e soluções práticas.",
+      icon: Globe2,
+    },
+    {
+      title: "Gestão e organização",
+      description:
+        "Apoio na organização de rotinas, prazos, documentos e informações, trazendo mais controle para o dia a dia.",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Otimização de processos",
+      description:
+        "Análise e melhoria de processos internos, reduzindo retrabalho e tornando o atendimento mais ágil e eficiente.",
+      icon: Workflow,
+    },
+  ],
+};
 
 // Copy da hero da home — dados do consumer (Evolução 032).
 // CTA usa o anchor real #contact — a própria home renderiza ContactSplit (id="contact").
@@ -103,7 +135,7 @@ export default function SiteHomePage() {
           /#services e /#about dos headers/footers e pertencem à composição da home,
           não aos componentes reutilizáveis. */}
       <div id="services">
-        <ServicesWithIcons />
+        <ServicesWithIcons {...servicesHomeData} />
       </div>
       <div id="about">
         <AboutSplit />

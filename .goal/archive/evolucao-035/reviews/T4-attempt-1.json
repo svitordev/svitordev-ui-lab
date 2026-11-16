@@ -1,0 +1,32 @@
+{
+  "task_id": "T4",
+  "fingerprint": "7e9d3cc3b14afc953e098b1499ba4e0084204ac83370a8817d9f93efdb8a7aa8",
+  "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+  "verdict": "APPROVED",
+  "summary": "T4 aprovada (PASS). Os 6 novos testes em tests/smoke.spec.ts cobrem integralmente os cenarios exigidos para o banner de preferencias de privacidade (Evolucao 035): primeira visita com heading acessivel, copy factual, acoes de mesmo peso e abertura de Personalizar via teclado; aceitar opcionais com persistencia em localStorage e manutencao do estado oculto apos reload; recusar opcionais mantendo necessary: true e opcionais false apos reload; personalizacao por label associado (getByRole checkbox) e persistencia ao salvar; reabertura via teclado pelo botao do footer carregando o estado anterior, sobrescrevendo a decisao e anunciando via live region (role=status); fail-safe para localStorage corrompido sem quebrar a pagina e zero overflow horizontal nos dois viewports (desktop 1280x720 e mobile 375x667). O helper seedConsentDecision foi restrito exclusivamente aos 5 testes existentes com interferencia comprovada (contagem de input[id] e sobreposicao fisica do banner fixed bottom em mobile), sem aplicacao global. Gates reportados verdes (lint 0/0, build 24 rotas, test:e2e 103 passed / 3 skipped / 0 failed, git diff --check limpo) e contagens confirmadas (site 7 -> 8, total 53 -> 54, Playwright 47 -> 53 testes).",
+  "findings": [],
+  "tests": [
+    {
+      "evidence": "tests/smoke.spec.ts (linhas 1455-1599): 6 novos testes cobrindo primeira visita, aceitar, recusar, personalizar, reabertura pelo footer, storage corrompido e zero overflow; 103 passed + 3 skipped (0 failed) nos projetos desktop e mobile (E2E_EXIT=0).",
+      "name": "npm run test:e2e",
+      "status": "passed"
+    },
+    {
+      "evidence": "LINT_EXIT=0 (0 erros / 0 warnings) reportado nas evidencias da T4.",
+      "name": "npm run lint",
+      "status": "passed"
+    },
+    {
+      "evidence": "BUILD_EXIT=0 (24 rotas compiladas com sucesso) reportado nas evidencias da T4.",
+      "name": "npm run build",
+      "status": "passed"
+    },
+    {
+      "evidence": "CHECK_EXIT=0 sem erros de whitespace ou formacao no diff.",
+      "name": "git diff --check",
+      "status": "passed"
+    }
+  ],
+  "correction_prompt": "",
+  "source": "independent-antigravity-cli"
+}

@@ -143,9 +143,9 @@ Contrato do Breadcrumbs (resumo):
 
 | Nome | Path | Status | Observações |
 |---|---|---|---|
-| ServicesGridSimple | `components/sections/services/services-grid-simple.tsx` | Template | Grade simples |
+| ServicesGridSimple | `components/sections/services/services-grid-simple.tsx` | Pronto | **Data-driven** (Evolução 036, migração — visual preservado). Contrato `ServiceGridItem`/`ServicesGridSimpleProps` (tipos locais); `title`/`services` obrigatórios; `description?` opcional com renderização condicional; sem defaults internos; sem icon API e sem actions (componente não tem ícones nem CTA hoje); `desc` → `description` (naming do DS); Server Component; consumer `/library/services` (`servicesGridSimpleDemo`) com copy 1:1 |
 | ServicesSplitWithHighlight | `components/sections/services/services-split-with-highlight.tsx` | Template | Dividido com destaque |
-| ServicesWithIcons | `components/sections/services/services-with-icons.tsx` | Template | Com ícones |
+| ServicesWithIcons | `components/sections/services/services-with-icons.tsx` | Pronto | **Data-driven** (Evolução 036, migração — visual preservado). Contrato `ServiceWithIcon`/`ServicesWithIconsProps` (tipos locais); `title`/`services` obrigatórios; `description?` opcional com renderização condicional; sem defaults internos; `icon` = componente React (`React.ComponentType<{ className?: string }>` — lucide-react, dependência real do projeto); sem actions (nenhum CTA hoje); `desc` → `description` (naming do DS); Server Component; consumers: home (`servicesHomeData`) e `/library/services` (`servicesWithIconsDemo`) com copy 1:1 |
 
 ### Testimonials — `components/sections/testimonials/` (4)
 
