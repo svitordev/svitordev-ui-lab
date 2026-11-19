@@ -1,64 +1,74 @@
-# Evidência T3 — Consumers + preservação funcional/visual (attempt 1)
+# Evidência T3 — Header B (HeaderCentered) data-driven (attempt 1)
 
-Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037 (b69dab192d266c66)
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 038
 
-## 0. Natureza desta tarefa
+## Escopo desta task
 
-O consumer único foi atualizado na T2 (acoplamento documentado na evidência T2: props
-obrigatórias quebrariam o build sem dados no consumer). Esta T3 é a VERIFICAÇÃO FORMAL:
-consumers completos, nenhum uso da API antiga, copy 1:1, outras variants intactas, gates.
-Nenhuma edição de código nesta tarefa (diff = mesmo diff da T2, nenhum arquivo adicional).
+Migrar exatamente 1 componente: `components/site/headers/header-centered.tsx` (Header B)
+para o contrato aprovado na auditoria (T1, APPROVED), + seus 2 consumers reais passando os
+dados 1:1. Header A (T2, APPROVED) permanece íntegro. Zero redesign, zero dependência nova,
+zero componente novo, zero rota nova, zero DropdownMenu.
 
-## 1. Consumers completos (grep real no código de produção)
+## Contrato implementado (exatamente o aprovado na T1)
 
-Grep por `AboutTimeline|about-timeline` em `app/`, `components/`, `lib/`, `tests/`:
-- `app/library/about/page.tsx` — ÚNICO consumer; usa a API NOVA:
-  `preview: <AboutTimeline {...aboutTimelineDemo} />` (import do componente + type
-  `AboutTimelineProps`).
-- `components/sections/about/about-timeline.tsx` — a definição do contrato.
-- Nenhum outro uso; nenhum `<AboutTimeline />` sem props remanescente (API antiga = zero).
-- Home não importa o componente (histórico QLT-012); nenhuma composition o usa — confere
-  com a auditoria T1 aprovada.
+```ts
+type HeaderNavItem = { href: string; label: string };
+type HeaderCenteredProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+};
+export function HeaderCentered({ brand, navItems }: HeaderCenteredProps) { ... }
+```
 
-## 2. Copy 1:1 (consumer dono dos dados)
+- sem `action` (HeaderCentered não tem CTA hoje — contrato mínimo, sem inflação);
+- zero defaults; tipos locais; `"use client"` + `usePathname` preservados;
+- `aria-label="Navegação principal"` preservado; keys `item.href` preservadas;
+- layout `flex-col items-center` + `flex-wrap justify-center` intocado (decisão 007 — sem
+  MobileNav neste header, flex-wrap cobre mobile);
+- marca com `{" "}` entre os spans preservado (fiel ao original).
 
-`aboutTimelineDemo` no consumer reproduz EXATAMENTE o conteúdo original do componente:
-- title: "Um pouco da nossa trajetória"
-- description: "Uma história construída ao lado de clientes que confiam no nosso trabalho e crescem junto conosco."
-- items (ordem original preservada):
-  1. "Início das atividades" — "Primeiros atendimentos, entendendo na prática as principais necessidades dos clientes e da área de atuação."
-  2. "Crescimento e consolidação" — "Ampliação da carteira de clientes, organização dos processos internos e aprofundamento em serviços especializados."
-  3. "Atuação atual" — "Atendimento focado em oferecer soluções personalizadas, com acompanhamento próximo e foco em resultados concretos para cada cliente."
-- supportingText: "Você pode adaptar os textos dessa linha do tempo para escritórios, clínicas, consultorias e outros tipos de empresas, mantendo a mesma estrutura visual."
+## Consumers atualizados (dados 1:1 com o hardcode anterior)
 
-Nenhuma reescrita de copy; nenhuma mudança de ordem.
+1. `app/library/headers/page.tsx` — entry `header-centered` agora renderiza
+   `<HeaderCentered brand={...} navItems={...} />` com os mesmos 5 itens na mesma ordem
+   (Início `/`, Serviços `/#services`, Sobre `/#about`, Blog `/blog`, Contato `/#contact`);
+   entry `header-basic` (T2) intacto; entry `header-with-topbar` segue híbrido até T4;
+   ordem dos previews basic→centered→topbar preservada.
+2. `app/(site)/layout.tsx` — Server Component; dados definidos em `headerData` e passados ao
+   `HeaderCentered` (mesmos brand/navItems 1:1); `FooterCta` e estrutura intocados; Server →
+   Client com dados é o padrão existente (root layout + Consent).
 
-## 3. Outras About variants intactas
-
-- `git diff -- components/sections/about/about-simple.tsx components/sections/about/about-split.tsx`
-  → vazio (zero alteração; permanecem Template/dívida do QLT-005).
-- Página `/library/about`: ids (`about-simple`, `about-split`, `about-timeline`), nomes,
-  descrições das entries e ORDEM preservados; preview boxes padronizados mantidos; metadata
-  inalterada; teste da shell (h1 "About / Sobre" + firstId `about-simple`) continua válido.
-
-## 4. Diff total do working tree (produção)
+## Arquivos alterados nesta task (git diff --stat acumulado T2+T3)
 
 ```
-app/library/about/page.tsx                   | 45 ++++++++++++++++++----
-components/sections/about/about-timeline.tsx | 56 +++++++++++++++-------------
-2 files changed, 69 insertions(+), 32 deletions(-)
+ app/(site)/layout.tsx                       | 13 ++++++++++-   (esta task)
+ app/library/headers/page.tsx                | 34 ++++++++++++++++++++++++-----  (T2 + esta task)
+ components/site/headers/header-basic.tsx    | 29 +++++++++++++-----------   (T2, APPROVED)
+ components/site/headers/header-centered.tsx | 21 +++++++++---------   (esta task)
+ 4 files changed, 66 insertions(+), 31 deletions(-)
 ```
-Apenas os 2 arquivos do escopo T2+T3. Zero componente novo, zero rota nova, zero dependência.
 
-## 5. Gates (execuções reais, nesta ordem)
+## Gates executados (outputs reais)
 
-| Gate | Comando | Exit | Resultado |
-|---|---|---|---|
-| ESLint | `npm run lint` | 0 | 0 erros / 0 warnings |
-| Build | `npm run build` | 0 | Compiled successfully; 24 rotas |
-| git diff --check | `git diff --check` | 0 | limpo |
+```
+> npm run lint
+> eslint
+(0 erros, 0 warnings — apenas nota informativa do baseline-browser-mapping)
+LINT_EXIT=0
 
-## 6. Conformidade com os critérios T3
+> npm run build
+ ✓ Compiled successfully in 1961.1ms
+ ✓ Generating static pages using 15 workers (24/24) in 1007.3ms
+BUILD_EXIT=0
 
-- Todos os consumers migrados (1/1): ✔ · nenhum uso da API antiga: ✔ · copy 1:1: ✔ ·
-  ordem preservada: ✔ · AboutSimple/AboutSplit intactos: ✔ · gates verdes: ✔.
+git diff --check → DIFFCHECK_EXIT=0
+```
+
+- Rotas: **24** (baseline preservado).
+- Playwright: execução completa na T4 (plano aprovado na T1).
+
+## Estado de contagens
+
+- components: 54 (12 UI / 8 site / 32 sections / 2 wrappers) — inalterado.
+- rotas: 24 — inalterado.
+- QLT-005: 20 → 17 ao final (documentado na T5).

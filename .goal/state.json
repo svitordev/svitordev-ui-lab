@@ -1,225 +1,238 @@
 {
   "version": 1,
-  "goal": "Evolucao 037 - Migrar AboutTimeline para contrato data-driven, reduzindo QLT-005 incrementalmente (baseline 21, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-036: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 55 testes (110 execucoes, 107 passed + 3 skipped).",
+  "goal": "Evolucao 038 - Migrar os 3 Headers planejados para contratos data-driven, reduzindo QLT-005 incrementalmente (baseline 20, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova, zero DropdownMenu (039). Baseline real pos-037: components 54 (UI 12, site 8, sections 32, wrappers 2), rotas 24, Playwright 56 testes (112 execucoes, 109 passed + 3 skipped). QLT-006/007 VERIFIED preservados; QLT-011 parcial aberto.",
   "current": 4,
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria AboutTimeline + consumers + contrato (sem alterar producao)",
+      "description": "Auditoria dos 3 Headers + consumers + contratos (sem alterar producao)",
       "acceptance": [
-        "consumers completos mapeados",
-        "contrato minimo sem inflacao",
-        "conteudo vs estrutura separados",
-        "zero redesign",
+        "exatamente 3 Headers identificados pelo codigo real",
+        "consumers completos",
+        "contratos minimos sem abstracao artificial",
+        "mobile nav preservado",
         "QLT-005 previsto corretamente",
-        "escopo exclusivo da 037"
+        "QLT-006/007 sem regressao"
       ],
       "status": "COMPLETED",
-      "attempts": 1,
-      "fingerprint": "911bb10f1c686a08bc0ad6599528409874d4435e67f7aa8048a15ee317c8c6b7",
+      "attempts": 2,
+      "fingerprint": "fabadd473e43b2b2ee13f594c550c91355c6efb72286c10f0adf572260286916",
       "review": {
         "task_id": "T1",
-        "fingerprint": "911bb10f1c686a08bc0ad6599528409874d4435e67f7aa8048a15ee317c8c6b7",
+        "fingerprint": "fabadd473e43b2b2ee13f594c550c91355c6efb72286c10f0adf572260286916",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria T1 da Evolução 037 (AboutTimeline) verificada contra o código real do workspace. Todos os 6 critérios de aceite foram comprovados: (1) único consumer real mapeado em app/library/about/page.tsx (confirmado que app/(site)/page.tsx e app/library/landing/page.tsx não importam AboutTimeline) e transição para preview: React.ReactNode planejada sem tocar em AboutSimple/AboutSplit; (2) contrato mínimo AboutTimelineItem/AboutTimelineProps (title, description?, items, supportingText?) alinhado ao DS sem inflação (sem eyebrow, period/datas, CTA ou defaults internos); (3) separação exata entre conteúdo configurável e estrutura interna (marcador numerado index + 1, tokens, classes, hierarquia h2->h3 e Server Component preservados); (4) zero redesign (copy e layout 1:1); (5) redução incremental de QLT-005 prevista corretamente de 21 (15 sections + 6 site) para 20 (14 sections + 6 site), mantendo status ABERTO; (6) escopo exclusivo da 037 respeitado sem alterações de produção na T1.",
+        "summary": "Auditoria T1 da Evolução 038 verificada diretamente contra o código real do workspace (somente leitura, zero arquivos de produção alterados). Todos os 6 critérios de aceite estão VERIFIED: (1) exatamente 3 Headers identificados em components/site/headers/ (header-basic.tsx, header-centered.tsx, header-with-topbar.tsx, todos Client Components usando usePathname) mais mobile-nav.tsx compartilhado; (2) consumers reais completos mapeados (app/library/headers/page.tsx para os 3 headers e app/(site)/layout.tsx para HeaderCentered); (3) contratos mínimos aprovados sem defaults internos, sem abstração artificial e sem DropdownMenu (reservado para a 039); (4) MobileNav (Evolução 007) já data-driven preservado sem alteração; (5) QLT-005 confirmado no baseline 20 (14 sections + 6 site pós-037) com redução prevista para 17 (14 sections + 3 site) mantendo status ABERTO; (6) QLT-006 (menu mobile acessível e ordem dos previews em tests/smoke.spec.ts) e QLT-007 (aria-label='Navegação principal' nas navs dos 3 headers) preservados sem regressão.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Leitura direta de components/sections/about/about-timeline.tsx (linhas 1-54), app/library/about/page.tsx (linhas 1-80), app/(site)/page.tsx (linhas 1-151), app/library/landing/page.tsx (linhas 1-40), docs/COMPONENT-CATALOG.md (linhas 134-141), docs/ROADMAP-1000-EVOLUTIONS.md (linhas 410, 475, 485-487) e tests/smoke.spec.ts (linhas 521-549). Nenhuma execução de teste requerida na etapa de auditoria/planejamento T1.",
-            "name": "static-workspace-audit-t1",
+            "evidence": "Inspeção estática direta em disco de components/site/headers/: confirmados header-basic.tsx (HeaderBasic, 63 linhas, Client Component), header-centered.tsx (HeaderCentered, 58 linhas, Client Component), header-with-topbar.tsx (HeaderWithTopbar, 82 linhas, Client Component) e mobile-nav.tsx (MobileNav, 91 linhas, já data-driven). Task T1 é audit-only sem alteração de código de produção.",
+            "name": "AC-01 & AC-02: Verificação estática dos 3 Headers e consumers reais (app/library/headers/page.tsx e app/(site)/layout.tsx)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Verificação dos contratos propostos (HeaderBasicProps com brand/navItems/action; HeaderCenteredProps com brand/navItems; HeaderWithTopbarProps com brand/navItems/topbar) confrontados linha a linha com o JSX e dados atuais dos 3 componentes e com MobileNavProps (MobileNavLink: { href: string; label: string }). Zero defaults mascarando hardcode, zero abstração prematura, zero DropdownMenu.",
+            "name": "AC-03 & AC-04: Verificação estática dos contratos mínimos data-driven e compatibilidade 1:1 com MobileNav",
+            "status": "passed"
+          },
+          {
+            "evidence": "Conferência direta em docs/ROADMAP-1000-EVOLUTIONS.md (linha 475), memory-bank/CURRENT-STATE.md (linha 49) e tests/smoke.spec.ts (linhas 62-123): baseline QLT-005 pós-037 confirmado em 20 (14 sections + 6 site) com redução prevista para 17 (14 sections + 3 site, ABERTO); QLT-006 e QLT-007 preservados com mesma semântica ARIA e ordem de previews.",
+            "name": "AC-05 & AC-06: Verificação de baseline/previsão QLT-005 (20 -> 17) e preservação de QLT-006/QLT-007 em tests/smoke.spec.ts",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-16T16:04:58.964800+00:00"
+        "recorded_at": "2026-11-19T15:21:30.578795+00:00"
       },
-      "completed_at": "2026-11-16T16:04:59.155689+00:00"
+      "block_reason": "PASS sem evidências de testes aprovados ou com findings",
+      "unblocked_at": "2026-11-19T15:09:46.345481+00:00",
+      "unblock_reason": "Operador autorizou retomada da T1 do Goal 038. O bloqueio foi exclusivamente procedural: a auditoria foi considerada PASS pelo Inspector, mas o validador fail-closed exigiu campos/evidencias compativeis com uma task de investigacao pura sem gates funcionais. Nenhum codigo de producao foi alterado. Preservar fingerprint, state e historico e reapresentar a mesma auditoria com evidencia/payload compativel com o validador.",
+      "unblock_authorized_by_operator": true,
+      "completed_at": "2026-11-19T15:21:30.770265+00:00"
     },
     {
       "id": "T2",
-      "description": "Migrar AboutTimeline para o contrato aprovado",
+      "description": "Migrar Header A + consumers",
       "acceptance": [
         "contrato exato da T1",
-        "hardcode removido",
-        "visual preservado",
-        "Server boundary preservado",
-        "zero dependencias",
+        "consumer dono dos dados",
+        "hrefs/copy/ordem/CTA/brand preservados",
+        "boundary preservado",
+        "zero defaults mascarando hardcode",
         "gates lint/build/diff-check verdes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+      "fingerprint": "bab1a4cb78e4d33cf3288780129b50bd528ca13940bc285a36c0cf4b949d19eb",
       "review": {
         "task_id": "T2",
-        "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+        "fingerprint": "bab1a4cb78e4d33cf3288780129b50bd528ca13940bc285a36c0cf4b949d19eb",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T2 aprovada (PASS). A migracao de AboutTimeline para o contrato data-driven aprovado na T1 foi verificada diretamente nos arquivos do workspace (components/sections/about/about-timeline.tsx, app/library/about/page.tsx e package.json) e nas evidencias dos gates: (1) tipos exportados AboutTimelineItem e AboutTimelineProps seguem exatamente o contrato da T1 sem defaults internos nem inflacao de campos; (2) todo conteudo textual hardcoded foi removido do componente e transferido 1:1 para aboutTimelineDemo no consumer unico app/library/about/page.tsx; (3) classes Tailwind, tokens, semantica h2/h3, marcadores numerados (index + 1) e keys estaveis foram integralmente preservados; (4) Server Component boundary mantido (sem 'use client'); (5) zero dependencias novas em package.json; (6) gates lint, build (24/24 rotas) e git diff --check reportados verdes nas evidencias incorporadas e consistentes com a inspecao estatica do codigo.",
+        "summary": "Task T2 (Migrar Header A / HeaderBasic + consumers) verificada diretamente no código real do workspace e aprovada (PASS). Todos os 6 critérios de aceite estão VERIFIED: (1) contrato exato da T1 implementado em components/site/headers/header-basic.tsx com tipos locais HeaderNavItem, HeaderAction e HeaderBasicProps ({ brand: { prefix, suffix }, navItems, action }); (2) consumer app/library/headers/page.tsx convertido para o padrão heterogêneo preview: React.ReactNode e dono dos dados 1:1 do HeaderBasic, mantendo HeaderCentered e HeaderWithTopbar prontos para T3/T4; (3) hrefs (/, /#services, /#about, /#contact), copy, ordem dos itens e dos previews, CTA ('Entrar em contato' -> '/#contact'), brand ('Sua'/'Empresa'), aria-label='Navegação principal' (QLT-007) e integração com MobileNav (QLT-006) integralmente preservados; (4) Client boundary ('use client' + usePathname) preservado em header-basic.tsx e Server boundary preservado em app/library/headers/page.tsx; (5) zero defaults internos ou constantes hardcoded remanescentes em header-basic.tsx; (6) gates npm run lint (exit 0), npm run build (exit 0, 24/24 rotas) e git diff --check (exit 0) verdes.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Evidencia incorporada pelo Builder: `npm run lint` exit 0 (0 erros / 0 warnings), consistente com a inspecao estatica de components/sections/about/about-timeline.tsx e app/library/about/page.tsx.",
-            "name": "npm run lint",
+            "evidence": "Inspeção direta de components/site/headers/header-basic.tsx (linhas 1-66): tipos locais HeaderNavItem, HeaderAction e HeaderBasicProps idênticos aos aprovados na T1; zero valores default no destructuring ou fallback interno; 'use client' e usePathname preservados; aria-label='Navegação principal' e MobileNav links={navItems} intactos.",
+            "name": "AC-01, AC-03, AC-04, AC-05: Verificação estática do contrato data-driven, boundary e ausência de defaults em HeaderBasic",
             "status": "passed"
           },
           {
-            "evidence": "Evidencia incorporada pelo Builder: `npm run build` exit 0 (Compiled successfully; 24/24 rotas geradas), consistente com a checagem de tipos entre AboutTimelineProps e aboutTimelineDemo em app/library/about/page.tsx.",
-            "name": "npm run build",
+            "evidence": "Inspeção direta de app/library/headers/page.tsx (linhas 1-96): HeaderItem migrado para preview: React.ReactNode; entry header-basic passa brand ({ prefix: 'Sua', suffix: 'Empresa' }), navItems (4 links: Início '/', Serviços '/#services', Sobre '/#about', Contato '/#contact') e action ({ label: 'Entrar em contato', href: '/#contact' }); ordem dos previews basic -> centered -> topbar e Server Component preservados.",
+            "name": "AC-02 & AC-03: Verificação estática do consumer app/library/headers/page.tsx e preservação de copy/hrefs/ordem/CTA/brand",
             "status": "passed"
           },
           {
-            "evidence": "Evidencia incorporada pelo Builder: `git diff --check` exit 0 (limpo).",
-            "name": "git diff --check",
+            "evidence": "Evidências de execução reportadas e consistentes com o código inspecionado: npm run lint (LINT_EXIT=0, 0 erros/warnings), npm run build (BUILD_EXIT=0, 24/24 páginas estáticas geradas sem erro de tipos) e git diff --check (DIFFCHECK_EXIT=0).",
+            "name": "AC-06: Gates lint, build (24 rotas) e git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-19T12:33:29.688666+00:00"
+        "recorded_at": "2026-11-19T15:37:49.822352+00:00"
       },
-      "completed_at": "2026-11-19T12:33:29.881381+00:00"
+      "completed_at": "2026-11-19T15:37:50.000895+00:00"
     },
     {
       "id": "T3",
-      "description": "Migrar consumers reais com copy 1:1",
+      "description": "Migrar Header B + consumers (Header A integro)",
       "acceptance": [
-        "todos consumers migrados",
-        "nenhum uso da API antiga",
-        "copy e ordem preservadas",
-        "outras About variants intactas",
+        "contrato exato da T1",
+        "nenhuma reestruturacao do Header A",
+        "copy/hrefs preservados",
         "gates verdes"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+      "fingerprint": "9e46ca33969ef1f818304028c74420fba26272e7b1f28048c7434fa12458f5fc",
       "review": {
         "task_id": "T3",
-        "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+        "fingerprint": "9e46ca33969ef1f818304028c74420fba26272e7b1f28048c7434fa12458f5fc",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Verificação formal da T3 (Evolução 037) concluída com sucesso (PASS). O único consumer real de AboutTimeline (app/library/about/page.tsx) foi migrado para a nova API data-driven com tipagem explícita (AboutTimelineProps), sem qualquer uso remanescente da API antiga sem props. A copy e a ordem dos 3 itens da timeline, bem como dos textos de cabeçalho, apoio e das entradas da página /library/about, foram preservadas 1:1. As demais variantes (AboutSimple e AboutSplit) permanecem intactas e os quality gates (ESLint, Next.js build e git diff --check) estão verdes.",
+        "summary": "Auditoria independente da T3 (Evolucao 038) concluida com veredito PASS. O componente HeaderCentered (components/site/headers/header-centered.tsx) foi migrado para o contrato data-driven exato da T1 (HeaderNavItem e HeaderCenteredProps com brand: { prefix, suffix } e navItems: HeaderNavItem[], sem defaults internos e sem prop action desnecessaria), preservando integralmente classes, estrutura DOM, espaco entre prefix/suffix, aria-label=\"Navegação principal\", logica de rota ativa via usePathname e ausencia de MobileNav (decisao Evolucao 007). Os dois consumers reais — app/library/headers/page.tsx e app/(site)/layout.tsx — foram atualizados passando copy e hrefs 1:1 (Sua / Empresa e os 5 links: /, /#services, /#about, /blog, /#contact). O HeaderBasic (Header A, T2) permanece integro sem reestruturacao, e o HeaderWithTopbar segue inalterado aguardando a T4. Gates reportados verdes (npm run lint EXIT=0, npm run build EXIT=0 com 24 rotas, git diff --check EXIT=0).",
         "findings": [],
         "tests": [
           {
-            "evidence": "npm run lint reportado nas evidências com exit 0 (0 erros / 0 warnings) e código inspecionado sem violações.",
+            "evidence": "Evidencia reportada: eslint executado via npm run lint com 0 erros e 0 warnings (LINT_EXIT=0).",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "npm run build reportado nas evidências com exit 0 (24 rotas compiladas com sucesso) e tipagem de AboutTimelineProps verificada entre componente e consumer.",
+            "evidence": "Evidencia reportada: Next.js build compilado com sucesso e 24/24 paginas estaticas geradas (BUILD_EXIT=0).",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "git diff --check reportado nas evidências com exit 0 (limpo) e arquivos inspecionados sem problemas de formatação.",
+            "evidence": "Evidencia reportada: git diff --check sem erros de whitespace/formatação (DIFFCHECK_EXIT=0).",
             "name": "git diff --check",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-19T12:36:34.566484+00:00"
+        "recorded_at": "2026-11-19T15:48:32.510872+00:00"
       },
-      "completed_at": "2026-11-19T12:36:34.757873+00:00"
+      "completed_at": "2026-11-19T15:48:32.696069+00:00"
     },
     {
       "id": "T4",
-      "description": "Regressao + Playwright (somente lacunas reais)",
+      "description": "Migrar Header C + regressao integrada dos 3",
       "acceptance": [
-        "contrato observavel provado via consumers",
-        "ordem",
-        "desktop+mobile",
-        "zero overflow",
+        "contrato exato da T1",
+        "mobile nav com aria-expanded/aria-controls/foco/teclado preservados",
+        "testes so para lacunas reais",
         "suite completa verde",
         "contagens reais"
       ],
       "status": "COMPLETED",
       "attempts": 1,
-      "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
+      "fingerprint": "c499e4eeaa4d0756148ad0aae0d13da41c6b16b30c9a20cb4ba1045049f45d88",
       "review": {
         "task_id": "T4",
-        "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
+        "fingerprint": "c499e4eeaa4d0756148ad0aae0d13da41c6b16b30c9a20cb4ba1045049f45d88",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "Auditoria independente da T4 (Evolução 037 — Regressão + Playwright para AboutTimeline) concluída com veredito PASS. O código real de tests/smoke.spec.ts (linhas 1668-1714), app/library/about/page.tsx e components/sections/about/about-timeline.tsx foi inspecionado e confrontado com as evidências de execução. O novo teste cobre exclusivamente a lacuna real do contrato observável de AboutTimeline no seu único consumer (/library/about), validando title (h2), description, ordem das entries na página e ordem editorial dos 3 items (h3 nth(0..2)) com suas respectivas descrições, supportingText e zero overflow horizontal nos projetos desktop e mobile. A contagem real na suíte foi confirmada em 56 testes (112 execuções: 109 passed + 3 skipped), com lint, build (24/24 rotas) e git diff --check limpos.",
+        "summary": "Auditoria independente da T4 (Evolução 038) concluída com veredito PASS. O componente HeaderWithTopbar (components/site/headers/header-with-topbar.tsx) foi migrado exatamente para o contrato data-driven aprovado na T1 (HeaderNavItem e HeaderWithTopbarProps locais, brand prefix/suffix, navItems, topbar com phone e email obrigatórios e note opcional condicional, ícones Phone/Mail estruturais internos, sem defaults internos, preservando 'use client', usePathname, aria-label='Navegação principal' e MobileNav intocado recebendo links={navItems}). O consumer app/library/headers/page.tsx passa os dados 1:1 preservando copy, links e a ordem basic -> centered -> topbar, mantendo íntegras as migrações de T2 (HeaderBasic) e T3 (HeaderCentered, incluindo app/(site)/layout.tsx). Foi adicionado apenas 1 teste E2E focado na lacuna real de cobertura em tests/smoke.spec.ts ('header com topbar: conteudo renderizado a partir dos dados do consumer'), elevando a suíte para 57 testes (114 execuções: 111 passed + 3 skipped), com lint, build (24/24 rotas) e diff --check verdes.",
         "findings": [],
         "tests": [
           {
-            "evidence": "Inspeção direta de tests/smoke.spec.ts (linhas 1668-1714) e evidência de execução isolada: npx playwright test -g \"about: página da Library\" -> 2 passed (desktop + mobile), validando contrato AboutTimelineProps via consumer, ordem das entries e dos 3 passos (h3), copy completa e scrollWidth === clientWidth.",
-            "name": "Playwright (teste focado: about: página da Library prova o contrato do AboutTimeline via consumer)",
+            "evidence": "npm run lint -> LINT_EXIT=0 (0 erros, 0 warnings)",
+            "name": "lint",
             "status": "passed"
           },
           {
-            "evidence": "Contagem real verificada no arquivo tests/smoke.spec.ts (56 blocos test(), sendo 3 com test.skip para non-mobile) e evidência de execução de npm run test:e2e -> exit 0, 112 execuções (109 passed + 3 skipped).",
-            "name": "Playwright (suíte completa: npm run test:e2e)",
+            "evidence": "npm run build -> BUILD_EXIT=0 (Compiled successfully, 24/24 páginas estáticas geradas)",
+            "name": "build / typecheck",
             "status": "passed"
           },
           {
-            "evidence": "Evidência de execução reportada pelo Builder: npm run lint -> exit 0 (0 erros / 0 warnings); npm run build -> exit 0 (24/24 rotas compiladas); git diff --check -> exit 0.",
-            "name": "Quality Gates (ESLint + Next.js Build + git diff --check)",
+            "evidence": "git diff --check -> DIFFCHECK_EXIT=0",
+            "name": "git diff --check",
+            "status": "passed"
+          },
+          {
+            "evidence": "npm run test:e2e -> E2E_EXIT=0 (57 testes x 2 projects = 114 execuções: 111 passed + 3 skipped, incluindo o novo teste 'header com topbar: conteudo renderizado a partir dos dados do consumer' e os testes existentes de MobileNav)",
+            "name": "playwright e2e suite",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-19T12:42:30.877488+00:00"
+        "recorded_at": "2026-11-19T16:05:59.965422+00:00"
       },
-      "completed_at": "2026-11-19T12:42:31.068729+00:00"
+      "completed_at": "2026-11-19T16:06:00.161491+00:00"
     },
     {
       "id": "T5",
-      "description": "Documentacao + QLT-005 (21 para 20, ABERTO)",
+      "description": "Documentacao + QLT-005 (20 para 17, ABERTO)",
       "acceptance": [
-        "QUALITY-REVIEW, catalogo, roadmap, CURRENT-STATE, CHANGELOG coerentes",
+        "QUALITY-REVIEW, catalogo (3 entries existentes), roadmap (038 VERIFIED, proxima 039), CURRENT-STATE, CHANGELOG coerentes",
+        "QLT-006/007 VERIFIED preservados",
         "QLT-011 preservado",
-        "038 nao iniciada",
         "gates verdes"
       ],
       "status": "COMPLETED",
-      "attempts": 2,
-      "fingerprint": "81d186051a8e53ecfa2eb8ff5e0c2740c3a1b97ea80f54c58c622db5d0a6112c",
+      "attempts": 1,
+      "fingerprint": "d25e2295230a05fbd3a86d2477d6756b9182fe63c562b0f69b508b708993b6cc",
       "review": {
         "task_id": "T5",
-        "fingerprint": "81d186051a8e53ecfa2eb8ff5e0c2740c3a1b97ea80f54c58c622db5d0a6112c",
+        "fingerprint": "d25e2295230a05fbd3a86d2477d6756b9182fe63c562b0f69b508b708993b6cc",
         "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
         "verdict": "APPROVED",
-        "summary": "T5 (Evolução 037 — Documentação + QLT-005 de 21 para 20, ABERTO) auditada e aprovada (PASS). Leitura direta do disco confirmou coerência integral entre código de produção (components/sections/about/about-timeline.tsx, app/library/about/page.tsx), teste E2E (tests/smoke.spec.ts:1668) e os 5 arquivos de documentação atualizados (QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md). QLT-005 atualizado de 21 para 20 (14 sections + 6 site) permanecendo ISSUE_CONFIRMED / ABERTO; QLT-011 integralmente preservado como parcial/ABERTO; Evolução 038 não iniciada; contagens preservadas (54 componentes: 32 sections, 12 UI, 8 site, 2 wrappers; 24 rotas); gates verdes comprovados por evidência real de execução (Playwright 109 passed + 3 skipped em 112 execuções, lint 0/0, build 24/24 rotas PASS, git diff --check exit 0).",
+        "summary": "T5 (Documentacao + QLT-005 20 para 17, ABERTO) auditada e aprovada no workspace real. Os 5 arquivos documentais (QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md e memory-bank/CHANGELOG.md) foram verificados por leitura direta e estao integralmente coerentes entre si e com o codigo real dos 3 headers migrados (HeaderBasic, HeaderCentered, HeaderWithTopbar) e seus consumers (app/library/headers/page.tsx e app/(site)/layout.tsx). QLT-005 atualizado de 20 para 17 (14 sections + 3 site) e mantido ABERTO. QLT-006 e QLT-007 permanecem VERIFIED (MobileNav intocado e aria-label='Navegação principal' preservado nos 3 headers). QLT-011 permanece aberto/parcial sem fechamento indevido. Contagens do catalogo (54: 12 UI, 8 site, 32 sections, 2 wrappers) e rotas (24) preservadas. Gates documentados verdes (lint 0/0, build PASS 24 rotas, Playwright 57 testes / 114 execucoes com 111 passed + 3 skipped, git diff --check limpo) e nenhum commit/push realizado.",
         "findings": [],
         "tests": [
           {
-            "evidence": "E2E_EXIT=0 — Suíte Playwright completa reexecutada (Chromium dual-project desktop 1280×720 + mobile 375×667): 56 testes / 112 execuções — 109 passed + 3 skipped + 0 failed (42.4s), incluindo execuções #111 [desktop] (366ms) e #112 [mobile] (379ms) de tests/smoke.spec.ts:1668:5 ('about: página da Library prova o contrato do AboutTimeline via consumer (ordem, copy, zero overflow)').",
-            "name": "npm run test:e2e",
-            "status": "passed"
-          },
-          {
-            "evidence": "LINT_EXIT=0 — ESLint executado sem erros e sem warnings (0 erros / 0 warnings).",
+            "evidence": "Evidencia T5: npm run lint -> 0 erros, 0 warnings (LINT_EXIT=0)",
             "name": "npm run lint",
             "status": "passed"
           },
           {
-            "evidence": "BUILD_EXIT=0 — Next.js build concluído com sucesso ('Compiled successfully in 2.2s; Generating static pages (24/24) in 996.0ms'), confirmando 24 rotas e zero rota nova.",
+            "evidence": "Evidencia T5: npm run build -> Compiled successfully, Generating static pages (24/24) (BUILD_EXIT=0)",
             "name": "npm run build",
             "status": "passed"
           },
           {
-            "evidence": "DIFFCHECK_EXIT=0 — git diff --check limpo nos 5 arquivos documentais modificados (QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CHANGELOG.md, memory-bank/CURRENT-STATE.md; 27 inserções, 10 deleções).",
+            "evidence": "Evidencia T5: git diff --check -> DIFFCHECK_EXIT=0",
             "name": "git diff --check",
+            "status": "passed"
+          },
+          {
+            "evidence": "Executado na T4 com o codigo de producao final (T5 alterou apenas documentacao): 57 testes / 114 execucoes (111 passed + 3 skipped)",
+            "name": "npx playwright test",
             "status": "passed"
           }
         ],
         "correction_prompt": "",
         "source": "independent-antigravity-cli",
-        "recorded_at": "2026-11-19T13:37:55.860304+00:00"
+        "recorded_at": "2026-11-19T18:40:56.929460+00:00"
       },
-      "block_reason": "PASS sem evidências de testes aprovados ou com findings",
-      "unblocked_at": "2026-11-19T13:34:02.860074+00:00",
-      "unblock_reason": "Operador autorizou retomada da T5 do Goal 037. O bloqueio foi exclusivamente procedural: o Inspector retornou PASS, mas o validador fail-closed exigiu evidencia verificavel adicional dos testes/gates ja aprovados. Nenhum codigo funcional ou documentacao deve ser alterado apenas para contornar o bloqueio. Preservar state, fingerprint e historico.",
-      "unblock_authorized_by_operator": true,
-      "completed_at": "2026-11-19T13:37:56.044520+00:00"
+      "completed_at": "2026-11-19T18:40:57.126363+00:00"
     }
   ],
-  "created_at": "2026-11-16T15:57:32.729254+00:00",
-  "finished_at": "2026-11-19T13:37:56.044533+00:00"
+  "created_at": "2026-11-19T14:06:24.467131+00:00",
+  "finished_at": "2026-11-19T18:40:57.126375+00:00"
 }

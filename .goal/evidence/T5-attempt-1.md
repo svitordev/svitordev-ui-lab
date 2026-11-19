@@ -1,73 +1,64 @@
 # Evidência T5 — Documentação + QLT-005 (attempt 1)
 
-Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037 (b69dab192d266c66)
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 038
 
-## 1. Diff desde a primeira revisão (arquivos desta tarefa — só documentação)
+## Documentos atualizados (exatamente os previstos na auditoria T1)
 
-### `QUALITY-REVIEW.md`
-- Linha de migrações registradas do QLT-005: adicionado `about-timeline` (Evolução 037) à
-  lista existente (010, 016, 031, 032, 036).
-- Novo bloco **"Verificação (Evolução 037, 2026-11-19)"** no QLT-005: contrato exato (tipos
-  locais, obrigatórios vs condicionais, sem defaults, `desc` → `description`, sem
-  eyebrow/action/period — marcador é número de passo via índice, Server Component, visual
-  preservado, AboutSimple/AboutSplit permanecem na dívida), **contagem 21 → 20 (14 sections +
-  6 site), permanece ISSUE_CONFIRMED / ABERTO**, gate com os números reais da suíte.
-- QLT-011: **inalterado** (parcial, aberto — nada nesta tarefa o toca).
+1. **`QUALITY-REVIEW.md`** — QLT-005: parágrafo de migrações registradas estendido com os
+   3 headers (Evolução 038) + bloco "Verificação (Evolução 038, 2026-11-19)" com contagem
+   **20 → 17 (14 sections + 3 site — sobram os 3 footers)**, **permanece ABERTO**, gate real
+   (+1 teste dual-project; suíte 57/114 — 111 passed + 3 skipped; lint 0/0; build PASS
+   24 rotas; diff-check limpo) e **QLT-006/QLT-007 VERIFIED preservados** (MobileNav intocado;
+   `aria-label` nos 3 headers + shell). QLT-011 preservado (sem fechamento).
+2. **`docs/COMPONENT-CATALOG.md`** — as 3 entradas existentes (`HeaderBasic`,
+   `HeaderCentered`, `HeaderWithTopbar`) marcadas **Data-driven (Evolução 038, migração —
+   visual preservado)** no formato consolidado das migrações (031/036/037), com os contratos
+   implementados; MobileNav intacto; contagens do catálogo inalteradas
+   (**12 UI / 8 site / 32 sections / 2 wrappers / total 54**).
+3. **`docs/ROADMAP-1000-EVOLUTIONS.md`** — linha do lote: **038 ✅ VERIFIED (2026-11-19)**,
+   039–050 planejadas e não iniciadas, **próxima execução: 039** (não iniciada). Linha do
+   QLT-005: adicionado "038 ✅ VERIFIED (2026-11-19): headers×3 migrados, 20 → 17"; lote
+   passa a "migra mais 3 (040×3)".
+4. **`memory-bank/CURRENT-STATE.md`** — lote com 038 ✅ concluída e 039 como próxima; entrada
+   "**Evolução 038:** ✅ IMPLEMENTADA / VERIFIED" no formato das anteriores (001–038);
+   "**Próxima execução:** Evolução 039".
+5. **`memory-bank/CHANGELOG.md`** — novo entry no topo (038, 2026-11-19, VERIFIED — QLT-005
+   incremental) no formato consolidado (037 acima, 036 acima).
 
-### `docs/COMPONENT-CATALOG.md`
-- A entrada EXISTENTE de `AboutTimeline` marcada **Pronto / Data-driven (Evolução 037)** com o
-  contrato real no Observações (mesmo estilo das linhas HeroPrimary/HeroSteps/Services).
-  AboutSimple e AboutSplit permanecem Template.
-- Contagens do topo **inalteradas e corretas**: 12 UI / 8 site / 32 sections / 2 wrappers /
-  total 54 (migração de contrato, não de contagem — nenhum componente novo).
+**`docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados** (nenhuma convenção nova,
+nenhuma decisão nova — migração para props já é política conhecida).
 
-### `docs/ROADMAP-1000-EVOLUTIONS.md`
-- Status do lote: `037 ✅ VERIFIED (2026-11-19)`; próxima execução **038**.
-- Linha da tabela 037: `✅ VERIFIED` + QLT-005 (21→20, aberto).
-- Seção QLT-005: hoje **20** (14 sections + 6 site); verificação da 037 registrada;
-  "o lote migra mais **6** (038×3, 040×3)"; 14 permanecem após o lote — breakdown confere
-  (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0 = 14).
-- Lista "Migrações do contrato": 12 itens, 5 concluídas; `AboutTimeline ✅ (037)` marcado na
-  posição original.
+## Estado final do goal
 
-### `memory-bank/CURRENT-STATE.md`
-- Linha do lote ativo: 026–037 ✅; **038 é a próxima**.
-- Entrada **Evolução 037** completa no formato das anteriores (contrato, consumers, copy 1:1,
-  gates, suíte 56/112 — 109+3, QLT-005 21→20 aberto, QLT-011 preservado).
-- Seção de roadmap (001–037): entrada 037 VERIFIED adicionada; próxima execução 038.
+- Componentes migrados nesta evolução: exatamente os 3 planejados (T2=Basic, T3=Centered,
+  T4=WithTopbar); MobileNav intocado.
+- Contagens: catálogo 54 (12/8/32/2) · rotas 24 · Playwright 57 testes / 114 execuções
+  (111 passed + 3 skipped) · zero dependências novas · zero componentes novos · zero rotas
+  novas · zero DropdownMenu.
+- QLT-005: 20 → 17, ABERTO. QLT-006/007 VERIFIED preservados. QLT-011 preservado.
 
-### `memory-bank/CHANGELOG.md`
-- Entrada `[2026-11-19] — Evolução 037` no topo (mais recente primeiro), só estado final,
-  formato das entradas 035/036.
+## Gates executados nesta task (outputs reais)
 
-### `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md`
-- **Inalterados** — nenhuma convenção visual nova, nenhuma decisão nova (migração para props já
-  é política conhecida; o contrato seguiu as convenções 001/003/010/016/031/032/036).
+```
+> npm run lint
+> eslint
+(0 erros, 0 warnings — apenas nota informativa do baseline-browser-mapping)
+LINT_EXIT=0
 
-## 2. Gates (execuções reais, nesta ordem)
+> npm run build
+ ✓ Compiled successfully in 1852.5ms
+ ✓ Generating static pages using 15 workers (24/24) in 985.9ms
+BUILD_EXIT=0
 
-| Gate | Comando | Exit | Resultado |
-|---|---|---|---|
-| ESLint | `npm run lint` | 0 | 0 erros / 0 warnings |
-| Build | `npm run build` | 0 | Compiled successfully (24 rotas, nenhuma nova) |
-| git diff --check | `git diff --check` | 0 | limpo |
+git diff --check → DIFFCHECK_EXIT=0
+```
 
-(Playwright não re-executado nesta tarefa — mudança exclusivamente documental, não afeta o que
-o smoke cobre; suíte verde completa executada na T4: 109 passed + 3 skipped, exit 0.)
+- Playwright: executado na T4 com o código final (111 passed + 3 skipped, exit 0); esta task
+  alterou apenas documentação (nenhum arquivo de produção tocado na T5).
 
-## 3. Contagens finais (estado real pós-T5)
+## Git
 
-- Catálogo: 12 UI / 8 site / 32 sections / 2 wrappers / **total 54** (inalterado).
-- Rotas: **24** (nenhuma nova).
-- Playwright: **56 testes / 112 execuções — 109 passed + 3 skipped** (verde na T4).
-- QLT-005: **21 → 20** (14 sections + 6 site) — **ABERTO**, nunca VERIFIED; exatamente o
-  componente desta goal removido da dívida; AboutSimple/AboutSplit permanecem.
-- QLT-011: preservado (parcial, aberto).
-
-## 4. Conformidade com os critérios
-
-- Documentação refletiu o código real (verificada por leitura dos 2 arquivos de produção +
-  teste antes de escrever).
-- Nenhuma contagem inflada; nenhum componente/rota/dependência nova; QLT-005 permanece aberto;
-  038 não iniciada.
-- Sem commit (regra da goal).
+- `git status`: 10 renames do arquivamento do Goal 037 (via git mv, antes do bootstrap) +
+  11 arquivos modificados (6 de produção/teste das T2–T4 + 5 de documentação desta T5) +
+  arquivos novos de `.goal/` (plan/state/evidence/prompts/reviews do Goal 038).
+- **Nenhum commit/push executado** (política: apenas pelo operador).

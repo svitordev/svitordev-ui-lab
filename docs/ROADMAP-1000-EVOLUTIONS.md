@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; **035 ✅ VERIFIED (2026-11-12)**; **036 ✅ VERIFIED (2026-11-16)**; **037 ✅ VERIFIED (2026-11-19)**; 038–050 planejadas e não iniciadas. Próxima execução: **038**.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; **035 ✅ VERIFIED (2026-11-12)**; **036 ✅ VERIFIED (2026-11-16)**; **037 ✅ VERIFIED (2026-11-19)**; **038 ✅ VERIFIED (2026-11-19)**; 039–050 planejadas e não iniciadas. Próxima execução: **039**.
 
 ## Visão geral
 
@@ -472,7 +472,7 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 
 - **QLT-003** — ✅ **VERIFIED pela 026** (2026-11-09): 10 botões mortos → 0; anchors `/#services`/`/#about` passaram a resolver por alvos reais na home; zero `href="#"`.
 - **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
-- **QLT-005** — hoje **20 componentes sem props** (14 sections + 6 site) — **031 ✅ VERIFIED (2026-11-11): hero-primary migrado, 25 → 24**; **032 ✅ VERIFIED (2026-11-11): hero-steps migrado, 24 → 23**; **036 ✅ VERIFIED (2026-11-16): services-with-icons + services-grid-simple migrados, 23 → 21**; **037 ✅ VERIFIED (2026-11-19): about-timeline migrado, 21 → 20**; o lote migra mais **6** (038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
+- **QLT-005** — hoje **20 componentes sem props** (14 sections + 6 site) — **031 ✅ VERIFIED (2026-11-11): hero-primary migrado, 25 → 24**; **032 ✅ VERIFIED (2026-11-11): hero-steps migrado, 24 → 23**; **036 ✅ VERIFIED (2026-11-16): services-with-icons + services-grid-simple migrados, 23 → 21**; **037 ✅ VERIFIED (2026-11-19): about-timeline migrado, 21 → 20**; **038 ✅ VERIFIED (2026-11-19): headers×3 migrados, 20 → 17**; o lote migra mais **3** (040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
 - **QLT-009** — ✅ **VERIFIED pela 030** (2026-11-10): decisão tomada (DEC-011 — dark-only oficial) E implementada de fato — paleta única no `:root`, sem `.dark`, sem `@custom-variant dark`, sem mecanismo fake; teste novo protege a política.
 - **QLT-011** — **parcialmente resolvido na 032 ✅** (heading hierarchy do hero-steps corrigida — steps h3→h2; o palpite h1→h3 foi rejeitado por evidência do código: o h1 do componente é o único h1 da home, protegido por 2 testes) **e reauditado na 050** (comentários stale, nit do wrapper). Sem fechamento garantido.
 

@@ -13,7 +13,7 @@ type HeaderItem = {
   id: string;
   name: string;
   description: string;
-  Component: React.ComponentType;
+  preview: React.ReactNode;
 };
 
 const headers: HeaderItem[] = [
@@ -22,21 +22,59 @@ const headers: HeaderItem[] = [
     name: "Header básico",
     description:
       "Logo à esquerda, navegação à direita e um botão de contato. Funciona bem para a maioria dos sites institucionais.",
-    Component: HeaderBasic,
+    preview: (
+      <HeaderBasic
+        brand={{ prefix: "Sua", suffix: "Empresa" }}
+        navItems={[
+          { href: "/", label: "Início" },
+          { href: "/#services", label: "Serviços" },
+          { href: "/#about", label: "Sobre" },
+          { href: "/#contact", label: "Contato" },
+        ]}
+        action={{ label: "Entrar em contato", href: "/#contact" }}
+      />
+    ),
   },
   {
     id: "header-centered",
     name: "Header centralizado",
     description:
       "Marca centralizada e menu logo abaixo. Ideal para sites mais minimalistas ou com foco institucional.",
-    Component: HeaderCentered,
+    preview: (
+      <HeaderCentered
+        brand={{ prefix: "Sua", suffix: "Empresa" }}
+        navItems={[
+          { href: "/", label: "Início" },
+          { href: "/#services", label: "Serviços" },
+          { href: "/#about", label: "Sobre" },
+          { href: "/blog", label: "Blog" },
+          { href: "/#contact", label: "Contato" },
+        ]}
+      />
+    ),
   },
   {
     id: "header-with-topbar",
     name: "Header com topbar",
     description:
       "Faixa superior com telefone e e-mail, seguida do cabeçalho principal com navegação. Ótimo para escritórios e clínicas.",
-    Component: HeaderWithTopbar,
+    preview: (
+      <HeaderWithTopbar
+        brand={{ prefix: "Sua", suffix: "Empresa" }}
+        navItems={[
+          { href: "/", label: "Início" },
+          { href: "/#services", label: "Serviços" },
+          { href: "/#about", label: "Sobre" },
+          { href: "/blog", label: "Blog" },
+          { href: "/#contact", label: "Contato" },
+        ]}
+        topbar={{
+          phone: "(00) 00000-0000",
+          email: "contato@suaempresa.com",
+          note: "Atendimento em horário comercial ou conforme a política da empresa.",
+        }}
+      />
+    ),
   },
 ];
 
@@ -55,7 +93,7 @@ export default function HeadersLibraryPage() {
         </header>
 
         <section className="space-y-4">
-          {headers.map(({ id, name, description, Component }) => (
+          {headers.map(({ id, name, description, preview }) => (
             <div
               key={id}
               className="space-y-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm"
@@ -74,7 +112,7 @@ export default function HeadersLibraryPage() {
 
               {/* Preview */}
               <div className="overflow-hidden rounded-xl border bg-background">
-                <Component />
+                {preview}
               </div>
             </div>
           ))}

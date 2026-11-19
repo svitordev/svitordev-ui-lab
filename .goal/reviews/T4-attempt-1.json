@@ -1,24 +1,29 @@
 {
   "task_id": "T4",
-  "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
+  "fingerprint": "c499e4eeaa4d0756148ad0aae0d13da41c6b16b30c9a20cb4ba1045049f45d88",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria independente da T4 (Evolução 037 — Regressão + Playwright para AboutTimeline) concluída com veredito PASS. O código real de tests/smoke.spec.ts (linhas 1668-1714), app/library/about/page.tsx e components/sections/about/about-timeline.tsx foi inspecionado e confrontado com as evidências de execução. O novo teste cobre exclusivamente a lacuna real do contrato observável de AboutTimeline no seu único consumer (/library/about), validando title (h2), description, ordem das entries na página e ordem editorial dos 3 items (h3 nth(0..2)) com suas respectivas descrições, supportingText e zero overflow horizontal nos projetos desktop e mobile. A contagem real na suíte foi confirmada em 56 testes (112 execuções: 109 passed + 3 skipped), com lint, build (24/24 rotas) e git diff --check limpos.",
+  "summary": "Auditoria independente da T4 (Evolução 038) concluída com veredito PASS. O componente HeaderWithTopbar (components/site/headers/header-with-topbar.tsx) foi migrado exatamente para o contrato data-driven aprovado na T1 (HeaderNavItem e HeaderWithTopbarProps locais, brand prefix/suffix, navItems, topbar com phone e email obrigatórios e note opcional condicional, ícones Phone/Mail estruturais internos, sem defaults internos, preservando 'use client', usePathname, aria-label='Navegação principal' e MobileNav intocado recebendo links={navItems}). O consumer app/library/headers/page.tsx passa os dados 1:1 preservando copy, links e a ordem basic -> centered -> topbar, mantendo íntegras as migrações de T2 (HeaderBasic) e T3 (HeaderCentered, incluindo app/(site)/layout.tsx). Foi adicionado apenas 1 teste E2E focado na lacuna real de cobertura em tests/smoke.spec.ts ('header com topbar: conteudo renderizado a partir dos dados do consumer'), elevando a suíte para 57 testes (114 execuções: 111 passed + 3 skipped), com lint, build (24/24 rotas) e diff --check verdes.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Inspeção direta de tests/smoke.spec.ts (linhas 1668-1714) e evidência de execução isolada: npx playwright test -g \"about: página da Library\" -> 2 passed (desktop + mobile), validando contrato AboutTimelineProps via consumer, ordem das entries e dos 3 passos (h3), copy completa e scrollWidth === clientWidth.",
-      "name": "Playwright (teste focado: about: página da Library prova o contrato do AboutTimeline via consumer)",
+      "evidence": "npm run lint -> LINT_EXIT=0 (0 erros, 0 warnings)",
+      "name": "lint",
       "status": "passed"
     },
     {
-      "evidence": "Contagem real verificada no arquivo tests/smoke.spec.ts (56 blocos test(), sendo 3 com test.skip para non-mobile) e evidência de execução de npm run test:e2e -> exit 0, 112 execuções (109 passed + 3 skipped).",
-      "name": "Playwright (suíte completa: npm run test:e2e)",
+      "evidence": "npm run build -> BUILD_EXIT=0 (Compiled successfully, 24/24 páginas estáticas geradas)",
+      "name": "build / typecheck",
       "status": "passed"
     },
     {
-      "evidence": "Evidência de execução reportada pelo Builder: npm run lint -> exit 0 (0 erros / 0 warnings); npm run build -> exit 0 (24/24 rotas compiladas); git diff --check -> exit 0.",
-      "name": "Quality Gates (ESLint + Next.js Build + git diff --check)",
+      "evidence": "git diff --check -> DIFFCHECK_EXIT=0",
+      "name": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "evidence": "npm run test:e2e -> E2E_EXIT=0 (57 testes x 2 projects = 114 execuções: 111 passed + 3 skipped, incluindo o novo teste 'header com topbar: conteudo renderizado a partir dos dados do consumer' e os testes existentes de MobileNav)",
+      "name": "playwright e2e suite",
       "status": "passed"
     }
   ],

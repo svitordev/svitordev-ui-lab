@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-19] — Evolução 038: Migrar headers×3 para contrato (VERIFIED — QLT-005 incremental)
+
+- **`components/site/headers/header-basic.tsx`** (`HeaderBasic`), **`components/site/headers/header-centered.tsx`** (`HeaderCentered`) e **`components/site/headers/header-with-topbar.tsx`** (`HeaderWithTopbar`) — os 3 migrados da dívida pela auditoria da 038. Contratos data-driven locais na linguagem dos contratos modernos do Lab: `HeaderNavItem`/`HeaderAction`/`HeaderBasicProps`, `HeaderNavItem`/`HeaderCenteredProps` e `HeaderNavItem`/`HeaderWithTopbarProps`; `brand` (`prefix`/`suffix` — marca em dois tons) e `navItems` obrigatórios nos 3; `action` só no Basic (único com CTA hoje); `topbar` só no WithTopbar (`phone`/`email` obrigatórios, `note?` condicional); ícones Phone/Mail estruturais internos (lucide-react, dependência real); sem defaults internos; Client boundary preservado nos 3 (`use client` + `usePathname` — destaque de rota ativa); visual preservado (estrutura, classes, tokens e `aria-label="Navegação principal"` intactos); keys `item.href`; zero DropdownMenu (é a 039).
+- **Consumers donos dos dados:** `app/library/headers/page.tsx` (página convertida para preview `React.ReactNode`, padrão das páginas heterogêneas; ordem basic→centered→topbar preservada) e `app/(site)/layout.tsx` (Server Component passando os dados 1:1) — copy 1:1; **MobileNav intocado** (contrato da 007); nenhum componente novo, nenhuma rota nova, **zero dependências novas**.
+- +1 teste Playwright dual-project (conteúdo do preview do HeaderWithTopbar renderizado a partir dos dados do consumer — marca, topbar, ordem dos nav items via DOM, escopo semântico, zero overflow). Suíte: 57 testes / 114 execuções — **111 passed + 3 skipped**. Lint **0/0**; build **PASS** (24 rotas); `git diff --check` limpo.
+- Contagens: catálogo **32 sections / 12 UI / 8 site / total 54** (inalterado — migração de contrato, não de contagem); rotas **24** (nenhuma nova). **QLT-005: 20 → 17 (14 sections + 3 site), permanece ABERTO. QLT-006/QLT-007 VERIFIED preservados. QLT-011 preservado.**
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (as 3 entradas existentes marcadas data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (038 VERIFIED, próxima 039), `memory-bank/CURRENT-STATE.md` (001–038, próxima execução: 039). `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção nova, nenhuma decisão nova — migração para props já é política conhecida).
+
+---
+
 ## [2026-11-19] — Evolução 037: Migrar AboutTimeline para contrato (VERIFIED — QLT-005 incremental)
 
 - **`components/sections/about/about-timeline.tsx`** (`AboutTimeline`) — migrado da dívida pela auditoria da 037 (AboutSimple e AboutSplit permanecem hardcoded). Contrato data-driven local na linguagem dos contratos modernos do Lab: `AboutTimelineItem`/`AboutTimelineProps` (tipos locais); `title`/`items` obrigatórios; `description?`/`supportingText?` opcionais com renderização condicional; sem defaults internos; sem eyebrow/action/period (não existem no componente — o marcador é o número do passo via índice, não dado); `desc` → `description` (naming do DS); Server Component e visual preservados (estrutura, classes, tokens, marcadores e heading levels h2/h3 intactos); keys `item.title`.

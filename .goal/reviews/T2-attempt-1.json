@@ -1,24 +1,24 @@
 {
   "task_id": "T2",
-  "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+  "fingerprint": "bab1a4cb78e4d33cf3288780129b50bd528ca13940bc285a36c0cf4b949d19eb",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T2 aprovada (PASS). A migracao de AboutTimeline para o contrato data-driven aprovado na T1 foi verificada diretamente nos arquivos do workspace (components/sections/about/about-timeline.tsx, app/library/about/page.tsx e package.json) e nas evidencias dos gates: (1) tipos exportados AboutTimelineItem e AboutTimelineProps seguem exatamente o contrato da T1 sem defaults internos nem inflacao de campos; (2) todo conteudo textual hardcoded foi removido do componente e transferido 1:1 para aboutTimelineDemo no consumer unico app/library/about/page.tsx; (3) classes Tailwind, tokens, semantica h2/h3, marcadores numerados (index + 1) e keys estaveis foram integralmente preservados; (4) Server Component boundary mantido (sem 'use client'); (5) zero dependencias novas em package.json; (6) gates lint, build (24/24 rotas) e git diff --check reportados verdes nas evidencias incorporadas e consistentes com a inspecao estatica do codigo.",
+  "summary": "Task T2 (Migrar Header A / HeaderBasic + consumers) verificada diretamente no código real do workspace e aprovada (PASS). Todos os 6 critérios de aceite estão VERIFIED: (1) contrato exato da T1 implementado em components/site/headers/header-basic.tsx com tipos locais HeaderNavItem, HeaderAction e HeaderBasicProps ({ brand: { prefix, suffix }, navItems, action }); (2) consumer app/library/headers/page.tsx convertido para o padrão heterogêneo preview: React.ReactNode e dono dos dados 1:1 do HeaderBasic, mantendo HeaderCentered e HeaderWithTopbar prontos para T3/T4; (3) hrefs (/, /#services, /#about, /#contact), copy, ordem dos itens e dos previews, CTA ('Entrar em contato' -> '/#contact'), brand ('Sua'/'Empresa'), aria-label='Navegação principal' (QLT-007) e integração com MobileNav (QLT-006) integralmente preservados; (4) Client boundary ('use client' + usePathname) preservado em header-basic.tsx e Server boundary preservado em app/library/headers/page.tsx; (5) zero defaults internos ou constantes hardcoded remanescentes em header-basic.tsx; (6) gates npm run lint (exit 0), npm run build (exit 0, 24/24 rotas) e git diff --check (exit 0) verdes.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Evidencia incorporada pelo Builder: `npm run lint` exit 0 (0 erros / 0 warnings), consistente com a inspecao estatica de components/sections/about/about-timeline.tsx e app/library/about/page.tsx.",
-      "name": "npm run lint",
+      "evidence": "Inspeção direta de components/site/headers/header-basic.tsx (linhas 1-66): tipos locais HeaderNavItem, HeaderAction e HeaderBasicProps idênticos aos aprovados na T1; zero valores default no destructuring ou fallback interno; 'use client' e usePathname preservados; aria-label='Navegação principal' e MobileNav links={navItems} intactos.",
+      "name": "AC-01, AC-03, AC-04, AC-05: Verificação estática do contrato data-driven, boundary e ausência de defaults em HeaderBasic",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia incorporada pelo Builder: `npm run build` exit 0 (Compiled successfully; 24/24 rotas geradas), consistente com a checagem de tipos entre AboutTimelineProps e aboutTimelineDemo em app/library/about/page.tsx.",
-      "name": "npm run build",
+      "evidence": "Inspeção direta de app/library/headers/page.tsx (linhas 1-96): HeaderItem migrado para preview: React.ReactNode; entry header-basic passa brand ({ prefix: 'Sua', suffix: 'Empresa' }), navItems (4 links: Início '/', Serviços '/#services', Sobre '/#about', Contato '/#contact') e action ({ label: 'Entrar em contato', href: '/#contact' }); ordem dos previews basic -> centered -> topbar e Server Component preservados.",
+      "name": "AC-02 & AC-03: Verificação estática do consumer app/library/headers/page.tsx e preservação de copy/hrefs/ordem/CTA/brand",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia incorporada pelo Builder: `git diff --check` exit 0 (limpo).",
-      "name": "git diff --check",
+      "evidence": "Evidências de execução reportadas e consistentes com o código inspecionado: npm run lint (LINT_EXIT=0, 0 erros/warnings), npm run build (BUILD_EXIT=0, 24/24 páginas estáticas geradas sem erro de tipos) e git diff --check (DIFFCHECK_EXIT=0).",
+      "name": "AC-06: Gates lint, build (24 rotas) e git diff --check",
       "status": "passed"
     }
   ],

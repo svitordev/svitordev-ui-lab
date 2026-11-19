@@ -5,15 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { href: "/", label: "Início" },
-  { href: "/#services", label: "Serviços" },
-  { href: "/#about", label: "Sobre" },
-  { href: "/blog", label: "Blog" },
-  { href: "/#contact", label: "Contato" },
-];
+type HeaderNavItem = { href: string; label: string };
 
-export function HeaderCentered() {
+type HeaderCenteredProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+};
+
+export function HeaderCentered({ brand, navItems }: HeaderCenteredProps) {
   const pathname = usePathname();
 
   return (
@@ -21,8 +20,8 @@ export function HeaderCentered() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-3">
         {/* Logo / Marca */}
         <Link href="/" className="text-sm font-semibold tracking-tight">
-          <span className="font-bold">Sua</span>{" "}
-          <span className="text-muted-foreground">Empresa</span>
+          <span className="font-bold">{brand.prefix}</span>{" "}
+          <span className="text-muted-foreground">{brand.suffix}</span>
         </Link>
 
         {/* Navegação centralizada */}
@@ -30,7 +29,7 @@ export function HeaderCentered() {
           aria-label="Navegação principal"
           className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-muted-foreground"
         >
-          {navLinks.map((item) => {
+          {navItems.map((item) => {
             // ignora o hash na verificação de rota ativa
             const baseHref = item.href.split("#")[0] || "/";
             const isActive =

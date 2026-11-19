@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "goal": "Evolucao 037 - Migrar AboutTimeline para contrato data-driven, reduzindo QLT-005 incrementalmente (baseline 21, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-036: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 55 testes (110 execucoes, 107 passed + 3 skipped).",
+  "current": 4,
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria AboutTimeline + consumers + contrato (sem alterar producao)",
+      "acceptance": [
+        "consumers completos mapeados",
+        "contrato minimo sem inflacao",
+        "conteudo vs estrutura separados",
+        "zero redesign",
+        "QLT-005 previsto corretamente",
+        "escopo exclusivo da 037"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "911bb10f1c686a08bc0ad6599528409874d4435e67f7aa8048a15ee317c8c6b7",
+      "review": {
+        "task_id": "T1",
+        "fingerprint": "911bb10f1c686a08bc0ad6599528409874d4435e67f7aa8048a15ee317c8c6b7",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria T1 da Evolução 037 (AboutTimeline) verificada contra o código real do workspace. Todos os 6 critérios de aceite foram comprovados: (1) único consumer real mapeado em app/library/about/page.tsx (confirmado que app/(site)/page.tsx e app/library/landing/page.tsx não importam AboutTimeline) e transição para preview: React.ReactNode planejada sem tocar em AboutSimple/AboutSplit; (2) contrato mínimo AboutTimelineItem/AboutTimelineProps (title, description?, items, supportingText?) alinhado ao DS sem inflação (sem eyebrow, period/datas, CTA ou defaults internos); (3) separação exata entre conteúdo configurável e estrutura interna (marcador numerado index + 1, tokens, classes, hierarquia h2->h3 e Server Component preservados); (4) zero redesign (copy e layout 1:1); (5) redução incremental de QLT-005 prevista corretamente de 21 (15 sections + 6 site) para 20 (14 sections + 6 site), mantendo status ABERTO; (6) escopo exclusivo da 037 respeitado sem alterações de produção na T1.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Leitura direta de components/sections/about/about-timeline.tsx (linhas 1-54), app/library/about/page.tsx (linhas 1-80), app/(site)/page.tsx (linhas 1-151), app/library/landing/page.tsx (linhas 1-40), docs/COMPONENT-CATALOG.md (linhas 134-141), docs/ROADMAP-1000-EVOLUTIONS.md (linhas 410, 475, 485-487) e tests/smoke.spec.ts (linhas 521-549). Nenhuma execução de teste requerida na etapa de auditoria/planejamento T1.",
+            "name": "static-workspace-audit-t1",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-16T16:04:58.964800+00:00"
+      },
+      "completed_at": "2026-11-16T16:04:59.155689+00:00"
+    },
+    {
+      "id": "T2",
+      "description": "Migrar AboutTimeline para o contrato aprovado",
+      "acceptance": [
+        "contrato exato da T1",
+        "hardcode removido",
+        "visual preservado",
+        "Server boundary preservado",
+        "zero dependencias",
+        "gates lint/build/diff-check verdes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+      "review": {
+        "task_id": "T2",
+        "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T2 aprovada (PASS). A migracao de AboutTimeline para o contrato data-driven aprovado na T1 foi verificada diretamente nos arquivos do workspace (components/sections/about/about-timeline.tsx, app/library/about/page.tsx e package.json) e nas evidencias dos gates: (1) tipos exportados AboutTimelineItem e AboutTimelineProps seguem exatamente o contrato da T1 sem defaults internos nem inflacao de campos; (2) todo conteudo textual hardcoded foi removido do componente e transferido 1:1 para aboutTimelineDemo no consumer unico app/library/about/page.tsx; (3) classes Tailwind, tokens, semantica h2/h3, marcadores numerados (index + 1) e keys estaveis foram integralmente preservados; (4) Server Component boundary mantido (sem 'use client'); (5) zero dependencias novas em package.json; (6) gates lint, build (24/24 rotas) e git diff --check reportados verdes nas evidencias incorporadas e consistentes com a inspecao estatica do codigo.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Evidencia incorporada pelo Builder: `npm run lint` exit 0 (0 erros / 0 warnings), consistente com a inspecao estatica de components/sections/about/about-timeline.tsx e app/library/about/page.tsx.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidencia incorporada pelo Builder: `npm run build` exit 0 (Compiled successfully; 24/24 rotas geradas), consistente com a checagem de tipos entre AboutTimelineProps e aboutTimelineDemo em app/library/about/page.tsx.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidencia incorporada pelo Builder: `git diff --check` exit 0 (limpo).",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-19T12:33:29.688666+00:00"
+      },
+      "completed_at": "2026-11-19T12:33:29.881381+00:00"
+    },
+    {
+      "id": "T3",
+      "description": "Migrar consumers reais com copy 1:1",
+      "acceptance": [
+        "todos consumers migrados",
+        "nenhum uso da API antiga",
+        "copy e ordem preservadas",
+        "outras About variants intactas",
+        "gates verdes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+      "review": {
+        "task_id": "T3",
+        "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Verificação formal da T3 (Evolução 037) concluída com sucesso (PASS). O único consumer real de AboutTimeline (app/library/about/page.tsx) foi migrado para a nova API data-driven com tipagem explícita (AboutTimelineProps), sem qualquer uso remanescente da API antiga sem props. A copy e a ordem dos 3 itens da timeline, bem como dos textos de cabeçalho, apoio e das entradas da página /library/about, foram preservadas 1:1. As demais variantes (AboutSimple e AboutSplit) permanecem intactas e os quality gates (ESLint, Next.js build e git diff --check) estão verdes.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "npm run lint reportado nas evidências com exit 0 (0 erros / 0 warnings) e código inspecionado sem violações.",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "npm run build reportado nas evidências com exit 0 (24 rotas compiladas com sucesso) e tipagem de AboutTimelineProps verificada entre componente e consumer.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "git diff --check reportado nas evidências com exit 0 (limpo) e arquivos inspecionados sem problemas de formatação.",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-19T12:36:34.566484+00:00"
+      },
+      "completed_at": "2026-11-19T12:36:34.757873+00:00"
+    },
+    {
+      "id": "T4",
+      "description": "Regressao + Playwright (somente lacunas reais)",
+      "acceptance": [
+        "contrato observavel provado via consumers",
+        "ordem",
+        "desktop+mobile",
+        "zero overflow",
+        "suite completa verde",
+        "contagens reais"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
+      "review": {
+        "task_id": "T4",
+        "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "Auditoria independente da T4 (Evolução 037 — Regressão + Playwright para AboutTimeline) concluída com veredito PASS. O código real de tests/smoke.spec.ts (linhas 1668-1714), app/library/about/page.tsx e components/sections/about/about-timeline.tsx foi inspecionado e confrontado com as evidências de execução. O novo teste cobre exclusivamente a lacuna real do contrato observável de AboutTimeline no seu único consumer (/library/about), validando title (h2), description, ordem das entries na página e ordem editorial dos 3 items (h3 nth(0..2)) com suas respectivas descrições, supportingText e zero overflow horizontal nos projetos desktop e mobile. A contagem real na suíte foi confirmada em 56 testes (112 execuções: 109 passed + 3 skipped), com lint, build (24/24 rotas) e git diff --check limpos.",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "Inspeção direta de tests/smoke.spec.ts (linhas 1668-1714) e evidência de execução isolada: npx playwright test -g \"about: página da Library\" -> 2 passed (desktop + mobile), validando contrato AboutTimelineProps via consumer, ordem das entries e dos 3 passos (h3), copy completa e scrollWidth === clientWidth.",
+            "name": "Playwright (teste focado: about: página da Library prova o contrato do AboutTimeline via consumer)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Contagem real verificada no arquivo tests/smoke.spec.ts (56 blocos test(), sendo 3 com test.skip para non-mobile) e evidência de execução de npm run test:e2e -> exit 0, 112 execuções (109 passed + 3 skipped).",
+            "name": "Playwright (suíte completa: npm run test:e2e)",
+            "status": "passed"
+          },
+          {
+            "evidence": "Evidência de execução reportada pelo Builder: npm run lint -> exit 0 (0 erros / 0 warnings); npm run build -> exit 0 (24/24 rotas compiladas); git diff --check -> exit 0.",
+            "name": "Quality Gates (ESLint + Next.js Build + git diff --check)",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-19T12:42:30.877488+00:00"
+      },
+      "completed_at": "2026-11-19T12:42:31.068729+00:00"
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao + QLT-005 (21 para 20, ABERTO)",
+      "acceptance": [
+        "QUALITY-REVIEW, catalogo, roadmap, CURRENT-STATE, CHANGELOG coerentes",
+        "QLT-011 preservado",
+        "038 nao iniciada",
+        "gates verdes"
+      ],
+      "status": "COMPLETED",
+      "attempts": 2,
+      "fingerprint": "81d186051a8e53ecfa2eb8ff5e0c2740c3a1b97ea80f54c58c622db5d0a6112c",
+      "review": {
+        "task_id": "T5",
+        "fingerprint": "81d186051a8e53ecfa2eb8ff5e0c2740c3a1b97ea80f54c58c622db5d0a6112c",
+        "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
+        "verdict": "APPROVED",
+        "summary": "T5 (Evolução 037 — Documentação + QLT-005 de 21 para 20, ABERTO) auditada e aprovada (PASS). Leitura direta do disco confirmou coerência integral entre código de produção (components/sections/about/about-timeline.tsx, app/library/about/page.tsx), teste E2E (tests/smoke.spec.ts:1668) e os 5 arquivos de documentação atualizados (QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CURRENT-STATE.md, memory-bank/CHANGELOG.md). QLT-005 atualizado de 21 para 20 (14 sections + 6 site) permanecendo ISSUE_CONFIRMED / ABERTO; QLT-011 integralmente preservado como parcial/ABERTO; Evolução 038 não iniciada; contagens preservadas (54 componentes: 32 sections, 12 UI, 8 site, 2 wrappers; 24 rotas); gates verdes comprovados por evidência real de execução (Playwright 109 passed + 3 skipped em 112 execuções, lint 0/0, build 24/24 rotas PASS, git diff --check exit 0).",
+        "findings": [],
+        "tests": [
+          {
+            "evidence": "E2E_EXIT=0 — Suíte Playwright completa reexecutada (Chromium dual-project desktop 1280×720 + mobile 375×667): 56 testes / 112 execuções — 109 passed + 3 skipped + 0 failed (42.4s), incluindo execuções #111 [desktop] (366ms) e #112 [mobile] (379ms) de tests/smoke.spec.ts:1668:5 ('about: página da Library prova o contrato do AboutTimeline via consumer (ordem, copy, zero overflow)').",
+            "name": "npm run test:e2e",
+            "status": "passed"
+          },
+          {
+            "evidence": "LINT_EXIT=0 — ESLint executado sem erros e sem warnings (0 erros / 0 warnings).",
+            "name": "npm run lint",
+            "status": "passed"
+          },
+          {
+            "evidence": "BUILD_EXIT=0 — Next.js build concluído com sucesso ('Compiled successfully in 2.2s; Generating static pages (24/24) in 996.0ms'), confirmando 24 rotas e zero rota nova.",
+            "name": "npm run build",
+            "status": "passed"
+          },
+          {
+            "evidence": "DIFFCHECK_EXIT=0 — git diff --check limpo nos 5 arquivos documentais modificados (QUALITY-REVIEW.md, docs/COMPONENT-CATALOG.md, docs/ROADMAP-1000-EVOLUTIONS.md, memory-bank/CHANGELOG.md, memory-bank/CURRENT-STATE.md; 27 inserções, 10 deleções).",
+            "name": "git diff --check",
+            "status": "passed"
+          }
+        ],
+        "correction_prompt": "",
+        "source": "independent-antigravity-cli",
+        "recorded_at": "2026-11-19T13:37:55.860304+00:00"
+      },
+      "block_reason": "PASS sem evidências de testes aprovados ou com findings",
+      "unblocked_at": "2026-11-19T13:34:02.860074+00:00",
+      "unblock_reason": "Operador autorizou retomada da T5 do Goal 037. O bloqueio foi exclusivamente procedural: o Inspector retornou PASS, mas o validador fail-closed exigiu evidencia verificavel adicional dos testes/gates ja aprovados. Nenhum codigo funcional ou documentacao deve ser alterado apenas para contornar o bloqueio. Preservar state, fingerprint e historico.",
+      "unblock_authorized_by_operator": true,
+      "completed_at": "2026-11-19T13:37:56.044520+00:00"
+    }
+  ],
+  "created_at": "2026-11-16T15:57:32.729254+00:00",
+  "finished_at": "2026-11-19T13:37:56.044533+00:00"
+}

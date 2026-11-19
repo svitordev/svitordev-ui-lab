@@ -122,6 +122,45 @@ test('menu mobile do header com topbar abre pelo botao e fecha com clique fora',
   await expect(button).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('header com topbar: conteudo renderizado a partir dos dados do consumer', async ({ page }) => {
+  // Evolução 038 — lacuna real de cobertura: conteúdo dos previews vem dos dados passados
+  // pelo consumer. Dual-project: asserts de visibilidade só para o que é visível nos dois
+  // viewports; nav/nota podem estar ocultos em mobile (asserts por DOM/texto).
+  await page.goto('/library/headers');
+
+  // Escopo semântico pelo heading da variant (padrão 007/015) — sem acoplamento a classes.
+  const preview = page
+    .getByRole('heading', { name: 'Header com topbar' })
+    .locator('xpath=ancestor::div[3]');
+
+  // Marca em dois tons a partir dos dados (prefix + suffix), link real para /.
+  const brand = preview.getByRole('link', { name: /Sua\s*Empresa/ });
+  await expect(brand).toBeVisible();
+  await expect(brand).toHaveAttribute('href', '/');
+
+  // Topbar: telefone e e-mail vindos dos dados (sempre visíveis nos dois projects).
+  await expect(preview.getByText('(00) 00000-0000')).toBeVisible();
+  await expect(preview.getByText('contato@suaempresa.com')).toBeVisible();
+  // Nota condicional do contrato (hidden md:inline — presente no DOM nos dois projects).
+  await expect(
+    preview.getByText('Atendimento em horário comercial ou conforme a política da empresa.'),
+  ).toHaveCount(1);
+
+  // Ordem dos nav items exatamente como os dados do consumer (DOM — vale mesmo com a
+  // nav oculta em mobile).
+  const hrefs = await preview
+    .locator('nav[aria-label="Navegação principal"] a')
+    .evaluateAll((links) => links.map((a) => a.getAttribute('href')));
+  expect(hrefs).toEqual(['/', '/#services', '/#about', '/blog', '/#contact']);
+
+  // Zero overflow horizontal nos dois viewports.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
 test('review cards: rating exibe nome acessível com estrelas preenchidas', async ({ page }) => {
   await page.goto('/library/testimonials');
 

@@ -1,60 +1,58 @@
 {
-  "goal": "Evolucao 037 - Migrar AboutTimeline para contrato data-driven, reduzindo QLT-005 incrementalmente (baseline 21, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-036: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 55 testes (110 execucoes, 107 passed + 3 skipped).",
+  "goal": "Evolucao 038 - Migrar os 3 Headers planejados para contratos data-driven, reduzindo QLT-005 incrementalmente (baseline 20, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova, zero DropdownMenu (039). Baseline real pos-037: components 54 (UI 12, site 8, sections 32, wrappers 2), rotas 24, Playwright 56 testes (112 execucoes, 109 passed + 3 skipped). QLT-006/007 VERIFIED preservados; QLT-011 parcial aberto.",
   "tasks": [
     {
       "id": "T1",
-      "description": "Auditoria AboutTimeline + consumers + contrato (sem alterar producao)",
+      "description": "Auditoria dos 3 Headers + consumers + contratos (sem alterar producao)",
       "acceptance": [
-        "consumers completos mapeados",
-        "contrato minimo sem inflacao",
-        "conteudo vs estrutura separados",
-        "zero redesign",
+        "exatamente 3 Headers identificados pelo codigo real",
+        "consumers completos",
+        "contratos minimos sem abstracao artificial",
+        "mobile nav preservado",
         "QLT-005 previsto corretamente",
-        "escopo exclusivo da 037"
+        "QLT-006/007 sem regressao"
       ]
     },
     {
       "id": "T2",
-      "description": "Migrar AboutTimeline para o contrato aprovado",
+      "description": "Migrar Header A + consumers",
       "acceptance": [
         "contrato exato da T1",
-        "hardcode removido",
-        "visual preservado",
-        "Server boundary preservado",
-        "zero dependencias",
+        "consumer dono dos dados",
+        "hrefs/copy/ordem/CTA/brand preservados",
+        "boundary preservado",
+        "zero defaults mascarando hardcode",
         "gates lint/build/diff-check verdes"
       ]
     },
     {
       "id": "T3",
-      "description": "Migrar consumers reais com copy 1:1",
+      "description": "Migrar Header B + consumers (Header A integro)",
       "acceptance": [
-        "todos consumers migrados",
-        "nenhum uso da API antiga",
-        "copy e ordem preservadas",
-        "outras About variants intactas",
+        "contrato exato da T1",
+        "nenhuma reestruturacao do Header A",
+        "copy/hrefs preservados",
         "gates verdes"
       ]
     },
     {
       "id": "T4",
-      "description": "Regressao + Playwright (somente lacunas reais)",
+      "description": "Migrar Header C + regressao integrada dos 3",
       "acceptance": [
-        "contrato observavel provado via consumers",
-        "ordem",
-        "desktop+mobile",
-        "zero overflow",
+        "contrato exato da T1",
+        "mobile nav com aria-expanded/aria-controls/foco/teclado preservados",
+        "testes so para lacunas reais",
         "suite completa verde",
         "contagens reais"
       ]
     },
     {
       "id": "T5",
-      "description": "Documentacao + QLT-005 (21 para 20, ABERTO)",
+      "description": "Documentacao + QLT-005 (20 para 17, ABERTO)",
       "acceptance": [
-        "QUALITY-REVIEW, catalogo, roadmap, CURRENT-STATE, CHANGELOG coerentes",
+        "QUALITY-REVIEW, catalogo (3 entries existentes), roadmap (038 VERIFIED, proxima 039), CURRENT-STATE, CHANGELOG coerentes",
+        "QLT-006/007 VERIFIED preservados",
         "QLT-011 preservado",
-        "038 nao iniciada",
         "gates verdes"
       ]
     }

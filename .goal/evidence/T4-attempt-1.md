@@ -1,57 +1,88 @@
-# Evidência T4 — Regressão + Playwright (attempt 1)
+# Evidência T4 — Header C (HeaderWithTopbar) data-driven + regressão integrada (attempt 1)
 
-Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037 (b69dab192d266c66)
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 038
 
-## 1. Diff desde a primeira revisão (arquivos desta tarefa)
+## Escopo desta task
 
-Apenas `tests/smoke.spec.ts` (+1 teste ao final do arquivo — a auditoria T1 aprovada
-confirmou que nenhum teste anterior assertava o conteúdo do timeline; a cobertura da página
-era só shell/h1/firstId).
+Migrar exatamente 1 componente: `components/site/headers/header-with-topbar.tsx` (Header C)
+para o contrato aprovado na auditoria (T1, APPROVED), + consumer da página de previews
+passando os dados 1:1, + o único teste novo do goal (lacuna real de cobertura), com execução
+completa de Playwright. Headers A (T2) e B (T3) APPROVED permanecem íntegros. Zero redesign,
+zero dependência nova, zero componente novo, zero rota nova, zero DropdownMenu.
 
-### Teste — `about: página da Library prova o contrato do AboutTimeline via consumer (ordem, copy, zero overflow)` (dual)
-- h1 "About / Sobre" (role real da página).
-- Ordem das 3 entries da página (labels da shell): "About simples" → "About em duas
-  colunas" → "Timeline / trajetória" (visíveis + posição relativa via xpath `following::` —
-  simple antes de timeline).
-- Conteúdo do timeline escopado na `ancestor::section[1]` a partir do heading do componente
-  (mesmo padrão dos testes de contact/036): h2 "Um pouco da nossa trajetória" + descrição do
-  consumer.
-- Os 3 passos na ordem editorial via `getByRole(heading, level 3).nth(0..2)`: Início das
-  atividades → Crescimento e consolidação → Atuação atual, cada um com a descrição exata dos
-  dados do consumer + supporting text (nota final) — prova consumer ownership indiretamente
-  pelo conteúdo específico.
-- Zero overflow horizontal (`scrollWidth === clientWidth`) — roda nos 2 viewports.
-- Sem asserts de classes Tailwind/pixels/marcadores internos — roles/textos reais.
+## Contrato implementado (exatamente o aprovado na T1)
 
-## 2. Gates (execuções reais, nesta ordem)
+```ts
+type HeaderNavItem = { href: string; label: string };
+type HeaderWithTopbarProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+  topbar: { phone: string; email: string; note?: string };
+};
+export function HeaderWithTopbar({ brand, navItems, topbar }: HeaderWithTopbarProps) { ... }
+```
 
-| Gate | Comando | Exit | Resultado |
-|---|---|---|---|
-| ESLint | `npm run lint` | 0 | 0 erros / 0 warnings |
-| Build | `npm run build` | 0 | Compiled successfully; 24/24 rotas |
-| git diff --check | `git diff --check` | 0 | limpo |
-| Playwright (teste novo, isolado) | `npx playwright test -g "about: página da Library"` | 0 | 2 passed (desktop + mobile) |
-| Playwright (suíte completa) | `npm run test:e2e` | 0 | **109 passed + 3 skipped** (56 testes × 2 projetos = 112 execuções) |
+- `topbar` é a razão de ser do componente (existe hoje) — phone/email obrigatórios, `note?`
+  condicional (renderizada só se presente);
+- ícones Phone/Mail (lucide — dependência real já usada) estruturais internos, não viraram
+  dados;
+- zero defaults; tipos locais; `"use client"` + `usePathname` preservados;
+- `aria-label="Navegação principal"` preservado; keys `item.href` preservadas;
+- `<MobileNav links={navItems} />` — mesma composição estrutural da T2 (MobileNav intocado);
+- dados do consumer 1:1 com o hardcode anterior: brand `Sua`/`Empresa`; 5 nav items na mesma
+  ordem (/, /#services, /#about, /blog, /#contact); topbar `(00) 00000-0000` /
+  `contato@suaempresa.com` / nota de horário. Zero dead href, zero mudança de copy.
 
-Porta 3000 verificada antes da suíte (armadilha conhecida da 036): sem servidor órfão —
-Playwright subiu o dev server próprio do config.
+## Teste novo (único do goal — lacuna real aprovada na T1)
 
-## 3. Contagens (estado real pós-T4)
+`tests/smoke.spec.ts` — `header com topbar: conteudo renderizado a partir dos dados do
+consumer` (dual-project, roda nos 2 projects):
+- escopo semântico pelo heading da variant (padrão 007/015 — sem classes Tailwind);
+- marca dois tons vinda dos dados (prefix+suffix) como link real para `/` (visível nos 2);
+- topbar phone/email visíveis nos 2 projects; nota condicional presente no DOM nos 2
+  (oculta em mobile por `hidden md:inline` — assert por contagem de DOM);
+- ordem exata dos hrefs dos nav items lida do DOM do nav escopado (funciona mesmo com a nav
+  oculta em mobile);
+- zero overflow horizontal nos dois viewports.
+Sem asserts de classes Tailwind/pixels. Testes existentes não duplicados (cobrem menu mobile,
+CTA e home; este cobre o conteúdo renderizado a partir dos dados no preview do consumer).
 
-- Testes Playwright: **56** (55 baseline + 1 novo) · execuções: 112 · **109 passed + 3
-  skipped** — exatamente a previsão da auditoria T1 (+1 dual-project).
-- Rotas: 24 (inalterado).
-- Catálogo: 12 UI / 8 site / 32 sections / 2 wrappers / **total 54** (inalterado — T5 atualiza docs).
-- QLT-005: 21 (baseline T1; edição documental na T5).
+## Arquivos alterados nesta task
 
-## 4. Conformidade com os critérios
+- `components/site/headers/header-with-topbar.tsx` (migração)
+- `app/library/headers/page.tsx` (entry topbar passa dados; entries basic/centered das
+  T2/T3 APPROVED intactos; ordem basic→centered→topbar preservada)
+- `tests/smoke.spec.ts` (+1 teste)
 
-- Cobertura apenas de lacunas reais: ✔ (contrato do timeline sem teste anterior; nada
-  duplicado — teste da shell existente intacto).
-- Contrato observável via consumer: ✔ (copy específica dos data objects, ordem editorial,
-  escopo semântico).
-- NÃO testar: ✔ (sem classes Tailwind, sem pixels, sem internals do marcador/map, sem types).
-- Desktop + mobile + zero overflow: ✔ (dual-project).
-- Consumer Library intacto (entries/labels/preview boxes) e home sem regressão: ✔ (suíte
-  completa verde, 109+3, zero retries).
-- Zero redesign / zero dependência nova: ✔ (só o arquivo de teste mudou nesta tarefa).
+## Gates executados (outputs reais)
+
+```
+> npm run lint
+> eslint
+(0 erros, 0 warnings — apenas nota informativa do baseline-browser-mapping)
+LINT_EXIT=0
+
+> npm run build
+ ✓ Compiled successfully in 2.4s
+ ✓ Generating static pages using 15 workers (24/24) in 1073.7ms
+BUILD_EXIT=0
+
+git diff --check → DIFFCHECK_EXIT=0
+
+> npm run test:e2e
+(porta 3000 verificada livre antes da execução — sem dev server órfão)
+  3 skipped
+  111 passed (42.5s)
+E2E_EXIT=0
+```
+
+- Playwright: **57 testes × 2 projects = 114 execuções — 111 passed + 3 skipped, exit 0**
+  (exatamente a previsão da auditoria T1; os 3 skipped são os mobile-only já conhecidos +
+  desktop-only — mesma contagem do baseline 109+3 com os +2 do teste novo).
+
+## Estado de contagens
+
+- components: 54 (12 UI / 8 site / 32 sections / 2 wrappers) — inalterado.
+- rotas: 24 — inalterado.
+- Playwright: 56 → 57 testes (112 → 114 execuções; 111 passed + 3 skipped).
+- QLT-005: 20 → 17 ao final (documentado na T5).

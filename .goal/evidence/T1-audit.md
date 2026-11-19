@@ -1,135 +1,142 @@
-# Evidência T1 — Auditoria AboutTimeline + contrato (attempt 1)
+# Evidência T1 — Auditoria dos 3 Headers + consumers + contratos (attempt 1)
 
-Data: 2026-11-16 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 038
 T1 é investigação — NENHUM arquivo de produção alterado (apenas `.goal/`).
 
-## 1. Componente real (verificado no disco)
+## 0. Baseline confirmado no repositório real
 
-- **Path exato:** `components/sections/about/about-timeline.tsx`
-- **Export:** `AboutTimeline` (nomeado, função) — Server Component (sem `"use client"`;
-  apresentacional puro, sem estado/interação → boundary preservado, sem motivo para client).
-- **Conteúdo hardcoded hoje:** array `timeline` no topo do arquivo (3 items `{title, desc}`),
-  heading h2 "Um pouco da nossa trajetória", parágrafo de descrição e parágrafo final de
-  nota ("Você pode adaptar os textos dessa linha do tempo...").
-- **Estrutura interna:** `section` > container `max-w-6xl` > header centralizado/esquerdo
-  (h2 + p) > lista `space-y-4` de cards `flex gap-3 rounded-2xl border bg-muted/20` com
-  **marcador numerado** (círculo `bg-foreground` com `index + 1`) + h3 + p; parágrafo final
-  `text-[11px]`. Tokens existentes, dark-only, sem motion, sem dependências.
+- Catálogo: 12 UI / 8 site / 32 sections / 2 wrappers / **total 54** · rotas **24** ·
+  Playwright **56 testes / 112 execuções — 109 passed + 3 skipped**.
+- QLT-005: **20** (14 sections + 6 site), ISSUE_CONFIRMED / ABERTO. QLT-006 **VERIFIED**.
+  QLT-007 **VERIFIED**. QLT-011 parcial/aberto.
+- Git: `main`, HEAD == origin/main == `8849713` (operador commitou a 037). Working tree:
+  renames do arquivamento 037 + plan/state novos do bootstrap — esperado, registrado.
 
-## 2. Consumers reais (grep global pelo import/export)
+## 1. Os 3 Headers (código real — exatamente os previstos pela 038)
 
-| Consumer | Rota/contexto | Conteúdo atual | Migra? |
-|---|---|---|---|
-| `app/library/about/page.tsx` | `/library/about` (entry `about-timeline`, 3º da lista) | renderiza `<AboutTimeline />` sem props — todo o conteúdo vem do array interno | **SIM** (único consumer) |
-| Home (`app/(site)/page.tsx`) | — | **NÃO importa** o componente (import removido na QLT-012/0.1.0; referências em QUALITY-REVIEW:32/401/421 são registro histórico do finding VERIFIED) | n/a |
-| Compositions (`/library/landing`, blog, etc.) | — | sem uso | n/a |
+| Header | Path | Boundary | Hardcoded | Data-driven? | Entra na 038 |
+|---|---|---|---|---|---|
+| **A — HeaderBasic** | `components/site/headers/header-basic.tsx` | **Client** (`usePathname` — destaque de rota ativa) | navLinks (4), brand, CTA "Entrar em contato" → `/#contact` | Não (Template) | **SIM** |
+| **B — HeaderCentered** | `components/site/headers/header-centered.tsx` | **Client** (`usePathname`) | navLinks (5), brand | Não (Template) | **SIM** |
+| **C — HeaderWithTopbar** | `components/site/headers/header-with-topbar.tsx` | **Client** (`usePathname`) | navLinks (5), brand, topbar: `(00) 00000-0000`, `contato@suaempresa.com`, nota de horário | Não (Template) | **SIM** |
+| MobileNav (compartilhado) | `components/site/headers/mobile-nav.tsx` | Client (estado real) | — | **JÁ data-driven** (`MobileNavLink`/`MobileNavProps` — contrato da 007) | NÃO (intocável) |
 
-Nenhum outro uso. Após a migração, o único consumer passa a ser dono dos dados — nenhum
-consumer ficará na API antiga.
+Ordem A/B/C = ordem do roadmap/catalago (HeaderBasic, HeaderCentered, HeaderWithTopbar).
 
-**Detalhe do consumer:** `/library/about` é hoje uma página homogênea
-(`Component: React.ComponentType`, 3 entries). Com props apenas no timeline, a página vira
-heterogênea → converte para `preview: React.ReactNode` (padrão consolidado das páginas
-heterogêneas: hero, services). Os outros 2 componentes (AboutSimple, AboutSplit) permanecem
-intactos e continuam na dívida.
+## 2. Consumers reais (grep global pelos exports)
 
-## 3. Inventário do hardcode
+| Consumer | Headers usados | Ação |
+|---|---|---|
+| `app/library/headers/page.tsx` | os 3 (previews `Component: React.ComponentType`) | página vira heterogênea → `preview: React.ReactNode` (padrão consolidado) com data objects por header |
+| `app/(site)/layout.tsx` | **HeaderCentered** (layout real do site) | layout permanece Server; passa os dados 1:1 |
+
+Nenhum outro consumer (landing não usa headers). Nenhum consumer ficará na API antiga.
+
+## 3. Inventário do hardcode (conteúdo vs estrutura)
 
 ### Conteúdo configurável → props
-- heading principal (h2) → `title` (obrigatório — presente hoje).
-- parágrafo de descrição → `description?` (opcional, condicional).
-- items da timeline (3) → `items` (obrigatório) — cada item: `title` + `description`
-  (campo `desc` → `description`, naming do DS — convenção 032/036).
-- parágrafo final de nota → `supportingText?` (opcional, condicional — convenção
-  HeroPrimary/HeroSteps; é conteúdo editorial, não estrutura).
+- **brand** (os 3): texto em dois tons — `prefix` (bold) + `suffix` (muted). Não é asset/logo
+  image (não existe asset — não inventar). Vira prop com os dois campos para preservar o
+  visual exato.
+- **navItems** (os 3): array `{href, label}` — hoje `navLinks` interno.
+- **action** (só HeaderBasic — único com CTA hoje): `{label, href}` — `Button asChild` +
+  `Link` preservados (convenção 001).
+- **topbar** (só WithTopbar — sua razão de ser): `{phone, email, note?}` — `note` opcional com
+  renderização condicional; ícones Phone/Mail são estruturais (lucide, dependência real, ficam
+  internos).
 
 ### Estrutura interna → permanece no componente
-- `section`/container/breakpoints; header (h2 + p condicionais); lista `space-y-4`; cards
-  flex; **marcador numerado** (derivado do índice — decoração/estrutura, não vira prop);
-  classes, tokens, shadow, rounded; parágrafo final (wrapper estrutural com texto do
-  consumer); responsividade; dark-only.
+- Layouts (logo à esquerda/nav à direita; centralizado; topbar+linha), breakpoints,
+  `hidden md:flex`, `flex-wrap`, `border-b`, `backdrop-blur`, `bg-muted/40`, espaçamentos,
+  classes, tokens, dark-only; destaque de rota ativa (`usePathname` + `cn`); MobileNav
+  intocado; `aria-label="Navegação principal"` em todos os `<nav>` (QLT-007).
 
-## 4. Contrato proposto (mínimo, sem inflação)
+## 4. Contratos propostos (mínimos, sem inflação, sem defaults)
 
 ```ts
-export type AboutTimelineItem = {
-  title: string;
-  description: string;
+// HeaderBasic (A)
+type HeaderNavItem = { href: string; label: string };
+type HeaderAction = { label: string; href: string };
+type HeaderBasicProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+  action: HeaderAction;
 };
 
-export type AboutTimelineProps = {
-  title: string;
-  description?: string;
-  items: AboutTimelineItem[];
-  supportingText?: string;
+// HeaderCentered (B) — sem action (não tem CTA hoje — não inflar)
+type HeaderNavItem = { href: string; label: string };
+type HeaderCenteredProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+};
+
+// HeaderWithTopbar (C) — sem action (não tem CTA hoje)
+type HeaderNavItem = { href: string; label: string };
+type HeaderWithTopbarProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+  topbar: { phone: string; email: string; note?: string };
 };
 ```
 
-- Nomenclatura alinhada aos contratos vigentes (001/003/010/016/031/032/036): `title`,
-  `description`, `items`, `supportingText` — sem criar sinonímia nova.
-- **Sem defaults** proibidos: nada de `title = "..."` ou `items = [...]` reproduzindo o
-  conteúdo antigo; consumer é dono.
-- Sem `action`/CTA (componente não tem CTA hoje — não inflar API).
-- Sem `eyebrow` (componente não tem eyebrow hoje — não inflar API; o campo do contrato
-  conceitual do plano foi descartado pela auditoria do código real).
-- **Sem `period`/datas:** o código real NÃO tem anos/períodos — os marcadores são números de
-  passo (`index + 1`). O `period` conceitual do plano não se aplica; nada de `Date`, parsing
-  ou timezone nesta evolução.
-- Keys: `item.title` (identificador semanticamente estável, já é o key atual — preservado;
-  índice só governa o número do marcador).
+- **Tipos locais por componente** (convenção 001/003/010/016/031/032/036/037 — sem abstração
+  global artificial). `HeaderNavItem` é estruturalmente idêntico ao `MobileNavLink` já
+  exportado pelo MobileNav — TypeScript aceita a passagem `navItems` → `links` sem acoplamento
+  de import. Sem três tipos incompatíveis: mesma linguagem (`href`/`label`, `action`, `brand`).
+- Obrigatórios: o que existe hoje em cada header (brand, navItems; action só no Basic; topbar
+  no WithTopbar). Opcionais condicionais: `note?`. **Sem defaults** mascarando hardcode.
+- Keys: `item.href` (identificador estável, já é o key atual — preservado).
 
-## 5. Heading hierarchy / A11Y (auditoria, sem ampliação de escopo)
+## 5. Mobile nav / a11y / destinos (não-regressão)
 
-- Componente: h2 (principal) → h3 (items) — hierarquia correta, sem skip. Preservado.
-- Na página da Library: h1 da página → h2 da entry (label da shell) → h2/h3 do componente —
-  padrão já existente em todas as páginas da Library (serviços/hero). Sem mudança.
-- Marcadores numerados são texto visível (número de passo), não ícone decorativo — sem
-  ARIA extra. Leitura linear correta (número → título → descrição por item). QLT-011
-  preservado (nada a corrigir aqui).
+- **QLT-006 (VERIFIED, 007):** MobileNav intocado — botão ghost icon-lg Menu/X, `aria-label`
+  dinâmico, `aria-expanded`, `aria-controls` via `useId`, painel condicional, fecha por
+  botão/Escape com retorno de foco/clique fora, `md:hidden`. Basic e WithTopbar continuam
+  passando os links (mesma ordem). Testes existentes (3 de menu mobile) devem permanecer
+  verdes sem modificação.
+- **QLT-007 (VERIFIED, 006):** `aria-label="Navegação principal"` preservado nos 3 headers +
+  shell. Nenhum nav ambiguamente duplicado.
+- **Destinos (026/QLT-003 VERIFIED):** hrefs 1:1 — `/`, `/#services`, `/#about`, `/#contact`,
+  `/blog`; CTA Basic → `/#contact`. Zero `href="#"` reintroduzido.
+- **Headings:** headers não usam h1–h6 — nada a preservar/alterar (QLT-011 intocado).
 
-## 6. Visual
+## 6. QLT-005
 
-**ZERO REDESIGN.** Conteúdo, ordem (3 items na ordem atual), layout, spacing, typography,
-marcadores, responsividade e dark-only DEC-011 preservados 1:1. A migração é apenas de
-fonte-de-dados: array interno → props do consumer (copy 1:1).
+- Baseline real: **20** (14 sections + 6 site). Os 3 headers estão na dívida (lista de
+  migrações do roadmap). Previsão pós-038: **20 → 17** (14 sections + 3 site — sobram os
+  3 footers). **Permanece ABERTO.** QUALITY-REVIEW não foi editado na T1.
 
-## 7. QLT-005
+## 7. Testes — cobertura atual e lacuna real
 
-- Baseline real confirmado no QUALITY-REVIEW (pós-036): **21** (15 sections + 6 site),
-  ISSUE_CONFIRMED / ABERTO. AboutTimeline está na dívida (catálogo: Template; lista de
-  migrações do roadmap).
-- Previsão pós-037: **21 → 20** (14 sections + 6 site). **Permanece ABERTO** — nunca
-  VERIFIED. Roadmap pós-lote "about 2" confere (AboutSimple + AboutSplit ficam).
-- T1 não edita QUALITY-REVIEW (edição é T5).
+Cobertura existente (não duplicar): 3 testes de menu mobile (teclado+Escape no Basic,
+clique+fora no WithTopbar, navegação real pelo painel do Basic — todos mobile-only, dependem
+da ORDEM dos previews: basic 1º, topbar 2º — preservada); home header → `#services` +
+CTA → `/#contact` (HeaderCentered); CTA "Entrar em contato" → `/#contact` em
+`/library/headers`; shell da página de headers (h1 + previews).
+**Lacuna real:** conteúdo renderizado a partir dos dados do consumer no desktop — brand
+(dois tons), nav items na ordem, topbar phone/email/nota. Plano T4: **+1 teste dual-project**
+(roles/textos reais, escopo semântico por preview, zero overflow). Sem asserts de classes
+Tailwind/pixels.
+Esperado pós-T4: **57 testes / 114 execuções — 111 passed + 3 skipped**, exit 0.
 
-## 8. Testes — cobertura atual e lacuna real
+## 8. Arquivos previstos (T2–T5)
 
-- `tests/smoke.spec.ts` cobre `/library/about` apenas via shell (linha ~524: rota + h1
-  "About / Sobre" + firstId `about-simple` + zero overflow). Nenhum teste asserta o conteúdo
-  do timeline.
-- **Lacuna real:** contrato do AboutTimeline via consumer. Plano T4: **+1 teste dual-project**
-  (roles/textos reais): h1 da página; ordem das 3 entries; h2 + descrição + 3 h3 do timeline
-  na ordem (Início das atividades → Crescimento e consolidação → Atuação atual) com as
-  descrições dos dados do consumer; supporting text; zero overflow nos 2 viewports. Sem
-  asserts de classes Tailwind/pixels/marcadores internos. Nada redundante.
-- Baseline: 55 testes / 110 execuções (107 passed + 3 skipped) → esperado pós-T4:
-  56 testes / 112 execuções (109 passed + 3 skipped), exit 0.
+- T2 (Header A): `header-basic.tsx` + `app/library/headers/page.tsx` (entry basic → preview
+  com dados; página convertida para `preview: React.ReactNode` — padrão das heterogêneas).
+- T3 (Header B): `header-centered.tsx` + `app/library/headers/page.tsx` (entry centered) +
+  `app/(site)/layout.tsx` (Server, dados 1:1). Header A íntegro.
+- T4 (Header C + regressão): `header-with-topbar.tsx` + `app/library/headers/page.tsx`
+  (entry topbar) + `tests/smoke.spec.ts` (+1 teste da lacuna). Gates completos.
+- T5: QUALITY-REVIEW (20→17, ABERTO), catálogo (3 entries existentes), ROADMAP (038 VERIFIED,
+  próxima 039), CURRENT-STATE, CHANGELOG. DESIGN-SYSTEM/DECISIONS inalterados.
 
-## 9. Arquivos previstos (T2–T5)
+## 9. Riscos
 
-- T2: `components/sections/about/about-timeline.tsx` (contrato acima, estrutura intacta).
-- T3: `app/library/about/page.tsx` (preview ReactNode + `aboutTimelineDemo` com copy 1:1;
-  AboutSimple/AboutSplit renderizados sem props; ids/ordem/labels preservados).
-- T4: `tests/smoke.spec.ts` (+1 teste dual). Gates: lint/build/test:e2e/diff-check.
-- T5: QUALITY-REVIEW (21→20, ABERTO), COMPONENT-CATALOG (entrada existente marcada
-  data-driven; contagens 32/12/8/54), ROADMAP (037 VERIFIED, próxima 038), CURRENT-STATE,
-  CHANGELOG. DESIGN-SYSTEM/DECISIONS inalterados.
-
-## 10. Riscos
-
-- Conversão da página para `preview` não muda visual nem ids — teste da shell (firstId
-  `about-simple`) permanece válido.
-- Armadilha conhecida (036/T4): dev server órfão na porta 3000 com cache corrompido por
-  build → verificar `Get-NetTCPConnection -LocalPort 3000` antes do Playwright.
-- Zero dependências novas; zero componente novo; zero rota nova; commit/push só pelo
+- Testes existentes usam `button[aria-expanded]` com `.first()`/`.nth(1)` — dependem da ordem
+  dos previews (basic → centered → topbar); ordem preservada, risco nulo se nada for
+  reordenado.
+- `app/(site)/layout.tsx` é Server renderizando Client Component com dados — padrão já
+  existente (root layout + Consent banner).
+- Armadilha conhecida: dev server órfão na porta 3000 → verificar antes do Playwright.
+- Zero dependências novas (DropdownMenu é 039); zero componente/rota nova; commit/push só pelo
   operador.

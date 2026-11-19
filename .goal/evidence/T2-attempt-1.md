@@ -1,79 +1,86 @@
-# Evidência T2 — Migrar AboutTimeline para o contrato (attempt 1)
+# Evidência T2 — Header A (HeaderBasic) data-driven (attempt 1)
 
-Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037 (b69dab192d266c66)
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 038
 
-## 0. Nota de acoplamento (T2/T3)
+## Escopo desta task
 
-O contrato aprovado na T1 torna `title`/`items` obrigatórios (sem defaults). Isso força o
-consumer a fornecer os dados para o build compilar — por isso o consumer único
-(`app/library/about/page.tsx`) foi atualizado nesta tarefa junto com o componente (preview
-`React.ReactNode` + `aboutTimelineDemo`, exatamente como prescrito na T1/T3). T3 torna-se
-verificação formal (consumers completos, copy 1:1, outras variants intactas, gates).
+Migrar exatamente 1 componente: `components/site/headers/header-basic.tsx` (Header A) para o
+contrato aprovado na auditoria (T1, APPROVED). Consumer da página de previews convertido para
+o padrão `preview: React.ReactNode` (páginas heterogêneas). Zero redesign, zero dependência
+nova, zero componente novo, zero rota nova, zero DropdownMenu.
 
-## 1. Diff real (git diff --stat desde o último commit)
-
-```
- app/library/about/page.tsx                   | 45 ++++++++++++++++++----
- components/sections/about/about-timeline.tsx | 56 +++++++++++++++-------------
- 2 files changed, 69 insertions(+), 32 deletions(-)
-```
-
-### `components/sections/about/about-timeline.tsx` (antes → depois)
-
-- ANTES: array `const timeline = [...]` interno (3 items `{title, desc}`) + h2/descrição/
-  nota finais hardcoded; `export function AboutTimeline()` sem props.
-- DEPOIS: contrato exatamente como aprovado na T1:
+## Contrato implementado (exatamente o aprovado na T1)
 
 ```ts
-export type AboutTimelineItem = {
-  title: string;
-  description: string;
+type HeaderNavItem = { href: string; label: string };
+type HeaderAction = { label: string; href: string };
+type HeaderBasicProps = {
+  brand: { prefix: string; suffix: string };
+  navItems: HeaderNavItem[];
+  action: HeaderAction;
 };
-
-export type AboutTimelineProps = {
-  title: string;
-  description?: string;
-  items: AboutTimelineItem[];
-  supportingText?: string;
-};
+export function HeaderBasic({ brand, navItems, action }: HeaderBasicProps) { ... }
 ```
 
-- Renderização 100% a partir das props: `{title}`, `{description}` condicional
-  (`{description ? <p>…</p> : null}`), `items.map(...)`, `{supportingText}` condicional.
-- `desc` → `description` (naming do DS). Sem defaults internos. Sem eyebrow/action (não
-  existem no componente — sem inflação). Sem `Date`/period (marcador = número do passo via
-  índice — estrutura, não dado).
-- Estrutura intacta: `section`/container/breakpoints, header (h2 + p), lista `space-y-4`,
-  cards `flex gap-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm`, marcador numerado
-  `h-6 w-6 rounded-full bg-foreground text-background` com `index + 1`, h3 + p `text-xs`,
-  parágrafo final `mt-4 text-[11px]`, tokens, dark-only. Keys `item.title` preservadas.
-- Server Component preservado (sem `"use client"` — apresentacional puro).
+- zero defaults; todos obrigatórios (existem hoje no componente);
+- tipos locais (sem abstração global); `HeaderNavItem` estruturalmente idêntico ao
+  `MobileNavLink` — `<MobileNav links={navItems} />` compõe sem acoplamento de import;
+- `"use client"` + `usePathname` preservados (Client boundary);
+- `aria-label="Navegação principal"` preservado; keys `item.href` preservadas;
+- marca continua link para `/` com dois tons (prefix bold + suffix muted) — agora via dados;
+- CTA renderiza `action.label` → `action.href` (mesmo destino real `/#contact`);
+- dados passados pelo consumer 1:1 com o estado anterior (Início `/`, Serviços `/#services`,
+  Sobre `/#about`, Contato `/#contact`; action `Entrar em contato` → `/#contact`;
+  brand `Sua`/`Empresa`). Zero dead href.
 
-### `app/library/about/page.tsx` (consumer único)
+## Arquivos alterados (git diff --stat)
 
-- `AboutItem.Component: React.ComponentType` → `preview: React.ReactNode` (página vira
-  heterogênea — padrão das páginas hero/services).
-- `const aboutTimelineDemo: AboutTimelineProps` com **copy 1:1** do conteúdo original
-  (título, descrição, 3 items na ordem original, nota final) — consumer dono dos dados.
-- AboutSimple/AboutSplit: renderizados sem props (`preview: <AboutSimple />` etc.), ids,
-  nomes, descrições das entries e ordem (simple → split → timeline) preservados.
-- `<Component />` → `{preview}` dentro do mesmo preview box.
+```
+ app/library/headers/page.tsx             | 23 +++++++++++++++++------
+ components/site/headers/header-basic.tsx | 29 ++++++++++++++++-------------
+ 2 files changed, 33 insertions(+), 19 deletions(-)
+```
 
-## 2. Gates (execuções reais, nesta ordem)
+- `app/library/headers/page.tsx`: `HeaderItem.Component: React.ComponentType` →
+  `preview: React.ReactNode`; entry `header-basic` passa os dados 1:1 ao `HeaderBasic`;
+  entries `header-centered`/`header-with-topbar` permanecem renderizando os componentes sem
+  props (ainda não migrados — serão convertidos com dados nas T3/T4); ordem dos previews
+  basic→centered→topbar preservada (testes existentes dependem dela).
+- Acoplamento documentado (padrão 037): a conversão da página para `preview` na T2 é
+  necessária porque o `HeaderBasic` agora exige props; os outros dois previews ficam híbridos
+  até suas tasks.
 
-| Gate | Comando | Exit | Resultado |
-|---|---|---|---|
-| ESLint | `npm run lint` | 0 | 0 erros / 0 warnings |
-| Build | `npm run build` | 0 | Compiled successfully; 24/24 rotas geradas |
-| git diff --check | `git diff --check` | 0 | limpo |
+## Gates executados (outputs reais)
 
-Teste focado pertinente: nenhum teste existente asserta o conteúdo do timeline (cobertura da
-página é só shell/h1/firstId — linha ~524 do smoke); teste do contrato entra na T4 (plano
-T1 aprovado). Nenhum teste quebrado pela mudança (build type-check passou; JSX/roles
-preservados).
+```
+> npm run lint
+> eslint
+(0 erros, 0 warnings — apenas nota informativa do baseline-browser-mapping)
+LINT_EXIT=0
 
-## 3. Conformidade com os critérios T2
+> npm run build
+[baseline-browser-mapping] The data in this module is over two months old...
+ ✓ Compiled successfully in 2.2s
+ ✓ Generating static pages using 15 workers (24/24) in 1012.8ms
+BUILD_EXIT=0
+```
 
-- Contrato exato da T1: ✔ · hardcode removido do componente: ✔ (todo conteúdo configurável
-  vem das props) · visual preservado: ✔ (classes/tokens/estrutura idênticos) · Server
-  boundary: ✔ · semântica (h2/h3, keys estáveis): ✔ · zero dependências: ✔ · gates verdes: ✔.
+- Rotas no build: **24** (baseline preservado; `/`, `/_not-found`, `/blog`, `/blog/[slug]`,
+  `/library` + 19 rotas `/library/*`, incluindo `/library/headers`).
+- `git diff --check`: **DIFFCHECK_EXIT=0** (sem whitespace errors).
+- Playwright: não executado nesta task (execução completa na T4, conforme plano aprovado na
+  T1; testes existentes de menu mobile/CTA cobrem o Header A e permanecem válidos — ordem
+  preservada).
+
+## Estado de contagens
+
+- components: 54 (12 UI / 8 site / 32 sections / 2 wrappers) — inalterado (nenhum componente
+  novo).
+- rotas: 24 — inalterado.
+- QLT-005: 20 → (fechamento documentado na T5; previsão final 17).
+
+## Riscos/conhecido
+
+- Dev server órfão na porta 3000 pode afetar Playwright na T4 (verificar antes).
+- Testes existentes usam `.first()`/`.nth(1)` em `button[aria-expanded]` — ordem dos previews
+  não mudou.

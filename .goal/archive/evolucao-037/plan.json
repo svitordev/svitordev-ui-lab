@@ -1,0 +1,62 @@
+{
+  "goal": "Evolucao 037 - Migrar AboutTimeline para contrato data-driven, reduzindo QLT-005 incrementalmente (baseline 21, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-036: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 55 testes (110 execucoes, 107 passed + 3 skipped).",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria AboutTimeline + consumers + contrato (sem alterar producao)",
+      "acceptance": [
+        "consumers completos mapeados",
+        "contrato minimo sem inflacao",
+        "conteudo vs estrutura separados",
+        "zero redesign",
+        "QLT-005 previsto corretamente",
+        "escopo exclusivo da 037"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Migrar AboutTimeline para o contrato aprovado",
+      "acceptance": [
+        "contrato exato da T1",
+        "hardcode removido",
+        "visual preservado",
+        "Server boundary preservado",
+        "zero dependencias",
+        "gates lint/build/diff-check verdes"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Migrar consumers reais com copy 1:1",
+      "acceptance": [
+        "todos consumers migrados",
+        "nenhum uso da API antiga",
+        "copy e ordem preservadas",
+        "outras About variants intactas",
+        "gates verdes"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Regressao + Playwright (somente lacunas reais)",
+      "acceptance": [
+        "contrato observavel provado via consumers",
+        "ordem",
+        "desktop+mobile",
+        "zero overflow",
+        "suite completa verde",
+        "contagens reais"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao + QLT-005 (21 para 20, ABERTO)",
+      "acceptance": [
+        "QUALITY-REVIEW, catalogo, roadmap, CURRENT-STATE, CHANGELOG coerentes",
+        "QLT-011 preservado",
+        "038 nao iniciada",
+        "gates verdes"
+      ]
+    }
+  ]
+}
