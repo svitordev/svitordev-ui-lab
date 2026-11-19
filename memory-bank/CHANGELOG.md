@@ -4,6 +4,16 @@ Registro de mudanças técnicas importantes ao longo da evolução. Formato insp
 
 ---
 
+## [2026-11-19] — Evolução 037: Migrar AboutTimeline para contrato (VERIFIED — QLT-005 incremental)
+
+- **`components/sections/about/about-timeline.tsx`** (`AboutTimeline`) — migrado da dívida pela auditoria da 037 (AboutSimple e AboutSplit permanecem hardcoded). Contrato data-driven local na linguagem dos contratos modernos do Lab: `AboutTimelineItem`/`AboutTimelineProps` (tipos locais); `title`/`items` obrigatórios; `description?`/`supportingText?` opcionais com renderização condicional; sem defaults internos; sem eyebrow/action/period (não existem no componente — o marcador é o número do passo via índice, não dado); `desc` → `description` (naming do DS); Server Component e visual preservados (estrutura, classes, tokens, marcadores e heading levels h2/h3 intactos); keys `item.title`.
+- **Consumer dono dos dados:** `app/library/about/page.tsx` (`aboutTimelineDemo` — página convertida para preview `React.ReactNode`, padrão das páginas heterogêneas) com copy 1:1; ids/ordem/labels das entries preservados; AboutSimple/AboutSplit intactos; nenhum componente novo, nenhuma rota nova, **zero dependências novas**.
+- +1 teste Playwright dual-project (contrato provado via consumer real: headings/copy específicas dos data objects, ordem das entries, escopo semântico, zero overflow). Suíte: 56 testes / 112 execuções — **109 passed + 3 skipped**. Lint **0/0**; build **PASS** (24 rotas); `git diff --check` limpo.
+- Contagens: catálogo **32 sections / 12 UI / 8 site / total 54** (inalterado — migração de contrato, não de contagem); rotas **24** (nenhuma nova). **QLT-005: 21 → 20 (14 sections + 6 site), permanece ABERTO. QLT-011 preservado.**
+- Documentação atualizada: `docs/COMPONENT-CATALOG.md` (entrada existente marcada data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (037 VERIFIED, próxima 038), `memory-bank/CURRENT-STATE.md` (001–037, próxima execução: 038). `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção nova, nenhuma decisão nova — migração para props já é política conhecida).
+
+---
+
 ## [2026-11-16] — Evolução 036: Migrar services×2 para contrato (VERIFIED — QLT-005 incremental)
 
 - **`components/sections/services/services-with-icons.tsx`** (`ServicesWithIcons`) e **`components/sections/services/services-grid-simple.tsx`** (`ServicesGridSimple`) — os 2 migrados da dívida pela auditoria da 036 (`ServicesSplitWithHighlight` permanece hardcoded na dívida). Contratos data-driven locais na linguagem dos contratos modernos do Lab: `ServiceWithIcon`/`ServicesWithIconsProps` (`icon` = componente React — lucide-react, dependência real do projeto) e `ServiceGridItem`/`ServicesGridSimpleProps` (sem icon API, sem actions — nada que o componente não tenha hoje); `title`/`services` obrigatórios; `description?` opcional com renderização condicional; sem defaults internos; `desc` → `description` (naming do DS); Server Components e visual preservados (estrutura, classes, tokens e heading levels h2/h3 intactos).

@@ -2,18 +2,49 @@
 import type { Metadata } from "next";
 import { AboutSimple } from "@/components/sections/about/about-simple";
 import { AboutSplit } from "@/components/sections/about/about-split";
-import { AboutTimeline } from "@/components/sections/about/about-timeline";
+import {
+  AboutTimeline,
+  type AboutTimelineProps,
+} from "@/components/sections/about/about-timeline";
 
 export const metadata: Metadata = {
   title: "Library · About",
   description: "Seções sobre a empresa — simples, em duas colunas e timeline.",
 };
 
+// Página heterogênea (só o timeline recebe props) — preview ReactNode preserva a
+// tipagem real do contrato no local do JSX (padrão das páginas heterogêneas).
 type AboutItem = {
   id: string;
   name: string;
   description: string;
-  Component: React.ComponentType;
+  preview: React.ReactNode;
+};
+
+// Dados do consumer — copy original preservada (Evolução 037).
+const aboutTimelineDemo: AboutTimelineProps = {
+  title: "Um pouco da nossa trajetória",
+  description:
+    "Uma história construída ao lado de clientes que confiam no nosso trabalho e crescem junto conosco.",
+  items: [
+    {
+      title: "Início das atividades",
+      description:
+        "Primeiros atendimentos, entendendo na prática as principais necessidades dos clientes e da área de atuação.",
+    },
+    {
+      title: "Crescimento e consolidação",
+      description:
+        "Ampliação da carteira de clientes, organização dos processos internos e aprofundamento em serviços especializados.",
+    },
+    {
+      title: "Atuação atual",
+      description:
+        "Atendimento focado em oferecer soluções personalizadas, com acompanhamento próximo e foco em resultados concretos para cada cliente.",
+    },
+  ],
+  supportingText:
+    "Você pode adaptar os textos dessa linha do tempo para escritórios, clínicas, consultorias e outros tipos de empresas, mantendo a mesma estrutura visual.",
 };
 
 const abouts: AboutItem[] = [
@@ -21,19 +52,19 @@ const abouts: AboutItem[] = [
     id: "about-simple",
     name: "About simples",
     description: "Bloco direto sobre a empresa, sem distrações.",
-    Component: AboutSimple,
+    preview: <AboutSimple />,
   },
   {
     id: "about-split",
     name: "About em duas colunas",
     description: "Texto e destaque lado a lado em telas grandes.",
-    Component: AboutSplit,
+    preview: <AboutSplit />,
   },
   {
     id: "about-timeline",
     name: "Timeline / trajetória",
     description: "Linha do tempo da empresa em etapas.",
-    Component: AboutTimeline,
+    preview: <AboutTimeline {...aboutTimelineDemo} />,
   },
 ];
 
@@ -52,7 +83,7 @@ export default function AboutLibraryPage() {
         </header>
 
         <section className="space-y-4">
-          {abouts.map(({ id, name, description, Component }) => (
+          {abouts.map(({ id, name, description, preview }) => (
             <div
               key={id}
               className="space-y-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm"
@@ -69,7 +100,7 @@ export default function AboutLibraryPage() {
 
               {/* Preview */}
               <div className="overflow-hidden rounded-xl border bg-background">
-                <Component />
+                {preview}
               </div>
             </div>
           ))}

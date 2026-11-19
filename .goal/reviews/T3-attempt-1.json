@@ -1,29 +1,24 @@
 {
   "task_id": "T3",
-  "fingerprint": "e270ffae5a03f3fe401f7662151603ff470c01e1f807279aea343b23d3d20400",
+  "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T3 verificada com sucesso (PASS). O componente ServicesGridSimple (components/sections/services/services-grid-simple.tsx) foi migrado para o contrato data-driven aprovado (ServiceGridItem e ServicesGridSimpleProps), sem valores default mascarando hardcode. O unico consumer (app/library/services/page.tsx) detem os dados (servicesGridSimpleDemo) preservando 1:1 a copy original, classes Tailwind, hierarquia de headings (h2/h3) e boundary de Server Component. As entregas da T2 (services-with-icons.tsx e app/(site)/page.tsx) e o componente fora do escopo (services-split-with-highlight.tsx) permanecem integros. Gates de qualidade (lint, build, git diff --check e Playwright) reportados com exit code 0 nas evidencias da task.",
+  "summary": "Verificação formal da T3 (Evolução 037) concluída com sucesso (PASS). O único consumer real de AboutTimeline (app/library/about/page.tsx) foi migrado para a nova API data-driven com tipagem explícita (AboutTimelineProps), sem qualquer uso remanescente da API antiga sem props. A copy e a ordem dos 3 itens da timeline, bem como dos textos de cabeçalho, apoio e das entradas da página /library/about, foram preservadas 1:1. As demais variantes (AboutSimple e AboutSplit) permanecem intactas e os quality gates (ESLint, Next.js build e git diff --check) estão verdes.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Evidencia reportada pelo Builder: npm run lint -> LINT_EXIT=0 (0 erros / 0 warnings) e leitura direta dos arquivos TS/TSX sem violacoes.",
+      "evidence": "npm run lint reportado nas evidências com exit 0 (0 erros / 0 warnings) e código inspecionado sem violações.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia reportada pelo Builder: npm run build -> BUILD_EXIT=0 (Compiled successfully in 1824.1ms) e contratos TypeScript validados nos arquivos reais.",
+      "evidence": "npm run build reportado nas evidências com exit 0 (24 rotas compiladas com sucesso) e tipagem de AboutTimelineProps verificada entre componente e consumer.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia reportada pelo Builder: git diff --check -> CHECK_EXIT=0.",
+      "evidence": "git diff --check reportado nas evidências com exit 0 (limpo) e arquivos inspecionados sem problemas de formatação.",
       "name": "git diff --check",
-      "status": "passed"
-    },
-    {
-      "evidence": "Evidencia reportada pelo Builder: npx playwright test -g \"rotas sem smoke\" -> TEST_EXIT=0, 2 passed (desktop + mobile cobrindo /library/services com firstId: services-grid-simple).",
-      "name": "npx playwright test -g \"rotas sem smoke\"",
       "status": "passed"
     }
   ],

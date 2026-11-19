@@ -1,34 +1,24 @@
 {
   "task_id": "T4",
-  "fingerprint": "881d43362e8af413bfaa89cbb881adfbb93e13ef7f4a56a171f12b713c55c342",
+  "fingerprint": "ebc8cf663f8520d5bb42cd452b0fea76f16dcdc81969923e60da0ea90a5f6625",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Inspeção independente concluída em modo somente leitura para a tarefa T4 (Regressão integrada + Playwright) da Evolução 036. Foi verificado diretamente no código real do workspace (`tests/smoke.spec.ts`, `app/library/services/page.tsx`, `app/(site)/page.tsx`, `components/sections/services/services-grid-simple.tsx`, `components/sections/services/services-with-icons.tsx`, `components/sections/services/services-split-with-highlight.tsx` e `package.json`) que: (1) os 2 novos testes em `tests/smoke.spec.ts` (linhas 1604–1666) cobrem exatamente a lacuna real dos dois contratos migrados (`ServicesGridSimple` e `ServicesWithIcons`) via consumers reais (`/library/services` e `/`), validando headings, descrição, ordem dos 6 h3 na Library e 3 h3 na Home, contagem de ícones SVG escopada por section, preservação de `ServicesSplitWithHighlight` e zero overflow horizontal nos dois viewports (desktop e mobile), sem helpers que mascarem bugs e sem acoplamento a classes Tailwind (nota: embora o resumo textual do Builder tenha citado rótulos diferentes na prosa, o código real em `tests/smoke.spec.ts` reflete exatamente a copy real dos consumers); (2) zero dependência nova em `package.json`; (3) evidências dos gates reportadas completas e consistentes (`npm run lint` 0/0, `npm run build` PASS com 24 rotas, `git diff --check` limpo, `npm run test:e2e` com 55 testes / 110 execuções: 107 passed + 3 skipped). Veredito: PASS.",
+  "summary": "Auditoria independente da T4 (Evolução 037 — Regressão + Playwright para AboutTimeline) concluída com veredito PASS. O código real de tests/smoke.spec.ts (linhas 1668-1714), app/library/about/page.tsx e components/sections/about/about-timeline.tsx foi inspecionado e confrontado com as evidências de execução. O novo teste cobre exclusivamente a lacuna real do contrato observável de AboutTimeline no seu único consumer (/library/about), validando title (h2), description, ordem das entries na página e ordem editorial dos 3 items (h3 nth(0..2)) com suas respectivas descrições, supportingText e zero overflow horizontal nos projetos desktop e mobile. A contagem real na suíte foi confirmada em 56 testes (112 execuções: 109 passed + 3 skipped), com lint, build (24/24 rotas) e git diff --check limpos.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Evidência incorporada pelo Builder: `npm run lint` (exit 0, 0 erros / 0 warnings). Código inspecionado em `tests/smoke.spec.ts` sem violações de lint ou tipagem.",
-      "name": "npm run lint",
+      "evidence": "Inspeção direta de tests/smoke.spec.ts (linhas 1668-1714) e evidência de execução isolada: npx playwright test -g \"about: página da Library\" -> 2 passed (desktop + mobile), validando contrato AboutTimelineProps via consumer, ordem das entries e dos 3 passos (h3), copy completa e scrollWidth === clientWidth.",
+      "name": "Playwright (teste focado: about: página da Library prova o contrato do AboutTimeline via consumer)",
       "status": "passed"
     },
     {
-      "evidence": "Evidência incorporada pelo Builder: `npm run build` (exit 0, PASS, 24 rotas geradas). Contratos tipados verificados por leitura em `components/sections/services/*` e consumers em `app/library/services/page.tsx` e `app/(site)/page.tsx`.",
-      "name": "npm run build",
+      "evidence": "Contagem real verificada no arquivo tests/smoke.spec.ts (56 blocos test(), sendo 3 com test.skip para non-mobile) e evidência de execução de npm run test:e2e -> exit 0, 112 execuções (109 passed + 3 skipped).",
+      "name": "Playwright (suíte completa: npm run test:e2e)",
       "status": "passed"
     },
     {
-      "evidence": "Evidência incorporada pelo Builder: `npx playwright test -g \"services:\"` (exit 0, 4 passed = 2 testes × 2 viewports) e código real verificado em `tests/smoke.spec.ts` (linhas 1604–1666).",
-      "name": "npx playwright test -g \"services:\"",
-      "status": "passed"
-    },
-    {
-      "evidence": "Evidência incorporada pelo Builder: `npm run test:e2e` (exit 0, 55 testes × 2 projetos = 110 execuções, 107 passed + 3 skipped).",
-      "name": "npm run test:e2e",
-      "status": "passed"
-    },
-    {
-      "evidence": "Evidência incorporada pelo Builder: `git diff --check` (exit 0, limpo).",
-      "name": "git diff --check",
+      "evidence": "Evidência de execução reportada pelo Builder: npm run lint -> exit 0 (0 erros / 0 warnings); npm run build -> exit 0 (24/24 rotas compiladas); git diff --check -> exit 0.",
+      "name": "Quality Gates (ESLint + Next.js Build + git diff --check)",
       "status": "passed"
     }
   ],

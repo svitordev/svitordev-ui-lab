@@ -1,34 +1,41 @@
 // components/sections/about/about-timeline.tsx
-const timeline = [
-  {
-    title: "Início das atividades",
-    desc: "Primeiros atendimentos, entendendo na prática as principais necessidades dos clientes e da área de atuação.",
-  },
-  {
-    title: "Crescimento e consolidação",
-    desc: "Ampliação da carteira de clientes, organização dos processos internos e aprofundamento em serviços especializados.",
-  },
-  {
-    title: "Atuação atual",
-    desc: "Atendimento focado em oferecer soluções personalizadas, com acompanhamento próximo e foco em resultados concretos para cada cliente.",
-  },
-];
+// Evolução 037 — contrato data-driven local (QLT-005 incremental). O consumer é
+// dono dos dados; o componente mantém apenas a estrutura (lista, cards, marcadores
+// numerados por passo) com tokens existentes. Sem datas/períodos — o marcador é o
+// número do passo (índice), não um campo de dados.
 
-export function AboutTimeline() {
+export type AboutTimelineItem = {
+  title: string;
+  description: string;
+};
+
+export type AboutTimelineProps = {
+  title: string;
+  description?: string;
+  items: AboutTimelineItem[];
+  supportingText?: string;
+};
+
+export function AboutTimeline({
+  title,
+  description,
+  items,
+  supportingText,
+}: AboutTimelineProps) {
   return (
     <section className="w-full bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
         <div className="mb-6 space-y-2 text-center md:text-left">
           <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
-            Um pouco da nossa trajetória
+            {title}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Uma história construída ao lado de clientes que confiam no nosso trabalho e crescem junto conosco.
-          </p>
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
         </div>
 
         <div className="space-y-4">
-          {timeline.map((item, index) => (
+          {items.map((item, index) => (
             <div
               key={item.title}
               className="flex gap-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm"
@@ -38,16 +45,15 @@ export function AboutTimeline() {
               </div>
               <div>
                 <h3 className="text-sm font-semibold">{item.title}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">{item.desc}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <p className="mt-4 text-[11px] text-muted-foreground">
-          Você pode adaptar os textos dessa linha do tempo para escritórios, clínicas, consultorias
-          e outros tipos de empresas, mantendo a mesma estrutura visual.
-        </p>
+        {supportingText ? (
+          <p className="mt-4 text-[11px] text-muted-foreground">{supportingText}</p>
+        ) : null}
       </div>
     </section>
   );

@@ -137,7 +137,7 @@ Contrato do Breadcrumbs (resumo):
 |---|---|---|---|
 | AboutSimple | `components/sections/about/about-simple.tsx` | Template | Layout simples |
 | AboutSplit | `components/sections/about/about-split.tsx` | Template | Layout dividido |
-| AboutTimeline | `components/sections/about/about-timeline.tsx` | Template | Timeline |
+| AboutTimeline | `components/sections/about/about-timeline.tsx` | Pronto | **Data-driven** (Evolução 037, migração — visual preservado). Contrato `AboutTimelineItem`/`AboutTimelineProps` (tipos locais); `title`/`items` obrigatórios; `description?`/`supportingText?` opcionais com renderização condicional; sem defaults internos; sem eyebrow/action/period (marcador = número do passo via índice); `desc` → `description` (naming do DS); Server Component; consumer `/library/about` (`aboutTimelineDemo`) com copy 1:1 |
 
 ### Services — `components/sections/services/` (3)
 

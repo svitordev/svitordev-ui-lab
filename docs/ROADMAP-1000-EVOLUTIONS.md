@@ -386,7 +386,7 @@ Working tree limpo em `main` (HEAD = origin/main), roadmap aprovado, nenhuma dep
 
 # Lote 02 — Evoluções 026–050
 
-**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; **035 ✅ VERIFIED (2026-11-12)**; **036 ✅ VERIFIED (2026-11-16)**; 037–050 planejadas e não iniciadas. Próxima execução: **037**.
+**Status:** **EM EXECUÇÃO** — planejado na repriorização ao fim do Lote 01 (2026-11-09). **026 ✅ VERIFIED (2026-11-09)**; **027 ✅ VERIFIED (2026-11-09)**; **028 ✅ VERIFIED (2026-11-10)**; **029 ✅ VERIFIED (2026-11-10)**; **030 ✅ VERIFIED (2026-11-10)**; **031 ✅ VERIFIED (2026-11-11)**; **032 ✅ VERIFIED (2026-11-11)**; **033 ✅ VERIFIED (2026-11-12)**; **034 ✅ VERIFIED (2026-11-12)**; **035 ✅ VERIFIED (2026-11-12)**; **036 ✅ VERIFIED (2026-11-16)**; **037 ✅ VERIFIED (2026-11-19)**; 038–050 planejadas e não iniciadas. Próxima execução: **038**.
 
 ## Visão geral
 
@@ -407,7 +407,7 @@ O lote abre com a dívida real de confiança do template (026 — QLT-003) e com
 | 034 | Gallery (section) | section | Grid de mídia data-driven, estruturalmente distinta, **usando Tabs como parte funcional** (conjuntos reais da demo) | `components/sections/gallery/gallery-tabs.tsx` + demo (path real, aprovado na auditoria T1) | — | 029 | Médio |
 | 035 | Consent preferences banner ✅ VERIFIED | site | Componente de UI/comportamento de consentimento (não compliance engine); persistência explícita, acessível, sem tracking real, demo segura | `components/site/consent/consent-preferences.tsx` + integração (root layout + FooterCta) + testes (path real, aprovado na auditoria T1) | — | 026 | Pequeno |
 | 036 | Migrar services×2 para contrato ✅ VERIFIED | refactor | QLT-005 incremental (auditoria T1 selecionou services-with-icons + services-grid-simple; Split permanece) | 2 contratos + demos | QLT-005 (23→21, aberto) | 026 | Médio |
-| 037 | Migrar AboutTimeline para contrato | refactor | Preparar About composition; reduzir QLT-005 sem migração escondida | contrato + demo | QLT-005 | — | Pequeno |
+| 037 | Migrar AboutTimeline para contrato ✅ VERIFIED | refactor | Preparar About composition; reduzir QLT-005 sem migração escondida | contrato + demo | QLT-005 (21→20, aberto) | — | Pequeno |
 | 038 | Migrar headers×3 para API data-driven | refactor | Links/actions via props; consolidar padrão da 026; preservar MobileNav e acessibilidade (3 componentes pequenos — cabem numa evolução) | 3 contratos + demos | QLT-005 | 026 | Médio |
 | 039 | DropdownMenu + Header with dropdown navigation | UI | Primitive com consumer real imediato: 4º header funcionalmente distinto | `components/ui/dropdown-menu.tsx` + header novo + demo + teste | — | 038 | Médio |
 | 040 | Migrar footers×3 para contrato | refactor | QLT-005 incremental | 3 contratos + demos | QLT-005 | 026 | Médio |
@@ -472,7 +472,7 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 
 - **QLT-003** — ✅ **VERIFIED pela 026** (2026-11-09): 10 botões mortos → 0; anchors `/#services`/`/#about` passaram a resolver por alvos reais na home; zero `href="#"`.
 - **QLT-004** — planejado para a **028** (comportamento demonstrativo explícito via Alert; sem backend, sem envio fingido).
-- **QLT-005** — hoje **21 componentes sem props** (15 sections + 6 site) — **031 ✅ VERIFIED (2026-11-11): hero-primary migrado, 25 → 24**; **032 ✅ VERIFIED (2026-11-11): hero-steps migrado, 24 → 23**; **036 ✅ VERIFIED (2026-11-16): services-with-icons + services-grid-simple migrados, 23 → 21**; o lote migra mais **7** (037, 038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
+- **QLT-005** — hoje **20 componentes sem props** (14 sections + 6 site) — **031 ✅ VERIFIED (2026-11-11): hero-primary migrado, 25 → 24**; **032 ✅ VERIFIED (2026-11-11): hero-steps migrado, 24 → 23**; **036 ✅ VERIFIED (2026-11-16): services-with-icons + services-grid-simple migrados, 23 → 21**; **037 ✅ VERIFIED (2026-11-19): about-timeline migrado, 21 → 20**; o lote migra mais **6** (038×3, 040×3); **14 permanecem** após o lote (about 2, services 1, testimonials 3, contact 3, cta 3, pricing 2, site 0). **Permanece ABERTO** — novos components de contact/CTA não contam como migração dos legacy hardcoded.
 - **QLT-009** — ✅ **VERIFIED pela 030** (2026-11-10): decisão tomada (DEC-011 — dark-only oficial) E implementada de fato — paleta única no `:root`, sem `.dark`, sem `@custom-variant dark`, sem mecanismo fake; teste novo protege a política.
 - **QLT-011** — **parcialmente resolvido na 032 ✅** (heading hierarchy do hero-steps corrigida — steps h3→h2; o palpite h1→h3 foi rejeitado por evidência do código: o h1 do componente é o único h1 da home, protegido por 2 testes) **e reauditado na 050** (comentários stale, nit do wrapper). Sem fechamento garantido.
 
@@ -482,9 +482,9 @@ Aplicada estritamente: cada primitive novo tem consumer real nomeado dentro do l
 - **site (+2):** Consent preferences banner, Header with dropdown navigation.
 - **sections (+1):** Gallery.
 
-## Migrações do contrato (12 — 4 concluídas: hero-primary ✅ 031, hero-steps ✅ 032, services-grid-simple ✅ 036, services-with-icons ✅ 036)
+## Migrações do contrato (12 — 5 concluídas: hero-primary ✅ 031, hero-steps ✅ 032, services-grid-simple ✅ 036, services-with-icons ✅ 036, AboutTimeline ✅ 037)
 
-hero-primary ✅ (031), hero-steps ✅ (032), services-grid-simple ✅ (036), services-with-icons ✅ (036 — entrada adicionada: a auditoria da 036 a selecionou no lugar da Split, que permanece na dívida), services-split-with-highlight, AboutTimeline, HeaderBasic, HeaderCentered, HeaderWithTopbar, FooterColumns, FooterCta, FooterSimple.
+hero-primary ✅ (031), hero-steps ✅ (032), services-grid-simple ✅ (036), services-with-icons ✅ (036 — entrada adicionada: a auditoria da 036 a selecionou no lugar da Split, que permanece na dívida), AboutTimeline ✅ (037), services-split-with-highlight, HeaderBasic, HeaderCentered, HeaderWithTopbar, FooterColumns, FooterCta, FooterSimple.
 
 ## Compositions (6)
 

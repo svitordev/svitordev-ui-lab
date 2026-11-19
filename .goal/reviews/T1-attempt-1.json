@@ -1,14 +1,14 @@
 {
   "task_id": "T1",
-  "fingerprint": "a134574487418155e146be3e57d325f32116c2e74641df52cb7a1545930e7d12",
+  "fingerprint": "911bb10f1c686a08bc0ad6599528409874d4435e67f7aa8048a15ee317c8c6b7",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "Auditoria T1 da Evolução 036 verificada com sucesso contra o workspace real. O arquivo .goal/evidence/T1-audit.md documenta a tabela completa dos 3 componentes em components/sections/services/** (ServicesWithIcons, ServicesGridSimple, ServicesSplitWithHighlight) com paths, consumers reais (app/(site)/page.tsx e app/library/services/page.tsx), status hardcoded/data-driven e seleção fundamentada de exatamente 2 componentes (ServicesWithIcons como Service A e ServicesGridSimple como Service B, mantendo ServicesSplitWithHighlight na dívida: services 3 -> 1). Separação entre hardcodes e estrutura interna, contratos locais ServicesWithIconsProps e ServicesGridSimpleProps, icon strategy (React.ComponentType<{ className?: string }>), CTA strategy (sem actions), previsão QLT-005 (23 -> 21, mantendo ISSUE_CONFIRMED/ABERTO), lacunas reais de testes em tests/smoke.spec.ts, arquivos previstos (T2-T5) e riscos foram todos confirmados sem nenhuma alteração em código de produção.",
+  "summary": "Auditoria T1 da Evolução 037 (AboutTimeline) verificada contra o código real do workspace. Todos os 6 critérios de aceite foram comprovados: (1) único consumer real mapeado em app/library/about/page.tsx (confirmado que app/(site)/page.tsx e app/library/landing/page.tsx não importam AboutTimeline) e transição para preview: React.ReactNode planejada sem tocar em AboutSimple/AboutSplit; (2) contrato mínimo AboutTimelineItem/AboutTimelineProps (title, description?, items, supportingText?) alinhado ao DS sem inflação (sem eyebrow, period/datas, CTA ou defaults internos); (3) separação exata entre conteúdo configurável e estrutura interna (marcador numerado index + 1, tokens, classes, hierarquia h2->h3 e Server Component preservados); (4) zero redesign (copy e layout 1:1); (5) redução incremental de QLT-005 prevista corretamente de 21 (15 sections + 6 site) para 20 (14 sections + 6 site), mantendo status ABERTO; (6) escopo exclusivo da 037 respeitado sem alterações de produção na T1.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Tarefa T1 é exclusivamente de investigação/auditoria documental (.goal/evidence/T1-audit.md) sem alteração de código de produção; leitura direta confirmou os arquivos de produção intactos e as referências reais em tests/smoke.spec.ts (linhas 525, 984, 1004-1032).",
-      "name": "verificacao-estatica-auditoria-t1",
+      "evidence": "Leitura direta de components/sections/about/about-timeline.tsx (linhas 1-54), app/library/about/page.tsx (linhas 1-80), app/(site)/page.tsx (linhas 1-151), app/library/landing/page.tsx (linhas 1-40), docs/COMPONENT-CATALOG.md (linhas 134-141), docs/ROADMAP-1000-EVOLUTIONS.md (linhas 410, 475, 485-487) e tests/smoke.spec.ts (linhas 521-549). Nenhuma execução de teste requerida na etapa de auditoria/planejamento T1.",
+      "name": "static-workspace-audit-t1",
       "status": "passed"
     }
   ],

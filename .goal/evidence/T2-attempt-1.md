@@ -1,95 +1,79 @@
-# T2 — Service A migrada: ServicesWithIcons (Goal 036)
+# Evidência T2 — Migrar AboutTimeline para o contrato (attempt 1)
 
-Contrato implementado exatamente como aprovado na T1 (Service A). Três arquivos alterados
-(componente + 2 consumers). Nenhum outro componente tocado (GridSimple e
-SplitWithHighlight intactos — B é a próxima task).
+Data: 2026-11-19 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037 (b69dab192d266c66)
 
-## Diff real — `components/sections/services/services-with-icons.tsx`
+## 0. Nota de acoplamento (T2/T3)
 
-```diff
--import { Globe2, LayoutDashboard, Workflow } from "lucide-react";
-+// Evolução 036 — contrato data-driven local (QLT-005 incremental). O consumer é
-+// dono dos dados; o componente mantém apenas a estrutura (grid, cards, moldura do
-+// ícone) com tokens existentes. Icon = componente (lucide-react é dependência real).
+O contrato aprovado na T1 torna `title`/`items` obrigatórios (sem defaults). Isso força o
+consumer a fornecer os dados para o build compilar — por isso o consumer único
+(`app/library/about/page.tsx`) foi atualizado nesta tarefa junto com o componente (preview
+`React.ReactNode` + `aboutTimelineDemo`, exatamente como prescrito na T1/T3). T3 torna-se
+verificação formal (consumers completos, copy 1:1, outras variants intactas, gates).
 
--const servicesWithIcons = [ ...3 items hardcoded (title/desc/Icon)... ];
-+export type ServiceWithIcon = {
-+  title: string;
-+  description: string;
-+  icon: React.ComponentType<{ className?: string }>;
-+};
-+
-+export type ServicesWithIconsProps = {
-+  title: string;
-+  description?: string;
-+  services: ServiceWithIcon[];
-+};
+## 1. Diff real (git diff --stat desde o último commit)
 
--export function ServicesWithIcons() {
-+export function ServicesWithIcons({ title, description, services }: ServicesWithIconsProps) {
+```
+ app/library/about/page.tsx                   | 45 ++++++++++++++++++----
+ components/sections/about/about-timeline.tsx | 56 +++++++++++++++-------------
+ 2 files changed, 69 insertions(+), 32 deletions(-)
 ```
 
-- Heading/description da seção e os 3 items passaram a vir das props; `description` com
-  renderização condicional; `desc` → `description` (naming DS).
-- **Estrutura interna intacta:** `section`/`div`/`h2`/`h3`, grid `md:grid-cols-3`, cards
-  `rounded-2xl border bg-muted/20`, moldura do ícone `h-10 w-10 rounded-xl bg-muted` com
-  `Icon className="h-5 w-5 text-muted-foreground"` — zero redesign, zero classe alterada.
-- Server Component preservado (sem `"use client"` — boundary atual mantido).
+### `components/sections/about/about-timeline.tsx` (antes → depois)
 
-## Diff real — `app/(site)/page.tsx` (consumer real da home)
+- ANTES: array `const timeline = [...]` interno (3 items `{title, desc}`) + h2/descrição/
+  nota finais hardcoded; `export function AboutTimeline()` sem props.
+- DEPOIS: contrato exatamente como aprovado na T1:
 
-```diff
--import { ServicesWithIcons } from "@/components/sections/services/services-with-icons";
-+import {
-+  ServicesWithIcons,
-+  type ServicesWithIconsProps,
-+} from "@/components/sections/services/services-with-icons";
- import { TestimonialsGrid } from "@/components/sections/testimonials/testimonials-grid";
-+import { Globe2, LayoutDashboard, Workflow } from "lucide-react";
-+
-+// Copy original dos services da home, movida para o consumer (Evolução 036).
-+const servicesHomeData: ServicesWithIconsProps = { title, description, services[3] };
-...
-       <div id="services">
--        <ServicesWithIcons />
-+        <ServicesWithIcons {...servicesHomeData} />
-       </div>
+```ts
+export type AboutTimelineItem = {
+  title: string;
+  description: string;
+};
+
+export type AboutTimelineProps = {
+  title: string;
+  description?: string;
+  items: AboutTimelineItem[];
+  supportingText?: string;
+};
 ```
 
-Copy movida **1:1** do componente original (títulos, descrições e ícones Globe2/
-LayoutDashboard/Workflow na mesma ordem).
+- Renderização 100% a partir das props: `{title}`, `{description}` condicional
+  (`{description ? <p>…</p> : null}`), `items.map(...)`, `{supportingText}` condicional.
+- `desc` → `description` (naming do DS). Sem defaults internos. Sem eyebrow/action (não
+  existem no componente — sem inflação). Sem `Date`/period (marcador = número do passo via
+  índice — estrutura, não dado).
+- Estrutura intacta: `section`/container/breakpoints, header (h2 + p), lista `space-y-4`,
+  cards `flex gap-3 rounded-2xl border bg-muted/20 p-4 text-sm shadow-sm`, marcador numerado
+  `h-6 w-6 rounded-full bg-foreground text-background` com `index + 1`, h3 + p `text-xs`,
+  parágrafo final `mt-4 text-[11px]`, tokens, dark-only. Keys `item.title` preservadas.
+- Server Component preservado (sem `"use client"` — apresentacional puro).
 
-## Diff real — `app/library/services/page.tsx` (consumer demo)
+### `app/library/about/page.tsx` (consumer único)
 
-- `Component: React.ComponentType` → `preview: React.ReactNode` (padrão da página de hero
-  para páginas heterogêneas — `React.ComponentType` sem props não compila com props
-  obrigatórias no TS strict).
-- `servicesWithIconsDemo: ServicesWithIconsProps` com a copy original 1:1; GridSimple e
-  SplitWithHighlight renderizados sem props (ainda hardcoded — B/C).
-- **Ordem e ids das entries preservados** (`services-grid-simple` continua primeiro —
-  assertado por teste existente).
+- `AboutItem.Component: React.ComponentType` → `preview: React.ReactNode` (página vira
+  heterogênea — padrão das páginas hero/services).
+- `const aboutTimelineDemo: AboutTimelineProps` com **copy 1:1** do conteúdo original
+  (título, descrição, 3 items na ordem original, nota final) — consumer dono dos dados.
+- AboutSimple/AboutSplit: renderizados sem props (`preview: <AboutSimple />` etc.), ids,
+  nomes, descrições das entries e ordem (simple → split → timeline) preservados.
+- `<Component />` → `{preview}` dentro do mesmo preview box.
 
-## Gates reais (executados, exit codes reais)
+## 2. Gates (execuções reais, nesta ordem)
 
-- `npm run lint` → **LINT_EXIT=0** (0 erros / 0 warnings).
-- `npm run build` → **BUILD_EXIT=0** (`Compiled successfully in 3.9s`).
-- `git diff --check` → **CHECK_EXIT=0**.
-- `npx playwright test -g "rotas sem smoke|navegacao representativa|landing: compoe"` →
-  **TEST_EXIT=0**, **6 passed** (testes existentes que cobrem as áreas afetadas: shell →
-  `/library/services` com `firstId: services-grid-simple`, âncoras `#services` da home,
-  landing composition — ambos os projetos).
+| Gate | Comando | Exit | Resultado |
+|---|---|---|---|
+| ESLint | `npm run lint` | 0 | 0 erros / 0 warnings |
+| Build | `npm run build` | 0 | Compiled successfully; 24/24 rotas geradas |
+| git diff --check | `git diff --check` | 0 | limpo |
 
-### Incidente auditável (não é defeito da migração)
+Teste focado pertinente: nenhum teste existente asserta o conteúdo do timeline (cobertura da
+página é só shell/h1/firstId — linha ~524 do smoke); teste do contrato entra na T4 (plano
+T1 aprovado). Nenhum teste quebrado pela mudança (build type-check passou; JSX/roles
+preservados).
 
-1ª execução dos testes acima: 6 falhas — snapshot das páginas em **404**. Causa provada:
-dev server **órfão** das 11:26 (PID 8816, anterior às edições desta sessão) segurando a
-porta 3000 com `reuseExistingServer: true` e cache corrompido pelo `npm run build`.
-Após `taskkill /PID 8816 /T /F` (só o órfão), re-execução idêntica: **6/6 verdes**.
-Nenhum assert de teste foi alterado.
+## 3. Conformidade com os critérios T2
 
-## Conformidade com os critérios T2
-
-- Service A data-driven; consumers donos dos dados (home + Library); copy preservada 1:1;
-  visual preservado (zero classe alterada); boundary Server preservado; nenhuma dívida
-  nova (contrato mínimo aprovado, sem defaults, sem actions inventadas — nenhum CTA hoje);
-  gates verdes com diff + outputs + exit codes.
+- Contrato exato da T1: ✔ · hardcode removido do componente: ✔ (todo conteúdo configurável
+  vem das props) · visual preservado: ✔ (classes/tokens/estrutura idênticos) · Server
+  boundary: ✔ · semântica (h2/h3, keys estáveis): ✔ · zero dependências: ✔ · gates verdes: ✔.

@@ -1664,3 +1664,51 @@ test('services: home mantém a copy real do contrato migrado (consumer dono dos 
     ),
   ).toBe(true);
 });
+
+test('about: página da Library prova o contrato do AboutTimeline via consumer (ordem, copy, zero overflow)', async ({ page }) => {
+  await page.goto('/library/about');
+
+  await expect(page.getByRole('heading', { level: 1, name: 'About / Sobre' })).toBeVisible();
+
+  // Ordem das entries na página (labels da shell): simple → split → timeline.
+  await expect(page.getByRole('heading', { level: 2, name: 'About simples' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'About em duas colunas' })).toBeVisible();
+  await expect(
+    page.locator('xpath=//h2[contains(., "About simples")][following::h2[contains(., "Timeline / trajetória")]]'),
+  ).toHaveCount(1);
+
+  // Conteúdo do timeline vindo dos dados do consumer (contrato AboutTimelineProps).
+  const section = page
+    .getByRole('heading', { level: 2, name: 'Um pouco da nossa trajetória' })
+    .locator('xpath=ancestor::section[1]');
+  await expect(section).toBeVisible();
+  await expect(
+    section.getByText('Uma história construída ao lado de clientes que confiam no nosso trabalho e crescem junto conosco.'),
+  ).toBeVisible();
+
+  // Os 3 passos originais, na ordem editorial, com as descrições dos dados do consumer.
+  const h3s = section.getByRole('heading', { level: 3 });
+  await expect(h3s).toHaveCount(3);
+  await expect(h3s.nth(0)).toHaveText('Início das atividades');
+  await expect(h3s.nth(1)).toHaveText('Crescimento e consolidação');
+  await expect(h3s.nth(2)).toHaveText('Atuação atual');
+  await expect(
+    section.getByText('Primeiros atendimentos, entendendo na prática as principais necessidades dos clientes e da área de atuação.'),
+  ).toBeVisible();
+  await expect(
+    section.getByText('Ampliação da carteira de clientes, organização dos processos internos e aprofundamento em serviços especializados.'),
+  ).toBeVisible();
+  await expect(
+    section.getByText('Atendimento focado em oferecer soluções personalizadas, com acompanhamento próximo e foco em resultados concretos para cada cliente.'),
+  ).toBeVisible();
+  await expect(
+    section.getByText('Você pode adaptar os textos dessa linha do tempo para escritórios, clínicas, consultorias e outros tipos de empresas, mantendo a mesma estrutura visual.'),
+  ).toBeVisible();
+
+  // Zero overflow horizontal nos dois viewports.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

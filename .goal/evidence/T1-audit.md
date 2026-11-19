@@ -1,118 +1,135 @@
-# T1 — Auditoria das duas Services + contratos (Goal 036)
+# Evidência T1 — Auditoria AboutTimeline + contrato (attempt 1)
 
-Investigação apenas — nenhum código de produção alterado nesta task. Todas as constatações vêm de leitura/grep direto do código atual (comandos reais ao final).
+Data: 2026-11-16 · Builder: Strata Qwen3.8 Flash Next 256K · Goal 037
+T1 é investigação — NENHUM arquivo de produção alterado (apenas `.goal/`).
 
-## 1. Tabela completa — `components/sections/services/**` (todos os componentes)
+## 1. Componente real (verificado no disco)
 
-| Componente | Path | Consumers reais | Hardcoded? | Já data-driven? | Entra na 036? |
-|---|---|---|---|---|---|
-| ServicesWithIcons | `components/sections/services/services-with-icons.tsx` | **home** (`app/(site)/page.tsx` L14/L106) + Library (`app/library/services/page.tsx`) | SIM (zero props; array interno `servicesWithIcons` com title/desc/Icon) | NÃO | **SIM — Service A** |
-| ServicesGridSimple | `components/sections/services/services-grid-simple.tsx` | Library (`app/library/services/page.tsx`) | SIM (zero props; array interno `services` com title/desc + heading/desc de seção) | NÃO | **SIM — Service B** |
-| ServicesSplitWithHighlight | `components/sections/services/services-split-with-highlight.tsx` | Library (`app/library/services/page.tsx`) | SIM (zero props; `mainService`, `secondaryPoints`, caixa "Exemplo de uso", copy de adaptação) | NÃO | NÃO — fica na dívida |
+- **Path exato:** `components/sections/about/about-timeline.tsx`
+- **Export:** `AboutTimeline` (nomeado, função) — Server Component (sem `"use client"`;
+  apresentacional puro, sem estado/interação → boundary preservado, sem motivo para client).
+- **Conteúdo hardcoded hoje:** array `timeline` no topo do arquivo (3 items `{title, desc}`),
+  heading h2 "Um pouco da nossa trajetória", parágrafo de descrição e parágrafo final de
+  nota ("Você pode adaptar os textos dessa linha do tempo...").
+- **Estrutura interna:** `section` > container `max-w-6xl` > header centralizado/esquerdo
+  (h2 + p) > lista `space-y-4` de cards `flex gap-3 rounded-2xl border bg-muted/20` com
+  **marcador numerado** (círculo `bg-foreground` com `index + 1`) + h3 + p; parágrafo final
+  `text-[11px]`. Tokens existentes, dark-only, sem motion, sem dependências.
 
-**Seleção (exatamente 2):** ServicesWithIcons + ServicesGridSimple. Justificativa:
-- **ServicesWithIcons** é o único service com **consumer real fora da Library** (home) — a migração prova o contrato com consumer dono dos dados imediatamente (padrão 031/032).
-- **ServicesGridSimple** é a forma canônica da família grid (heading + description + items[] com título/descrição) — encaixa diretamente na linguagem dos contratos modernos sem campos one-off.
-- **ServicesSplitWithHighlight permanece hardcoded**: estrutura heterogênea (bloco principal + caixa de exemplo + lista de bullets + copy meta-demo "Este bloco pode ser adaptado...") — o contrato seria um saco de campos únicos sem segundo consumer à vista; conteúdo é a própria demo de adaptabilidade (anti-inflação). A projeção do roadmap pós-lote confirma: **services 3 → 1** após a 036.
-- Os dois migrados compartilham forma conceitual coerente (heading + description + lista de cards), mas **sem abstração compartilhada** — cada um define seus tipos locais (padrão de todos os contratos do Lab: `HeroPrimaryProps`, `HeroStepsProps`, `GalleryTabsProps` são locais).
+## 2. Consumers reais (grep global pelo import/export)
 
-## 2. Consumers mapeados (grep real em `app/**`)
+| Consumer | Rota/contexto | Conteúdo atual | Migra? |
+|---|---|---|---|
+| `app/library/about/page.tsx` | `/library/about` (entry `about-timeline`, 3º da lista) | renderiza `<AboutTimeline />` sem props — todo o conteúdo vem do array interno | **SIM** (único consumer) |
+| Home (`app/(site)/page.tsx`) | — | **NÃO importa** o componente (import removido na QLT-012/0.1.0; referências em QUALITY-REVIEW:32/401/421 são registro histórico do finding VERIFIED) | n/a |
+| Compositions (`/library/landing`, blog, etc.) | — | sem uso | n/a |
 
-- `app/(site)/page.tsx`: importa e renderiza `<ServicesWithIcons />` (L14, L106) — **único consumer fora da Library**.
-- `app/library/services/page.tsx`: os 3 via `ServicesItem[]` com `Component: React.ComponentType` renderizado sem props — **a página precisará ser adaptada para passar dados** (consumer dono dos dados; `React.ComponentType` sem props não compila com props obrigatórias no TS strict).
-- Landing composition (`/library/landing`): **não usa** nenhum service (grep não casa) — nada a migrar lá.
-- Nenhum outro import de services no repositório.
+Nenhum outro uso. Após a migração, o único consumer passa a ser dono dos dados — nenhum
+consumer ficará na API antiga.
 
-## 3. Inventário de hardcode (o que sai do componente)
+**Detalhe do consumer:** `/library/about` é hoje uma página homogênea
+(`Component: React.ComponentType`, 3 entries). Com props apenas no timeline, a página vira
+heterogênea → converte para `preview: React.ReactNode` (padrão consolidado das páginas
+heterogêneas: hero, services). Os outros 2 componentes (AboutSimple, AboutSplit) permanecem
+intactos e continuam na dívida.
 
-**ServicesWithIcons (A):** heading da seção ("Serviços que geram resultado para o seu negócio"), description da seção, array de 3 items (title, desc, **Icon**). Estrutura interna permanece: grid `md:grid-cols-3`, cards `rounded-2xl border bg-muted/20`, container do ícone `h-10 w-10 rounded-xl bg-muted`, `h-5 w-5 text-muted-foreground`, tokens, dark-only.
+## 3. Inventário do hardcode
 
-**ServicesGridSimple (B):** heading ("Como sua empresa ajuda os clientes"), description da seção, array de 3 items (title, desc). Estrutura interna permanece: grid `md:grid-cols-3`, cards `rounded-xl border bg-background`, tokens, dark-only.
+### Conteúdo configurável → props
+- heading principal (h2) → `title` (obrigatório — presente hoje).
+- parágrafo de descrição → `description?` (opcional, condicional).
+- items da timeline (3) → `items` (obrigatório) — cada item: `title` + `description`
+  (campo `desc` → `description`, naming do DS — convenção 032/036).
+- parágrafo final de nota → `supportingText?` (opcional, condicional — convenção
+  HeroPrimary/HeroSteps; é conteúdo editorial, não estrutura).
 
-**Nenhum dos dois tem CTA hoje** → contrato sem actions (não inventar API sem uso).
+### Estrutura interna → permanece no componente
+- `section`/container/breakpoints; header (h2 + p condicionais); lista `space-y-4`; cards
+  flex; **marcador numerado** (derivado do índice — decoração/estrutura, não vira prop);
+  classes, tokens, shadow, rounded; parágrafo final (wrapper estrutural com texto do
+  consumer); responsividade; dark-only.
 
-## 4. Contratos aprovados (linguagem dos contratos modernos 001/003/010/016/031/032)
-
-**Service A — `services-with-icons.tsx`:**
+## 4. Contrato proposto (mínimo, sem inflação)
 
 ```ts
-type ServiceWithIcon = {
+export type AboutTimelineItem = {
   title: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
 };
 
-type ServicesWithIconsProps = {
+export type AboutTimelineProps = {
   title: string;
   description?: string;
-  services: ServiceWithIcon[];
+  items: AboutTimelineItem[];
+  supportingText?: string;
 };
 ```
 
-**Service B — `services-grid-simple.tsx`:**
+- Nomenclatura alinhada aos contratos vigentes (001/003/010/016/031/032/036): `title`,
+  `description`, `items`, `supportingText` — sem criar sinonímia nova.
+- **Sem defaults** proibidos: nada de `title = "..."` ou `items = [...]` reproduzindo o
+  conteúdo antigo; consumer é dono.
+- Sem `action`/CTA (componente não tem CTA hoje — não inflar API).
+- Sem `eyebrow` (componente não tem eyebrow hoje — não inflar API; o campo do contrato
+  conceitual do plano foi descartado pela auditoria do código real).
+- **Sem `period`/datas:** o código real NÃO tem anos/períodos — os marcadores são números de
+  passo (`index + 1`). O `period` conceitual do plano não se aplica; nada de `Date`, parsing
+  ou timezone nesta evolução.
+- Keys: `item.title` (identificador semanticamente estável, já é o key atual — preservado;
+  índice só governa o número do marcador).
 
-```ts
-type ServiceGridItem = {
-  title: string;
-  description: string;
-};
+## 5. Heading hierarchy / A11Y (auditoria, sem ampliação de escopo)
 
-type ServicesGridSimpleProps = {
-  title: string;
-  description?: string;
-  services: ServiceGridItem[];
-};
-```
+- Componente: h2 (principal) → h3 (items) — hierarquia correta, sem skip. Preservado.
+- Na página da Library: h1 da página → h2 da entry (label da shell) → h2/h3 do componente —
+  padrão já existente em todas as páginas da Library (serviços/hero). Sem mudança.
+- Marcadores numerados são texto visível (número de passo), não ícone decorativo — sem
+  ARIA extra. Leitura linear correta (número → título → descrição por item). QLT-011
+  preservado (nada a corrigir aqui).
 
-- `title`/`services` obrigatórios; `description?` opcional com renderização condicional; **sem defaults internos escondendo conteúdo**; `desc` → `description` (naming do DS, precedente 032).
-- Tipos locais por componente — **sem tipo compartilhado** entre A e B (cada contrato é independente; abstração só para reduzir linhas é proibida).
+## 6. Visual
 
-## 5. Icon strategy
+**ZERO REDESIGN.** Conteúdo, ordem (3 items na ordem atual), layout, spacing, typography,
+marcadores, responsividade e dark-only DEC-011 preservados 1:1. A migração é apenas de
+fonte-de-dados: array interno → props do consumer (copy 1:1).
 
-- **A:** consumer fornece `icon` como **componente** (`React.ComponentType<{ className?: string }>`) — `lucide-react` é dependência existente; home passa `Globe2`/`LayoutDashboard`/`Workflow`; página da Library idem. O componente mantém o **markup estrutural** do ícone (container `h-10 w-10 rounded-xl bg-muted`, `h-5 w-5 text-muted-foreground`) — o consumer decide **qual** ícone, não como ele é emoldurado.
-- Lookup global por string arbitrária: **rejeitado** (sem necessidade — nenhum padrão assim no repo; `contact-details` usa `Icon:` como componente nos dados locais, mesma direção).
-- **B:** sem ícones — nada a decidir.
+## 7. QLT-005
 
-## 6. CTA strategy
+- Baseline real confirmado no QUALITY-REVIEW (pós-036): **21** (15 sections + 6 site),
+  ISSUE_CONFIRMED / ABERTO. AboutTimeline está na dívida (catálogo: Template; lista de
+  migrações do roadmap).
+- Previsão pós-037: **21 → 20** (14 sections + 6 site). **Permanece ABERTO** — nunca
+  VERIFIED. Roadmap pós-lote "about 2" confere (AboutSimple + AboutSplit ficam).
+- T1 não edita QUALITY-REVIEW (edição é T5).
 
-Nenhum dos dois componentes migrados tem CTA hoje → **nenhuma action entra no contrato** (não inventar API sem consumer). Convenção 001 permanece documentada para contratos futuros com actions.
+## 8. Testes — cobertura atual e lacuna real
 
-## 7. QLT-005 — previsão (não atualizar na T1)
+- `tests/smoke.spec.ts` cobre `/library/about` apenas via shell (linha ~524: rota + h1
+  "About / Sobre" + firstId `about-simple` + zero overflow). Nenhum teste asserta o conteúdo
+  do timeline.
+- **Lacuna real:** contrato do AboutTimeline via consumer. Plano T4: **+1 teste dual-project**
+  (roles/textos reais): h1 da página; ordem das 3 entries; h2 + descrição + 3 h3 do timeline
+  na ordem (Início das atividades → Crescimento e consolidação → Atuação atual) com as
+  descrições dos dados do consumer; supporting text; zero overflow nos 2 viewports. Sem
+  asserts de classes Tailwind/pixels/marcadores internos. Nada redundante.
+- Baseline: 55 testes / 110 execuções (107 passed + 3 skipped) → esperado pós-T4:
+  56 testes / 112 execuções (109 passed + 3 skipped), exit 0.
 
-- Baseline real confirmado em `QUALITY-REVIEW.md`: **23 (17 sections + 6 site), ISSUE_CONFIRMED/ABERTO**.
-- Os 2 componentes migrados **estão na dívida** → previsão pós-036: **23 → 21** (15 sections + 6 site). **Permanece ABERTO** — nunca VERIFIED.
-- Consistência com a projeção do roadmap pós-lote: services 3 → 1 ✓.
+## 9. Arquivos previstos (T2–T5)
 
-## 8. Heading / a11y
+- T2: `components/sections/about/about-timeline.tsx` (contrato acima, estrutura intacta).
+- T3: `app/library/about/page.tsx` (preview ReactNode + `aboutTimelineDemo` com copy 1:1;
+  AboutSimple/AboutSplit renderizados sem props; ids/ordem/labels preservados).
+- T4: `tests/smoke.spec.ts` (+1 teste dual). Gates: lint/build/test:e2e/diff-check.
+- T5: QUALITY-REVIEW (21→20, ABERTO), COMPONENT-CATALOG (entrada existente marcada
+  data-driven; contagens 32/12/8/54), ROADMAP (037 VERIFIED, próxima 038), CURRENT-STATE,
+  CHANGELOG. DESIGN-SYSTEM/DECISIONS inalterados.
 
-Ambos: `h2` da seção + `h3` dos cards — **hierarquia preservada sem alteração** (QLT-011 não é objetivo da 036; nenhum ajuste de heading necessário para preservar semântica na migração).
+## 10. Riscos
 
-## 9. Visual — zero redesign
-
-Layout, grid, breakpoints, spacing, classes, tokens, dark-only DEC-011 e conteúdo atual (copy exata movida para os consumers) preservados integralmente. Nenhuma rota nova, nenhum componente novo, nenhuma dependência nova.
-
-## 10. Testes — lacunas reais (T4)
-
-- Existentes que tocam services: `/library/services` via shell (linha 525 — visita + `firstId: 'services-grid-simple'`; **ordem das entries da shell não pode mudar**); âncoras `#services` da home/landing (linhas 220/759–764/984/1004–1025). **Nenhum teste atual asserta conteúdo dos components services.**
-- Lacunas reais a cobrir (dual-project): contrato de A provado via consumer oficial (Library: heading, 3 items, ordem, ícones; home: copy real preservada); contrato de B via consumer (heading, 3 items, ordem); zero overflow nos dois viewports; SplitWithHighlight continua renderizando (regressão da página intacta).
-- Sem helpers que mascarem bugs; sem duplicar teste sem valor.
-
-## 11. Arquivos previstos
-
-- **T2 (Service A):** `components/sections/services/services-with-icons.tsx` + `app/(site)/page.tsx` + `app/library/services/page.tsx`.
-- **T3 (Service B):** `components/sections/services/services-grid-simple.tsx` + `app/library/services/page.tsx`.
-- **T4:** `tests/smoke.spec.ts` (apenas lacunas reais).
-- **T5:** `QUALITY-REVIEW.md` (QLT-005 23→21, aberto), `docs/COMPONENT-CATALOG.md` (entradas existentes marcadas data-driven), `docs/ROADMAP-1000-EVOLUTIONS.md` (036 VERIFIED, próxima 037), `memory-bank/CURRENT-STATE.md`, `memory-bank/CHANGELOG.md`. `docs/DESIGN-SYSTEM.md` e `memory-bank/DECISIONS.md` inalterados (nenhuma convenção/decisão nova).
-
-## 12. Riscos
-
-- **Type da página da Library:** `Component: React.ComponentType` (sem props) não compila com props obrigatórias — adaptação mínima e explícita na página (consumer passa os dados), sem mudar o padrão das entries da shell.
-- **Copy da home:** deve ser movida 1:1 para o consumer (testes de âncora/heading da home não podem regredir).
-- **Ordem das entries da Library:** `firstId: 'services-grid-simple'` é assertado — não reordenar.
-- Risco baixo — migração mecânica de dados com contrato mínimo; zero mudança visual.
-
-## Material auditável (comandos reais desta task)
-
-- `grep "services-grid-simple|services-split-with-highlight|services-with-icons|ServicesGridSimple|ServicesSplitWithHighlight|ServicesWithIcons" em app/**` → 11 matches em 2 arquivos (home + library/services) — consumers completos.
-- Leituras integrais: os 3 componentes de `components/sections/services/`, `app/library/services/page.tsx`, `components/sections/hero/hero-primary.tsx` (linguagem de contrato), `QUALITY-REVIEW.md` §QLT-005 (baseline 23), `docs/COMPONENT-CATALOG.md` (3 entradas Template), `tests/smoke.spec.ts` (grep services — nenhuma cobertura de conteúdo).
-- Nenhuma alteração de código nesta task.
+- Conversão da página para `preview` não muda visual nem ids — teste da shell (firstId
+  `about-simple`) permanece válido.
+- Armadilha conhecida (036/T4): dev server órfão na porta 3000 com cache corrompido por
+  build → verificar `Get-NetTCPConnection -LocalPort 3000` antes do Playwright.
+- Zero dependências novas; zero componente novo; zero rota nova; commit/push só pelo
+  operador.

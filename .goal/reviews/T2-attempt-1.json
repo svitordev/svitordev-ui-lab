@@ -1,29 +1,24 @@
 {
   "task_id": "T2",
-  "fingerprint": "6044ed9d79bb1503baabbab184782cc53101a2f7f649cbc69df973f4e318f298",
+  "fingerprint": "58ce9c6a107f1f1f837da028773c0f6d80de1f0218e2862d0419814d741e6e1f",
   "reviewer": "antigravity-cli-google-signin:gemini-4-argon-high",
   "verdict": "APPROVED",
-  "summary": "T2 auditada e aprovada (PASS). A leitura direta dos arquivos reais do workspace confirma que ServicesWithIcons (components/sections/services/services-with-icons.tsx) foi migrado para o contrato data-driven local (ServiceWithIcon e ServicesWithIconsProps) sem defaults internos mascarando hardcode. Os dois consumers reais — app/(site)/page.tsx (servicesHomeData) e app/library/services/page.tsx (servicesWithIconsDemo com preview: React.ReactNode no padrao de app/library/hero/page.tsx) — assumiram a propriedade integral da copy e dos icones (Globe2, LayoutDashboard, Workflow) preservando 1:1 textos, classes Tailwind, hierarquia de headings (h2/h3), ancora #services na home, ordem/ids no catalogo (/library/services) e boundary Server Component. ServicesGridSimple e ServicesSplitWithHighlight permanecem intactos para a proxima etapa. Gates reportados nas evidencias (lint 0/0 com exit 0, build PASS com exit 0, git diff --check com exit 0 e Playwright focado 6/6 passed com exit 0) estao completos e consistentes com o codigo inspecionado.",
+  "summary": "T2 aprovada (PASS). A migracao de AboutTimeline para o contrato data-driven aprovado na T1 foi verificada diretamente nos arquivos do workspace (components/sections/about/about-timeline.tsx, app/library/about/page.tsx e package.json) e nas evidencias dos gates: (1) tipos exportados AboutTimelineItem e AboutTimelineProps seguem exatamente o contrato da T1 sem defaults internos nem inflacao de campos; (2) todo conteudo textual hardcoded foi removido do componente e transferido 1:1 para aboutTimelineDemo no consumer unico app/library/about/page.tsx; (3) classes Tailwind, tokens, semantica h2/h3, marcadores numerados (index + 1) e keys estaveis foram integralmente preservados; (4) Server Component boundary mantido (sem 'use client'); (5) zero dependencias novas em package.json; (6) gates lint, build (24/24 rotas) e git diff --check reportados verdes nas evidencias incorporadas e consistentes com a inspecao estatica do codigo.",
   "findings": [],
   "tests": [
     {
-      "evidence": "Evidencia incorporada pelo Builder: npm run lint -> LINT_EXIT=0 (0 erros / 0 warnings). Consistente com a inspecao estatica dos 3 arquivos alterados.",
+      "evidence": "Evidencia incorporada pelo Builder: `npm run lint` exit 0 (0 erros / 0 warnings), consistente com a inspecao estatica de components/sections/about/about-timeline.tsx e app/library/about/page.tsx.",
       "name": "npm run lint",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia incorporada pelo Builder: npm run build -> BUILD_EXIT=0 (Compiled successfully in 3.9s). Tipagens ServicesWithIconsProps e ServiceWithIcon verificadas nos arquivos reais.",
+      "evidence": "Evidencia incorporada pelo Builder: `npm run build` exit 0 (Compiled successfully; 24/24 rotas geradas), consistente com a checagem de tipos entre AboutTimelineProps e aboutTimelineDemo em app/library/about/page.tsx.",
       "name": "npm run build",
       "status": "passed"
     },
     {
-      "evidence": "Evidencia incorporada pelo Builder: git diff --check -> CHECK_EXIT=0. Arquivos lidos sem erros de whitespace ou marcadores de conflito.",
+      "evidence": "Evidencia incorporada pelo Builder: `git diff --check` exit 0 (limpo).",
       "name": "git diff --check",
-      "status": "passed"
-    },
-    {
-      "evidence": "Evidencia incorporada pelo Builder: npx playwright test -g \"rotas sem smoke|navegacao representativa|landing: compoe\" -> TEST_EXIT=0 (6 passed apos encerrar servidor dev orfao PID 8816).",
-      "name": "playwright focused suite (services library & home)",
       "status": "passed"
     }
   ],

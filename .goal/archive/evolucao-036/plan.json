@@ -1,0 +1,53 @@
+{
+  "goal": "Evolucao 036 - Migrar duas sections de Services para contratos data-driven, reduzindo QLT-005 incrementalmente (baseline 23, confirmar pela auditoria). Zero redesign, zero dependencia nova, zero componente novo, zero rota nova. Baseline real pos-035: sections 32, UI 12, site 8, total 54, rotas 24, Playwright 53 testes (106 execucoes, 103 passed + 3 skipped).",
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Auditoria das duas Services + contratos (investigacao, sem alterar codigo de producao)",
+      "acceptance": [
+        "Evidencia .goal/evidence/T1-audit.md com tabela de TODOS os componentes de services (path, consumers, hardcoded, data-driven, entra na 036), hardcodes separados de estrutura interna, contratos aprovados A e B, icon strategy, CTA strategy, previsao QLT-005, testes necessarios, arquivos previstos e riscos",
+        "exatamente 2 services selecionadas conforme roadmap/codigo real sem assumir nomes antes da auditoria",
+        "nenhuma alteracao de codigo de producao nesta task"
+      ]
+    },
+    {
+      "id": "T2",
+      "description": "Migrar Service A conforme contrato aprovado na T1",
+      "acceptance": [
+        "Contrato implementado sem default mascarando hardcode, consumer dono dos dados, copy e comportamento preservados",
+        "visual, destinos, boundary Server/Client e heading levels preservados",
+        "gates lint 0/0, build PASS, git diff --check limpo com evidencia de diff + outputs reais + exit codes"
+      ]
+    },
+    {
+      "id": "T3",
+      "description": "Migrar Service B conforme contrato aprovado na T1",
+      "acceptance": [
+        "Contrato implementado sem default mascarando hardcode, consumer dono dos dados, copy e comportamento preservados",
+        "visual, destinos, boundary e heading preservados",
+        "T2 permanece integra sem alteracao indevida",
+        "gates lint 0/0, build PASS, git diff --check limpo com evidencia auditavel"
+      ]
+    },
+    {
+      "id": "T4",
+      "description": "Regressao integrada + Playwright",
+      "acceptance": [
+        "Auditoria de testes existentes primeiro, cobrir apenas lacunas reais provando os dois contratos via consumers (renderizacao, heading, items, ordem, CTA/href) em desktop e mobile com zero overflow",
+        "suite completa verde nos dois projetos sem helpers mascarando bugs",
+        "gates lint 0/0, build PASS (24 rotas), test:e2e, git diff --check limpo com contagens reais"
+      ]
+    },
+    {
+      "id": "T5",
+      "description": "Documentacao + QLT-005",
+      "acceptance": [
+        "QUALITY-REVIEW com QLT-005 real (23 para 21 se ambos estavam no finding, permanece ABERTO, nunca VERIFIED) registrando exatamente os 2 componentes removidos da dívida, QLT-011 preservado",
+        "catalogo atualiza entradas existentes sem criar componentes",
+        "ROADMAP marca 036 VERIFIED e proxima 037 sem iniciar",
+        "CURRENT-STATE e CHANGELOG somente estado final",
+        "gates lint 0/0, build PASS, git diff --check limpo"
+      ]
+    }
+  ]
+}
